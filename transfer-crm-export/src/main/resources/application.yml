@@ -1,0 +1,10 @@
+## Dubbo 服务生产者者配置
+spring:
+  application:
+    name: crm-export
+  dubbo:
+    server: true
+    registry: zookeeper://10.0.98.157:2181
+    protocol:
+      port: 20800
+      name: dubbo

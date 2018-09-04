@@ -1,0 +1,85 @@
+# Tomcat
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-threads: 1000
+        min-spare-threads: 30
+    port: 81
+    connection-timeout: 5000
+    #context-path: /mustang
+    context-path: /
+
+spring:
+    # 环境 dev|test|pro
+    profiles:
+        active: dev
+    http:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+            enabled: true
+    thymeleaf:
+      mode: LEGACYHTML5
+    #邮箱配置
+    mail:
+        host: smtp.exmail.qq.com
+        protocol: smtp
+        username: xieyuqing@hengqijy.com
+        password: King199092
+        properties:
+            mail:
+                smtp:
+                    starttls:
+                        auth: true
+                        enable: true
+                        required: true
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath*:com/hqjy/transfer/crm/modules/*/dao/*Dao.xml
+    configuration:
+        map-underscore-to-camel-case: true
+
+jwt-token:
+    # token有效时长，单位秒 默认一天 86400s = 3600*24
+      expire: 86400
+    # 续命时长 默认 3600s
+      prolong: 7200
+
+pagehelper:
+    helperDialect: mysql
+    page-size-zero: true
+    reasonable: true
+    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+    row-bounds-with-count: true
+
+#天润接口以及参数配置
+tiNet:
+    # 官网电话归属地接口
+    phoneAttribution: http://172.16.2.237/promotion/phone/info
+    # 主机地址
+    host: http://api.clink.cn/interfaceAction
+    #获取天润所有座席cno
+    getTiNetCnoUrl: ${tiNet.host}/clientInterface!list.action
+    # 外呼通话记录
+    cdrObInterface: ${tiNet.host}/cdrObInterface!listCdrOb.action
+
+
+#小能接口地址
+xn:
+  # 主机地址
+  host: http://hz-v7.ntalker.com/api
+  #小能token验证
+  auth:
+    siteId: hq_1000
+    clientId: 9ab491b0
+    clientSecret: cd6abeb2f5
+    authorizationCode: a31ffbb6882434625f14f5469bd52448
+  api:
+    #获取token
+    tokenUrl: ${xn.host}/OauthCredentials/oauth
+    #获取小能客户信息
+    accountsUrl: ${xn.host}/Accounts/Accounts?siteid=${xn.auth.siteId}
+    #获取客户组信息
+    siteidUrl: ${xn.host}/Syssetings/Syssetings?siteid=${xn.auth.siteId}
+
+
