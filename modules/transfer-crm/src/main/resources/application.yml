@@ -3,14 +3,14 @@ server:
         uri-encoding: UTF-8
         max-threads: 1000
         min-spare-threads: 30
-    port: 81
+    port: 8200
     connection-timeout: 5000
     #context-path: /mustang
     context-path: /
 
 info:
   app:
-    name: transfer-config-server
+    name: transfer-crm
     version: 1.0
 
 eureka:

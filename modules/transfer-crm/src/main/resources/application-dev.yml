@@ -14,7 +14,7 @@ spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
-            url: jdbc:mysql://10.0.98.6:3306/mustang_v2?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            url: jdbc:mysql://10.0.98.6:3306/mustang_transfer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
             username: root
             password: root
             driverClassName: com.mysql.jdbc.Driver
@@ -43,37 +43,6 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
-
-#ActiveMQ参数配置
-activemq:
-    # 服务器地址；failover：自动重连机制开启
-    brokerURL: failover:(tcp://172.16.2.225:61616)
-    # 用户名
-    userName: admin
-    # 密码
-    password: Hqjy@2017#@!
-    # 消息队列名称 配置：一个消费者一次只取1条（默认1000条），然后一条一条确认消息
-    queueName:
-        allot: mustang_business_dev?consumer.prefetchSize=1  # 官网，ERP, 代理网队列名称
-    # 是否开启商机消息处理,默认 false
-    businessHandle:
-        allot: true
-    # 商机消费者个数，默认1
-    consumerSize:
-        allot: 1
-    # 失败商机，初始发送延时 默认1000 单位ms（10 * 60 * 1000）
-    initialRedeliveryDelay: 600000
-    # 失败商机，重试延迟时间 默认1000
-    redeliveryDelay: 600000
-    # 失败商机，最大重试次数，默认6 ，设置-1为无限次重试
-    maximumRedeliveries: -1
-
-rabbitmq:
-    address: 10.0.98.46:5672
-    username: admin
-    password: mon4498
-    queueName:
-      ncDeal: nc.success.reg.stu.cjym.dev
 
 #NC接口参数
 nc:
