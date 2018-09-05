@@ -46,6 +46,11 @@ public class Constant {
     public static final String CUSTOMER_RECYCLE_TIME = " 21:00:00";
 
     /**
+     * 服务内部调用前缀
+     */
+    public static final String API_PATH = "/api/private/";
+
+    /**
      * 菜单类型
      */
     public enum MenuType {

@@ -3,30 +3,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hqjy.transfer.modules</groupId>
-    <artifactId>transfer-crm-allot</artifactId>
+    <groupId>com.hqjy.transfer.common</groupId>
+    <artifactId>common-model</artifactId>
     <version>${transfer.version}</version>
     <packaging>jar</packaging>
 
-    <name>transfer-allot</name>
-    <description>transfer-crm-allot CRM分配服务</description>
+    <name>common-model</name>
+    <description>common-model 公共库 model</description>
 
     <parent>
         <groupId>com.hqjy.transfer</groupId>
-        <artifactId>modules</artifactId>
+        <artifactId>common</artifactId>
         <version>${transfer.version}</version>
     </parent>
 
     <dependencies>
         <dependency>
             <groupId>com.hqjy.transfer.common</groupId>
-            <artifactId>common-web</artifactId>
-            <version>${transfer.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.hqjy.transfer.common</groupId>
-            <artifactId>common-redis</artifactId>
+            <artifactId>common-base</artifactId>
             <version>${transfer.version}</version>
         </dependency>
 

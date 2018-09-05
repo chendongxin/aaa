@@ -6,6 +6,7 @@ import com.hqjy.transfer.websocket.config.WebSocketServer;
 import com.hqjy.transfer.websocket.constant.WsConstant;
 import com.hqjy.transfer.websocket.dto.WsDTO;
 import com.hqjy.transfer.websocket.service.WsService;
+import com.hqjy.transfer.websocket.utils.WsCode;
 import com.hqjy.transfer.websocket.utils.WsReturn;
 import io.netty.channel.Channel;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -58,7 +59,7 @@ public class WsServiceImpl implements WsService {
     public void disconnect(String userId) {
         Channel channel = WebSocketServer.channelPool.get(userId);
         if (channel != null) {
-            channel.writeAndFlush(new TextWebSocketFrame(JsonUtil.toJson(R.ok(WsConstant.WS_DISCONNECT))));
+            channel.writeAndFlush(new TextWebSocketFrame(JsonUtil.toJson(R.ok(WsCode.WS_DISCONNECT))));
             channel.close();
             log.debug("主动断开用户：{} 成功", userId);
         }

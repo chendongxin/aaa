@@ -59,7 +59,7 @@ public class WsHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> 
             return;
         }
         //验证Token信息，从path中获取token参数
-        String token = request.uri().substring(request.uri().indexOf("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.")).replaceAll("/", "");
+        String token = (request.uri().contains("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.") ? request.uri().substring(request.uri().indexOf("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.")) : request.uri()).replaceAll("/", "");
         logger.debug("得到token参数:{}", token);
         UserDTO user = checkToken(token);
         if (user == null) {

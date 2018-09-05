@@ -16,9 +16,20 @@
         <groupId>com.hqjy.transfer</groupId>
         <artifactId>modules</artifactId>
         <version>${transfer.version}</version>
+
     </parent>
 
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>org.springframework.cloud</artifactId>
+                    <groupId>*</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 
         <dependency>
             <groupId>com.hqjy.transfer.common</groupId>

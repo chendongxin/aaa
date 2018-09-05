@@ -19,6 +19,12 @@
 
     <dependencies>
 
+        <!-- 服务注册 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
         <!-- 配置中心 -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

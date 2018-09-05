@@ -1,23 +1,14 @@
 server:
-    port: 8203
+  port: 8301
 
 spring:
     application:
     # 应用名称
-      name: transfer-crm-export
+      name: transfer-websocket
     # 环境 dev|test|pro
     profiles:
         active: dev
 
-# Feign 开启 Hystrix
-feign:
-  hystrix:
-    enabled: true
-
-info:
-  app:
-    name: transfer-crm-export
-    version: 1.0
 eureka:
   client:
     serviceUrl:
@@ -25,7 +16,7 @@ eureka:
     # 缓存清单每隔30秒跟新一次
     registry-fetch-interval-seconds: 10
   instance:
-    hostname: transfer-crm-export
+    hostname: transfer-websocket
     # 实例使用ip进行访问
     prefer-ip-address: true
     # 实例显示id

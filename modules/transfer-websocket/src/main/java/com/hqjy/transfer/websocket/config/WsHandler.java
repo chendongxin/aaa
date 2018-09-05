@@ -5,6 +5,7 @@ import com.hqjy.transfer.common.base.utils.JsonUtil;
 import com.hqjy.transfer.common.base.utils.R;
 import com.hqjy.transfer.websocket.constant.WsConstant;
 import com.hqjy.transfer.websocket.service.WsService;
+import com.hqjy.transfer.websocket.utils.WsCode;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -40,7 +41,7 @@ public class WsHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
             //token验证失败
             if (StringUtils.isEmpty(userId)) {
                 //发送断开消息并，断开
-                channel.writeAndFlush(new TextWebSocketFrame(JsonUtil.toJson(R.ok(WsConstant.WS_UNAUTHORIZED))));
+                channel.writeAndFlush(new TextWebSocketFrame(JsonUtil.toJson(R.ok(WsCode.WS_UNAUTHORIZED))));
                 channel.close();
                 log.debug("发送断开消息，并断开连接");
                 return;
@@ -56,7 +57,7 @@ public class WsHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
             //此通道添加到组
             WebSocketServer.CHANNEL_GROUP.add(channel);
             // 发送连接成功消息
-            wsService.sendMessage(userId, JsonUtil.toJson(R.ok(WsConstant.WS_CONNECTION)));
+            wsService.sendMessage(userId, JsonUtil.toJson(R.ok(WsCode.WS_CONNECTION)));
             log.debug("websocket当前连接数量：" + WebSocketServer.channelPool.size());
             // TODO 连接成功用户写入Redis
         } else {

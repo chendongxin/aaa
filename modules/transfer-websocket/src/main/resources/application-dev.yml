@@ -1,0 +1,33 @@
+spring:
+    redis:
+        host: 10.0.98.9
+        port: 6385
+        password:       # 密码（默认为空）
+        database: 10
+        timeout: 15000  # 连接超时时长（毫秒）
+        pool:
+            max-active: 1000  # 连接池最大连接数（使用负值表示没有限制）
+            max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
+            max-idle: 10      # 连接池中的最大空闲连接
+            min-idle: 5       # 连接池中的最小空闲连接
+        ws-topic-name: mustang_websocket_dev #websocket推送redis主题的名称
+
+# websocket监听端口，默认8088
+netty:
+  websocket:
+    #是否开启服务
+    enabled: true
+    #监听端口
+    port: 8300
+
+info:
+  app:
+    name: transfer-websocket
+    version: 1.0
+    websocket:
+       #是否开启服务
+       enabled: ${netty.websocket.enabled}
+       #监听端口
+       port: ${netty.websocket.port}
+       #websocket推送redis主题的名称
+       ws-topic-name: ${spring.redis.ws-topic-name}
