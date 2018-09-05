@@ -1,6 +1,6 @@
 spring:
     redis:
-        database: 3
+        database: 10
         host: 10.0.98.9
         port: 6385
         password:       # 密码（默认为空）

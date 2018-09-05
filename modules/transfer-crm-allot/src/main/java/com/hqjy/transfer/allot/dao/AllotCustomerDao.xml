@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.transfer.allot.dao.AllotCustomerDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.transfer.allot.model.entity.AllotCustomerEntity">
+        <id column="customer_id" jdbcType="BIGINT" property="customerId"/>
+        <result column="nc_id" jdbcType="VARCHAR" property="ncId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="sex" jdbcType="TINYINT" property="sex"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="source" jdbcType="TINYINT" property="source"/>
+        <result column="consult" jdbcType="TINYINT" property="consult"/>
+        <result column="memo" jdbcType="VARCHAR" property="memo"/>
+        <result column="allot_time" jdbcType="VARCHAR" property="allotTime"/>
+        <result column="create_id" jdbcType="BIGINT" property="createId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_id" jdbcType="BIGINT" property="updateId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+        customer_id, nc_id, name, sex, address, url, status, source, consult, memo, allot_time, create_id,
+        create_time, update_id, update_time
+    </sql>
+
+    <!-- 插入一条记录,只保存基本信息，不保存分配信息和主联系方式 -->
+    <insert id="save" keyProperty="customerId" useGeneratedKeys="true">
+        insert into biz_customer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != ncId">nc_id,</if>
+            <if test="null != name">name,</if>
+            <if test="null != sex">sex,</if>
+            <if test="null != address">address,</if>
+            <if test="null != url">url,</if>
+            <if test="null != status">status,</if>
+            <if test="null != source">source,</if>
+            <if test="null != consult">consult,</if>
+            <if test="null != memo">memo,</if>
+            <if test="null != allotTime">allot_time,</if>
+            <if test="null != createId">create_id,</if>
+            <if test="null != createTime">create_time,</if>
+            <if test="null != updateId">update_id,</if>
+            <if test="null != updateTime">update_time,</if>
+            <if test="null != deptId">dept_id,</if>
+            <if test="null != userId">user_id,</if>
+            <if test="null != contact">contact,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != ncId">#{ncId},</if>
+            <if test="null != name">#{name},</if>
+            <if test="null != sex">#{sex},</if>
+            <if test="null != address">#{address},</if>
+            <if test="null != url">#{url},</if>
+            <if test="null != status">#{status},</if>
+            <if test="null != source">#{source},</if>
+            <if test="null != consult">#{consult},</if>
+            <if test="null != memo">#{memo},</if>
+            <if test="null != allotTime">#{allotTime},</if>
+            <if test="null != createId">#{createId},</if>
+            <if test="null != createTime">#{createTime},</if>
+            <if test="null != updateId">#{updateId},</if>
+            <if test="null != updateTime">#{updateTime},</if>
+            <if test="null != deptId">#{deptId},</if>
+            <if test="null != userId">#{userId},</if>
+            <if test="null != contact">#{contact},</if>
+        </trim>
+    </insert>
+
+    <!--  修改customer的ID,主要修改新增加的用户的ID为老客户的ID,因为老客户ID不存在在，但是联系表中还存在 -->
+    <update id="updateCustomerId">
+        update biz_customer
+        <set>
+            customer_id = #{newId}
+        </set>
+        where customer_id = #{customerId}
+    </update>
+
+    <!--  更新联系次数 -->
+    <update id="updateConsult">
+        update biz_customer
+        <set>
+            consult = consult+1
+        </set>
+        where customer_id = #{customerId}
+    </update>
+
+    <!--  分配成功，设置部门ID（一定存在），人员ID，主联系方式 -->
+    <update id="updateProcessInfo">
+        update biz_customer
+        <set>
+            dept_id = #{deptId},
+            <if test="null != userId">user_id = #{userId},</if>
+            <if test="null != contact">contact = #{contact},</if>
+            <if test="null != allotTime">allot_time = #{allotTime},</if>
+        </set>
+        where customer_id = #{customerId}
+    </update>
+
+    <!-- 删除给定主键的记录 -->
+    <delete id="delete">
+        delete
+        from biz_customer
+        where
+            customer_id = #{customerId}
+    </delete>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_customer
+        where customer_id = #{customerId}
+    </select>
+
+
+</mapper>

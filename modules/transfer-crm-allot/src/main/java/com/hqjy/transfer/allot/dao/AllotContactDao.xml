@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.transfer.allot.dao.AllotContactDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.transfer.allot.model.entity.AllotContactEntity">
+        <id column="contact_id" jdbcType="BIGINT" property="contactId"/>
+        <result column="customer_id" jdbcType="BIGINT" property="customerId"/>
+        <result column="is_primary" jdbcType="TINYINT" property="isPrimary"/>
+        <result column="type" jdbcType="TINYINT" property="type"/>
+        <result column="detail" jdbcType="VARCHAR" property="detail"/>
+        <result column="create_id" jdbcType="BIGINT" property="createId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_id" jdbcType="BIGINT" property="updateId"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+        contact_id, customer_id, is_primary, type, detail, create_id, create_time, update_id,
+        update_time
+    </sql>
+
+    <!-- 根据联系方式和详情查询一条数据 -->
+    <select id="findOneByTypeAndDetail" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_customer_contact
+        where type=#{type} and detail=#{detail}
+    </select>
+
+    <!-- 查询主联系方式 -->
+    <select id="findPrimary" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_customer_contact
+        where customer_id=#{customerId} order by type limit 1
+    </select>
+
+    <!-- 插入一条记录,ignore 忽略已经存在 -->
+    <insert id="save" keyProperty="contactId" useGeneratedKeys="true">
+        insert ignore into biz_customer_contact
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != customerId">customer_id,</if>
+            <if test="null != isPrimary">is_primary,</if>
+            <if test="null != type">type,</if>
+            <if test="null != detail">detail,</if>
+            <if test="null != createId">create_id,</if>
+            <if test="null != createTime">create_time,</if>
+            <if test="null != updateId">update_id,</if>
+            <if test="null != updateTime">update_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != customerId">#{customerId},</if>
+            <if test="null != isPrimary">#{isPrimary},</if>
+            <if test="null != type">#{type},</if>
+            <if test="null != detail">#{detail},</if>
+            <if test="null != createId">#{createId},</if>
+            <if test="null != createTime">#{createTime},</if>
+            <if test="null != updateId">#{updateId},</if>
+            <if test="null != updateTime">#{updateTime},</if>
+        </trim>
+    </insert>
+
+</mapper>

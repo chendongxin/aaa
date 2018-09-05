@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.transfer.allot.dao.WeigthRoundDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="WeigthRoundResultMap" type="com.hqjy.transfer.allot.model.dto.WeigthRoundDTO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="weights" jdbcType="TINYINT" property="weights"/>
+    </resultMap>
+
+    <!-- 实体映射 -->
+    <resultMap id="ClassResultMap" type="com.hqjy.transfer.allot.model.dto.AllotClassDTO">
+        <id column="class_id" jdbcType="BIGINT" property="classId"/>
+        <result column="start_time" property="startTime"/>
+        <result column="stop_time" property="stopTime"/>
+    </resultMap>
+
+    <!-- 获取指定时间的排版id列表，不指定时间，查询最早排班 -->
+    <select id="getDeptClassList" resultMap="ClassResultMap">
+        SELECT
+            class_id,
+            duty_date,
+            start_time,
+            stop_time,
+            class_id,
+            STR_TO_DATE(
+                    CONCAT(
+                            DATE_FORMAT(duty_date, '%Y-%m-%d'),
+                            DATE_FORMAT(start_time, '%H:%i:%s')
+                    ),
+                    '%Y-%m-%d %H:%i:%s'
+            ) start,
+            STR_TO_DATE(
+                    CONCAT(
+                            DATE_FORMAT(duty_date, '%Y-%m-%d'),
+                            DATE_FORMAT(stop_time, '%H:%i:%s')
+                    ),
+                    '%Y-%m-%d %H:%i:%s'
+            ) stop
+        FROM
+            (SELECT
+                 bs.class_id,
+                 bs.duty_date,
+                 start_time,
+                 stop_time
+             FROM
+                 sys_schedule bs
+                 LEFT JOIN sys_class bc ON bc.class_id = bs.class_id
+             WHERE
+                 bs.class_id is not null and bs.class_id != 0 and
+                 ((duty_date = CURDATE() AND stop_time >= CURTIME()) OR duty_date = date_add(CURDATE(), INTERVAL 1 DAY))
+                 -- ((duty_date = date_add(CURDATE(), INTERVAL -2 DAY) AND stop_time >= CURTIME()) OR duty_date = date_add(CURDATE(), INTERVAL -1 DAY))
+                 AND bs.dept_id = #{deptId}
+             GROUP BY
+                 duty_date,
+                 bs.class_id
+             ORDER BY
+                 duty_date,
+                 start_time,
+                 stop_time) a
+
+    </select>
+
+    <!-- 根据区域编码查询处理此区域下商机的部门列表 -->
+    <select id="getDeptListByAreaId" resultMap="WeigthRoundResultMap">
+        select
+            sd.dept_id id,
+            sd.weights
+        from cust_area_dept cad
+            left join sys_dept sd on sd.dept_id = cad.dept_id
+        where area_id = #{areaId} and sd.status = 0 and weights > 0
+        order by weights desc, sd.dept_id asc
+    </select>
+
+    <!--  根据部门id 查询子部门列表 -->
+    <select id="getDeptList" resultMap="WeigthRoundResultMap">
+        select
+            dept_id id,
+            weights
+        from sys_dept
+        where parent_id = #{deptId} and sys_dept.status = 0 and weights > 0
+        order by weights desc, dept_id asc
+    </select>
+
+    <!-- 根据部门id 和排班id查询排班人员列表 -->
+    <select id="getUserList" resultMap="WeigthRoundResultMap">
+        select s.user_id id,weights
+        from
+        (select user_id
+        from sys_schedule
+        where dept_id = #{deptId}
+        <choose>
+            <when test="classList != null and classList.size() > 0">
+                and class_id in
+                <foreach collection="classList" index="index" item="item" open="(" separator="," close=")">
+                    #{item.classId}
+                </foreach>
+                and duty_date = #{classList[0].dutyDate}
+            </when>
+            <otherwise>and 1 = 2</otherwise>
+        </choose>
+        ) s
+        left join sys_user_dept sud on s.user_id = sud.user_id
+        left join sys_user su on su.user_id = s.user_id
+        where dept_id = #{deptId} and su.status = 0 and weights > 0
+        order by weights desc, s.user_id asc
+    </select>
+
+</mapper>

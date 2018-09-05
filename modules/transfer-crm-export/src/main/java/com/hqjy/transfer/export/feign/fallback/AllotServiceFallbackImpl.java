@@ -17,6 +17,7 @@
 
 package com.hqjy.transfer.export.feign.fallback;
 
+import com.hqjy.transfer.common.model.allot.CustomerInfo;
 import com.hqjy.transfer.export.feign.AllotService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,9 @@ import org.springframework.stereotype.Service;
 public class AllotServiceFallbackImpl implements AllotService {
 
     @Override
-    public boolean reset() {
+    public CustomerInfo reset() {
         log.error("调用{}异常:{}", "get");
-        return false;
+        return null;
     }
 
 }

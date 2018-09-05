@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.transfer.allot.dao.AllotProcessDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.transfer.allot.model.entity.AllotProcessEntity">
+        <id column="process_id" jdbcType="BIGINT" property="processId"/>
+        <result column="customer_id" jdbcType="BIGINT" property="customerId"/>
+        <result column="dept_id" jdbcType="BIGINT" property="deptId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="active" jdbcType="BIT" property="active"/>
+        <result column="follow_count" jdbcType="INTEGER" property="followCount"/>
+        <result column="last_follow_id" jdbcType="BIGINT" property="lastFollowId"/>
+        <result column="memo" jdbcType="VARCHAR" property="memo"/>
+        <result column="expire_time" jdbcType="TIMESTAMP" property="expireTime"/>
+        <result column="create_id" jdbcType="INTEGER" property="createId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+        process_id, customer_id, dept_id, user_id, active, follow_count, last_follow_id,
+        memo, expire_time, create_id, create_time
+    </sql>
+
+    <!-- 保存一条激活状态流程记录 -->
+    <insert id="saveActive" keyProperty="processId" useGeneratedKeys="true">
+        insert into biz_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            active,
+            <if test="null != customerId">customer_id,</if>
+            <if test="null != deptId">dept_id,</if>
+            <if test="null != userId">user_id,</if>
+            <if test="null != followCount">follow_count,</if>
+            <if test="null != lastFollowId">last_follow_id,</if>
+            <if test="null != memo">memo,</if>
+            <if test="null != expireTime">expire_time,</if>
+            <if test="null != createId">create_id,</if>
+            <if test="null != createTime">create_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            1,
+            <if test="null != customerId">#{customerId},</if>
+            <if test="null != deptId">#{deptId},</if>
+            <if test="null != userId">#{userId},</if>
+            <if test="null != followCount">#{followCount},</if>
+            <if test="null != lastFollowId">#{lastFollowId},</if>
+            <if test="null != memo">#{memo},</if>
+            <if test="null != expireTime">#{expireTime},</if>
+            <if test="null != createId">#{createId},</if>
+            <if test="null != createTime">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新客户所有流程记录为未激活状态 -->
+    <update id="updateNotActivated">
+        update biz_process
+        <set>
+            active = 0
+        </set>
+        where customer_id = #{customerId}
+    </update>
+
+    <!-- 更新其他流程记录为未激活状态 -->
+    <update id="updateActive">
+        update biz_process
+        <set>
+            active = 1
+        </set>
+        where process_id = #{processId}
+    </update>
+
+    <!-- 客户编号查找一条当前激活状态流程记录 -->
+    <select id="findOneActiveByCustomerId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_process
+        where customer_id = #{customerId} and active =1
+    </select>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from biz_process
+        where process_id = #{processId}
+    </select>
+
+</mapper>
