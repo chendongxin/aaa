@@ -26,6 +26,12 @@
 
         <dependency>
             <groupId>com.hqjy.transfer.common</groupId>
+            <artifactId>common-model</artifactId>
+            <version>${transfer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.hqjy.transfer.common</groupId>
             <artifactId>common-redis</artifactId>
             <version>${transfer.version}</version>
         </dependency>
