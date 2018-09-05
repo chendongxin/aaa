@@ -3,30 +3,33 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hqjy.transfer.common</groupId>
-    <artifactId>common-web</artifactId>
+    <groupId>com.hqjy.transfer.modules</groupId>
+    <artifactId>transfer-websocket</artifactId>
     <version>${transfer.version}</version>
     <packaging>jar</packaging>
 
-    <name>common-web</name>
-    <description>common-web 公共库 web</description>
+    <name>transfer-websocket</name>
+    <description>transfer-websocket websocket服务</description>
+
 
     <parent>
         <groupId>com.hqjy.transfer</groupId>
-        <artifactId>common</artifactId>
+        <artifactId>modules</artifactId>
         <version>${transfer.version}</version>
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>com.hqjy.transfer.common</groupId>
-            <artifactId>common-base</artifactId>
+            <artifactId>common-redis</artifactId>
             <version>${transfer.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.1.17.Final</version>
         </dependency>
 
     </dependencies>

@@ -3,30 +3,32 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hqjy.transfer.common</groupId>
-    <artifactId>common-web</artifactId>
+    <groupId>com.hqjy.transfer</groupId>
+    <artifactId>euraka</artifactId>
     <version>${transfer.version}</version>
     <packaging>jar</packaging>
 
-    <name>common-web</name>
-    <description>common-web 公共库 web</description>
+    <name>euraka</name>
+    <description>euraka 服务注册中心</description>
 
     <parent>
-        <groupId>com.hqjy.transfer</groupId>
-        <artifactId>common</artifactId>
+        <groupId>com.hqjy</groupId>
+        <artifactId>transfer</artifactId>
         <version>${transfer.version}</version>
     </parent>
 
     <dependencies>
+
+        <!--eureka服务-->
         <dependency>
-            <groupId>com.hqjy.transfer.common</groupId>
-            <artifactId>common-base</artifactId>
-            <version>${transfer.version}</version>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
 
+        <!-- eureka Basic认证登录需要 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
     </dependencies>
@@ -42,5 +44,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>

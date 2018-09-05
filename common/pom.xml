@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <name>common</name>
-    <description>transfer-common 公共库</description>
+    <description>common 公共库</description>
 
     <parent>
         <groupId>com.hqjy</groupId>

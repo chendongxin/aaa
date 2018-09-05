@@ -3,7 +3,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    mv
     <groupId>com.hqjy</groupId>
     <artifactId>transfer</artifactId>
     <version>${transfer.version}</version>
@@ -13,26 +12,17 @@
         <!-- 公共库 -->
         <module>common</module>
 
-        <!-- dubbo 接口 -->
-        <module>transfer-api</module>
+        <!-- euraka 服务注册中心 -->
+        <module>euraka</module>
 
-        <!-- CRM 业务 -->
-        <module>transfer-crm</module>
+        <!-- config 配置中心 -->
+        <module>config</module>
 
-        <!-- 分配服务 -->
-        <module>transfer-crm-allot</module>
+        <!-- gateway API网关服务 -->
+        <module>gateway</module>
 
-        <!-- 导出服务 -->
-        <module>transfer-crm-export</module>
-
-        <!-- websocket -->
-        <module>transfer-websocket</module>
-
-        <!-- 定时任务 -->
-        <module>transfer-crm-quartz</module>
-
-        <!-- 爬虫服务 -->
-        <module>transfer-crawler</module>
+        <!-- 业务模块 -->
+        <module>modules</module>
     </modules>
 
     <name>transfer</name>
@@ -45,10 +35,23 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Edgware.SR4</spring-cloud.version>
         <transfer.version>1.0</transfer.version>
     </properties>
 
@@ -78,6 +81,18 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
+        <!-- 服务注册 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+        <!--配置中心-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-config</artifactId>
         </dependency>
 
         <!-- lombok -->

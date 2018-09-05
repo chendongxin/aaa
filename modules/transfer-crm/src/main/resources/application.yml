@@ -1,0 +1,80 @@
+server:
+    tomcat:
+        uri-encoding: UTF-8
+        max-threads: 1000
+        min-spare-threads: 30
+    port: 81
+    connection-timeout: 5000
+    #context-path: /mustang
+    context-path: /
+
+info:
+  app:
+    name: transfer-config-server
+    version: 1.0
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://transfer:password@localhost:8000/eureka
+    # 缓存清单每隔30秒跟新一次
+    registry-fetch-interval-seconds: 10
+  instance:
+    hostname: transfer-crm
+    # 实例使用ip进行访问
+    prefer-ip-address: true
+    # 实例显示id
+    instance-id: ${spring.application.name}:${server.port}
+    # 服务续约任务调用间隔时间，默认30秒
+    lease-renewal-interval-in-seconds: 5
+    # 服务失效时间，默认90秒
+    lease-expiration-duration-in-seconds: 20
+
+spring:
+    application:
+    # 应用名称
+      name: transfer-crm
+    # 环境 dev|test|pro
+    profiles:
+        active: dev
+    http:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+            enabled: true
+    thymeleaf:
+      mode: LEGACYHTML5
+    #邮箱配置
+    mail:
+        host: smtp.exmail.qq.com
+        protocol: smtp
+        username: xieyuqing@hengqijy.com
+        password: King199092
+        properties:
+            mail:
+                smtp:
+                    starttls:
+                        auth: true
+                        enable: true
+                        required: true
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath*:com/hqjy/transfer/crm/modules/*/dao/*Dao.xml
+    configuration:
+        map-underscore-to-camel-case: true
+
+jwt-token:
+    # token有效时长，单位秒 默认一天 86400s = 3600*24
+      expire: 86400
+    # 续命时长 默认 3600s
+      prolong: 7200
+
+pagehelper:
+    helperDialect: mysql
+    page-size-zero: true
+    reasonable: true
+    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+    row-bounds-with-count: true
+
+
+

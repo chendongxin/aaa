@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.hqjy.transfer</groupId>
         <artifactId>common</artifactId>
-        <version>1.0</version>
+        <version>${transfer.version}</version>
     </parent>
 
     <dependencies>
