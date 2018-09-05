@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.hqjy.transfer</groupId>
+    <artifactId>modules</artifactId>
+    <version>${transfer.version}</version>
+    <packaging>pom</packaging>
+
+    <name>transfer-modules</name>
+    <description>transfer-modules 服务模块</description>
+
+    <parent>
+        <groupId>com.hqjy</groupId>
+        <artifactId>transfer</artifactId>
+        <version>${transfer.version}</version>
+    </parent>
+
+    <modules>
+
+        <!-- 爬虫服务 -->
+        <module>transfer-crawler</module>
+
+        <!-- CRM 业务 -->
+        <module>transfer-crm</module>
+
+        <!-- 分配服务 -->
+        <module>transfer-crm-allot</module>
+
+        <!-- 导出服务 -->
+        <module>transfer-crm-export</module>
+
+        <!-- websocket -->
+        <module>transfer-websocket</module>
+
+        <!-- 定时任务 -->
+        <module>transfer-crm-quartz</module>
+
+    </modules>
+
+    <dependencies>
+        <!-- 客户端负载均衡 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+        </dependency>
+
+        <!-- 声明式服务调用  -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-feign</artifactId>
+            <version>1.4.5.RELEASE</version>
+        </dependency>
+
+        <!--熔断器 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-hystrix</artifactId>
+            <version>1.4.5.RELEASE</version>
+        </dependency>
+
+    </dependencies>
+
+</project>
