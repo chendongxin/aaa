@@ -10,3 +10,22 @@ spring:
             max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
             max-idle: 10      # 连接池中的最大空闲连接
             min-idle: 5       # 连接池中的最小空闲连接
+    rabbitmq:
+      host: 10.0.98.75
+      port: 5672
+      username: admin
+      password: Rabbitmq@2018
+      # 支持发布确认
+      publisher-confirms: true
+      # 支持发布返回
+      publisher-returns: true
+      listener:
+        simple:
+          acknowledge-mode: manual
+          # 指定最小的消费者数量
+          concurrency: 1
+          # 指定最大的消费者数量
+          max-concurrency: 1
+          # 是否支持重试
+          retry:
+            enabled: true
