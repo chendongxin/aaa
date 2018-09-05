@@ -19,11 +19,11 @@ spring:
           # 相对搜索位置，可配置多个
           search-paths: config-repo
   rabbitmq:
-    host: hejinyo.cn
+    host: 10.0.98.75
     port: 5672
-    username: jelly
-    password: jelly
-    virtual-host: /jelly
+    username: admin
+    password: Rabbitmq@2018
+    #virtual-host: /jelly
 
 eureka:
   client:
