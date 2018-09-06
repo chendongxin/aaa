@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.admin.dao.ShiroDao">
+
+    <!-- 用户表表基本列 -->
+    <sql id="SysUser_Column_List">
+        user_id, user_name, phone, avatar, salt, password, login_ip, login_time, status,
+        create_id, create_time, update_id, update_time
+    </sql>
+
+    <!-- 菜单表基本列 -->
+    <sql id="SysMenu_Column_List">
+        menu_id, type, parent_id, menu_name, code, perms, icon, seq, status, create_id, create_time,
+        update_id, update_time
+    </sql>
+
+    <!-- 电话号码查询用户信息 -->
+    <select id="findByPhone" resultType="com.hqjy.mustang.admin.model.dto.LoginUserDTO">
+        select
+        <include refid="SysUser_Column_List"/>
+        from sys_user
+        where phone = #{phone}
+    </select>
+
+    <!-- 根据用户Id，查询用户 -->
+    <select id="findByUserId" resultType="com.hqjy.mustang.admin.model.dto.LoginUserDTO">
+        select
+        <include refid="SysUser_Column_List"/>
+        from sys_user
+        where user_id = #{userId}
+    </select>
+
+    <!-- 管理员拥有所有权限 -->
+    <select id="findAllPerms" resultType="string">
+        SELECT m.perms
+        FROM sys_menu m
+        WHERE m.perms IS NOT NULL
+    </select>
+
+    <!-- 查询用户的所有权限 -->
+    <select id="findAllPermsByUserId" resultType="string">
+        SELECT m.perms
+        FROM sys_user_role ur
+            LEFT JOIN sys_role_menu rm ON ur.role_id = rm.role_id
+            LEFT JOIN sys_menu m ON rm.menu_id = m.menu_id
+        WHERE ur.user_id = #{userId} AND m.perms IS NOT NULL
+    </select>
+
+    <!-- 查询用户的所有角色 -->
+    <select id="findAllRoleByUserId" resultType="string">
+        SELECT sr.role_code
+        FROM sys_user_role ur
+            left join sys_role sr on sr.role_id = ur.role_id
+        WHERE ur.user_id = #{userId} AND sr.role_code IS NOT NULL
+    </select>
+
+    <!-- 更新一条记录 -->
+    <update id="updateUserLoginInfo">
+        UPDATE sys_user
+        SET login_ip = #{loginIp}, login_time = #{loginTime}
+        WHERE user_id = #{userId}
+    </update>
+
+</mapper>

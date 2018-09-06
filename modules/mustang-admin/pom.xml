@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.hqjy.transfer.modules</groupId>
-    <artifactId>transfer-crm</artifactId>
+    <artifactId>mustang-admin</artifactId>
     <version>${transfer.version}</version>
     <packaging>jar</packaging>
 
-    <name>transfer-crm</name>
-    <description>transfer-crm CRM主业务</description>
+    <name>mustang-admin</name>
+    <description>mustang-admin 系统管理</description>
 
     <parent>
         <groupId>com.hqjy.transfer</groupId>
@@ -34,6 +34,12 @@
             <groupId>com.hqjy.transfer.common</groupId>
             <artifactId>common-redis</artifactId>
             <version>${transfer.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+            <version>1.4.0</version>
         </dependency>
 
         <!-- mybatis -->

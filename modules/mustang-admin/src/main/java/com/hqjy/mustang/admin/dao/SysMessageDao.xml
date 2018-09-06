@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.admin.dao.SysMessageDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.mustang.admin.model.entity.SysMessageEntity">
+        <id column="msg_id" jdbcType="BIGINT" property="msgId"/>
+        <result column="type" jdbcType="INTEGER" property="type"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="content" jdbcType="VARCHAR" property="content"/>
+        <result column="data" jdbcType="CHAR" property="data"/>
+        <result column="read_flag" jdbcType="TINYINT" property="readFlag"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="create_id" jdbcType="BIGINT" property="createId"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+        msg_id, type, title, content, data, read_flag, user_id, create_id, create_time, update_time
+    </sql>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Where_SQL">
+        <where>
+            <if test="type != null and !&quot;&quot;.equals(type)">and type = #{type}</if>
+            <if test="title != null and !&quot;&quot;.equals(title)">and title = #{title}</if>
+            <if test="content != null and !&quot;&quot;.equals(content)">and content = #{content}</if>
+            <if test="data != null and !&quot;&quot;.equals(data)">and data = #{data}</if>
+            <if test="readFlag != null and !&quot;&quot;.equals(readFlag)">and read_flag = #{readFlag}</if>
+            <if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
+            <if test="createId != null and !&quot;&quot;.equals(createId)">and create_id = #{createId}</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+        </where>
+    </sql>
+
+    <!-- 用户查询消息列表 -->
+    <select id="findMessageListPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_message
+        where
+        user_id = #{userId} and type = #{type}
+        order by msg_id desc
+    </select>
+
+    <!-- 标记已读 -->
+    <update id="updateReadByMsgId">
+        update sys_message
+        <set>
+            read_flag = 1
+        </set>
+        where user_id = #{userId} and msg_id = #{msgId}
+    </update>
+
+    <!-- 标记用户类型消息已读 -->
+    <update id="updateReadByType">
+        update sys_message
+        <set>
+            read_flag = 1
+        </set>
+        where user_id = #{userId} and type = #{type}
+    </update>
+
+    <!-- 清空用户类型消息 -->
+    <delete id="deleteByMsgId">
+        delete
+        from sys_message
+        where user_id = #{userId} and msg_id = #{msgId}
+    </delete>
+
+    <!-- 清空用户类型消息 -->
+    <delete id="deleteByType">
+        delete
+        from sys_message
+        where user_id = #{userId} and type = #{type}
+    </delete>
+
+    <!-- 统计消息数量 -->
+    <select id="countInfo" resultType="com.hqjy.mustang.admin.model.dto.MessageTypeCountDTO">
+        select
+            count(msg_id) count,
+            type
+        from sys_message
+        where user_id = #{userId} and read_flag = 0
+        group by type
+    </select>
+
+    <!-- 统计消息总数量 -->
+    <select id="totalCount" resultType="int">
+        select count(msg_id)
+        from sys_message
+        where user_id = #{userId} and read_flag = 0
+    </select>
+
+    <!-- 插入一条记录 -->
+    <insert id="save" keyProperty="msgId" useGeneratedKeys="true">
+        insert into sys_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != type">type,</if>
+            <if test="null != title">title,</if>
+            <if test="null != content">content,</if>
+            <if test="null != data">data,</if>
+            <if test="null != readFlag">read_flag,</if>
+            <if test="null != userId">user_id,</if>
+            <if test="null != createId">create_id,</if>
+            <if test="null != createTime">create_time,</if>
+            <if test="null != updateTime">update_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != type">#{type},</if>
+            <if test="null != title">#{title},</if>
+            <if test="null != content">#{content},</if>
+            <if test="null != data">#{data},</if>
+            <if test="null != readFlag">#{readFlag},</if>
+            <if test="null != userId">#{userId},</if>
+            <if test="null != createId">#{createId},</if>
+            <if test="null != createTime">#{createTime},</if>
+            <if test="null != updateTime">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新一条记录 -->
+    <update id="update">
+        update sys_message
+        <set>
+            <if test="null != type">type = #{type},</if>
+            <if test="null != title">title = #{title},</if>
+            <if test="null != content">content = #{content},</if>
+            <if test="null != data">data = #{data},</if>
+            <if test="null != readFlag">read_flag = #{readFlag},</if>
+            <if test="null != userId">user_id = #{userId},</if>
+            <if test="null != createId">create_id = #{createId},</if>
+            <if test="null != createTime">create_time = #{createTime},</if>
+            <if test="null != updateTime">update_time = #{updateTime},</if>
+        </set>
+        where msg_id = #{msgId}
+    </update>
+
+    <!-- 删除给定主键的记录 -->
+    <delete id="delete">
+        delete
+        from sys_message
+        where
+            msg_id = #{msgId}
+    </delete>
+
+    <!-- 多个主键批量删除记录 -->
+    <delete id="deleteBatch">
+        delete
+        from sys_message
+        where
+        msg_id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 多个实体批量删除记录 -->
+    <delete id="deleteList">
+        delete
+        from sys_message
+        where
+        msg_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.msgId}
+        </foreach>
+    </delete>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_message
+        where msg_id = #{msgId}
+    </select>
+
+    <!-- 查询多条 -->
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_message
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_message
+        <where>
+            <if test="type != null and !&quot;&quot;.equals(type)">and type = #{type}</if>
+            <if test="title != null and !&quot;&quot;.equals(title)">and title like concat('%',#{title},'%')</if>
+            <if test="content != null and !&quot;&quot;.equals(content)">and content like concat('%',#{content},'%')</if>
+            <if test="data != null and !&quot;&quot;.equals(data)">and data = #{data}</if>
+            <if test="readFlag != null and !&quot;&quot;.equals(readFlag)">and read_flag = #{readFlag}</if>
+            <if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
+            <if test="createId != null and !&quot;&quot;.equals(createId)">and create_id = #{createId}</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+        </where>
+    </select>
+
+    <!-- 查询记录数量 -->
+    <select id="count" resultType="int">
+        select
+        count(*)
+        from sys_message
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 查询记录是否存在 -->
+    <select id="exsit" resultType="boolean">
+        select
+        count(*)
+        from sys_message
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+
+</mapper>

@@ -19,6 +19,17 @@
     </parent>
 
     <modules>
+        <!-- 系统管理 -->
+        <module>mustang-admin</module>
+
+        <!-- 分配服务 -->
+        <module>mustang-allot</module>
+
+        <!-- websocket -->
+        <module>mustang-websocket</module>
+
+        <!-- 定时任务 -->
+        <module>mustang-quartz</module>
 
         <!-- 爬虫服务 -->
         <module>transfer-crawler</module>
@@ -26,17 +37,8 @@
         <!-- CRM 业务 -->
         <module>transfer-crm</module>
 
-        <!-- 分配服务 -->
-        <module>transfer-crm-allot</module>
-
         <!-- 导出服务 -->
-        <module>transfer-crm-export</module>
-
-        <!-- websocket -->
-        <module>transfer-websocket</module>
-
-        <!-- 定时任务 -->
-        <module>transfer-crm-quartz</module>
+        <module>transfer-export</module>
 
     </modules>
 
