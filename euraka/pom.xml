@@ -5,7 +5,7 @@
 
     <groupId>com.hqjy.mustang</groupId>
     <artifactId>euraka</artifactId>
-    <version>${mustang.version}</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>euraka</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.hqjy</groupId>
         <artifactId>mustang</artifactId>
-        <version>${mustang.version}</version>
+        <version>1.0</version>
     </parent>
 
     <dependencies>

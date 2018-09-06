@@ -5,7 +5,7 @@
 
     <groupId>com.hqjy.mustang.common</groupId>
     <artifactId>common-base</artifactId>
-    <version>${mustang.version}</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>common-base</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.hqjy.mustang</groupId>
         <artifactId>common</artifactId>
-        <version>${mustang.version}</version>
+        <version>1.0</version>
     </parent>
 
     <dependencies>
@@ -125,13 +125,6 @@
 
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <finalName>${project.name}</finalName>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 

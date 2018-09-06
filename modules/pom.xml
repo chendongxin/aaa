@@ -6,7 +6,7 @@
 
     <groupId>com.hqjy.mustang</groupId>
     <artifactId>modules</artifactId>
-    <version>${mustang.version}</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
 
     <name>transfer-modules</name>
@@ -15,7 +15,7 @@
     <parent>
         <groupId>com.hqjy</groupId>
         <artifactId>mustang</artifactId>
-        <version>${mustang.version}</version>
+        <version>1.0</version>
     </parent>
 
     <modules>
@@ -25,11 +25,11 @@
         <!-- 分配服务 -->
         <module>mustang-allot</module>
 
-        <!-- websocket -->
-        <module>mustang-websocket</module>
-
         <!-- 定时任务 -->
         <module>mustang-quartz</module>
+
+        <!-- websocket -->
+        <module>mustang-websocket</module>
 
         <!-- 爬虫服务 -->
         <module>transfer-crawler</module>

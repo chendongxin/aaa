@@ -5,7 +5,7 @@
 
     <groupId>com.hqjy.mustang</groupId>
     <artifactId>gateway</artifactId>
-    <version>${mustang.version}</version>
+    <version>1.0</version>
     <packaging>jar</packaging>
 
     <name>gateway</name>
@@ -14,7 +14,7 @@
     <parent>
         <groupId>com.hqjy</groupId>
         <artifactId>mustang</artifactId>
-        <version>${mustang.version}</version>
+        <version>1.0</version>
     </parent>
 
     <dependencies>
@@ -22,7 +22,7 @@
         <dependency>
             <groupId>com.hqjy.mustang.common</groupId>
             <artifactId>common-base</artifactId>
-            <version>${mustang.version}</version>
+            <version>1.0</version>
         </dependency>
 
         <!-- 服务注册 -->
