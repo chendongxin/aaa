@@ -3,9 +3,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hqjy.transfer</groupId>
+    <groupId>com.hqjy.mustang</groupId>
     <artifactId>gateway</artifactId>
-    <version>${transfer.version}</version>
+    <version>${mustang.version}</version>
     <packaging>jar</packaging>
 
     <name>gateway</name>
@@ -13,16 +13,16 @@
 
     <parent>
         <groupId>com.hqjy</groupId>
-        <artifactId>transfer</artifactId>
-        <version>${transfer.version}</version>
+        <artifactId>mustang</artifactId>
+        <version>${mustang.version}</version>
     </parent>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.hqjy.transfer.common</groupId>
+            <groupId>com.hqjy.mustang.common</groupId>
             <artifactId>common-base</artifactId>
-            <version>${transfer.version}</version>
+            <version>${mustang.version}</version>
         </dependency>
 
         <!-- 服务注册 -->

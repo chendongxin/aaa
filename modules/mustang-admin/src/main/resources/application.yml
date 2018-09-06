@@ -59,7 +59,7 @@ spring:
                         required: true
 # Mybatis配置
 mybatis:
-    mapperLocations: classpath*:com/hqjy/transfer/crm/modules/*/dao/*Dao.xml
+    mapperLocations: classpath*:com/hqjy/mustang/admin/dao/*Dao.xml
     configuration:
         map-underscore-to-camel-case: true
 

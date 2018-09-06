@@ -30,7 +30,7 @@ public class SysMessageApi {
     /**
      * 发送消息
      */
-    @PostMapping("/sendNotice")
+    @PostMapping("/sendMessage")
     public void sendMessage(@RequestBody MessageSendVO msg) {
         sysMessageService.sendMessage(msg.getUserId(), msg.getTitle(), msg.getContent(), msg.getData());
     }

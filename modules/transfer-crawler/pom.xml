@@ -3,18 +3,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hqjy.transfer.modules</groupId>
+    <groupId>com.hqjy.mustang.modules</groupId>
     <artifactId>transfer-crawler</artifactId>
-    <version>${transfer.version}</version>
+    <version>${mustang.version}</version>
     <packaging>jar</packaging>
 
     <name>crawler</name>
     <description>crawler 爬虫服务</description>
 
     <parent>
-        <groupId>com.hqjy.transfer</groupId>
+        <groupId>com.hqjy.mustang</groupId>
         <artifactId>modules</artifactId>
-        <version>${transfer.version}</version>
+        <version>${mustang.version}</version>
     </parent>
 
     <dependencies>

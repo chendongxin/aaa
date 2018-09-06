@@ -18,7 +18,7 @@ netty:
     #是否开启服务
     enabled: true
     #监听端口
-    port: 8300
+    port: 8388
 
 info:
   app:

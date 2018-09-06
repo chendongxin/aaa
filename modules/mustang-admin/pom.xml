@@ -3,37 +3,37 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hqjy.transfer.modules</groupId>
+    <groupId>com.hqjy.mustang.modules</groupId>
     <artifactId>mustang-admin</artifactId>
-    <version>${transfer.version}</version>
+    <version>${mustang.version}</version>
     <packaging>jar</packaging>
 
     <name>mustang-admin</name>
     <description>mustang-admin 系统管理</description>
 
     <parent>
-        <groupId>com.hqjy.transfer</groupId>
+        <groupId>com.hqjy.mustang</groupId>
         <artifactId>modules</artifactId>
-        <version>${transfer.version}</version>
+        <version>${mustang.version}</version>
     </parent>
 
     <dependencies>
         <dependency>
-            <groupId>com.hqjy.transfer.common</groupId>
+            <groupId>com.hqjy.mustang.common</groupId>
             <artifactId>common-web</artifactId>
-            <version>${transfer.version}</version>
+            <version>${mustang.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.hqjy.transfer.common</groupId>
+            <groupId>com.hqjy.mustang.common</groupId>
             <artifactId>common-model</artifactId>
-            <version>${transfer.version}</version>
+            <version>${mustang.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.hqjy.transfer.common</groupId>
+            <groupId>com.hqjy.mustang.common</groupId>
             <artifactId>common-redis</artifactId>
-            <version>${transfer.version}</version>
+            <version>${mustang.version}</version>
         </dependency>
 
         <dependency>

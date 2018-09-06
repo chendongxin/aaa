@@ -4,8 +4,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.hqjy</groupId>
-    <artifactId>transfer</artifactId>
-    <version>${transfer.version}</version>
+    <artifactId>mustang</artifactId>
+    <version>${mustang.version}</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -52,7 +52,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
         <spring-cloud.version>Edgware.SR4</spring-cloud.version>
-        <transfer.version>1.0</transfer.version>
+        <mustang.version>1.0</mustang.version>
     </properties>
 
     <dependencies>

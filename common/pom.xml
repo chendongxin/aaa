@@ -4,9 +4,9 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.hqjy.transfer</groupId>
+    <groupId>com.hqjy.mustang</groupId>
     <artifactId>common</artifactId>
-    <version>${transfer.version}</version>
+    <version>${mustang.version}</version>
     <packaging>pom</packaging>
 
     <name>common</name>
@@ -14,8 +14,8 @@
 
     <parent>
         <groupId>com.hqjy</groupId>
-        <artifactId>transfer</artifactId>
-        <version>${transfer.version}</version>
+        <artifactId>mustang</artifactId>
+        <version>${mustang.version}</version>
     </parent>
 
     <modules>
