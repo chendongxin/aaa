@@ -45,6 +45,7 @@ public class AccessFilter extends ZuulFilter {
             ctx.setResponseStatusCode(401);
             return null;
         }
+        ctx.addZuulRequestHeader(Constant.AUTHOR_PARAM, request.getHeader(Constant.AUTHOR_PARAM));
         log.info("pass ok");
         return null;
     }

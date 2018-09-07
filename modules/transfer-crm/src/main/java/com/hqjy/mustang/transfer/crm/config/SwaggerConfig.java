@@ -1,4 +1,4 @@
-package com.hqjy.mustang.admin.config;
+package com.hqjy.mustang.transfer.crm.config;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;

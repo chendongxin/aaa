@@ -1,10 +1,10 @@
 package com.hqjy.mustang.admin.service.impl;
 
-import com.hqjy.mustang.common.base.constant.SystemId;
-import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.admin.dao.ShiroDao;
 import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
 import com.hqjy.mustang.admin.service.ShiroService;
+import com.hqjy.mustang.common.base.constant.SystemId;
+import com.hqjy.mustang.common.base.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,4 +84,5 @@ public class ShiroServiceImpl implements ShiroService {
     public LoginUserDTO findByUserId(Long userId) {
         return shiroDao.findByUserId(userId);
     }
+
 }

@@ -1,12 +1,13 @@
 package com.hqjy.mustang.admin.shiro;
 
 import com.google.gson.reflect.TypeToken;
+import com.hqjy.mustang.admin.service.ShiroService;
 import com.hqjy.mustang.common.base.utils.JsonUtil;
+import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisUtils;
-import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
-import com.hqjy.mustang.admin.service.ShiroService;
+import com.hqjy.mustang.common.web.model.UserDetails;
+import com.hqjy.mustang.common.web.shiro.AuthToken;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -35,7 +36,7 @@ public class AuthRealm extends AuthorizingRealm {
 
     @Override
     public boolean supports(AuthenticationToken token) {
-        return token instanceof SysAuthcToken;
+        return token instanceof AuthToken;
     }
 
     /**
@@ -43,7 +44,7 @@ public class AuthRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        LoginUserDTO user = (LoginUserDTO) principals.getPrimaryPrincipal();
+        UserDetails user = (UserDetails) principals.getPrimaryPrincipal();
         Long userId = user.getUserId();
         //用户权限列表
         Set<String> permsSet;
@@ -53,8 +54,8 @@ public class AuthRealm extends AuthorizingRealm {
             }.getType());
         } else {
             permsSet = shiroService.getUserPermissions(userId);
-            //权限缓存600秒
-            redisUtils.set(RedisKeys.User.perm(userId), permsSet, 600);
+            //权限缓存3600秒
+            redisUtils.set(RedisKeys.User.perm(userId), permsSet, 3600);
         }
 
         // 用户角色列表
@@ -65,8 +66,8 @@ public class AuthRealm extends AuthorizingRealm {
             }.getType());
         } else {
             roleSet = shiroService.getUserRole(userId);
-            //权限缓存600秒
-            redisUtils.set(RedisKeys.User.role(userId), roleSet, 600);
+            //权限缓存3600秒
+            redisUtils.set(RedisKeys.User.role(userId), roleSet, 3600);
         }
 
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
@@ -80,10 +81,8 @@ public class AuthRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
-        SysAuthcToken statelessToken = (SysAuthcToken) token;
-        // 签证信息
-        LoginUserDTO userDTO = statelessToken.getLoginUser();
+        AuthToken authToken = (AuthToken) token;
         // 使用缓存中的userToken和当前验证token进行对比
-        return new SimpleAuthenticationInfo(userDTO, userDTO.getToken(), getName());
+        return new SimpleAuthenticationInfo(authToken, authToken.getJwt(), getName());
     }
 }

@@ -15,8 +15,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * @date : 2018/03/22 10:54
  */
 @SpringBootApplication
-@EnableAsync
-@EnableScheduling
 @ComponentScan(basePackages = {"com.hqjy.mustang.transfer.crm", "com.hqjy.mustang.common"})
 @EnableDiscoveryClient
 @EnableFeignClients

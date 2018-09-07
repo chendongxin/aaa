@@ -1,16 +1,16 @@
 server:
-    port: 8201
+    port: 8210
 
 spring:
     application:
     # 应用名称
-      name: transfer-crm-allot
+      name: mustang-allot
     # 环境 dev|test|pro
     profiles:
         active: dev
 info:
   app:
-    name: transfer-crm-allot
+    name: mustang-allot
     version: 1.0
 eureka:
   client:
@@ -19,7 +19,7 @@ eureka:
     # 缓存清单每隔30秒跟新一次
     registry-fetch-interval-seconds: 10
   instance:
-    hostname: transfer-crm-allot
+    hostname: mustang-allot
     # 实例使用ip进行访问
     prefer-ip-address: true
     # 实例显示id

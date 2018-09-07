@@ -1,16 +1,16 @@
 server:
-    port: 8310
+    port: 8220
 
 spring:
     application:
     # 应用名称
-      name: transfer-crawler
+      name: mustang-quartz
     # 环境 dev|test|pro
     profiles:
         active: dev
 info:
   app:
-    name: transfer-crawler
+    name: mustang-quartz
     version: 1.0
 eureka:
   client:
@@ -19,7 +19,7 @@ eureka:
     # 缓存清单每隔30秒跟新一次
     registry-fetch-interval-seconds: 10
   instance:
-    hostname: transfer-crawler
+    hostname: mustang-quartz
     # 实例使用ip进行访问
     prefer-ip-address: true
     # 实例显示id
