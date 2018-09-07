@@ -22,7 +22,7 @@
         </commentGenerator>
 
         <!-- 数据库链接URL、用户名、密码 -->
-        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://10.0.98.6:3306/mustang_v2"
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://10.0.98.6:3306/mustang_transfer"
                         userId="root" password="root">
         </jdbcConnection>
 
@@ -57,8 +57,8 @@
         </javaClientGenerator>
 
         <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
-        <table tableName="`sys_role_usable`" domainObjectName="SysRoleUsableEntity"
-               mapperName="SysRoleUsableDao"
+        <table tableName="`sys_user_extend`" domainObjectName="SysUserExtendEntity"
+               mapperName="SysUserExtendDao"
                enableInsert="false"
                enableSelectByPrimaryKey="true"
                enableDeleteByPrimaryKey="false"

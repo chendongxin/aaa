@@ -21,6 +21,7 @@ public enum StatusCode {
     LOGIN_ACCOUNT_NOEXIST(1116, "企业账户不存在"),
     LOGIN_ACCOUNT_LOCK(1117, "企业账户被禁用"),
     USER_UNAUTHORIZED(1118, "用户无权限进行此操作"),
+    PRIVATE_UNAUTHORIZED(1119, "非法请求"),
     TOKEN_OVERDUE(1130, "登录过期，请重新登录"),
     TOKEN_OUT(1131, "登录失效，帐号在其他地方登录"),
     TOKEN_FAULT(1132, "未登录，无权限访问"),

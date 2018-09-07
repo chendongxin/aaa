@@ -40,6 +40,9 @@
         <!-- 导出服务 -->
         <module>transfer-export</module>
 
+        <!-- call QT通话中心 -->
+        <module>transfer-call</module>
+
     </modules>
 
     <dependencies>

@@ -1,6 +1,9 @@
 package com.hqjy.mustang.gateway.fliter;
 
 import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.base.constant.StatusCode;
+import com.hqjy.mustang.common.base.utils.JsonUtil;
+import com.hqjy.mustang.common.base.utils.R;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
@@ -42,7 +45,9 @@ public class AccessFilter extends ZuulFilter {
         if (request.getRequestURL().toString().contains(Constant.API_PATH)) {
             log.warn("不允许访问微服务内部接口");
             ctx.setSendZuulResponse(false);
-            ctx.setResponseStatusCode(401);
+            ctx.setResponseStatusCode(400);
+            ctx.setResponseBody(JsonUtil.toJson(R.error(StatusCode.PRIVATE_UNAUTHORIZED)));
+            ctx.getResponse().setContentType("application/json;charset=UTF-8");
             return null;
         }
         ctx.addZuulRequestHeader(Constant.AUTHOR_PARAM, request.getHeader(Constant.AUTHOR_PARAM));

@@ -78,11 +78,18 @@ pagehelper:
     params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
     row-bounds-with-count: true
 
+
+# Feign 开启 Hystrix
+feign:
+  hystrix:
+    enabled: true
+
 # shiro 不拦截路径
 shiro:
   anon:
     path:
       # spring cloud 健康检查
+      - /info
       - /actuator/**
       - /doc
       - /swagger-ui.html
