@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferGenCostDao">
+  
+  <!-- 实体映射 -->
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferGenCostEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="way_id" jdbcType="INTEGER" property="wayId" />
+    <result column="gen_day" jdbcType="TIMESTAMP" property="genDay" />
+    <result column="initiative_money" jdbcType="DECIMAL" property="initiativeMoney" />
+    <result column="passive_money" jdbcType="DECIMAL" property="passiveMoney" />
+    <result column="initiative_virtual" jdbcType="DECIMAL" property="initiativeVirtual" />
+    <result column="passive_virtual" jdbcType="DECIMAL" property="passiveVirtual" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
+    <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  
+  <!-- 表基本列 -->
+  <sql id="Base_Column_List">
+    id, dept_id, dept_name, company_id, way_id, gen_day, initiative_money, passive_money, 
+    initiative_virtual, passive_virtual, create_user_id, create_user_name, create_time, 
+    update_user_id, update_user_name, update_time
+  </sql>
+  
+  <!-- 通用查询sql -->
+  <sql id="Base_Where_SQL">
+    <where>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and way_id = #{wayId}</if>
+		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and DATE_FORMAT(gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>
+		<if test="initiativeMoney != null and !&quot;&quot;.equals(initiativeMoney)">and initiative_money = #{initiativeMoney}</if>
+		<if test="passiveMoney != null and !&quot;&quot;.equals(passiveMoney)">and passive_money = #{passiveMoney}</if>
+		<if test="initiativeVirtual != null and !&quot;&quot;.equals(initiativeVirtual)">and initiative_virtual = #{initiativeVirtual}</if>
+		<if test="passiveVirtual != null and !&quot;&quot;.equals(passiveVirtual)">and passive_virtual = #{passiveVirtual}</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+	</where>
+  </sql>
+  
+  <!-- 插入一条记录 -->
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    insert into transfer_gen_cost
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != deptId">dept_id, </if>
+			<if test="null != deptName">dept_name, </if>
+			<if test="null != companyId">company_id, </if>
+			<if test="null != wayId">way_id, </if>
+			<if test="null != genDay">gen_day, </if>
+			<if test="null != initiativeMoney">initiative_money, </if>
+			<if test="null != passiveMoney">passive_money, </if>
+			<if test="null != initiativeVirtual">initiative_virtual, </if>
+			<if test="null != passiveVirtual">passive_virtual, </if>
+			<if test="null != createUserId">create_user_id, </if>
+			<if test="null != createUserName">create_user_name, </if>
+			<if test="null != createTime">create_time, </if>
+			<if test="null != updateUserId">update_user_id, </if>
+			<if test="null != updateUserName">update_user_name, </if>
+			<if test="null != updateTime">update_time, </if>
+		</trim>
+	values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != deptId">#{deptId}, </if>
+			<if test="null != deptName">#{deptName}, </if>
+			<if test="null != companyId">#{companyId}, </if>
+			<if test="null != wayId">#{wayId}, </if>
+			<if test="null != genDay">#{genDay}, </if>
+			<if test="null != initiativeMoney">#{initiativeMoney}, </if>
+			<if test="null != passiveMoney">#{passiveMoney}, </if>
+			<if test="null != initiativeVirtual">#{initiativeVirtual}, </if>
+			<if test="null != passiveVirtual">#{passiveVirtual}, </if>
+			<if test="null != createUserId">#{createUserId}, </if>
+			<if test="null != createUserName">#{createUserName}, </if>
+			<if test="null != createTime">#{createTime}, </if>
+			<if test="null != updateUserId">#{updateUserId}, </if>
+			<if test="null != updateUserName">#{updateUserName}, </if>
+			<if test="null != updateTime">#{updateTime}, </if>
+		</trim>
+  </insert>
+  
+  <!-- 更新一条记录 -->
+  <update id="update">
+    update transfer_gen_cost 
+		<set>
+			<if test="null != deptId">dept_id = #{deptId}, </if>
+			<if test="null != deptName">dept_name = #{deptName}, </if>
+			<if test="null != companyId">company_id = #{companyId}, </if>
+			<if test="null != wayId">way_id = #{wayId}, </if>
+			<if test="null != genDay">gen_day = #{genDay}, </if>
+			<if test="null != initiativeMoney">initiative_money = #{initiativeMoney}, </if>
+			<if test="null != passiveMoney">passive_money = #{passiveMoney}, </if>
+			<if test="null != initiativeVirtual">initiative_virtual = #{initiativeVirtual}, </if>
+			<if test="null != passiveVirtual">passive_virtual = #{passiveVirtual}, </if>
+			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
+			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
+			<if test="null != createTime">create_time = #{createTime}, </if>
+			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
+			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
+			<if test="null != updateTime">update_time = #{updateTime}, </if>
+		</set>
+		where id = #{id}
+  </update>
+  
+  <!-- 删除给定主键的记录 -->
+  <delete id="delete">
+    delete
+		from transfer_gen_cost
+	where
+		id = #{id}
+  </delete>
+  
+  <!-- 多个主键批量删除记录 -->
+  <delete id="deleteBatch">
+    delete
+		from transfer_gen_cost
+	where
+		id in 
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+  </delete>
+  
+  <!-- 多个实体批量删除记录 -->
+  <delete id="deleteList">
+    delete
+		from transfer_gen_cost
+	where
+		id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+  </delete>
+  
+  <!-- 主键查找一条记录 -->
+  <select id="findOne" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from transfer_gen_cost
+	where id = #{id}
+  </select>
+  
+  <!-- 查询多条 -->
+  <select id="findList" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from transfer_gen_cost
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+  <!-- 分页查询 -->
+  <select id="findPage" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from transfer_gen_cost
+		<where>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and way_id = #{wayId}</if>
+		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and DATE_FORMAT(gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>
+		<if test="initiativeMoney != null and !&quot;&quot;.equals(initiativeMoney)">and initiative_money = #{initiativeMoney}</if>
+		<if test="passiveMoney != null and !&quot;&quot;.equals(passiveMoney)">and passive_money = #{passiveMoney}</if>
+		<if test="initiativeVirtual != null and !&quot;&quot;.equals(initiativeVirtual)">and initiative_virtual = #{initiativeVirtual}</if>
+		<if test="passiveVirtual != null and !&quot;&quot;.equals(passiveVirtual)">and passive_virtual = #{passiveVirtual}</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+	</where>
+  </select>
+  
+  <!-- 查询记录数量 -->
+  <select id="count" resultType="int">
+    select
+		count(*)
+	from transfer_gen_cost
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+  <!-- 查询记录是否存在 -->
+  <select id="exsit" resultType="boolean">
+    select
+		count(*)
+	from transfer_gen_cost
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+
+</mapper>

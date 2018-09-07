@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferEmailDao">
+  
+  <!-- 实体映射 -->
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferEmailEntity">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="pro_id" jdbcType="INTEGER" property="proId" />
+    <result column="pro_name" jdbcType="VARCHAR" property="proName" />
+    <result column="dept_id" jdbcType="INTEGER" property="deptId" />
+    <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
+    <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  
+  <!-- 表基本列 -->
+  <sql id="Base_Column_List">
+    id, company_id, user_id, user_name, pro_id, pro_name, dept_id, dept_name, email, 
+    password, create_user_id, create_user_name, create_time, update_user_id, update_user_name, 
+    update_time
+  </sql>
+  
+  <!-- 通用查询sql -->
+  <sql id="Base_Where_SQL">
+    <where>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
+		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name = #{userName}</if>
+		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
+		<if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name = #{proName}</if>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
+		<if test="email != null and !&quot;&quot;.equals(email)">and email = #{email}</if>
+		<if test="password != null and !&quot;&quot;.equals(password)">and password = #{password}</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+	</where>
+  </sql>
+  
+  <!-- 插入一条记录 -->
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    insert into transfer_email
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != companyId">company_id, </if>
+			<if test="null != userId">user_id, </if>
+			<if test="null != userName">user_name, </if>
+			<if test="null != proId">pro_id, </if>
+			<if test="null != proName">pro_name, </if>
+			<if test="null != deptId">dept_id, </if>
+			<if test="null != deptName">dept_name, </if>
+			<if test="null != email">email, </if>
+			<if test="null != password">password, </if>
+			<if test="null != createUserId">create_user_id, </if>
+			<if test="null != createUserName">create_user_name, </if>
+			<if test="null != createTime">create_time, </if>
+			<if test="null != updateUserId">update_user_id, </if>
+			<if test="null != updateUserName">update_user_name, </if>
+			<if test="null != updateTime">update_time, </if>
+		</trim>
+	values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != companyId">#{companyId}, </if>
+			<if test="null != userId">#{userId}, </if>
+			<if test="null != userName">#{userName}, </if>
+			<if test="null != proId">#{proId}, </if>
+			<if test="null != proName">#{proName}, </if>
+			<if test="null != deptId">#{deptId}, </if>
+			<if test="null != deptName">#{deptName}, </if>
+			<if test="null != email">#{email}, </if>
+			<if test="null != password">#{password}, </if>
+			<if test="null != createUserId">#{createUserId}, </if>
+			<if test="null != createUserName">#{createUserName}, </if>
+			<if test="null != createTime">#{createTime}, </if>
+			<if test="null != updateUserId">#{updateUserId}, </if>
+			<if test="null != updateUserName">#{updateUserName}, </if>
+			<if test="null != updateTime">#{updateTime}, </if>
+		</trim>
+  </insert>
+  
+  <!-- 更新一条记录 -->
+  <update id="update">
+    update transfer_email 
+		<set>
+			<if test="null != companyId">company_id = #{companyId}, </if>
+			<if test="null != userId">user_id = #{userId}, </if>
+			<if test="null != userName">user_name = #{userName}, </if>
+			<if test="null != proId">pro_id = #{proId}, </if>
+			<if test="null != proName">pro_name = #{proName}, </if>
+			<if test="null != deptId">dept_id = #{deptId}, </if>
+			<if test="null != deptName">dept_name = #{deptName}, </if>
+			<if test="null != email">email = #{email}, </if>
+			<if test="null != password">password = #{password}, </if>
+			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
+			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
+			<if test="null != createTime">create_time = #{createTime}, </if>
+			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
+			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
+			<if test="null != updateTime">update_time = #{updateTime}, </if>
+		</set>
+		where id = #{id}
+  </update>
+  
+  <!-- 删除给定主键的记录 -->
+  <delete id="delete">
+    delete
+		from transfer_email
+	where
+		id = #{id}
+  </delete>
+  
+  <!-- 多个主键批量删除记录 -->
+  <delete id="deleteBatch">
+    delete
+		from transfer_email
+	where
+		id in 
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+  </delete>
+  
+  <!-- 多个实体批量删除记录 -->
+  <delete id="deleteList">
+    delete
+		from transfer_email
+	where
+		id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.id}
+		</foreach>
+  </delete>
+  
+  <!-- 主键查找一条记录 -->
+  <select id="findOne" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from transfer_email
+	where id = #{id}
+  </select>
+  
+  <!-- 查询多条 -->
+  <select id="findList" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from transfer_email
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+  <!-- 分页查询 -->
+  <select id="findPage" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from transfer_email
+		<where>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
+		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
+		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
+		<if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name like concat('%',#{proName},'%')</if>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
+		<if test="email != null and !&quot;&quot;.equals(email)">and email like concat('%',#{email},'%')</if>
+		<if test="password != null and !&quot;&quot;.equals(password)">and password like concat('%',#{password},'%')</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+	</where>
+  </select>
+  
+  <!-- 查询记录数量 -->
+  <select id="count" resultType="int">
+    select
+		count(*)
+	from transfer_email
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+  <!-- 查询记录是否存在 -->
+  <select id="exsit" resultType="boolean">
+    select
+		count(*)
+	from transfer_email
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+
+</mapper>
