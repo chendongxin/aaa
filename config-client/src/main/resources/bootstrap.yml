@@ -3,9 +3,11 @@ spring:
     name: transfer-foo    # 对应config-server所获取的配置文件的{application}
   cloud:
     config:
-      uri: http://localhost:8002/
       profile: dev            # profile对应config-server所获取的配置文件中的{profile}
       label: dev           # 指定Git仓库的分支，对应config-server所获取的配置文件的{label}
+      discovery:
+        enabled: true      # 表示使用服务发现组件中的Config Server，而不自己指定Config Server的uri，默认false
+        service-id: config-server  # 指定Config Server在服务发现中的serviceId，默认是configserver
   rabbitmq:
     host: 10.0.98.75
     port: 5672
