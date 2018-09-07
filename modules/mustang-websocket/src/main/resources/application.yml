@@ -1,10 +1,10 @@
 server:
-  port: 8300
+  port: 8230
 
 spring:
     application:
     # 应用名称
-      name: transfer-websocket
+      name: mustang-websocket
     # 环境 dev|test|pro
     profiles:
         active: dev
@@ -16,7 +16,7 @@ eureka:
     # 缓存清单每隔30秒跟新一次
     registry-fetch-interval-seconds: 10
   instance:
-    hostname: transfer-websocket
+    hostname: mustang-websocket
     # 实例使用ip进行访问
     prefer-ip-address: true
     # 实例显示id
