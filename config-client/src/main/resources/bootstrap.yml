@@ -1,33 +1,16 @@
-info:
-  app:
-    name: transfer-config-server
-    version: 1.0
-
-server:
-  port: 8002
-
 spring:
   application:
-    # 应用名称
-    name: transfer-config-server
+    name: transfer-foo    # 对应config-server所获取的配置文件的{application}
   cloud:
     config:
-      server:
-        git:
-          # 远程仓库地址
-          uri: http://10.0.98.7:8080/hejinyo/mustang-transfer.git
-          # 相对搜索位置，可配置多个
-          search-paths: config-repo
-          #git仓库的账号
-          username: xieyuqing
-          #git仓库的密码
-          password: king199092
+      uri: http://localhost:8002/
+      profile: dev            # profile对应config-server所获取的配置文件中的{profile}
+      label: dev           # 指定Git仓库的分支，对应config-server所获取的配置文件的{label}
   rabbitmq:
     host: 10.0.98.75
     port: 5672
     username: admin
     password: Rabbitmq@2018
-    #virtual-host: /jelly
 
 eureka:
   client:

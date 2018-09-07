@@ -4,7 +4,7 @@ info:
     version: 1.0
 
 server:
-  port: 8002
+  port: 8001
 
 spring:
   application:
