@@ -40,3 +40,10 @@ eureka:
 
 zuul:
   sensitiveHeaders: x-access-token,token
+  routes:
+    admin-route: #该名字可随意取
+      serviceId: mustang-admin
+      path: /admin/**
+    transfer-crm-routs: #该名字可随意取
+      serviceId: transfer-crm
+      path: /transfer/crm/**

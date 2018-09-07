@@ -1,6 +1,6 @@
 package com.hqjy.mustang.transfer.crm.dao;
 
-import com.hq.mustang.common.base.BaseDao;
+import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.entity.TransferGenCostEntity;
 import org.apache.ibatis.annotations.Mapper;
 

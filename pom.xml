@@ -16,7 +16,7 @@
         <module>euraka</module>
 
         <!-- config 配置中心 -->
-        <module>config</module>
+        <module>config-server</module>
 
         <!-- gateway API网关服务 -->
         <module>gateway</module>

@@ -47,7 +47,7 @@ public class GenPlugin extends PluginAdapter {
             }
         }
         //引入cn.hejinyo.base.BaseDao
-        interfaze.addImportedType(new FullyQualifiedJavaType("com.hq.mustang.common.base.BaseDao"));
+        interfaze.addImportedType(new FullyQualifiedJavaType("com.hqjy.mustang.common.base.base.BaseDao"));
         // 添加base接口 extends BaseDao<User>
         interfaze.addSuperInterface(new FullyQualifiedJavaType("BaseDao<" + introspectedTable.getBaseRecordType() + "," + typeName + ">"));
         // 添加@Mapper注解
