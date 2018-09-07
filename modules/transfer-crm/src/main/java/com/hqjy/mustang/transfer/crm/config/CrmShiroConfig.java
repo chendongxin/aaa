@@ -1,4 +1,4 @@
-package com.hqjy.mustang.transfer.crm.shiro;
+package com.hqjy.mustang.transfer.crm.config;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.constant.StatusCode;
