@@ -76,5 +76,14 @@ pagehelper:
     params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
     row-bounds-with-count: true
 
-
-
+# shiro 不拦截路径
+shiro:
+  anon:
+    path:
+      # spring cloud 健康检查
+      - /actuator/**
+      - /doc
+      - /swagger-ui.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/api-docs

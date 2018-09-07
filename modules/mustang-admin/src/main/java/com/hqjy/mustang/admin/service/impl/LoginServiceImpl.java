@@ -1,15 +1,15 @@
 package com.hqjy.mustang.admin.service.impl;
 
-import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
 import com.hqjy.mustang.admin.service.*;
-import com.hqjy.mustang.admin.shiro.TokenUtils;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisUtils;
+import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
 import com.hqjy.mustang.common.web.utils.HttpContextUtils;
 import com.hqjy.mustang.common.web.utils.IPUtils;
+import com.hqjy.mustang.common.web.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +79,9 @@ public class LoginServiceImpl implements LoginService {
     @Override
     public LoginUserDTO doLogin(LoginUserDTO user) {
         //签发用户token
-        user.setToken(TokenUtils.create(user.getUserId(), user.getPassword()));
+        String token = TokenUtils.createToken(user.getUserId(), user.getUserName(), Constant.JWT_SIGN_KEY);
+        user.setToken(token);
+        user.setJti(TokenUtils.tokenInfo(token, Constant.JWT_ID, String.class));
         // user.setAvatar(Optional.ofNullable(user.getAvatar()).map(s -> OSSFactory.ali().generatePresignedUrl(s, 86400)).orElse(null));
         //用户信息放入redis中
         redisUtils.set(RedisKeys.User.token(user.getUserId()), user, TokenUtils.getProlong());

@@ -1,9 +1,9 @@
 package com.hqjy.mustang.admin.model.dto;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
-import com.hqjy.mustang.admin.model.entity.SysRoleEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -57,15 +57,6 @@ public class LoginUserDTO implements Serializable {
     private Integer status;
 
     /**
-     * 角色列表
-     */
-    private List<SysRoleEntity> roleList;
-    /**
-     * 部门列表
-     */
-    private List<SysDeptEntity> deptList;
-
-    /**
      * 创建者ID
      */
     @JSONField(serialize = false)
@@ -85,12 +76,23 @@ public class LoginUserDTO implements Serializable {
     /**
      * 最后登录时间 login_time
      **/
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date loginTime;
 
     /**
      * 登录token
      */
     private String token;
+    private String jti;
 
+    /**
+     * 角色列表
+     */
+    private List roleList;
+    /**
+     * 部门列表
+     */
+    private List deptList;
 
 }

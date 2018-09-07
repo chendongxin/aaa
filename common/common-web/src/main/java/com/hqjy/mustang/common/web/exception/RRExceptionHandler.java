@@ -1,9 +1,12 @@
 package com.hqjy.mustang.common.web.exception;
 
+import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.utils.Tools;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.authz.UnauthorizedException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.MultipartException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 异常处理器
@@ -32,14 +36,23 @@ public class RRExceptionHandler {
     }
 
     /**
+     * 401 UNAUTHORIZED，无权限
+     */
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler({UnauthorizedException.class})
+    public R shiroException(UnauthorizedException ex, HttpServletResponse response) {
+        return R.error(StatusCode.USER_UNAUTHORIZED);
+    }
+
+
+    /**
      * 数据库唯一主键冲突
      */
- /*   @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.OK)
     @ExceptionHandler(DuplicateKeyException.class)
     public R handleDuplicateKeyException(DuplicateKeyException e) {
         return R.error(StatusCode.DATABASE_DUPLICATEKEY);
     }
-*/
 
     /**
      * 实体验证

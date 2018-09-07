@@ -1,5 +1,7 @@
 package com.hqjy.mustang.common.base.utils;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.interfaces.Claim;
 import jodd.util.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 

@@ -1,6 +1,9 @@
-package com.hqjy.mustang.admin.config;
+package com.hqjy.mustang.admin.shiro;
 
-import com.hqjy.mustang.admin.shiro.*;
+import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.web.shiro.AuthSubject;
+import com.hqjy.mustang.common.web.shiro.FilterAnonConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -26,14 +29,15 @@ import java.util.Map;
  * @date : 2018/1/20 10:10
  */
 @Configuration
+@Slf4j
 public class ShiroConfig {
 
     @Bean("securityManager")
     public SecurityManager securityManager(AuthRealm oAuth2Realm) {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         //禁用session 的subjectFactory
-        securityManager.setSubjectFactory(new StatelessSubject());
-        //禁用使用Sessions 作为存储策略的实现，但它没有完全地禁用Sessions,所以需要配合context.setSessionCreationEnabled(false);
+        securityManager.setSubjectFactory(new AuthSubject());
+        // 禁用使用Sessions 作为存储策略的实现，但它没有完全地禁用Sessions,所以需要配合context.setSessionCreationEnabled(false);
         ((DefaultSessionStorageEvaluator) ((DefaultSubjectDAO) securityManager.getSubjectDAO()).getSessionStorageEvaluator()).setSessionStorageEnabled(false);
         securityManager.setRealm(oAuth2Realm);
         return securityManager;
@@ -46,39 +50,27 @@ public class ShiroConfig {
 
         //oauth过滤
         Map<String, Filter> filters = new HashMap<>();
-        filters.put("oauth2", sysAuthcFilter());
-        filters.put("api", apiFilter());
-        filters.put("url", new URLFilter());
+        filters.put("oauth2", authFilter());
         shiroFilter.setFilters(filters);
 
         Map<String, String> filterMap = new LinkedHashMap<>();
-        filterMap.put("/app/**", "anon");
-        filterMap.put("/test/**", "anon");
-        filterMap.put("/druid/**", "anon");
-
-        /*  swagger  */
-        filterMap.put("/doc", "anon");
-        filterMap.put("/swagger-ui.html", "anon");
-        filterMap.put("/webjars/**", "anon");
-        filterMap.put("/swagger-resources/**", "anon");
-        filterMap.put("/v2/api-docs", "anon");
-
-        filterMap.put("/favicon.ico", "anon");
-        filterMap.put("/", "anon");
-        filterMap.put("/login", "anon");
-
-        /* 天润接口相关 */
-        filterMap.put("/tinet/login", "anon");
-        filterMap.put("/tinet/code", "anon");
-
-        // 开放接口
-        filterMap.put("/api/open/**", "api");
-
-        filterMap.put("/**", "url,oauth2");
         shiroFilter.setFilterChainDefinitionMap(filterMap);
+        filterAnonConfig().getPath().forEach(path -> {
+            log.info("admin 不拦截路径 => {}", path);
+            filterMap.put(path, "anon");
+        });
+        // 不拦截内部服务调用
+        filterMap.put(Constant.API_PATH_ANON , "anon");
 
+        filterMap.put("/**", "oauth2");
         return shiroFilter;
     }
+
+    @Bean
+    public FilterAnonConfig filterAnonConfig() {
+        return new FilterAnonConfig();
+    }
+
 
     @Bean("lifecycleBeanPostProcessor")
     public LifecycleBeanPostProcessor lifecycleBeanPostProcessor() {
@@ -100,35 +92,18 @@ public class ShiroConfig {
     }
 
     @Bean
-    public SysAuthcFilter sysAuthcFilter() {
-        return new SysAuthcFilter();
+    public AuthFilter authFilter() {
+        return new AuthFilter();
     }
 
     /**
      * 解决自定义拦截器混乱问题
      */
     @Bean
-    public FilterRegistrationBean registrationAuthcFilterBean(SysAuthcFilter sysAuthcFilter) {
+    public FilterRegistrationBean registrationAuthcFilterBean(AuthFilter sysAuthcFilter) {
         FilterRegistrationBean registration = new FilterRegistrationBean(sysAuthcFilter);
         //取消自动注册功能 Filter自动注册,不会添加到FilterChain中.
         registration.setEnabled(false);
         return registration;
     }
-
-    @Bean
-    public ApiFilter apiFilter() {
-        return new ApiFilter();
-    }
-
-    /**
-     * 解决自定义拦截器混乱问题
-     */
-    @Bean
-    public FilterRegistrationBean registrationApiFilterBean(ApiFilter apiFilter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(apiFilter);
-        //取消自动注册功能 Filter自动注册,不会添加到FilterChain中.
-        registration.setEnabled(false);
-        return registration;
-    }
-
 }

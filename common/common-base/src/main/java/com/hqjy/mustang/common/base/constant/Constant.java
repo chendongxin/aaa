@@ -6,26 +6,30 @@ package com.hqjy.mustang.common.base.constant;
  */
 public class Constant {
     /**
-     * rsa私钥
+     * 请求头中 JWT 的key
      */
-    public static final String RSA_PRIVATE_KEY = "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAMkwjXrPS2p24hZ7ASrC6P2t+Vun" +
-            "U/f0fnwAZ0za5i/M+PnGKo8MbUHTK8GlfCjmfVrSVr5NRJoF4ufvfxZjg2Wpa/guKna6ohdx40mu" +
-            "OrsFyYQ237H6gqGTDOPytdrfwzkkAVA1gGhfpN264nZToSCCve/62mL/ZfZoAPnWWLBfAgMBAAEC" +
-            "gYB1Oc8V4bcFn6N4ic9SRSNQvI/wsXyhm1ofknSeOWWqMHpZvveJRipbEloKiQvhIPulca2NUKRK" +
-            "QmfF0KxyNSWXixcQAiSkS/bmVcMfXx/TSZtpSs/RdJC0TgQryW4XsFtVbXwZEf1u7Z0Ijy8P7vLh" +
-            "e1+de9N3DqzT/x/fToFr0QJBAPj4Zv2jgzpmuoQsyvrqbA7w3t1tO8Dl+YRy/TSYorfGgXLbbrIF" +
-            "QWylyMN9DNV5n2oNDq9+BLHR9A5jvmd8MgUCQQDO3si0SKQYJonNBxVI316g76lX8B7NTPQCQzg2" +
-            "cFeAUAXzBmG1GdSQJwloPanB7TQDB5IfoXshIZf/Z9oPrDITAkBHIJgz0Bn2flC84BshMgWrAw94" +
-            "jPNsOYdeWoeSFiUugYyL5rqqKyw0wOwpRTl8Z2Gup4pRgpwOvR+PWNmVsPqNAkBQ0SIxpEtPEAc3" +
-            "rPO4w2LRlq9epnUyGUUeeSpFwj+85gZc+fpD6PJs2oNHUQe3tjZilJuWddyHhfs+kVDUXJ43AkA2" +
-            "VZzI2eVlon7GtTN6dTW8UuzE3cLGHIxCH1jQr87MIrvrkxIeMNNaZZ/bETZjYILJXhl0YT2RbPgO" +
-            "xY6kpaTj";
+    public static final String AUTHOR_PARAM = "token";
+
     /**
-     * rsa公钥
+     * JWT 签名
      */
-    public static final String RSA_PUBLIC_KEY = "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDJMI16z0tqduIWewEqwuj9rflbp1P39H58AGdM" +
-            "2uYvzPj5xiqPDG1B0yvBpXwo5n1a0la+TUSaBeLn738WY4NlqWv4Lip2uqIXceNJrjq7BcmENt+x" +
-            "+oKhkwzj8rXa38M5JAFQNYBoX6TduuJ2U6Eggr3v+tpi/2X2aAD51liwXwIDAQAB";
+    public static final String JWT_SIGN_KEY = "hqjy.mustang";
+
+    /**
+     * JWT token 用户名
+     */
+    public static final String JWT_TOKEN_USERNAME = "jtu";
+
+    /**
+     * JWT token 用户编号
+     */
+    public static final String JWT_TOKEN_USERID = "uid";
+
+    /**
+     * JWT_编号
+     */
+    public static final String JWT_ID = "jti";
+
     /**
      * 不允许查看公海的开始时间
      */
@@ -49,6 +53,7 @@ public class Constant {
      * 服务内部调用前缀
      */
     public static final String API_PATH = "/api/private/";
+    public static final String API_PATH_ANON = API_PATH + "**";
 
     /**
      * 菜单类型
@@ -554,4 +559,33 @@ public class Constant {
             return code;
         }
     }
+
+    public enum CheckToken {
+        /**
+         * 验证成功
+         */
+        SUCCESS(0),
+        /**
+         * 其他地方登录
+         */
+        TOKEN_OUT(1),
+        /**
+         * 登录过期
+         */
+        TOKEN_OVERDUE(2),
+        /**
+         * 未登录
+         */
+        TOKEN_FAULT(3);
+        private int value;
+
+        CheckToken(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
+        }
+    }
+
 }
