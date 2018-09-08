@@ -1,5 +1,6 @@
 server:
     port: 8240
+    context-path: /
 
 spring:
     application:
@@ -28,3 +29,18 @@ eureka:
     lease-renewal-interval-in-seconds: 5
     # 服务失效时间，默认90秒
     lease-expiration-duration-in-seconds: 20
+    #状态页面和健康指标
+    statusPageUrlPath: ${server.context-path}/swagger-ui.html
+
+# shiro 不拦截路径
+shiro:
+  anon:
+    path:
+      # spring cloud 健康检查
+      - /info
+      - /actuator/**
+      - /doc
+      - /swagger-ui.html
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/api-docs

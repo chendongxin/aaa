@@ -20,16 +20,6 @@
     </parent>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-feign</artifactId>
-            <exclusions>
-                <exclusion>
-                    <artifactId>org.springframework.cloud</artifactId>
-                    <groupId>*</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
             <groupId>com.hqjy.mustang.common</groupId>
@@ -43,6 +33,11 @@
             <version>4.1.17.Final</version>
         </dependency>
 
+        <!-- 服务注册 -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

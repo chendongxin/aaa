@@ -18,6 +18,7 @@
     </parent>
 
     <dependencies>
+
         <dependency>
             <groupId>com.hqjy.mustang.common</groupId>
             <artifactId>common-base</artifactId>
@@ -40,6 +41,8 @@
             <artifactId>shiro-spring</artifactId>
             <version>1.4.0</version>
         </dependency>
+
+
     </dependencies>
 
     <build>

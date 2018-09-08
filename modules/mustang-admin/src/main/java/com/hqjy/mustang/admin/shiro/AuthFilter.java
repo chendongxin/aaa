@@ -39,7 +39,7 @@ public class AuthFilter extends AccessControlFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String accessToken = ((HttpServletRequest) request).getHeader(TOKEN_PARAM_KEY);
-        log.error("accessToken:{}", accessToken);
+        log.error("url:{} ,accessToken:{}", ((HttpServletRequest) request).getRequestURL(),accessToken);
         try {
             Long userId = TokenUtils.tokenInfo(accessToken, Constant.JWT_TOKEN_USERID, Long.class);
             String userName = TokenUtils.tokenInfo(accessToken, Constant.JWT_TOKEN_USERNAME, String.class);

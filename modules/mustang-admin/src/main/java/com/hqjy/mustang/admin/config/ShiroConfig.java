@@ -1,5 +1,7 @@
-package com.hqjy.mustang.admin.shiro;
+package com.hqjy.mustang.admin.config;
 
+import com.hqjy.mustang.admin.shiro.AuthFilter;
+import com.hqjy.mustang.admin.shiro.AuthRealm;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.web.shiro.AuthSubject;
 import com.hqjy.mustang.common.web.shiro.FilterAnonConfig;
