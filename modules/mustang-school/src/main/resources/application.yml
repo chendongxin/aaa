@@ -1,16 +1,16 @@
 server:
-    port: 8330
+    port: 8240
 
 spring:
     application:
     # 应用名称
-      name: transfer-call
+      name: mustang-school
     # 环境 dev|test|pro
     profiles:
         active: dev
 info:
   app:
-    name: transfer-call
+    name: mustang-school
     version: 1.0
 eureka:
   client:
@@ -19,7 +19,7 @@ eureka:
     # 缓存清单每隔30秒跟新一次
     registry-fetch-interval-seconds: 10
   instance:
-    hostname: transfer-call
+    hostname: mustang-school
     # 实例使用ip进行访问
     prefer-ip-address: true
     # 实例显示id
@@ -28,21 +28,3 @@ eureka:
     lease-renewal-interval-in-seconds: 5
     # 服务失效时间，默认90秒
     lease-expiration-duration-in-seconds: 20
-
-# Feign 开启 Hystrix
-feign:
-  hystrix:
-    enabled: true
-
-# shiro 不拦截路径
-shiro:
-  anon:
-    path:
-      # spring cloud 健康检查
-      - /info
-      - /actuator/**
-      - /doc
-      - /swagger-ui.html
-      - /webjars/**
-      - /swagger-resources/**
-      - /v2/api-docs
