@@ -1,17 +1,18 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_sms 短信实体类
+ * transfer_gen_cost 推广费用实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferSmsEntity implements Serializable {
+public class TransferGenCostEntity implements Serializable {
     /**
 	 * 编号 id
 	 **/
@@ -20,7 +21,7 @@ public class TransferSmsEntity implements Serializable {
     /**
 	 * 部门id dept_id
 	 **/
-    private Long deptId;
+    private Integer deptId;
 
     /**
 	 * 部门名称 dept_name
@@ -28,14 +29,39 @@ public class TransferSmsEntity implements Serializable {
     private String deptName;
 
     /**
-	 * 手机号码 phone
+	 * 推广公司id company_id
 	 **/
-    private String phone;
+    private Integer companyId;
 
     /**
-	 * 发送内容 content
+	 * 推广方式id way_id
 	 **/
-    private String content;
+    private Integer wayId;
+
+    /**
+	 * 推广日期 格式YYYY-MM-DD gen_day
+	 **/
+    private Date genDay;
+
+    /**
+	 * 人民币主动 initiative_money
+	 **/
+    private BigDecimal initiativeMoney;
+
+    /**
+	 * 人民币被动 passive_money
+	 **/
+    private BigDecimal passiveMoney;
+
+    /**
+	 * 虚拟主动 initiative_virtual
+	 **/
+    private BigDecimal initiativeVirtual;
+
+    /**
+	 * 虚拟被动 passive_virtual
+	 **/
+    private BigDecimal passiveVirtual;
 
     /**
 	 * 创建人编号 create_user_id
@@ -43,7 +69,7 @@ public class TransferSmsEntity implements Serializable {
     private Long createUserId;
 
     /**
-	 * 创建人ID create_user_name
+	 * 创建人名称 create_user_name
 	 **/
     private String createUserName;
 

@@ -3,7 +3,7 @@
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferProcessDao">
   
   <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferProcessEntity">
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity">
     <id column="process_id" jdbcType="BIGINT" property="processId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="dept_id" jdbcType="BIGINT" property="deptId" />

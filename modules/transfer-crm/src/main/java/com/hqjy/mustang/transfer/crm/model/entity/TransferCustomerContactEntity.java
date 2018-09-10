@@ -1,31 +1,36 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_education 学历表实体类
+ * transfer_customer_contact 客户联系方式实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferEducationEntity implements Serializable {
+public class TransferCustomerContactEntity implements Serializable {
     /**
-	 * 编号 education_id
+	 * 主键 contact_id
 	 **/
-    private Integer educationId;
+    private Integer contactId;
 
     /**
-	 * 学历名称 name
+	 * 客户编号 customer_id
 	 **/
-    private String name;
+    private Integer customerId;
 
     /**
-	 * 状态 0启用 1禁用 status
+	 * 类型 type
 	 **/
-    private Integer status;
+    private Integer type;
+
+    /**
+	 * 联系方式详情 detail
+	 **/
+    private String detail;
 
     /**
 	 * 创建人编号 create_user_id

@@ -1,4 +1,4 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -6,27 +6,28 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_company_source 推广公司-来源关联实体类
+ * transfer_source 推广来源平台实体类
+ *
  *
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferCompanySourceEntity implements Serializable {
+public class TransferSourceEntity implements Serializable {
     /**
-     * 编号 id
+     * 主键 source_id
      **/
-    private Long id;
+    private Long sourceId;
 
     /**
-     * 推广公司id company_id
+     * 来源名称 name
      **/
-    private Long companyId;
+    private String name;
 
     /**
-     * 来源id source_id
+     * 状态 0启用 1禁用 status
      **/
-    private Integer sourceId;
+    private Byte status;
 
     /**
      * 创建人编号 create_user_id

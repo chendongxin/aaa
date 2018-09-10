@@ -3,7 +3,7 @@
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferCompanySourceDao">
   
   <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferCompanySourceEntity">
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="source_id" jdbcType="INTEGER" property="sourceId" />

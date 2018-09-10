@@ -1,41 +1,66 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_keyword 关键词配置实体类
+ * transfer_email 邮箱绑定实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferKeywordEntity implements Serializable {
+public class TransferEmailEntity implements Serializable {
     /**
 	 * 编号 id
 	 **/
     private Integer id;
 
     /**
-	 * 关联编号 parent_id
+	 * 推广公司id company_id
 	 **/
-    private Integer parentId;
+    private Integer companyId;
 
     /**
-	 * 名称 name
+	 * 推广id user_id
 	 **/
-    private String name;
+    private Integer userId;
 
     /**
-	 * 状态,见数据字典STATUS status
+	 * 推广人名称 user_name
 	 **/
-    private Byte status;
+    private String userName;
 
     /**
-	 * 属性级别：1-岗位类别，2-关键词 level
+	 * 赛道id pro_id
 	 **/
-    private Byte level;
+    private Integer proId;
+
+    /**
+	 * 赛道（产品名称） pro_name
+	 **/
+    private String proName;
+
+    /**
+	 * 部门id dept_id
+	 **/
+    private Integer deptId;
+
+    /**
+	 * 部门名称 dept_name
+	 **/
+    private String deptName;
+
+    /**
+	 * 推广邮箱 email
+	 **/
+    private String email;
+
+    /**
+	 * 邮箱密码 password
+	 **/
+    private String password;
 
     /**
 	 * 创建人编号 create_user_id

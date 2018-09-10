@@ -3,7 +3,7 @@
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferGenCostDao">
   
   <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferGenCostEntity">
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferGenCostEntity">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="dept_id" jdbcType="INTEGER" property="deptId" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />

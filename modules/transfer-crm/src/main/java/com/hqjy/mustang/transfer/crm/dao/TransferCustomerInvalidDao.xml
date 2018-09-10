@@ -3,7 +3,7 @@
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferCustomerInvalidDao">
   
   <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferCustomerInvalidEntity">
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerInvalidEntity">
     <id column="invalid_id" jdbcType="BIGINT" property="invalidId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />

@@ -1,61 +1,51 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_customer_invalid 无效客户实体类
+ * transfer_follow 客户跟进记录实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferCustomerInvalidEntity implements Serializable {
+public class TransferFollowEntity implements Serializable {
     /**
-	 * 自增主键 invalid_id
+	 * 跟进编号 follow_id
 	 **/
-    private Long invalidId;
+    private Long followId;
 
     /**
-	 * 客户id customer_id
+	 * 客户编号 customer_id
 	 **/
     private Long customerId;
 
     /**
-	 * 质检人id user_id
+	 * 流程编号 process_id
 	 **/
-    private Long userId;
+    private Long processId;
 
     /**
-	 * 质检员姓名 user_name
+	 * 跟进状态 跟进状态：枚举值见数据字典表FOLLOW_STATUS follow_status
 	 **/
-    private String userName;
+    private Long followStatus;
 
     /**
-	 * 0：未质检（默认）   1：已质检 status
+	 * 沟通方式 沟通方式：枚举值见数据字典表COMMUNICATE_WAY contact_type
 	 **/
-    private Byte status;
+    private Long contactType;
 
     /**
-	 * 商机状态 商机状态（0-有效商机，1-无效有效 biz_status
-	 **/
-    private Byte bizStatus;
-
-    /**
-	 * 无效说明 memo
+	 * 联系跟进记录 memo
 	 **/
     private String memo;
 
     /**
-	 * 见数据字典 见数据字典：无效类型（INVALID_TYPE） type
+	 * 下次联系时间 next_time
 	 **/
-    private Byte type;
-
-    /**
-	 * 确认说明 result
-	 **/
-    private String result;
+    private Date nextTime;
 
     /**
 	 * 创建人编号 create_user_id

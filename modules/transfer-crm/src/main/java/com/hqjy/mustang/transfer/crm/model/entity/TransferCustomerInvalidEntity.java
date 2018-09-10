@@ -1,71 +1,61 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_customer_repeat 重单客户实体类
+ * transfer_customer_invalid 无效客户实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferCustomerRepeatEntity implements Serializable {
+public class TransferCustomerInvalidEntity implements Serializable {
     /**
-	 * 重单主键 repeat_id
+	 * 自增主键 invalid_id
 	 **/
-    private Long repeatId;
+    private Long invalidId;
 
     /**
-	 * 客户主键 customer_id
+	 * 客户id customer_id
 	 **/
     private Long customerId;
 
     /**
-	 * 部门ID dept_id
-	 **/
-    private Long deptId;
-
-    /**
-	 * 部门名称 dept_name
-	 **/
-    private String deptName;
-
-    /**
-	 * 用户Id user_id
+	 * 质检人id user_id
 	 **/
     private Long userId;
 
     /**
-	 * 用户名称 user_name
+	 * 质检员姓名 user_name
 	 **/
     private String userName;
 
     /**
-	 * 客户名称 name
+	 * 0：未质检（默认）   1：已质检 status
 	 **/
-    private String name;
+    private Byte status;
 
     /**
-	 * 地址 address
+	 * 商机状态 商机状态（0-有效商机，1-无效有效 biz_status
 	 **/
-    private String address;
+    private Byte bizStatus;
 
     /**
-	 * 来源url url
-	 **/
-    private String url;
-
-    /**
-	 * 客户来源 source_id
-	 **/
-    private Long sourceId;
-
-    /**
-	 * 备注 memo
+	 * 无效说明 memo
 	 **/
     private String memo;
+
+    /**
+	 * 见数据字典 见数据字典：无效类型（INVALID_TYPE） type
+	 **/
+    private Byte type;
+
+    /**
+	 * 确认说明 result
+	 **/
+    private String result;
 
     /**
 	 * 创建人编号 create_user_id

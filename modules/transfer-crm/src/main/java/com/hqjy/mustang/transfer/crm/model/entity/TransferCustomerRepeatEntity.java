@@ -1,27 +1,31 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_gen_cost 推广费用实体类
+ * transfer_customer_repeat 重单客户实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferGenCostEntity implements Serializable {
+public class TransferCustomerRepeatEntity implements Serializable {
     /**
-	 * 编号 id
+	 * 重单主键 repeat_id
 	 **/
-    private Long id;
+    private Long repeatId;
 
     /**
-	 * 部门id dept_id
+	 * 客户主键 customer_id
 	 **/
-    private Integer deptId;
+    private Long customerId;
+
+    /**
+	 * 部门ID dept_id
+	 **/
+    private Long deptId;
 
     /**
 	 * 部门名称 dept_name
@@ -29,39 +33,39 @@ public class TransferGenCostEntity implements Serializable {
     private String deptName;
 
     /**
-	 * 推广公司id company_id
+	 * 用户Id user_id
 	 **/
-    private Integer companyId;
+    private Long userId;
 
     /**
-	 * 推广方式id way_id
+	 * 用户名称 user_name
 	 **/
-    private Integer wayId;
+    private String userName;
 
     /**
-	 * 推广日期 格式YYYY-MM-DD gen_day
+	 * 客户名称 name
 	 **/
-    private Date genDay;
+    private String name;
 
     /**
-	 * 人民币主动 initiative_money
+	 * 地址 address
 	 **/
-    private BigDecimal initiativeMoney;
+    private String address;
 
     /**
-	 * 人民币被动 passive_money
+	 * 来源url url
 	 **/
-    private BigDecimal passiveMoney;
+    private String url;
 
     /**
-	 * 虚拟主动 initiative_virtual
+	 * 客户来源 source_id
 	 **/
-    private BigDecimal initiativeVirtual;
+    private Long sourceId;
 
     /**
-	 * 虚拟被动 passive_virtual
+	 * 备注 memo
 	 **/
-    private BigDecimal passiveVirtual;
+    private String memo;
 
     /**
 	 * 创建人编号 create_user_id

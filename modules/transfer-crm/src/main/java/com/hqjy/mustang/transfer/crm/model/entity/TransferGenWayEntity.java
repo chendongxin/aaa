@@ -1,31 +1,31 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_gen_company 推广公司实体类
+ * transfer_gen_way 推广方式实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferGenCompanyEntity implements Serializable {
+public class TransferGenWayEntity implements Serializable {
     /**
-	 * 编号 company_id
+	 * 编号 way_id
 	 **/
-    private Long companyId;
+    private Long wayId;
 
     /**
-	 * 名称 name
+	 * 来源id source_id
 	 **/
-    private String name;
+    private Integer sourceId;
 
     /**
-	 * 状态 0启用 1禁用 status
+	 * 推广方式 gen_way
 	 **/
-    private Integer status;
+    private String genWay;
 
     /**
 	 * 创建人编号 create_user_id

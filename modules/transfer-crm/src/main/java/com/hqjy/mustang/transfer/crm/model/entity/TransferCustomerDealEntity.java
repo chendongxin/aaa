@@ -1,66 +1,62 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_email 邮箱绑定实体类
+ * transfer_customer_deal 成交客户实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferEmailEntity implements Serializable {
+public class TransferCustomerDealEntity implements Serializable {
     /**
-	 * 编号 id
+	 * 自增主键 deal_id
 	 **/
-    private Integer id;
+    private Long dealId;
 
     /**
-	 * 推广公司id company_id
+	 * 客户id customer_id
 	 **/
-    private Integer companyId;
+    private Long customerId;
 
     /**
-	 * 推广id user_id
+	 * 成交金额 money
 	 **/
-    private Integer userId;
+    private BigDecimal money;
 
     /**
-	 * 推广人名称 user_name
+	 * 成交人员 user_id
+	 **/
+    private Long userId;
+
+    /**
+	 * 成交人名称 user_name
 	 **/
     private String userName;
 
     /**
-	 * 赛道id pro_id
+	 * 区域id area_id
 	 **/
-    private Integer proId;
+    private Long areaId;
 
     /**
-	 * 赛道（产品名称） pro_name
+	 * 区域名称 area_code
 	 **/
-    private String proName;
+    private String areaCode;
 
     /**
-	 * 部门id dept_id
+	 * 校区id school_id
 	 **/
-    private Integer deptId;
+    private Long schoolId;
 
     /**
-	 * 部门名称 dept_name
+	 * 校区编码 school_code
 	 **/
-    private String deptName;
-
-    /**
-	 * 推广邮箱 email
-	 **/
-    private String email;
-
-    /**
-	 * 邮箱密码 password
-	 **/
-    private String password;
+    private String schoolCode;
 
     /**
 	 * 创建人编号 create_user_id

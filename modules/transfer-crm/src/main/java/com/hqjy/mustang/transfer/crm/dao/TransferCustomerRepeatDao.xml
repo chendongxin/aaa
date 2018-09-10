@@ -3,7 +3,7 @@
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferCustomerRepeatDao">
   
   <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferCustomerRepeatEntity">
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerRepeatEntity">
     <id column="repeat_id" jdbcType="BIGINT" property="repeatId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
     <result column="dept_id" jdbcType="BIGINT" property="deptId" />

@@ -3,7 +3,7 @@
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferGenWayDao">
   
   <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferGenWayEntity">
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity">
     <id column="way_id" jdbcType="BIGINT" property="wayId" />
     <result column="source_id" jdbcType="INTEGER" property="sourceId" />
     <result column="gen_way" jdbcType="VARCHAR" property="genWay" />

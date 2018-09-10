@@ -1,36 +1,41 @@
-package com.hqjy.mustang.transfer.crm.entity;
+package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * transfer_customer_contact 客户联系方式实体类
+ * transfer_keyword 关键词配置实体类
  * 
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
 @Data
-public class TransferCustomerContactEntity implements Serializable {
+public class TransferKeywordEntity implements Serializable {
     /**
-	 * 主键 contact_id
+	 * 编号 id
 	 **/
-    private Integer contactId;
+    private Integer id;
 
     /**
-	 * 客户编号 customer_id
+	 * 关联编号 parent_id
 	 **/
-    private Integer customerId;
+    private Integer parentId;
 
     /**
-	 * 类型 type
+	 * 名称 name
 	 **/
-    private Integer type;
+    private String name;
 
     /**
-	 * 联系方式详情 detail
+	 * 状态,见数据字典STATUS status
 	 **/
-    private String detail;
+    private Byte status;
+
+    /**
+	 * 属性级别：1-岗位类别，2-关键词 level
+	 **/
+    private Byte level;
 
     /**
 	 * 创建人编号 create_user_id
