@@ -5,6 +5,7 @@
   <!-- 实体映射 -->
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.entity.TransferGenCompanyEntity">
     <id column="company_id" jdbcType="BIGINT" property="companyId" />
+	<id column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
@@ -17,7 +18,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    company_id, name, status, create_user_id, create_user_name, create_time, update_user_id, 
+    company_id, parent_id, name, status, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
   
@@ -25,6 +26,7 @@
   <sql id="Base_Where_SQL">
     <where>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
@@ -41,6 +43,7 @@
     insert into transfer_gen_company
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != companyId">company_id, </if>
+			<if test="null != parentId">parent_id, </if>
 			<if test="null != name">name, </if>
 			<if test="null != status">status, </if>
 			<if test="null != createUserId">create_user_id, </if>
@@ -53,6 +56,7 @@
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != companyId">#{companyId}, </if>
+			<if test="null != parentId">#{parentId}, </if>
 			<if test="null != name">#{name}, </if>
 			<if test="null != status">#{status}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
@@ -69,6 +73,7 @@
     update transfer_gen_company 
 		<set>
 			<if test="null != companyId">company_id = #{companyId}, </if>
+			<if test="null != parentId">parent_id = #{parentId}, </if>
 			<if test="null != name">name = #{name}, </if>
 			<if test="null != status">status = #{status}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
@@ -134,6 +139,7 @@
 	from transfer_gen_company
 		<where>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
@@ -160,6 +166,13 @@
 	from transfer_gen_company
 		<include refid="Base_Where_SQL" />
   </select>
+
+	<select id="getAllGenCompanyList" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from transfer_gen_company
+		order by parent_id
+	</select>
   
 
 </mapper>

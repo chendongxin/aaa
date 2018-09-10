@@ -2,6 +2,8 @@ package com.hqjy.mustang.transfer.crm.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -36,6 +38,16 @@ public class TransferKeywordEntity implements Serializable {
 	 * 属性级别：1-岗位类别，2-关键词 level
 	 **/
     private Byte level;
+
+    /**
+     * 父关键词名称
+     */
+    private String parentName;
+
+    /**
+     * 子关键词
+     */
+    private List<TransferKeywordEntity> children;
 
     /**
 	 * 创建人编号 create_user_id

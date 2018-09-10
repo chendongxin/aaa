@@ -2,6 +2,8 @@ package com.hqjy.mustang.transfer.crm.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -18,6 +20,11 @@ public class TransferGenCompanyEntity implements Serializable {
     private Long companyId;
 
     /**
+     * 父编号 parent_id
+     */
+    private Long parentId;
+
+    /**
 	 * 名称 name
 	 **/
     private String name;
@@ -26,6 +33,16 @@ public class TransferGenCompanyEntity implements Serializable {
 	 * 状态 0启用 1禁用 status
 	 **/
     private Integer status;
+
+    /**
+     * 父推广公司名称
+     */
+    private String parentName;
+
+    /**
+     * 子推广公司
+     */
+    private List<TransferGenCompanyEntity> children;
 
     /**
 	 * 创建人编号 create_user_id

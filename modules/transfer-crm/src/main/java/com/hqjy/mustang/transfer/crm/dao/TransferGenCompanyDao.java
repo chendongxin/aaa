@@ -4,6 +4,8 @@ import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.entity.TransferGenCompanyEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * transfer_gen_company 持久化层
  * 
@@ -12,4 +14,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TransferGenCompanyDao extends BaseDao<TransferGenCompanyEntity, Long> {
+
+    /**
+     * 获取所有推广公司列表
+     */
+    List<TransferGenCompanyEntity> getAllGenCompanyList();
 }

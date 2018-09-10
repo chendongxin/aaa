@@ -2,6 +2,8 @@ package com.hqjy.mustang.transfer.crm.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -18,6 +20,11 @@ public class TransferGenWayEntity implements Serializable {
     private Long wayId;
 
     /**
+     * 父编号 parent_id
+     */
+    private Long parentId;
+
+    /**
 	 * 来源id source_id
 	 **/
     private Integer sourceId;
@@ -26,6 +33,16 @@ public class TransferGenWayEntity implements Serializable {
 	 * 推广方式 gen_way
 	 **/
     private String genWay;
+
+    /**
+     * 父推广方式名称
+     */
+    private String parentName;
+
+    /**
+     * 子推广方式
+     */
+    private List<TransferGenCompanyEntity> children;
 
     /**
 	 * 创建人编号 create_user_id
