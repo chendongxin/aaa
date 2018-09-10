@@ -4,7 +4,7 @@ import com.hqjy.mustang.admin.dao.SysRoleDao;
 import com.hqjy.mustang.admin.model.entity.SysRoleEntity;
 import com.hqjy.mustang.admin.model.entity.SysRoleUsableEntity;
 import com.hqjy.mustang.admin.service.*;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.exception.RRException;

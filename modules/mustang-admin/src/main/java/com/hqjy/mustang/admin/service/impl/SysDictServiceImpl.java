@@ -12,7 +12,7 @@ import com.hqjy.mustang.admin.model.dto.DictDTO;
 import com.hqjy.mustang.admin.model.entity.SysDictDirEntity;
 import com.hqjy.mustang.admin.model.entity.SysDictEntity;
 import com.hqjy.mustang.admin.service.SysDictService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

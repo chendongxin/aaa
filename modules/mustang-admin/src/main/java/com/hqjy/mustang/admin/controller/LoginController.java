@@ -1,15 +1,15 @@
 package com.hqjy.mustang.admin.controller;
 
+import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
+import com.hqjy.mustang.admin.service.LoginService;
+import com.hqjy.mustang.admin.service.ShiroService;
+import com.hqjy.mustang.admin.service.SysMenuService;
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.base.AbstractController;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisUtils;
-import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
-import com.hqjy.mustang.admin.service.LoginService;
-import com.hqjy.mustang.admin.service.ShiroService;
-import com.hqjy.mustang.admin.service.SysMenuService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
@@ -97,7 +97,8 @@ public class LoginController extends AbstractController {
     @PostMapping("/unlock")
     @SysLog("解锁屏幕")
     public R lockScreen(@RequestBody LoginUserDTO loginUser) {
-        if (ShiroUtils.getUser().getPassword().equals(new Sha256Hash(loginUser.getPassword(), ShiroUtils.getUser().getSalt()).toHex())) {
+        LoginUserDTO user = shiroService.findByUserId(ShiroUtils.getUserId());
+        if (user.getPassword().equals(new Sha256Hash(loginUser.getPassword(), user.getSalt()).toHex())) {
             return R.ok();
         }
         return R.error("密码错误");

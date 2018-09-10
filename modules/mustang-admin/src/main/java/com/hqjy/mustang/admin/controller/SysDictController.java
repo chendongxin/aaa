@@ -26,7 +26,7 @@ import java.util.HashMap;
  */
 @Api(tags = "数据字典管理", description = "SysDictController")
 @RestController
-@RequestMapping("sys/dict")
+@RequestMapping("/dict")
 public class SysDictController {
 
     @Autowired

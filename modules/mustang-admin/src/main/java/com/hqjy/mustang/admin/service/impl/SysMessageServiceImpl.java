@@ -15,7 +15,7 @@ import com.hqjy.mustang.admin.model.dto.WsDTO;
 import com.hqjy.mustang.admin.model.entity.SysMessageEntity;
 import com.hqjy.mustang.admin.service.SysConfigService;
 import com.hqjy.mustang.admin.service.SysMessageService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

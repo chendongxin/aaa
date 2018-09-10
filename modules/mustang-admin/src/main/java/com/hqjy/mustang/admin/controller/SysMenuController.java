@@ -26,7 +26,7 @@ import java.util.HashMap;
  */
 @Api(tags = "菜单管理", description = "SysMenuController")
 @RestController
-@RequestMapping("/sys/menu")
+@RequestMapping("//menu")
 public class SysMenuController extends AbstractController {
 
     @Autowired

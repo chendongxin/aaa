@@ -5,7 +5,7 @@ import com.hqjy.mustang.admin.dao.SysRoleMenuDao;
 import com.hqjy.mustang.admin.model.entity.SysMenuEntity;
 import com.hqjy.mustang.admin.model.entity.SysRoleMenuEntity;
 import com.hqjy.mustang.admin.service.SysRoleMenuService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -11,7 +11,7 @@ import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.service.SysDeptService;
 import com.hqjy.mustang.admin.service.SysUserDeptService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
