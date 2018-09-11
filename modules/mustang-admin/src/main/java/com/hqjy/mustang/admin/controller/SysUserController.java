@@ -1,6 +1,5 @@
 package com.hqjy.mustang.admin.controller;
 
-import com.hqjy.mustang.admin.utils.ShiroUtils;
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.base.AbstractController;
 import com.hqjy.mustang.common.base.constant.StatusCode;
@@ -10,6 +9,7 @@ import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.admin.model.entity.SysUserEntity;
 import com.hqjy.mustang.admin.service.SysUserService;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
