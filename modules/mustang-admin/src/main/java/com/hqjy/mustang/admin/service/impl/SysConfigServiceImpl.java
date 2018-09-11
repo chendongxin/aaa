@@ -15,7 +15,7 @@ import com.hqjy.mustang.admin.dao.SysConfigInfoDao;
 import com.hqjy.mustang.admin.model.entity.SysConfigEntity;
 import com.hqjy.mustang.admin.model.entity.SysConfigInfoEntity;
 import com.hqjy.mustang.admin.service.SysConfigService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

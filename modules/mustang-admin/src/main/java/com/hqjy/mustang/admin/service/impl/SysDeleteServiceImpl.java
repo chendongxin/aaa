@@ -6,7 +6,7 @@ import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.admin.dao.SysDeleteLogDao;
 import com.hqjy.mustang.admin.model.entity.SysDeleteLogEntity;
 import com.hqjy.mustang.admin.service.SysDeleteService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;

@@ -5,7 +5,7 @@ import com.hqjy.mustang.admin.dao.SysUserRoleDao;
 import com.hqjy.mustang.admin.model.entity.SysRoleEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserRoleEntity;
 import com.hqjy.mustang.admin.service.SysUserRoleService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

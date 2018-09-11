@@ -11,7 +11,7 @@ import com.hqjy.mustang.admin.service.SysCacheService;
 import com.hqjy.mustang.admin.service.SysDeleteService;
 import com.hqjy.mustang.admin.service.SysMenuService;
 import com.hqjy.mustang.admin.service.SysRoleMenuService;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

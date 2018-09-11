@@ -8,7 +8,7 @@ import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserRoleEntity;
 import com.hqjy.mustang.admin.service.*;
-import com.hqjy.mustang.admin.utils.ShiroUtils;
+import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.constant.SystemId;
@@ -18,6 +18,7 @@ import com.hqjy.mustang.common.base.utils.RegularUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisUtils;
+import com.hqjy.mustang.common.web.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -526,7 +527,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
      */
     @Override
     public void updateUserRedisInfo() {
-        LoginUserDTO oldUser = ShiroUtils.getUser();
+        LoginUserDTO oldUser = redisUtils.get(RedisKeys.User.token(ShiroUtils.getUserId()), LoginUserDTO.class);
         LoginUserDTO userDTO = shiroService.findByUserId(ShiroUtils.getUserId());
         userDTO.setToken(oldUser.getToken());
         userDTO.setLoginIp(oldUser.getLoginIp());
