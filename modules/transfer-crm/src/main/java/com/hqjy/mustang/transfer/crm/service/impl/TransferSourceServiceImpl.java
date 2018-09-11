@@ -3,7 +3,7 @@ package com.hqjy.mustang.transfer.crm.service.impl;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.transfer.crm.dao.TransferSourceDao;
-import com.hqjy.mustang.transfer.crm.entity.TransferSourceEntity;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferSourceService;
 import org.springframework.stereotype.Service;
 

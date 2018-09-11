@@ -4,7 +4,7 @@ import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferGenWayDao;
-import com.hqjy.mustang.transfer.crm.entity.TransferGenWayEntity;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferGenWayService;
 import org.springframework.stereotype.Service;
 

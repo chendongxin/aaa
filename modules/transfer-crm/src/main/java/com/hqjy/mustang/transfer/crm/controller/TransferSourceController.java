@@ -6,7 +6,7 @@ import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
-import com.hqjy.mustang.transfer.crm.entity.TransferSourceEntity;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferSourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
