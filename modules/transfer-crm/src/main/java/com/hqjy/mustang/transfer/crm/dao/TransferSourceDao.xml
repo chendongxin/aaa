@@ -114,6 +114,14 @@
 	from transfer_source
 	where source_id = #{sourceId}
   </select>
+
+	<!-- 通过名称查找一条记录 -->
+	<select id="findOneByName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from transfer_source
+		where name = #{name}
+	</select>
   
   <!-- 查询多条 -->
   <select id="findList" resultMap="BaseResultMap">
