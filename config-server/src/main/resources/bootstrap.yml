@@ -1,25 +1,33 @@
 info:
   app:
-    name: transfer-gateway-server
+    name: transfer-config-server
     version: 1.0
 
 server:
-  port: 8008
+  port: 8002
 
 spring:
   application:
     # 应用名称
-    name: transfer-gateway-server
-  profiles:
-    active: dev
+    name: transfer-config-server
   cloud:
     config:
-      fail-fast: true
-      discovery:
-        service-id: transfer-config-server
-        enabled: true
-      profile: ${spring.profiles.active}
-      label: master
+      server:
+        git:
+          # 远程仓库地址
+          uri: http://10.0.98.7:8080/hejinyo/mustang-transfer.git
+          # 相对搜索位置，可配置多个
+          search-paths: config-repo
+          #git仓库的账号
+          username: xieyuqing
+          #git仓库的密码
+          password: king199092
+  rabbitmq:
+    host: 10.0.98.75
+    port: 5672
+    username: admin
+    password: Rabbitmq@2018
+    #virtual-host: /jelly
 
 eureka:
   client:
@@ -28,7 +36,7 @@ eureka:
     # 缓存清单每隔30秒跟新一次
     registry-fetch-interval-seconds: 10
   instance:
-    hostname: transfer-gateway
+    hostname: transfer-config-server
     # 实例使用ip进行访问
     prefer-ip-address: true
     # 实例显示id
@@ -37,13 +45,3 @@ eureka:
     lease-renewal-interval-in-seconds: 5
     # 服务失效时间，默认90秒
     lease-expiration-duration-in-seconds: 20
-
-zuul:
-  sensitiveHeaders: x-access-token,token
-  routes:
-    admin-route: #该名字可随意取
-      serviceId: mustang-admin
-      path: /admin/**
-    transfer-crm-routs: #该名字可随意取
-      serviceId: transfer-crm
-      path: /transfer/crm/**

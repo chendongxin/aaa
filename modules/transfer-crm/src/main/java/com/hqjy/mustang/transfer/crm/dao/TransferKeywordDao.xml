@@ -167,6 +167,12 @@
 	from transfer_keyword
 		<include refid="Base_Where_SQL" />
   </select>
-  
+
+	<select id="getAllKeywordList" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from transfer_keyword
+		order by parent_id
+	</select>
 
 </mapper>

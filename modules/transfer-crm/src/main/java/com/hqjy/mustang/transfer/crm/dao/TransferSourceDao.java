@@ -12,4 +12,8 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TransferSourceDao extends BaseDao<TransferSourceEntity, Long> {
+    /**
+     * 通过名称查询一条来源平台
+     */
+    TransferSourceEntity findOneByName(String name);
 }

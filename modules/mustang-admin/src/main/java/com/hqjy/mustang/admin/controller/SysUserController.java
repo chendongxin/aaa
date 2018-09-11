@@ -1,5 +1,6 @@
 package com.hqjy.mustang.admin.controller;
 
+import com.hqjy.mustang.admin.utils.ShiroUtils;
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.base.AbstractController;
 import com.hqjy.mustang.common.base.constant.StatusCode;
@@ -210,4 +211,9 @@ public class SysUserController extends AbstractController {
         return list != null && list.size() > 0 ? R.ok(list) : R.error("当前选择部门不存在人员！");
     }
 
+    @ApiOperation(value = "只获取当前用户", notes = "只获取当前用户")
+    @GetMapping(value = "/getUser")
+    public R getUser() {
+        return R.result(ShiroUtils.getUser());
+    }
 }
