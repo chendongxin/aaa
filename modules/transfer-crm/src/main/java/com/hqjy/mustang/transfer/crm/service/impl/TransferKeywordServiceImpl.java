@@ -22,6 +22,6 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
 
     @Override
     public HashMap<String, List<TransferKeywordEntity>> getRecursionTree(boolean showRoot) {
-        return RecursionUtil.listTree(showRoot, TransferKeywordEntity.class, "getCompanyId", getAllKeywordList(), Collections.singletonList(SystemId.TREE_ROOT));
+        return RecursionUtil.listTree(showRoot, TransferKeywordEntity.class, "getId", getAllKeywordList(), Collections.singletonList(SystemId.TREE_ROOT));
     }
 }

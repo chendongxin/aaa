@@ -22,7 +22,7 @@ public class TransferGenWayServiceImpl extends BaseServiceImpl<TransferGenWayDao
 
     @Override
     public HashMap<String, List<TransferGenWayEntity>> getRecursionTree(boolean showRoot) {
-        return RecursionUtil.listTree(showRoot, TransferGenWayEntity.class, "getCompanyId", getAllGenWayList(), Collections.singletonList(SystemId.TREE_ROOT));
+        return RecursionUtil.listTree(showRoot, TransferGenWayEntity.class, "getWayId", getAllGenWayList(), Collections.singletonList(SystemId.TREE_ROOT));
     }
 
 }

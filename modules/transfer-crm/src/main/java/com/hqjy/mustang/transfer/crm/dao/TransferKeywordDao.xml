@@ -136,19 +136,22 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-		<include refid="Base_Column_List" />
-	from transfer_keyword
+	  tk.id, tk.parent_id, tk.name, tk.status, tk.level, tk.create_user_id, tk.create_user_name, tk.create_time,
+	  tk.update_user_id, tk.update_user_name, tk.update_time
+	from transfer_keyword tk
+	left join transfer_keyword tk1 on tk1.id = tk.parent_id
 		<where>
-		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
-		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
-		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
-		<if test="level != null and !&quot;&quot;.equals(level)">and level = #{level}</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="id != null and !&quot;&quot;.equals(id)">and tk.parent_id = #{id} or tk.id = #{id}</if>
+		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and tk.parent_id = #{parentId}</if>
+		<if test="name != null and !&quot;&quot;.equals(name)">and tk.name like concat('%',#{name},'%')</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and tk.status = #{status}</if>
+		<if test="level != null and !&quot;&quot;.equals(level)">and tk.level = #{level}</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tk.create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tk.create_user_name like concat('%',#{createUserName},'%')</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and tk.DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and tk.update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and tk.update_user_name like concat('%',#{updateUserName},'%')</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and tk.DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
 	</where>
   </select>
   

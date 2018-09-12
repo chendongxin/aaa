@@ -25,6 +25,11 @@ public class TransferSourceEntity implements Serializable {
     private String name;
 
     /**
+     * 电子邮件域名
+     */
+    private String emailDomain;
+
+    /**
      * 状态 0启用 1禁用 status
      **/
     private Byte status;

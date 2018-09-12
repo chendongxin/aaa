@@ -22,7 +22,7 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
 
     @Override
     public HashMap<String, List<TransferGenCompanyEntity>> getRecursionTree(boolean showRoot) {
-        return RecursionUtil.listTree(showRoot, TransferGenCompanyEntity.class, "getCompanyId", getAllGenCompanyList(), Collections.singletonList(SystemId.TREE_ROOT));
+        return RecursionUtil.listTree(showRoot, TransferGenCompanyEntity.class, "getId", getAllGenCompanyList(), Collections.singletonList(SystemId.TREE_ROOT));
     }
 
 
