@@ -11,7 +11,7 @@ import com.hqjy.mustang.common.web.shiro.AuthToken;
 import com.hqjy.mustang.common.web.shiro.FilterAnonConfig;
 import com.hqjy.mustang.common.web.utils.ResponseUtils;
 import com.hqjy.mustang.common.web.utils.TokenUtils;
-import com.hqjy.mustang.transfer.crm.fegin.AuthApiService;
+import com.hqjy.mustang.transfer.crm.feign.AuthApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -25,7 +25,6 @@ import javax.servlet.Filter;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 /**

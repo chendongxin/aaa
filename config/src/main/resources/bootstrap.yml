@@ -1,18 +1,29 @@
+info:
+  app:
+    name: transfer-config-server
+    version: 1.0
+
+server:
+  port: 8001
+
 spring:
   application:
-    name: transfer-foo    # 对应config-server所获取的配置文件的{application}
+    # 应用名称
+    name: transfer-config-server
   cloud:
     config:
-      profile: dev            # profile对应config-server所获取的配置文件中的{profile}
-      label: dev           # 指定Git仓库的分支，对应config-server所获取的配置文件的{label}
-      discovery:
-        enabled: true      # 表示使用服务发现组件中的Config Server，而不自己指定Config Server的uri，默认false
-        service-id: config-server  # 指定Config Server在服务发现中的serviceId，默认是configserver
+      server:
+        git:
+          # 远程仓库地址
+          uri: http://10.0.98.7:8080/hejinyo/mustang-transfer-config.git
+          # 相对搜索位置，可配置多个
+          search-paths: config-repo
   rabbitmq:
     host: 10.0.98.75
     port: 5672
     username: admin
     password: Rabbitmq@2018
+    #virtual-host: /jelly
 
 eureka:
   client:

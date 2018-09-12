@@ -15,11 +15,8 @@
         <!-- euraka 服务注册中心 -->
         <module>euraka</module>
 
-        <!-- config 配置服务端 -->
-        <module>config-server</module>
-
-        <!-- config 配置客户端 -->
-        <module>config-client</module>
+        <!-- config 配置中心 -->
+        <module>config</module>
 
         <!-- gateway API网关服务 -->
         <module>gateway</module>

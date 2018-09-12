@@ -1,8 +1,8 @@
-package com.hqjy.mustang.transfer.crm.fegin;
+package com.hqjy.mustang.transfer.crm.feign;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.web.model.AuthCheckResult;
-import com.hqjy.mustang.transfer.crm.fegin.fallback.AuthApiServiceFallbackImpl;
+import com.hqjy.mustang.transfer.crm.feign.fallback.AuthApiServiceFallbackImpl;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

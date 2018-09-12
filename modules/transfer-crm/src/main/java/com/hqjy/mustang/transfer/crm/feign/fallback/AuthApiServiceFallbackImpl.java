@@ -1,7 +1,7 @@
-package com.hqjy.mustang.transfer.crm.fegin.fallback;
+package com.hqjy.mustang.transfer.crm.feign.fallback;
 
 import com.hqjy.mustang.common.web.model.AuthCheckResult;
-import com.hqjy.mustang.transfer.crm.fegin.AuthApiService;
+import com.hqjy.mustang.transfer.crm.feign.AuthApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
