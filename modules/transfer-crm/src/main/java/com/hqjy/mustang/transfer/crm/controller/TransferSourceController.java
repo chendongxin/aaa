@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 @Api(tags = "推广管理-来源管理", description = "TransferSourceController")
 @RestController
-@RequestMapping("/transfer/source")
+@RequestMapping("/source")
 public class TransferSourceController {
 
     @Autowired

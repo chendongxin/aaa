@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 @Api(tags = "推广管理-关键词配置", description = "TransferKeywordController")
 @RestController
-@RequestMapping("/transfer/keyword")
+@RequestMapping("/keyword")
 public class TransferKeywordController {
 
     @Autowired

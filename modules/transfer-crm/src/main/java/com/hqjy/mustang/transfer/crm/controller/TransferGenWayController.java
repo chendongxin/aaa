@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 @Api(tags = "推广管理-推广方式", description = "TransferGenWayController")
 @RestController
-@RequestMapping("/transfer/GenWay")
+@RequestMapping("/gen/way")
 public class TransferGenWayController {
 
     @Autowired

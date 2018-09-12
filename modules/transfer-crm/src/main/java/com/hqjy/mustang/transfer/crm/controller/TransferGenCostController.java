@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 @Api(tags = "推广管理-推广费用", description = "TransferGenCostController")
 @RestController
-@RequestMapping("/transfer/GenCost")
+@RequestMapping("/gen/cost")
 public class TransferGenCostController {
 
     @Autowired

@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 @Api(tags = "推广管理-推广公司", description = "TransferGenCompanyController")
 @RestController
-@RequestMapping("/transfer/gen/company")
+@RequestMapping("/gen/company")
 public class TransferGenCompanyController {
 
     @Autowired
@@ -85,10 +85,10 @@ public class TransferGenCompanyController {
     }
 
     /**
-     * 新增推广公司
+     * 新增推广公司t
      */
     @ApiOperation(value = "新增推广公司", notes = "新增推广公司")
-    @ApiImplicitParam(paramType = "body", name = "TransferGenCompanyEntity", value = "推广公司信息对象", required = true, dataType = "TransferGenCompanyEntity")
+    @ApiImplicitParam(paramType = "body", name = "transferGenCompanyEntity", value = "推广公司信息对象", required = true, dataType = "TransferGenCompanyEntity")
     @SysLog("新增推广公司")
     @PostMapping("/save")
     public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferGenCompanyEntity transferGenCompanyEntity) {
