@@ -1,7 +1,6 @@
-package com.hqjy.mustang.common.web.config;
+package com.hqjy.mustang.transfer.crm.config;
 
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
@@ -13,8 +12,8 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class RestTemplateConfig {
 
-    @Bean
-    public RestTemplate restTemplate() {
+    @Bean(name = "ncRestTemplate")
+    public RestTemplate ncRestTemplate() {
         HttpComponentsClientHttpRequestFactory httpRequestFactory = new HttpComponentsClientHttpRequestFactory();
         httpRequestFactory.setConnectionRequestTimeout(1800000);
         httpRequestFactory.setConnectTimeout(1800000);
