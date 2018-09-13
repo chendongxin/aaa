@@ -7,6 +7,7 @@
     <id column="id" jdbcType="INTEGER" property="id" />
     <result column="parent_id" jdbcType="INTEGER" property="parentId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+	<result column="seq" jdbcType="INTEGER" property="seq" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="level" jdbcType="TINYINT" property="level" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
@@ -19,7 +20,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    id, parent_id, name, status, level, create_user_id, create_user_name, create_time, 
+    id, parent_id, name, seq, status, level, create_user_id, create_user_name, create_time,
     update_user_id, update_user_name, update_time
   </sql>
   
@@ -28,6 +29,7 @@
     <where>
 		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
+		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="level != null and !&quot;&quot;.equals(level)">and level = #{level}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
@@ -45,6 +47,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != parentId">parent_id, </if>
 			<if test="null != name">name, </if>
+			<if test="null != seq">seq, </if>
 			<if test="null != status">status, </if>
 			<if test="null != level">level, </if>
 			<if test="null != createUserId">create_user_id, </if>
@@ -58,6 +61,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != parentId">#{parentId}, </if>
 			<if test="null != name">#{name}, </if>
+			<if test="null != seq">#{seq}, </if>
 			<if test="null != status">#{status}, </if>
 			<if test="null != level">#{level}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
@@ -75,6 +79,7 @@
 		<set>
 			<if test="null != parentId">parent_id = #{parentId}, </if>
 			<if test="null != name">name = #{name}, </if>
+			<if test="null != seq">seq = #{seq}, </if>
 			<if test="null != status">status = #{status}, </if>
 			<if test="null != level">level = #{level}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
@@ -144,6 +149,7 @@
 		<if test="id != null and !&quot;&quot;.equals(id)">and tk.parent_id = #{id} or tk.id = #{id}</if>
 		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and tk.parent_id = #{parentId}</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and tk.name like concat('%',#{name},'%')</if>
+		<if test="seq != null and !&quot;&quot;.equals(seq)">and tk.seq = #{seq}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and tk.status = #{status}</if>
 		<if test="level != null and !&quot;&quot;.equals(level)">and tk.level = #{level}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tk.create_user_id = #{createUserId}</if>
@@ -177,5 +183,22 @@
 		from transfer_keyword
 		order by parent_id
 	</select>
+
+	<!-- 通过名称查找一条记录 -->
+	<select id="findOneByName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from transfer_keyword
+		where name = #{name}
+	</select>
+
+	<select id="findByParentId" resultMap="BaseResultMap">
+        select
+		<include refid="Base_Column_List" />
+        from transfer_keyword
+        WHERE
+        parent_id = #{parentId}
+        order by seq asc
+    </select>
 
 </mapper>

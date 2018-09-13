@@ -30,6 +30,11 @@ public class TransferKeywordEntity implements Serializable {
     private String name;
 
     /**
+     * 排序号 seq
+     **/
+    private Integer seq;
+
+    /**
 	 * 状态,见数据字典STATUS status
 	 **/
     private Byte status;

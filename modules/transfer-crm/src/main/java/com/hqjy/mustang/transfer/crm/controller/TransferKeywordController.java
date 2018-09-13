@@ -89,10 +89,26 @@ public class TransferKeywordController {
     /**
      * 新增关键词
      */
-    @ApiOperation(value = "新增关键词", notes = "新增关键词")
+    @ApiOperation(value = "新增关键词", notes = "请求参数：\n" +
+            "参数说明：\n" +
+            " 【岗位类别(大类下添加)/关键词(小类下添加):name】,【根节点:parentId】,【排序号:seq】\n" +
+            " 【状态(-1:未激活; 1:正常; 0:禁用):status】, 【属性级别(1: 岗位类别, 2: 关键词):level】\n" +
+            "示例：\n" +
+            "{\n" +
+            "  \"name\": \"测试类\",\n" +
+            "  \"parentId\": 2,\n" +
+            "  \"seq\": 1,\n" +
+            "  \"status\": 1,\n" +
+            "  \"level\": 2,\n" +
+            "}\n" +
+            "新增成功响应数据：\n" +
+            "{\n" +
+            "  \"msg\": \"成功\",\n" +
+            "  \"code\": 0\n" +
+            "}")
     @ApiImplicitParam(paramType = "body", name = "TransferKeywordEntity", value = "来源信息对象", required = true, dataType = "TransferKeywordEntity")
     @SysLog("新增关键词")
-    @PostMapping("/save")
+    @PostMapping
     public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferKeywordEntity transferKeywordEntity) {
         int count = transferKeywordService.save(transferKeywordEntity);
         if (count > 0) {
@@ -107,9 +123,9 @@ public class TransferKeywordController {
     @ApiOperation(value = "删除关键词", notes = "删除关键词：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "id", value = "关键词ID", required = true, dataType = "Integer")
     @SysLog("删除关键词")
-    @DeleteMapping("/{id}")
-    public R delete(@PathVariable("id") Integer id) {
-        int count = transferKeywordService.delete(id);
+    @DeleteMapping("/{ids}")
+    public R delete(@PathVariable("ids") Integer[] ids) {
+        int count = transferKeywordService.deleteBatch(ids);
         if (count > 0) {
             return R.ok();
         }
@@ -119,7 +135,23 @@ public class TransferKeywordController {
     /**
      * 修改关键词
      */
-    @ApiOperation(value = "修改关键词", notes = "修改关键词")
+    @ApiOperation(value = "修改关键词", notes = "输入参数：\n" +
+            "参数说明：\n" +
+            " 【岗位类别(大类下添加)/关键词(小类下添加):name】,【根节点:parentId】,【排序号:seq】\n" +
+            " 【状态(-1:未激活; 1:正常; 0:禁用):status】, 【属性级别(1: 岗位类别, 2: 关键词):level】\n" +
+            "示例：\n" +
+            "{\n" +
+            "  \"name\": \"测试类\",\n" +
+            "  \"parentId\": 2,\n" +
+            "  \"seq\": 1,\n" +
+            "  \"status\": 1,\n" +
+            "  \"level\": 2,\n" +
+            "}\n" +
+            "新增成功响应数据：\n" +
+            "{\n" +
+            "  \"msg\": \"成功\",\n" +
+            "  \"code\": 0\n" +
+            "}")
     @ApiImplicitParams({
             @ApiImplicitParam(paramType = "path", name = "id", value = "关键词ID", required = true, dataType = "Integer"),
             @ApiImplicitParam(paramType = "body", name = "transferKeywordEntity", value = "关键词实体", required = true, dataType = "TransferKeywordEntity")
