@@ -29,6 +29,7 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
     /**
      * 增加一条来源
      */
+    @Override
     public int save(TransferSourceEntity transferSourceEntity) {
         if (baseDao.findOneByName(transferSourceEntity.getName()) != null) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
@@ -41,6 +42,7 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
     /**
      * 修改一条来源
      */
+    @Override
     public int update(TransferSourceEntity transferSourceEntity) {
         transferSourceEntity.setUpdateUserId(getUserId());
         transferSourceEntity.setUpdateUserName(getUserName());

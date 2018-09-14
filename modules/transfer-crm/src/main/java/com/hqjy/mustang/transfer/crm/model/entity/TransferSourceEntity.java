@@ -1,5 +1,7 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,11 +22,6 @@ public class TransferSourceEntity implements Serializable {
 	 * 来源名称 name
 	 **/
     private String name;
-
-    /**
-     * 电子邮件域名
-     */
-    private String emailDomain;
 
     /**
 	 * 电子邮件域名 email_domain
