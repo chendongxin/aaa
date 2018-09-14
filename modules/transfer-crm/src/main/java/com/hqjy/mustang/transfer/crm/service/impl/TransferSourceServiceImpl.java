@@ -49,4 +49,9 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
         return baseDao.update(transferSourceEntity);
     }
 
+    @Override
+    public List<TransferSourceEntity> findNotByCompanyId(Long companyId) {
+        return baseDao.findNotByCompanyId(companyId);
+    }
+
 }

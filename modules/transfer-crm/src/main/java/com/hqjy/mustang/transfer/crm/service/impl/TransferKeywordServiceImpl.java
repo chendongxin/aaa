@@ -71,7 +71,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     public int deleteBatch(Integer[] ids) {
         List<Integer> list = Arrays.asList(ids);
         for (Integer id : list) {
-            List<TransferKeywordEntity> keywordList = baseDao.findByParentId(super.findOne(id).getId());
+            List<TransferKeywordEntity> keywordList = baseDao.findByParentId(id);
             if (keywordList.size() > 0) {
                 throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
             }

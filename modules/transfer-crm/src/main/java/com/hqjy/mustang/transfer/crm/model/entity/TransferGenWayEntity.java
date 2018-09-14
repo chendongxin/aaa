@@ -35,6 +35,16 @@ public class TransferGenWayEntity implements Serializable {
     private String genWay;
 
     /**
+     * 排序号 seq
+     **/
+    private Integer seq;
+
+    /**
+     * 状态,见数据字典STATUS status( 0-禁用 1-启用)
+     **/
+    private Byte status;
+
+    /**
      * 父推广方式名称
      */
     private String parentName;

@@ -4,6 +4,8 @@ import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * transfer_source 持久化层
  * 
@@ -19,4 +21,9 @@ public interface TransferSourceDao extends BaseDao<TransferSourceEntity, Long> {
      * @return 返回结果
      */
     TransferSourceEntity findOneByName(String name);
+
+    /**
+     * 查询不在该公司下的推广平台
+     */
+    List<TransferSourceEntity> findNotByCompanyId(Long companyId);
 }
