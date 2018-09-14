@@ -6,13 +6,8 @@
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDealEntity">
     <id column="deal_id" jdbcType="BIGINT" property="dealId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
-    <result column="money" jdbcType="DECIMAL" property="money" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="area_id" jdbcType="BIGINT" property="areaId" />
-    <result column="area_code" jdbcType="VARCHAR" property="areaCode" />
-    <result column="school_id" jdbcType="BIGINT" property="schoolId" />
-    <result column="school_code" jdbcType="VARCHAR" property="schoolCode" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -23,22 +18,16 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    deal_id, customer_id, money, user_id, user_name, area_id, area_code, school_id, school_code, 
-    create_user_id, create_user_name, create_time, update_user_id, update_user_name, 
-    update_time
+    deal_id, customer_id, user_id, user_name, create_user_id, create_user_name, create_time, 
+    update_user_id, update_user_name, update_time
   </sql>
   
   <!-- 通用查询sql -->
   <sql id="Base_Where_SQL">
     <where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="money != null and !&quot;&quot;.equals(money)">and money = #{money}</if>
 		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
 		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name = #{userName}</if>
-		<if test="areaId != null and !&quot;&quot;.equals(areaId)">and area_id = #{areaId}</if>
-		<if test="areaCode != null and !&quot;&quot;.equals(areaCode)">and area_code = #{areaCode}</if>
-		<if test="schoolId != null and !&quot;&quot;.equals(schoolId)">and school_id = #{schoolId}</if>
-		<if test="schoolCode != null and !&quot;&quot;.equals(schoolCode)">and school_code = #{schoolCode}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -53,13 +42,8 @@
     insert into transfer_customer_deal
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != customerId">customer_id, </if>
-			<if test="null != money">money, </if>
 			<if test="null != userId">user_id, </if>
 			<if test="null != userName">user_name, </if>
-			<if test="null != areaId">area_id, </if>
-			<if test="null != areaCode">area_code, </if>
-			<if test="null != schoolId">school_id, </if>
-			<if test="null != schoolCode">school_code, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
 			<if test="null != createTime">create_time, </if>
@@ -70,13 +54,8 @@
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != customerId">#{customerId}, </if>
-			<if test="null != money">#{money}, </if>
 			<if test="null != userId">#{userId}, </if>
 			<if test="null != userName">#{userName}, </if>
-			<if test="null != areaId">#{areaId}, </if>
-			<if test="null != areaCode">#{areaCode}, </if>
-			<if test="null != schoolId">#{schoolId}, </if>
-			<if test="null != schoolCode">#{schoolCode}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -91,13 +70,8 @@
     update transfer_customer_deal 
 		<set>
 			<if test="null != customerId">customer_id = #{customerId}, </if>
-			<if test="null != money">money = #{money}, </if>
 			<if test="null != userId">user_id = #{userId}, </if>
 			<if test="null != userName">user_name = #{userName}, </if>
-			<if test="null != areaId">area_id = #{areaId}, </if>
-			<if test="null != areaCode">area_code = #{areaCode}, </if>
-			<if test="null != schoolId">school_id = #{schoolId}, </if>
-			<if test="null != schoolCode">school_code = #{schoolCode}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
@@ -161,13 +135,8 @@
 	from transfer_customer_deal
 		<where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="money != null and !&quot;&quot;.equals(money)">and money = #{money}</if>
 		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
 		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
-		<if test="areaId != null and !&quot;&quot;.equals(areaId)">and area_id = #{areaId}</if>
-		<if test="areaCode != null and !&quot;&quot;.equals(areaCode)">and area_code like concat('%',#{areaCode},'%')</if>
-		<if test="schoolId != null and !&quot;&quot;.equals(schoolId)">and school_id = #{schoolId}</if>
-		<if test="schoolCode != null and !&quot;&quot;.equals(schoolCode)">and school_code like concat('%',#{schoolCode},'%')</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>

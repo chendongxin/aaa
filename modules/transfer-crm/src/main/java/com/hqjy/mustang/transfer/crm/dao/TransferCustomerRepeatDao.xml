@@ -6,14 +6,20 @@
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerRepeatEntity">
     <id column="repeat_id" jdbcType="BIGINT" property="repeatId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+    <result column="pro_id" jdbcType="BIGINT" property="proId" />
+    <result column="pro_name" jdbcType="VARCHAR" property="proName" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
+    <result column="source_id" jdbcType="BIGINT" property="sourceId" />
     <result column="dept_id" jdbcType="BIGINT" property="deptId" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="url" jdbcType="VARCHAR" property="url" />
-    <result column="source_id" jdbcType="BIGINT" property="sourceId" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="we_chat" jdbcType="VARCHAR" property="weChat" />
+    <result column="qq" jdbcType="VARCHAR" property="qq" />
+    <result column="land_line" jdbcType="VARCHAR" property="landLine" />
     <result column="memo" jdbcType="VARCHAR" property="memo" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -25,23 +31,29 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    repeat_id, customer_id, dept_id, dept_name, user_id, user_name, name, address, url, 
-    source_id, memo, create_user_id, create_user_name, create_time, update_user_id, update_user_name, 
-    update_time
+    repeat_id, customer_id, pro_id, pro_name, company_id, source_id, dept_id, dept_name, 
+    user_id, user_name, name, address, phone, we_chat, qq, land_line, memo, create_user_id, 
+    create_user_name, create_time, update_user_id, update_user_name, update_time
   </sql>
   
   <!-- 通用查询sql -->
   <sql id="Base_Where_SQL">
     <where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
+		<if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name = #{proName}</if>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
 		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
 		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
 		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name = #{userName}</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
 		<if test="address != null and !&quot;&quot;.equals(address)">and address = #{address}</if>
-		<if test="url != null and !&quot;&quot;.equals(url)">and url = #{url}</if>
-		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="phone != null and !&quot;&quot;.equals(phone)">and phone = #{phone}</if>
+		<if test="weChat != null and !&quot;&quot;.equals(weChat)">and we_chat = #{weChat}</if>
+		<if test="qq != null and !&quot;&quot;.equals(qq)">and qq = #{qq}</if>
+		<if test="landLine != null and !&quot;&quot;.equals(landLine)">and land_line = #{landLine}</if>
 		<if test="memo != null and !&quot;&quot;.equals(memo)">and memo = #{memo}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
@@ -57,14 +69,20 @@
     insert into transfer_customer_repeat
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != customerId">customer_id, </if>
+			<if test="null != proId">pro_id, </if>
+			<if test="null != proName">pro_name, </if>
+			<if test="null != companyId">company_id, </if>
+			<if test="null != sourceId">source_id, </if>
 			<if test="null != deptId">dept_id, </if>
 			<if test="null != deptName">dept_name, </if>
 			<if test="null != userId">user_id, </if>
 			<if test="null != userName">user_name, </if>
 			<if test="null != name">name, </if>
 			<if test="null != address">address, </if>
-			<if test="null != url">url, </if>
-			<if test="null != sourceId">source_id, </if>
+			<if test="null != phone">phone, </if>
+			<if test="null != weChat">we_chat, </if>
+			<if test="null != qq">qq, </if>
+			<if test="null != landLine">land_line, </if>
 			<if test="null != memo">memo, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
@@ -76,14 +94,20 @@
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != customerId">#{customerId}, </if>
+			<if test="null != proId">#{proId}, </if>
+			<if test="null != proName">#{proName}, </if>
+			<if test="null != companyId">#{companyId}, </if>
+			<if test="null != sourceId">#{sourceId}, </if>
 			<if test="null != deptId">#{deptId}, </if>
 			<if test="null != deptName">#{deptName}, </if>
 			<if test="null != userId">#{userId}, </if>
 			<if test="null != userName">#{userName}, </if>
 			<if test="null != name">#{name}, </if>
 			<if test="null != address">#{address}, </if>
-			<if test="null != url">#{url}, </if>
-			<if test="null != sourceId">#{sourceId}, </if>
+			<if test="null != phone">#{phone}, </if>
+			<if test="null != weChat">#{weChat}, </if>
+			<if test="null != qq">#{qq}, </if>
+			<if test="null != landLine">#{landLine}, </if>
 			<if test="null != memo">#{memo}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
@@ -99,14 +123,20 @@
     update transfer_customer_repeat 
 		<set>
 			<if test="null != customerId">customer_id = #{customerId}, </if>
+			<if test="null != proId">pro_id = #{proId}, </if>
+			<if test="null != proName">pro_name = #{proName}, </if>
+			<if test="null != companyId">company_id = #{companyId}, </if>
+			<if test="null != sourceId">source_id = #{sourceId}, </if>
 			<if test="null != deptId">dept_id = #{deptId}, </if>
 			<if test="null != deptName">dept_name = #{deptName}, </if>
 			<if test="null != userId">user_id = #{userId}, </if>
 			<if test="null != userName">user_name = #{userName}, </if>
 			<if test="null != name">name = #{name}, </if>
 			<if test="null != address">address = #{address}, </if>
-			<if test="null != url">url = #{url}, </if>
-			<if test="null != sourceId">source_id = #{sourceId}, </if>
+			<if test="null != phone">phone = #{phone}, </if>
+			<if test="null != weChat">we_chat = #{weChat}, </if>
+			<if test="null != qq">qq = #{qq}, </if>
+			<if test="null != landLine">land_line = #{landLine}, </if>
 			<if test="null != memo">memo = #{memo}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
@@ -171,14 +201,20 @@
 	from transfer_customer_repeat
 		<where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
+		<if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name like concat('%',#{proName},'%')</if>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
 		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
 		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
 		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 		<if test="address != null and !&quot;&quot;.equals(address)">and address like concat('%',#{address},'%')</if>
-		<if test="url != null and !&quot;&quot;.equals(url)">and url like concat('%',#{url},'%')</if>
-		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
+		<if test="weChat != null and !&quot;&quot;.equals(weChat)">and we_chat like concat('%',#{weChat},'%')</if>
+		<if test="qq != null and !&quot;&quot;.equals(qq)">and qq like concat('%',#{qq},'%')</if>
+		<if test="landLine != null and !&quot;&quot;.equals(landLine)">and land_line like concat('%',#{landLine},'%')</if>
 		<if test="memo != null and !&quot;&quot;.equals(memo)">and memo like concat('%',#{memo},'%')</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>

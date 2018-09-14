@@ -17,10 +17,10 @@
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
     <result column="dept_id" jdbcType="BIGINT" property="deptId" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
-    <result column="last_user_id" jdbcType="BIGINT" property="lastUserId" />
-    <result column="last_user_name" jdbcType="VARCHAR" property="lastUserName" />
     <result column="first_user_id" jdbcType="BIGINT" property="firstUserId" />
     <result column="first_user_name" jdbcType="VARCHAR" property="firstUserName" />
+    <result column="last_user_id" jdbcType="BIGINT" property="lastUserId" />
+    <result column="last_user_name" jdbcType="VARCHAR" property="lastUserName" />
     <result column="gen_user_id" jdbcType="BIGINT" property="genUserId" />
     <result column="gen_user_name" jdbcType="VARCHAR" property="genUserName" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -38,8 +38,8 @@
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
     customer_id, nc_id, pro_id, pro_name, source_id, company_id, name, status, get_way, 
-    user_id, user_name, dept_id, dept_name, last_user_id, last_user_name, first_user_id, 
-    first_user_name, gen_user_id, gen_user_name, phone, we_chat, qq, land_line, create_user_id, 
+    user_id, user_name, dept_id, dept_name, first_user_id, first_user_name, last_user_id, 
+    last_user_name, gen_user_id, gen_user_name, phone, we_chat, qq, land_line, create_user_id, 
     create_user_name, create_time, update_user_id, update_user_name, update_time
   </sql>
   
@@ -58,10 +58,10 @@
 		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name = #{userName}</if>
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
 		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
-		<if test="lastUserId != null and !&quot;&quot;.equals(lastUserId)">and last_user_id = #{lastUserId}</if>
-		<if test="lastUserName != null and !&quot;&quot;.equals(lastUserName)">and last_user_name = #{lastUserName}</if>
 		<if test="firstUserId != null and !&quot;&quot;.equals(firstUserId)">and first_user_id = #{firstUserId}</if>
 		<if test="firstUserName != null and !&quot;&quot;.equals(firstUserName)">and first_user_name = #{firstUserName}</if>
+		<if test="lastUserId != null and !&quot;&quot;.equals(lastUserId)">and last_user_id = #{lastUserId}</if>
+		<if test="lastUserName != null and !&quot;&quot;.equals(lastUserName)">and last_user_name = #{lastUserName}</if>
 		<if test="genUserId != null and !&quot;&quot;.equals(genUserId)">and gen_user_id = #{genUserId}</if>
 		<if test="genUserName != null and !&quot;&quot;.equals(genUserName)">and gen_user_name = #{genUserName}</if>
 		<if test="phone != null and !&quot;&quot;.equals(phone)">and phone = #{phone}</if>
@@ -93,10 +93,10 @@
 			<if test="null != userName">user_name, </if>
 			<if test="null != deptId">dept_id, </if>
 			<if test="null != deptName">dept_name, </if>
-			<if test="null != lastUserId">last_user_id, </if>
-			<if test="null != lastUserName">last_user_name, </if>
 			<if test="null != firstUserId">first_user_id, </if>
 			<if test="null != firstUserName">first_user_name, </if>
+			<if test="null != lastUserId">last_user_id, </if>
+			<if test="null != lastUserName">last_user_name, </if>
 			<if test="null != genUserId">gen_user_id, </if>
 			<if test="null != genUserName">gen_user_name, </if>
 			<if test="null != phone">phone, </if>
@@ -124,10 +124,10 @@
 			<if test="null != userName">#{userName}, </if>
 			<if test="null != deptId">#{deptId}, </if>
 			<if test="null != deptName">#{deptName}, </if>
-			<if test="null != lastUserId">#{lastUserId}, </if>
-			<if test="null != lastUserName">#{lastUserName}, </if>
 			<if test="null != firstUserId">#{firstUserId}, </if>
 			<if test="null != firstUserName">#{firstUserName}, </if>
+			<if test="null != lastUserId">#{lastUserId}, </if>
+			<if test="null != lastUserName">#{lastUserName}, </if>
 			<if test="null != genUserId">#{genUserId}, </if>
 			<if test="null != genUserName">#{genUserName}, </if>
 			<if test="null != phone">#{phone}, </if>
@@ -159,10 +159,10 @@
 			<if test="null != userName">user_name = #{userName}, </if>
 			<if test="null != deptId">dept_id = #{deptId}, </if>
 			<if test="null != deptName">dept_name = #{deptName}, </if>
-			<if test="null != lastUserId">last_user_id = #{lastUserId}, </if>
-			<if test="null != lastUserName">last_user_name = #{lastUserName}, </if>
 			<if test="null != firstUserId">first_user_id = #{firstUserId}, </if>
 			<if test="null != firstUserName">first_user_name = #{firstUserName}, </if>
+			<if test="null != lastUserId">last_user_id = #{lastUserId}, </if>
+			<if test="null != lastUserName">last_user_name = #{lastUserName}, </if>
 			<if test="null != genUserId">gen_user_id = #{genUserId}, </if>
 			<if test="null != genUserName">gen_user_name = #{genUserName}, </if>
 			<if test="null != phone">phone = #{phone}, </if>
@@ -243,10 +243,10 @@
 		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
 		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
-		<if test="lastUserId != null and !&quot;&quot;.equals(lastUserId)">and last_user_id = #{lastUserId}</if>
-		<if test="lastUserName != null and !&quot;&quot;.equals(lastUserName)">and last_user_name like concat('%',#{lastUserName},'%')</if>
 		<if test="firstUserId != null and !&quot;&quot;.equals(firstUserId)">and first_user_id = #{firstUserId}</if>
 		<if test="firstUserName != null and !&quot;&quot;.equals(firstUserName)">and first_user_name like concat('%',#{firstUserName},'%')</if>
+		<if test="lastUserId != null and !&quot;&quot;.equals(lastUserId)">and last_user_id = #{lastUserId}</if>
+		<if test="lastUserName != null and !&quot;&quot;.equals(lastUserName)">and last_user_name like concat('%',#{lastUserName},'%')</if>
 		<if test="genUserId != null and !&quot;&quot;.equals(genUserId)">and gen_user_id = #{genUserId}</if>
 		<if test="genUserName != null and !&quot;&quot;.equals(genUserName)">and gen_user_name like concat('%',#{genUserName},'%')</if>
 		<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
