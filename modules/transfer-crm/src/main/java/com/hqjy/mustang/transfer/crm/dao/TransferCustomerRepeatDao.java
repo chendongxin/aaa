@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Mapper;
  * transfer_customer_repeat 持久化层
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/14 15:58
  */
 @Mapper
 public interface TransferCustomerRepeatDao extends BaseDao<TransferCustomerRepeatEntity, Long> {
