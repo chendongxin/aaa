@@ -29,7 +29,5 @@
 hs_err_pid*
 
 .idea/
+common-generator/
 
-# generator
-GenPlugin.java
-generator.xml

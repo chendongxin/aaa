@@ -1,15 +1,15 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * transfer_customer_deal 成交客户实体类
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/14 11:19
  */
 @Data
 public class TransferCustomerDealEntity implements Serializable {
@@ -24,11 +24,6 @@ public class TransferCustomerDealEntity implements Serializable {
     private Long customerId;
 
     /**
-	 * 成交金额 money
-	 **/
-    private BigDecimal money;
-
-    /**
 	 * 成交人员 user_id
 	 **/
     private Long userId;
@@ -37,26 +32,6 @@ public class TransferCustomerDealEntity implements Serializable {
 	 * 成交人名称 user_name
 	 **/
     private String userName;
-
-    /**
-	 * 区域id area_id
-	 **/
-    private Long areaId;
-
-    /**
-	 * 区域名称 area_code
-	 **/
-    private String areaCode;
-
-    /**
-	 * 校区id school_id
-	 **/
-    private Long schoolId;
-
-    /**
-	 * 校区编码 school_code
-	 **/
-    private String schoolCode;
 
     /**
 	 * 创建人编号 create_user_id

@@ -1,14 +1,15 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- * transfer_customer 客户实体类
+ * transfer_customer 客户主表实体类
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/14 11:19
  */
 @Data
 public class TransferCustomerEntity implements Serializable {
@@ -48,12 +49,12 @@ public class TransferCustomerEntity implements Serializable {
     private String name;
 
     /**
-	 * 客户状态 status
+	 * 客户状态,BIZ_STATUS(0-潜在，1-(失败)有效，2-(失败)无效，3-预约，4-成交) status
 	 **/
     private Byte status;
 
     /**
-	 * 过去方式：见数据字典GET_WAY枚举 get_way
+	 * 推广方式：见数据字典GET_WAY枚举(1-主动获取，2-被动获取) get_way
 	 **/
     private Byte getWay;
 
@@ -78,16 +79,6 @@ public class TransferCustomerEntity implements Serializable {
     private String deptName;
 
     /**
-	 * 最后跟进人 last_user_id
-	 **/
-    private Long lastUserId;
-
-    /**
-	 * 最后跟进人名称 last_user_name
-	 **/
-    private String lastUserName;
-
-    /**
 	 * 首次跟进人 first_user_id
 	 **/
     private Long firstUserId;
@@ -96,6 +87,16 @@ public class TransferCustomerEntity implements Serializable {
 	 * 首次跟进人名称 first_user_name
 	 **/
     private String firstUserName;
+
+    /**
+	 * 最后跟进人 last_user_id
+	 **/
+    private Long lastUserId;
+
+    /**
+	 * 最后跟进人名称 last_user_name
+	 **/
+    private String lastUserName;
 
     /**
 	 * 推广用户ID gen_user_id
