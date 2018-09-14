@@ -39,7 +39,7 @@
         </javaTypeResolver>
 
         <!-- 生成实体类 -->
-        <javaModelGenerator targetPackage="cn.hejinyo.jelly.generator.model" targetProject="common/common-generator/src/main/java">
+        <javaModelGenerator targetPackage="com.hqjy.mustang.transfer.crm.model.entity" targetProject="common/common-generator/src/main/java">
             <property name="enableSubPackages" value="true"/>
             <!-- 设置是否在getter方法中，对String类型字段调用trim()方法 -->
             <property name="trimStrings" value="false"/>
@@ -47,18 +47,102 @@
         </javaModelGenerator>
 
         <!-- 生成Dao接口 -->
-        <sqlMapGenerator targetPackage="cn.hejinyo.jelly.generator.dao" targetProject="common/common-generator/src/main/java">
+        <sqlMapGenerator targetPackage="com.hqjy.mustang.transfer.crm.dao" targetProject="common/common-generator/src/main/java">
             <property name="enableSubPackages" value="true"/>
         </sqlMapGenerator>
 
         <!-- 生成DAO映射文件 -->
-        <javaClientGenerator type="XMLMAPPER" targetPackage="cn.hejinyo.jelly.generator.dao" targetProject="common/common-generator/src/main/java">
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.hqjy.mustang.transfer.crm.dao" targetProject="common/common-generator/src/main/java">
             <property name="enableSubPackages" value="true"/>
         </javaClientGenerator>
 
         <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
-        <table tableName="`sys_user_extend`" domainObjectName="SysUserExtendEntity"
-               mapperName="SysUserExtendDao"
+        <table tableName="`transfer_customer`" domainObjectName="TransferCustomerEntity"
+               mapperName="TransferCustomerDao"
+               enableInsert="false"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="`transfer_customer_contact`" domainObjectName="TransferCustomerContactEntity"
+               mapperName="TransferCustomerContactDao"
+               enableInsert="false"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="`transfer_customer_deal`" domainObjectName="TransferCustomerDealEntity"
+               mapperName="TransferCustomerDealDao"
+               enableInsert="false"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="`transfer_customer_detail`" domainObjectName="TransferCustomerDetailEntity"
+               mapperName="TransferCustomerDetailDao"
+               enableInsert="false"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="`transfer_customer_invalid`" domainObjectName="TransferCustomerInvalidEntity"
+               mapperName="TransferCustomerInvalidDao"
+               enableInsert="false"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="`transfer_customer_reservation`" domainObjectName="TransferCustomerReservationEntity"
+               mapperName="TransferCustomerReservationDao"
+               enableInsert="false"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="`transfer_source`" domainObjectName="TransferSourceEntity"
+               mapperName="TransferSourceDao"
+               enableInsert="false"
+               enableSelectByPrimaryKey="true"
+               enableDeleteByPrimaryKey="false"
+               enableUpdateByPrimaryKey="false"
+               enableCountByExample="false"
+               enableUpdateByExample="false"
+               enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false"/>
+        <!-- 要生成那些表(更改tableName和domainObjectName就可以) -->
+        <table tableName="`transfer_resume`" domainObjectName="TransferResumeEntity"
+               mapperName="TransferResumeDao"
                enableInsert="false"
                enableSelectByPrimaryKey="true"
                enableDeleteByPrimaryKey="false"

@@ -1,14 +1,15 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * transfer_customer_contact 客户联系方式实体类
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/14 11:19
  */
 @Data
 public class TransferCustomerContactEntity implements Serializable {
@@ -23,7 +24,7 @@ public class TransferCustomerContactEntity implements Serializable {
     private Integer customerId;
 
     /**
-	 * 类型 type
+	 * 类型;数据字典CONTACT_TYPE(1-手机，2-座机，3-微信，4-QQ) type
 	 **/
     private Integer type;
 

@@ -1,14 +1,15 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Date;
-import lombok.Data;
 
 /**
  * transfer_customer_reservation 预约客户实体类
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/14 11:19
  */
 @Data
 public class TransferCustomerReservationEntity implements Serializable {
@@ -28,24 +29,14 @@ public class TransferCustomerReservationEntity implements Serializable {
     private Date appointmentTime;
 
     /**
-	 * 到访状态 到访状态（见数字字典VISIT_STATUS）:默认0-未到访，1-已到访，-1到访流失 visit_status
+	 * 转NC状态（0-未转NC，1-已转NC） status
+	 **/
+    private Byte status;
+
+    /**
+	 *  上门状态(NC同步回传更新),见典VISIT_STATUS(0-未上门，1-以上门) visit_status
 	 **/
     private Byte visitStatus;
-
-    /**
-	 * 流失原因 lost_reason
-	 **/
-    private String lostReason;
-
-    /**
-	 * NC省份编码 province_code
-	 **/
-    private String provinceCode;
-
-    /**
-	 * NC省份名称 province_name
-	 **/
-    private String provinceName;
 
     /**
 	 * 预约老师编号 teacher_code
@@ -53,19 +44,9 @@ public class TransferCustomerReservationEntity implements Serializable {
     private String teacherCode;
 
     /**
-	 * 校区老师名称 teacher_name
+	 * NC校区老师名称 teacher_name
 	 **/
     private String teacherName;
-
-    /**
-	 * 预约校区NCId school_nc_id
-	 **/
-    private String schoolNcId;
-
-    /**
-	 * 校区名称 school_name
-	 **/
-    private String schoolName;
 
     /**
 	 * 创建人编号 create_user_id

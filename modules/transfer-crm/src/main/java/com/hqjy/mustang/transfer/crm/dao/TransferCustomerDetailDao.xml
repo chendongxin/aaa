@@ -9,27 +9,18 @@
     <result column="age" jdbcType="TINYINT" property="age" />
     <result column="sex" jdbcType="TINYINT" property="sex" />
     <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="birthday" jdbcType="DATE" property="birthday" />
     <result column="school" jdbcType="VARCHAR" property="school" />
-    <result column="graduate_time" jdbcType="DATE" property="graduateTime" />
+    <result column="graduate_date" jdbcType="DATE" property="graduateDate" />
     <result column="major" jdbcType="VARCHAR" property="major" />
     <result column="education_id" jdbcType="BIGINT" property="educationId" />
+    <result column="education_name" jdbcType="VARCHAR" property="educationName" />
+    <result column="apply_type" jdbcType="VARCHAR" property="applyType" />
+    <result column="apply_key" jdbcType="VARCHAR" property="applyKey" />
     <result column="position_applied" jdbcType="VARCHAR" property="positionApplied" />
     <result column="working_place" jdbcType="VARCHAR" property="workingPlace" />
-    <result column="salary" jdbcType="VARCHAR" property="salary" />
-    <result column="work_experience" jdbcType="VARCHAR" property="workExperience" />
-    <result column="education_experience" jdbcType="VARCHAR" property="educationExperience" />
-    <result column="project_experience" jdbcType="VARCHAR" property="projectExperience" />
-    <result column="social_practice" jdbcType="VARCHAR" property="socialPractice" />
-    <result column="trained_experience" jdbcType="VARCHAR" property="trainedExperience" />
-    <result column="language_ability" jdbcType="VARCHAR" property="languageAbility" />
-    <result column="it_skills" jdbcType="VARCHAR" property="itSkills" />
-    <result column="certificate" jdbcType="VARCHAR" property="certificate" />
-    <result column="self_description" jdbcType="VARCHAR" property="selfDescription" />
-    <result column="rewards" jdbcType="VARCHAR" property="rewards" />
-    <result column="other" jdbcType="VARCHAR" property="other" />
+    <result column="work_experience" jdbcType="TINYINT" property="workExperience" />
+    <result column="note" jdbcType="VARCHAR" property="note" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -39,13 +30,9 @@
   </resultMap>
   
   <!-- 表基本列 -->
-  <sql id="Base_Column_List">
-    id, customer_id, age, sex, address, note, email, birthday, school, graduate_time, 
-    major, education_id, position_applied, working_place, salary, work_experience, education_experience, 
-    project_experience, social_practice, trained_experience, language_ability, it_skills, 
-    certificate, self_description, rewards, other, create_user_id, create_user_name, 
-    create_time, update_user_id, update_user_name, update_time
-  </sql>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity">
+    <result column="resume_detail" jdbcType="LONGVARCHAR" property="resumeDetail" />
+  </resultMap>
   
   <!-- 通用查询sql -->
   <sql id="Base_Where_SQL">
@@ -54,33 +41,25 @@
 		<if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
 		<if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
 		<if test="address != null and !&quot;&quot;.equals(address)">and address = #{address}</if>
-		<if test="note != null and !&quot;&quot;.equals(note)">and note = #{note}</if>
 		<if test="email != null and !&quot;&quot;.equals(email)">and email = #{email}</if>
-		<if test="birthday != null and !&quot;&quot;.equals(birthday)">and birthday = #{birthday}</if>
 		<if test="school != null and !&quot;&quot;.equals(school)">and school = #{school}</if>
-		<if test="graduateTime != null and !&quot;&quot;.equals(graduateTime)">and graduate_time = #{graduateTime}</if>
+		<if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
 		<if test="major != null and !&quot;&quot;.equals(major)">and major = #{major}</if>
 		<if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
+		<if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name = #{educationName}</if>
+		<if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type = #{applyType}</if>
+		<if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key = #{applyKey}</if>
 		<if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied = #{positionApplied}</if>
 		<if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place = #{workingPlace}</if>
-		<if test="salary != null and !&quot;&quot;.equals(salary)">and salary = #{salary}</if>
 		<if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience = #{workExperience}</if>
-		<if test="educationExperience != null and !&quot;&quot;.equals(educationExperience)">and education_experience = #{educationExperience}</if>
-		<if test="projectExperience != null and !&quot;&quot;.equals(projectExperience)">and project_experience = #{projectExperience}</if>
-		<if test="socialPractice != null and !&quot;&quot;.equals(socialPractice)">and social_practice = #{socialPractice}</if>
-		<if test="trainedExperience != null and !&quot;&quot;.equals(trainedExperience)">and trained_experience = #{trainedExperience}</if>
-		<if test="languageAbility != null and !&quot;&quot;.equals(languageAbility)">and language_ability = #{languageAbility}</if>
-		<if test="itSkills != null and !&quot;&quot;.equals(itSkills)">and it_skills = #{itSkills}</if>
-		<if test="certificate != null and !&quot;&quot;.equals(certificate)">and certificate = #{certificate}</if>
-		<if test="selfDescription != null and !&quot;&quot;.equals(selfDescription)">and self_description = #{selfDescription}</if>
-		<if test="rewards != null and !&quot;&quot;.equals(rewards)">and rewards = #{rewards}</if>
-		<if test="other != null and !&quot;&quot;.equals(other)">and other = #{other}</if>
+		<if test="note != null and !&quot;&quot;.equals(note)">and note = #{note}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
 		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
 		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
 		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
 	</where>
   </sql>
   
@@ -92,33 +71,25 @@
 			<if test="null != age">age, </if>
 			<if test="null != sex">sex, </if>
 			<if test="null != address">address, </if>
-			<if test="null != note">note, </if>
 			<if test="null != email">email, </if>
-			<if test="null != birthday">birthday, </if>
 			<if test="null != school">school, </if>
-			<if test="null != graduateTime">graduate_time, </if>
+			<if test="null != graduateDate">graduate_date, </if>
 			<if test="null != major">major, </if>
 			<if test="null != educationId">education_id, </if>
+			<if test="null != educationName">education_name, </if>
+			<if test="null != applyType">apply_type, </if>
+			<if test="null != applyKey">apply_key, </if>
 			<if test="null != positionApplied">position_applied, </if>
 			<if test="null != workingPlace">working_place, </if>
-			<if test="null != salary">salary, </if>
 			<if test="null != workExperience">work_experience, </if>
-			<if test="null != educationExperience">education_experience, </if>
-			<if test="null != projectExperience">project_experience, </if>
-			<if test="null != socialPractice">social_practice, </if>
-			<if test="null != trainedExperience">trained_experience, </if>
-			<if test="null != languageAbility">language_ability, </if>
-			<if test="null != itSkills">it_skills, </if>
-			<if test="null != certificate">certificate, </if>
-			<if test="null != selfDescription">self_description, </if>
-			<if test="null != rewards">rewards, </if>
-			<if test="null != other">other, </if>
+			<if test="null != note">note, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
 			<if test="null != createTime">create_time, </if>
 			<if test="null != updateUserId">update_user_id, </if>
 			<if test="null != updateUserName">update_user_name, </if>
 			<if test="null != updateTime">update_time, </if>
+			<if test="null != resumeDetail">resume_detail, </if>
 		</trim>
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -126,33 +97,25 @@
 			<if test="null != age">#{age}, </if>
 			<if test="null != sex">#{sex}, </if>
 			<if test="null != address">#{address}, </if>
-			<if test="null != note">#{note}, </if>
 			<if test="null != email">#{email}, </if>
-			<if test="null != birthday">#{birthday}, </if>
 			<if test="null != school">#{school}, </if>
-			<if test="null != graduateTime">#{graduateTime}, </if>
+			<if test="null != graduateDate">#{graduateDate}, </if>
 			<if test="null != major">#{major}, </if>
 			<if test="null != educationId">#{educationId}, </if>
+			<if test="null != educationName">#{educationName}, </if>
+			<if test="null != applyType">#{applyType}, </if>
+			<if test="null != applyKey">#{applyKey}, </if>
 			<if test="null != positionApplied">#{positionApplied}, </if>
 			<if test="null != workingPlace">#{workingPlace}, </if>
-			<if test="null != salary">#{salary}, </if>
 			<if test="null != workExperience">#{workExperience}, </if>
-			<if test="null != educationExperience">#{educationExperience}, </if>
-			<if test="null != projectExperience">#{projectExperience}, </if>
-			<if test="null != socialPractice">#{socialPractice}, </if>
-			<if test="null != trainedExperience">#{trainedExperience}, </if>
-			<if test="null != languageAbility">#{languageAbility}, </if>
-			<if test="null != itSkills">#{itSkills}, </if>
-			<if test="null != certificate">#{certificate}, </if>
-			<if test="null != selfDescription">#{selfDescription}, </if>
-			<if test="null != rewards">#{rewards}, </if>
-			<if test="null != other">#{other}, </if>
+			<if test="null != note">#{note}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
 			<if test="null != updateUserId">#{updateUserId}, </if>
 			<if test="null != updateUserName">#{updateUserName}, </if>
 			<if test="null != updateTime">#{updateTime}, </if>
+			<if test="null != resumeDetail">#{resumeDetail}, </if>
 		</trim>
   </insert>
   
@@ -164,33 +127,25 @@
 			<if test="null != age">age = #{age}, </if>
 			<if test="null != sex">sex = #{sex}, </if>
 			<if test="null != address">address = #{address}, </if>
-			<if test="null != note">note = #{note}, </if>
 			<if test="null != email">email = #{email}, </if>
-			<if test="null != birthday">birthday = #{birthday}, </if>
 			<if test="null != school">school = #{school}, </if>
-			<if test="null != graduateTime">graduate_time = #{graduateTime}, </if>
+			<if test="null != graduateDate">graduate_date = #{graduateDate}, </if>
 			<if test="null != major">major = #{major}, </if>
 			<if test="null != educationId">education_id = #{educationId}, </if>
+			<if test="null != educationName">education_name = #{educationName}, </if>
+			<if test="null != applyType">apply_type = #{applyType}, </if>
+			<if test="null != applyKey">apply_key = #{applyKey}, </if>
 			<if test="null != positionApplied">position_applied = #{positionApplied}, </if>
 			<if test="null != workingPlace">working_place = #{workingPlace}, </if>
-			<if test="null != salary">salary = #{salary}, </if>
 			<if test="null != workExperience">work_experience = #{workExperience}, </if>
-			<if test="null != educationExperience">education_experience = #{educationExperience}, </if>
-			<if test="null != projectExperience">project_experience = #{projectExperience}, </if>
-			<if test="null != socialPractice">social_practice = #{socialPractice}, </if>
-			<if test="null != trainedExperience">trained_experience = #{trainedExperience}, </if>
-			<if test="null != languageAbility">language_ability = #{languageAbility}, </if>
-			<if test="null != itSkills">it_skills = #{itSkills}, </if>
-			<if test="null != certificate">certificate = #{certificate}, </if>
-			<if test="null != selfDescription">self_description = #{selfDescription}, </if>
-			<if test="null != rewards">rewards = #{rewards}, </if>
-			<if test="null != other">other = #{other}, </if>
+			<if test="null != note">note = #{note}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
 			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
 			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
 			<if test="null != updateTime">update_time = #{updateTime}, </if>
+			<if test="null != resumeDetail">resume_detail = #{resumeDetail}, </if>
 		</set>
 		where id = #{id}
   </update>
@@ -251,33 +206,25 @@
 		<if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
 		<if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
 		<if test="address != null and !&quot;&quot;.equals(address)">and address like concat('%',#{address},'%')</if>
-		<if test="note != null and !&quot;&quot;.equals(note)">and note like concat('%',#{note},'%')</if>
 		<if test="email != null and !&quot;&quot;.equals(email)">and email like concat('%',#{email},'%')</if>
-		<if test="birthday != null and !&quot;&quot;.equals(birthday)">and birthday = #{birthday}</if>
 		<if test="school != null and !&quot;&quot;.equals(school)">and school like concat('%',#{school},'%')</if>
-		<if test="graduateTime != null and !&quot;&quot;.equals(graduateTime)">and graduate_time = #{graduateTime}</if>
+		<if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
 		<if test="major != null and !&quot;&quot;.equals(major)">and major like concat('%',#{major},'%')</if>
 		<if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
+		<if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name like concat('%',#{educationName},'%')</if>
+		<if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type like concat('%',#{applyType},'%')</if>
+		<if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key like concat('%',#{applyKey},'%')</if>
 		<if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied like concat('%',#{positionApplied},'%')</if>
 		<if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place like concat('%',#{workingPlace},'%')</if>
-		<if test="salary != null and !&quot;&quot;.equals(salary)">and salary like concat('%',#{salary},'%')</if>
-		<if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience like concat('%',#{workExperience},'%')</if>
-		<if test="educationExperience != null and !&quot;&quot;.equals(educationExperience)">and education_experience like concat('%',#{educationExperience},'%')</if>
-		<if test="projectExperience != null and !&quot;&quot;.equals(projectExperience)">and project_experience like concat('%',#{projectExperience},'%')</if>
-		<if test="socialPractice != null and !&quot;&quot;.equals(socialPractice)">and social_practice like concat('%',#{socialPractice},'%')</if>
-		<if test="trainedExperience != null and !&quot;&quot;.equals(trainedExperience)">and trained_experience like concat('%',#{trainedExperience},'%')</if>
-		<if test="languageAbility != null and !&quot;&quot;.equals(languageAbility)">and language_ability like concat('%',#{languageAbility},'%')</if>
-		<if test="itSkills != null and !&quot;&quot;.equals(itSkills)">and it_skills like concat('%',#{itSkills},'%')</if>
-		<if test="certificate != null and !&quot;&quot;.equals(certificate)">and certificate like concat('%',#{certificate},'%')</if>
-		<if test="selfDescription != null and !&quot;&quot;.equals(selfDescription)">and self_description like concat('%',#{selfDescription},'%')</if>
-		<if test="rewards != null and !&quot;&quot;.equals(rewards)">and rewards like concat('%',#{rewards},'%')</if>
-		<if test="other != null and !&quot;&quot;.equals(other)">and other like concat('%',#{other},'%')</if>
+		<if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience = #{workExperience}</if>
+		<if test="note != null and !&quot;&quot;.equals(note)">and note like concat('%',#{note},'%')</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
 		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
 		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
 		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
 	</where>
   </select>
   
