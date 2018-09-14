@@ -2,7 +2,6 @@ package com.hqjy.mustang.transfer.crm.dao;
 
 import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
-import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

@@ -7,7 +7,6 @@ import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferGenWayDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
-import com.hqjy.mustang.transfer.crm.model.entity.TransferKeywordEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferGenWayService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
