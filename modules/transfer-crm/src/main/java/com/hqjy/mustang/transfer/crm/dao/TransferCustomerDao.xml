@@ -30,6 +30,7 @@
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="allot_time" jdbcType="TIMESTAMP" property="allotTime" />
     <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
     <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
@@ -40,7 +41,7 @@
     customer_id, nc_id, pro_id, pro_name, source_id, company_id, name, status, get_way, 
     user_id, user_name, dept_id, dept_name, first_user_id, first_user_name, last_user_id, 
     last_user_name, gen_user_id, gen_user_name, phone, we_chat, qq, land_line, create_user_id, 
-    create_user_name, create_time, update_user_id, update_user_name, update_time
+    create_user_name, create_time, allot_time, update_user_id, update_user_name, update_time
   </sql>
   
   <!-- 通用查询sql -->
@@ -106,6 +107,7 @@
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
 			<if test="null != createTime">create_time, </if>
+			<if test="null != allotTime">allot_time, </if>
 			<if test="null != updateUserId">update_user_id, </if>
 			<if test="null != updateUserName">update_user_name, </if>
 			<if test="null != updateTime">update_time, </if>
@@ -137,6 +139,7 @@
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
+			<if test="null != allotTime">#{allotTime}, </if>
 			<if test="null != updateUserId">#{updateUserId}, </if>
 			<if test="null != updateUserName">#{updateUserName}, </if>
 			<if test="null != updateTime">#{updateTime}, </if>
@@ -172,6 +175,7 @@
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
+			<if test="null != allotTime">allot_time = #{allotTime}, </if>
 			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
 			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
 			<if test="null != updateTime">update_time = #{updateTime}, </if>

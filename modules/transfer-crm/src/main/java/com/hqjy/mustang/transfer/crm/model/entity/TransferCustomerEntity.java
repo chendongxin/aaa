@@ -144,6 +144,11 @@ public class TransferCustomerEntity implements Serializable {
     private Date createTime;
 
     /**
+     * 分配时间 allot_time
+     **/
+    private Date allotTime;
+
+    /**
 	 * 更新人编号 update_user_id
 	 **/
     private Long updateUserId;

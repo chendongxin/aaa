@@ -61,16 +61,13 @@ public class OssFileUtils {
     }
 
     /**
-     * 获取访问的url对象 by -liuwenlong
+     * 获取访问的url对象
      *
      * @param objectKey     阿里云 object key ,Object key 的组成是 目录+文件名的形式
      * @param timeoutPeriod 超时时间，单位是秒
      * @return url
      */
     public static URL getVisitUrl(String objectKey, int timeoutPeriod) {
-        if (StringUtils.isBlank(objectKey)) {
-            return null;
-        }
         if (timeoutPeriod == 0) {
             timeoutPeriod = DEFAULT_EXPIRE;
         }
