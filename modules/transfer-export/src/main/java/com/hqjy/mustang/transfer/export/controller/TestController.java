@@ -19,6 +19,7 @@ public class TestController {
 
     @GetMapping("/reset")
     public R reset() {
+        System.out.println("test");
         return R.ok(allotService.reset());
     }
 
