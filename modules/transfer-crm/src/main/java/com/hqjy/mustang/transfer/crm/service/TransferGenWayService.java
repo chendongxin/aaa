@@ -3,18 +3,18 @@ package com.hqjy.mustang.transfer.crm.service;
 import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
 
-import java.util.HashMap;
 import java.util.List;
+
 
 public interface TransferGenWayService extends BaseService<TransferGenWayEntity, Long> {
 
-    /**
-     * 获取所有推广公司列表
-     */
-    List<TransferGenWayEntity> getAllGenWayList();
+//    /**
+//     * 获取不属于指定平台的推广方式
+//     */
+//    List<TransferGenWayEntity> findNotBySourceId(Long sourceId);
 
     /**
-     * 推广公司管理树数据
+     * 获取指定来源平台的推广方式
      */
-    HashMap<String, List<TransferGenWayEntity>> getRecursionTree(boolean showRoot);
+    List<TransferGenWayEntity> findBySourceId(Long sourceId);
 }

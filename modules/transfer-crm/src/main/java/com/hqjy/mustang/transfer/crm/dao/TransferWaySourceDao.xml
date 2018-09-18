@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferGenWayDao">
+<mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferWaySourceDao">
   
   <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity">
-    <id column="way_id" jdbcType="BIGINT" property="wayId" />
-    <result column="gen_way" jdbcType="VARCHAR" property="genWay" />
-	<result column="seq" jdbcType="INTEGER" property="seq" />
-	<result column="status" jdbcType="TINYINT" property="status" />
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferWaySourceEntity">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="way_id" jdbcType="BIGINT" property="wayId" />
+    <result column="source_id" jdbcType="BIGINT" property="sourceId" />
+	  <result column="seq" jdbcType="INTEGER" property="seq" />
+    <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -18,14 +19,15 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    way_id, gen_way, seq, status, create_user_id, create_user_name, create_time, update_user_id,
+    id, way_id, source_id, seq, status, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
   
   <!-- 通用查询sql -->
   <sql id="Base_Where_SQL">
     <where>
-		<if test="genWay != null and !&quot;&quot;.equals(genWay)">and gen_way = #{genWay}</if>
+		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and way_id = #{wayId}</if>
+		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
 		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
@@ -38,10 +40,11 @@
   </sql>
   
   <!-- 插入一条记录 -->
-  <insert id="save" keyProperty="wayId" useGeneratedKeys="true">
-    insert into transfer_gen_way
+  <insert id="save" keyProperty="id" useGeneratedKeys="true">
+    insert into transfer_way_source
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != genWay">gen_way, </if>
+			<if test="null != wayId">way_id, </if>
+			<if test="null != sourceId">source_id, </if>
 			<if test="null != seq">seq, </if>
 			<if test="null != status">status, </if>
 			<if test="null != createUserId">create_user_id, </if>
@@ -53,9 +56,10 @@
 		</trim>
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != wayId">#{wayId}, </if>
+			<if test="null != sourceId">#{sourceId}, </if>
 			<if test="null != seq">#{seq}, </if>
 			<if test="null != status">#{status}, </if>
-			<if test="null != genWay">#{genWay}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -67,11 +71,12 @@
   
   <!-- 更新一条记录 -->
   <update id="update">
-    update transfer_gen_way 
+    update transfer_way_source 
 		<set>
+			<if test="null != wayId">way_id = #{wayId}, </if>
+			<if test="null != sourceId">source_id = #{sourceId}, </if>
 			<if test="null != seq">seq = #{seq}, </if>
 			<if test="null != status">status = #{status}, </if>
-			<if test="null != genWay">gen_way = #{genWay}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
@@ -79,23 +84,23 @@
 			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
 			<if test="null != updateTime">update_time = #{updateTime}, </if>
 		</set>
-		where way_id = #{wayId}
+		where id = #{id}
   </update>
   
   <!-- 删除给定主键的记录 -->
   <delete id="delete">
     delete
-		from transfer_gen_way
+		from transfer_way_source
 	where
-		way_id = #{wayId}
+		id = #{id}
   </delete>
   
   <!-- 多个主键批量删除记录 -->
   <delete id="deleteBatch">
     delete
-		from transfer_gen_way
+		from transfer_way_source
 	where
-		way_id in 
+		id in 
 		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
 			#{item}
 		</foreach>
@@ -104,11 +109,11 @@
   <!-- 多个实体批量删除记录 -->
   <delete id="deleteList">
     delete
-		from transfer_gen_way
+		from transfer_way_source
 	where
-		way_id in 
+		id in 
 		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-			#{item.wayId}
+			#{item.id}
 		</foreach>
   </delete>
   
@@ -116,33 +121,37 @@
   <select id="findOne" resultMap="BaseResultMap">
     select
 		<include refid="Base_Column_List" />
-	from transfer_gen_way
-	where way_id = #{wayId}
+	from transfer_way_source
+	where id = #{id}
   </select>
   
   <!-- 查询多条 -->
   <select id="findList" resultMap="BaseResultMap">
     select
 		<include refid="Base_Column_List" />
-	from transfer_gen_way
+	from transfer_way_source
 		<include refid="Base_Where_SQL" />
   </select>
   
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-	  <include refid="Base_Column_List" />
-	from transfer_gen_way
+	  tws.id, tws.way_id, tws.source_id, tws.seq, tws.status, tws.create_user_id, tws.create_user_name,
+	  tws.create_time, tws.update_user_id, tws.update_user_name, tws.update_time, tgw.gen_way, ts.name
+	from transfer_way_source tws
+	left join transfer_gen_way tgw on tws.way_id = tgw.way_id
+	left join transfer_source ts on tws.source_id = ts.source_id
 		<where>
-		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
-		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
-		<if test="genWay != null and !&quot;&quot;.equals(genWay)">and tgw.gen_way like concat('%',#{genWay},'%')</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tgw.create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tgw.create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and tgw.DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and tgw.update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and tgw.update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and tgw.DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and tws.way_id = #{wayId}</if>
+		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and tws.source_id = #{sourceId}</if>
+		<if test="seq != null and !&quot;&quot;.equals(seq)">and tws.seq = #{seq}</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and tws.status = #{status}</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tws.create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tws.create_user_name like concat('%',#{createUserName},'%')</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and tws.DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and tws.update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and tws.update_user_name like concat('%',#{updateUserName},'%')</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and tws.DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
 	</where>
   </select>
   
@@ -150,7 +159,7 @@
   <select id="count" resultType="int">
     select
 		count(*)
-	from transfer_gen_way
+	from transfer_way_source
 		<include refid="Base_Where_SQL" />
   </select>
   
@@ -158,54 +167,17 @@
   <select id="exsit" resultType="boolean">
     select
 		count(*)
-	from transfer_gen_way
+	from transfer_way_source
 		<include refid="Base_Where_SQL" />
   </select>
-
-	<!--<select id="getAllGenWayList" resultMap="BaseResultMap">-->
-		<!--select-->
-			<!--<include refid="Base_Column_List"/>-->
-		<!--from transfer_gen_way-->
-		<!--order by parent_id-->
-	<!--</select>-->
-
-	<!-- 通过名称查找一条记录 -->
-	<select id="findOneByGenName" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from transfer_gen_way
-		where gen_way = #{genWay}
-	</select>
-
-	<select id="findByParentId" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from transfer_gen_way
-		WHERE
-		parent_id = #{parentId}
-		order by seq asc
-	</select>
 
 	<select id="findBySourceId" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
-		from transfer_gen_way tgw
-		WHERE
-			(select tgw.way_id
-			from transfer_way_source tws
-			where
-			tws.way_id = tgw.way_id
-			and tws.source_id = #{sourceId})
+		from transfer_way_source
+		where
+		source_id = #{sourceId}
 	</select>
-
-    <!--<select id="findNotBySourceId" resultMap="BaseResultMap">-->
-        <!--select-->
-        <!--<include refid="Base_Column_List"/>-->
-        <!--from transfer_gen_way tgw-->
-        <!--where tgw.way_id not in-->
-        <!--(select tws.way_id-->
-        <!--from transfer_way_source tws-->
-        <!--where tws.source_id = #{sourceId})-->
-    <!--</select>-->
+  
 
 </mapper>

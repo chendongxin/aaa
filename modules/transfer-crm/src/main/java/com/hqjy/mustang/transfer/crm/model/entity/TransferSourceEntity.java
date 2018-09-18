@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * transfer_source 推广来源（平台）实体类
@@ -17,6 +18,11 @@ public class TransferSourceEntity implements Serializable {
 	 * 主键 source_id
 	 **/
     private Long sourceId;
+
+    /**
+     * 主键 parent_id
+     **/
+    private Long parentId;
 
     /**
 	 * 来源名称 name
@@ -62,6 +68,11 @@ public class TransferSourceEntity implements Serializable {
 	 * 更新时间 update_time
 	 **/
     private Date updateTime;
+
+    /**
+     * 该推广方式下的推广平台
+     */
+    private List<TransferGenWayEntity> genWayList;
 
     private static final long serialVersionUID = 1L;
 }

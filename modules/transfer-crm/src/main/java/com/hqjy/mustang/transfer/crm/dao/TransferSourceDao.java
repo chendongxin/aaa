@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.dao;
 
 import com.hqjy.mustang.common.base.base.BaseDao;
+import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -26,4 +27,15 @@ public interface TransferSourceDao extends BaseDao<TransferSourceEntity, Long> {
      * 查询不在该公司下的推广平台
      */
     List<TransferSourceEntity> findNotByCompanyId(Long companyId);
+
+    /**
+     * 获取所有推广方式列表
+     */
+    List<TransferSourceEntity> getAllSourceList();
+
+    /**
+     * 获取制定公司下的推广方式列表
+     *
+     */
+    List<TransferSourceEntity> listPageSource(PageQuery pageQuery);
 }

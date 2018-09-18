@@ -2,6 +2,7 @@ package com.hqjy.mustang.transfer.crm.dao;
 
 import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public interface TransferGenWayDao extends BaseDao<TransferGenWayEntity, Long> {
     /**
      * 获取所有推广方式列表
      */
-    List<TransferGenWayEntity> getAllGenWayList();
+//    List<TransferGenWayEntity> getAllGenWayList();
 
     /**
      * 通过名称查询推广方式
@@ -28,4 +29,14 @@ public interface TransferGenWayDao extends BaseDao<TransferGenWayEntity, Long> {
      * 获取父ID下对应推广方式
      */
     List<TransferGenWayEntity> findByParentId(Long parentId);
+
+    /**
+     * 查询指定推广平台下的推广方式
+     */
+    List<TransferGenWayEntity> findBySourceId(Long sourceId);
+
+//    /**
+//     * 查询不在指定推广平台下的推广方式
+//     */
+//    List<TransferGenWayEntity> findNotBySourceId(Long sourceId);
 }

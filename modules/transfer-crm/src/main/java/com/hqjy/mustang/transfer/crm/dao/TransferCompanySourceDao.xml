@@ -6,7 +6,9 @@
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
-    <result column="source_id" jdbcType="INTEGER" property="sourceId" />
+    <result column="source_id" jdbcType="BIGINT" property="sourceId" />
+	<result column="dept_id" jdbcType="INTEGER" property="deptId" />
+	<result column="dept_name" jdbcType="VARCHAR" property="deptName" />
 	<result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -18,7 +20,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    id, company_id, source_id, status, create_user_id, create_user_name, create_time, update_user_id,
+    id, company_id, source_id, dept_id, dept_name, status, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
   
@@ -27,6 +29,8 @@
     <where>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
@@ -43,6 +47,8 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != companyId">company_id, </if>
 			<if test="null != sourceId">source_id, </if>
+			<if test="null != deptId">dept_id, </if>
+			<if test="null != deptName">_dept_name, </if>
 			<if test="null != status">status, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
@@ -55,6 +61,8 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != companyId">#{companyId}, </if>
 			<if test="null != sourceId">#{sourceId}, </if>
+			<if test="null != deptId">#{deptId}, </if>
+			<if test="null != deptName">#{deptName},</if>
 			<if test="null != status">#{status}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
@@ -71,6 +79,8 @@
 		<set>
 			<if test="null != companyId">company_id = #{companyId}, </if>
 			<if test="null != sourceId">source_id = #{sourceId}, </if>
+			<if test="null != deptId">dept_id = #{deptId}, </if>
+			<if test="null != deptName">dept_name = #{deptName},</if>
 			<if test="null != status">status = #{status}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
@@ -136,6 +146,8 @@
 		<where>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
@@ -169,8 +181,5 @@
 		where
 			company_id = #{companyId}
 	</select>
-
-
-  
 
 </mapper>

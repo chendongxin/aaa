@@ -7,6 +7,7 @@ import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
+import com.hqjy.mustang.transfer.crm.service.TransferGenWayService;
 import com.hqjy.mustang.transfer.crm.service.TransferSourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -31,6 +32,17 @@ public class TransferSourceController {
 
     @Autowired
     private TransferSourceService transferSourceService;
+    @Autowired
+    private TransferGenWayService transferGenWayService;
+
+    /**
+     * 来源平台管理树数据
+     */
+    @ApiOperation(value = "来源平台管理树数据", notes = "来源平台管理树数据，包含所有来源平台数据")
+    @GetMapping("/source/tree")
+    public R tree() {
+        return R.ok(transferSourceService.getRecursionTree(true));
+    }
 
     /**
      * 分页查询来源信息
@@ -38,8 +50,8 @@ public class TransferSourceController {
     @ApiOperation(value = "分页查询-来源管理", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "返回参数：【当前页:currPage】，【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
-            "【ID:sourceId】,【来源名称:name】,【状态:status】,【创建人ID:createId】,【创建时间:createTime】\n" +
-            "【更新人ID:updateId】,【更新时间:updateTime】\n" +
+            "【ID:sourceId】,【父编号:parentId】,【来源名称:name】,【电子邮件域名:email_domain】【状态:status】,【创建人ID:createUserId】,【创建人姓名:createUserName】【创建时间:createTime】\n" +
+            "【更新人ID:updateUserId】,【更新人姓名:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
             "{\n" +
             "  \"msg\": \"成功\",\n" +
@@ -134,5 +146,22 @@ public class TransferSourceController {
         }
         return R.error(StatusCode.DATABASE_SELECT_FAILURE);
     }
+
+    /**
+     * 获取所有的来源平台
+     */
+    @GetMapping("/source/all")
+    public R getAllSource() {
+        return R.ok(transferSourceService.getAllSourceList());
+    }
+
+    /**
+     * 获取指定来源平台的推广方式
+     */
+    @GetMapping("/source/way/{sourceId}")
+    public R getWayBySourceId(@PathVariable("sourceId") Long sourceId) {
+        return R.ok(transferGenWayService.findBySourceId(sourceId));
+    }
+
 
 }

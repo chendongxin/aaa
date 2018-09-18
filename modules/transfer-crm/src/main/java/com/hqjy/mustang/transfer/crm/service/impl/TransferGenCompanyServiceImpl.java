@@ -10,8 +10,11 @@ import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferCompanySourceDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferGenCompanyDao;
+import com.hqjy.mustang.transfer.crm.dao.TransferSourceDao;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferCompanySourceDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCompanyEntity;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferGenCompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +33,13 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
 
     @Autowired
     private TransferCompanySourceDao transferCompanySourceDao;
-
+    @Autowired
+    private TransferSourceDao transferSourceDao;
 
     @Override
-    public List<TransferCompanySourceEntity> findPageSource(PageQuery pageQuery) {
+    public List<TransferSourceEntity> findPageSource(PageQuery pageQuery) {
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
-        return transferCompanySourceDao.findPage(pageQuery);
+        return transferSourceDao.listPageSource(pageQuery);
     }
 
     /**
@@ -101,8 +105,14 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
      * 保存推广公司下的推广平台
      */
     @Override
-    public int saveCompanySource(TransferCompanySourceEntity transferCompanySourceEntity) {
-        TransferCompanySourceEntity newCompanySourceEntity = PojoConvertUtil.convert(transferCompanySourceEntity, TransferCompanySourceEntity.class);
+    public int saveCompanySource(TransferCompanySourceDTO companySource) {
+        List<TransferCompanySourceEntity> companySourceList = transferCompanySourceDao.findByCompanyId(companySource.getCompanyId());
+        for (TransferCompanySourceEntity transferCompanySource : companySourceList) {
+            if (transferCompanySource.getSourceId() == companySource.getSourceId()) {
+                throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
+            }
+        }
+        TransferCompanySourceEntity newCompanySourceEntity = PojoConvertUtil.convert(companySource, TransferCompanySourceEntity.class);
         newCompanySourceEntity.setCreateUserId(getUserId());
         newCompanySourceEntity.setCreateUserName(getUserName());
         return transferCompanySourceDao.save(newCompanySourceEntity);

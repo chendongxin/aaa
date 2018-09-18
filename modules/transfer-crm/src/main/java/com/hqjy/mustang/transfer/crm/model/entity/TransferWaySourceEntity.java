@@ -1,28 +1,42 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- * transfer_gen_way 推广方式实体类
+ * transfer_way_source 实体类
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/17 12:04
  */
 @Data
-public class TransferGenWayEntity implements Serializable {
+public class TransferWaySourceEntity implements Serializable {
     /**
-	 * 编号 way_id
+	 * 编号 id
+	 **/
+    private Long id;
+
+    /**
+	 * 推广方式id way_id
 	 **/
     private Long wayId;
 
     /**
-	 * 推广方式 gen_way
+     * 推广方式名称
+     */
+    private String wayName;
+
+    /**
+	 * 来源id source_id
 	 **/
-    private String genWay;
+    private Long sourceId;
+
+    /**
+     * 推广平台名称
+     */
+    private String sourceName;
 
     /**
      * 排序号 seq
@@ -30,19 +44,9 @@ public class TransferGenWayEntity implements Serializable {
     private Integer seq;
 
     /**
-     * 状态,见数据字典STATUS status( 0-禁用 1-启用)
-     **/
+	 * 状态,数据字典STATUS( 0-正常 1-禁用) status
+	 **/
     private Byte status;
-
-    /**
-     * 父推广方式名称
-     */
-    private String parentName;
-
-    /**
-     * 子推广方式
-     */
-    private List<TransferGenCompanyEntity> children;
 
     /**
 	 * 创建人编号 create_user_id

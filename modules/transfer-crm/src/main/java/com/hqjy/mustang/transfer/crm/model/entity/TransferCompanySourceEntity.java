@@ -26,7 +26,17 @@ public class TransferCompanySourceEntity implements Serializable {
     /**
      * 来源id source_id
      **/
-    private Integer sourceId;
+    private Long sourceId;
+
+    /**
+     * 部门Id
+     */
+    private Integer deptId;
+
+    /**
+     * 部门名称
+     */
+    private String deptName;
 
     /**
      * 状态 0启用 1禁用 status
