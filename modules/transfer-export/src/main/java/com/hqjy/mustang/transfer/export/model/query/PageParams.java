@@ -5,18 +5,18 @@ import lombok.Data;
 /**
  * @author xyq
  * @date create on 2018/9/17
- * @apiNote 推广报表父类查询参数
+ * @apiNote 分页查询
  */
 @Data
-public class QueryObject {
+public class PageParams {
 
     /**
      * 当前页数
      */
-    private int pageNum;
+    private int pageNum=1;
 
     /**
      * 每页大小
      */
-    private int pageSize;
+    private int pageSize=10;
 }

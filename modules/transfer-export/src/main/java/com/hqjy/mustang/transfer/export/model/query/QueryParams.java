@@ -1,39 +1,35 @@
 package com.hqjy.mustang.transfer.export.model.query;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * @author xyq
  * @date create on 2018/9/17
- * @apiNote 招转推广报表查询参数
+ * @apiNote 招转推广报表高级查询参数
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class QueryParams extends QueryObject {
+@ApiModel(value = "招转推广报表高级查询参数")
+public class QueryParams {
 
-    /**
-     * 日期（必选）
-     */
+    @ApiModelProperty(value = "日期（必选）")
     private String date;
-    /**
-     * 赛道
-     */
+
+    @ApiModelProperty(value = "赛道")
     private Long productId;
-    /**
-     * 推广公司
-     */
+
+    @ApiModelProperty(value = "推广公司")
     private Long companyId;
-    /**
-     * 来源平台
-     */
+
+    @ApiModelProperty(value = "来源平台")
     private Long sourceId;
-    /**
-     * 获取方式
-     */
+
+    @ApiModelProperty(value = "获取方式")
     private Long getWay;
-    /**
-     * 推广费用类型：人民币或虚拟币
-     */
+
+    @ApiModelProperty(value = "推广费用类型：人民币或虚拟币")
     private int costType;
 }

@@ -2,16 +2,15 @@ package com.hqjy.mustang.transfer.export.controller;
 
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.utils.R;
+import com.hqjy.mustang.transfer.export.model.query.DailyQueryParams;
+import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.model.query.QueryParams;
 import com.hqjy.mustang.transfer.export.service.PromotionDailyService;
 import com.hqjy.mustang.transfer.export.service.PromotionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author xyq
@@ -39,27 +38,27 @@ public class PromotionReportController {
 
     @ApiOperation(value = " 招转日常数据报表列表", notes = "请求参数格式：\n")
     @PostMapping("/promotionDailyList")
-    public R promotionDailyList(@RequestBody QueryParams params) {
-        return promotionDailyService.promotionDailyList(params);
+    public R promotionDailyList(@ModelAttribute PageParams params,@RequestBody(required = false) DailyQueryParams query) {
+        return promotionDailyService.promotionDailyList(params, query);
     }
 
     @SysLog("导出招转日常数据")
     @ApiOperation(value = "导出招转日常数据", notes = "请求参数格式:\n")
     @PostMapping("/exportPromotionDaily")
-    public R exportPromotionDaily(@RequestBody QueryParams params) {
-        return promotionDailyService.exportPromotionDaily(params);
+    public R exportPromotionDaily(@RequestBody DailyQueryParams query) {
+        return promotionDailyService.exportPromotionDaily(query);
     }
 
     @ApiOperation(value = "招转推广报表数据列表", notes = "请求参数格式：\n")
     @PostMapping("/promotionList")
-    public R promotionList(@RequestBody QueryParams params) {
-        return promotionService.promotionList(params);
+    public R promotionList(@ModelAttribute PageParams params,@RequestBody(required = false) QueryParams query) {
+        return promotionService.promotionList(params, query);
     }
 
     @SysLog("导出招转推广报表数据")
     @ApiOperation(value = "导出招转推广报表数据", notes = "请求参数格式:\n")
     @PostMapping("/exportPromotion")
-    public R exportPromotion(@RequestBody QueryParams params) {
-        return promotionService.exportPromotion(params);
+    public R exportPromotion(@RequestBody QueryParams query) {
+        return promotionService.exportPromotion(query);
     }
 }

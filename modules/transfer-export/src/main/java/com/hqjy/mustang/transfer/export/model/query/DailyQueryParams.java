@@ -1,34 +1,31 @@
 package com.hqjy.mustang.transfer.export.model.query;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
  * @author xyq
  * @date create on 2018/9/17
- * @apiNote 推广日常数据报表查询参数
+ * @apiNote 推广日常数据报表高级查询参数
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class DailyQueryParams extends QueryObject {
-    /**
-     * 日期（必选）
-     */
+@ApiModel(value = "推广日常数据报表高级查询参数")
+public class DailyQueryParams {
+
+    @ApiModelProperty(value = "日期（必选）")
     private String date;
-    /**
-     * 赛道
-     */
+
+    @ApiModelProperty(value = "赛道")
     private Long productId;
-    /**
-     * 推广公司
-     */
+
+    @ApiModelProperty(value = "推广公司")
     private Long companyId;
-    /**
-     * 来源平台
-     */
+
+    @ApiModelProperty(value = "来源平台")
     private Long sourceId;
-    /**
-     * 获取方式
-     */
+
+    @ApiModelProperty(value = "获取方式")
     private Long getWay;
 }
