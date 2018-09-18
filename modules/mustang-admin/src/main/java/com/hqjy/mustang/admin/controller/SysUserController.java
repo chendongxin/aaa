@@ -211,9 +211,4 @@ public class SysUserController extends AbstractController {
         return list != null && list.size() > 0 ? R.ok(list) : R.error("当前选择部门不存在人员！");
     }
 
-    @ApiOperation(value = "只获取当前用户", notes = "只获取当前用户")
-    @GetMapping(value = "/getUser")
-    public R getUser() {
-        return R.result(ShiroUtils.getUser());
-    }
 }
