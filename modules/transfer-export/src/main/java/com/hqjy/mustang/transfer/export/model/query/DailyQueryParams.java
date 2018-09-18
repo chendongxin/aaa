@@ -10,7 +10,25 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class DailyQueryParams extends PromotionQueryObject {
-
-
+public class DailyQueryParams extends QueryObject {
+    /**
+     * 日期（必选）
+     */
+    private String date;
+    /**
+     * 赛道
+     */
+    private Long productId;
+    /**
+     * 推广公司
+     */
+    private Long companyId;
+    /**
+     * 来源平台
+     */
+    private Long sourceId;
+    /**
+     * 获取方式
+     */
+    private Long getWay;
 }
