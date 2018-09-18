@@ -28,7 +28,7 @@ import java.util.HashMap;
  */
 @Api(tags = "部门管理", description = "SysDeptController")
 @RestController
-@RequestMapping("//dept")
+@RequestMapping("/dept")
 public class SysDeptController extends AbstractController {
 
 
@@ -138,6 +138,15 @@ public class SysDeptController extends AbstractController {
             return R.ok();
         }
         return R.error(StatusCode.DATABASE_DELETE_FAILURE);
+    }
+
+    /**
+     * 获取所有部门
+     */
+    @ApiOperation(value = "获取所有部门信息", notes = "获取所有部门信息")
+    @GetMapping("/alldept")
+    public R getAllDept() {
+        return R.ok(sysDeptService.getAllDeptList());
     }
 
 }
