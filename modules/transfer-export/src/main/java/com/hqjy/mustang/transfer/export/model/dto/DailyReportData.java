@@ -16,66 +16,66 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "招转日常报表数据对象")
 public class DailyReportData {
 
-    @ApiModelProperty(value = "序号")
+    @ApiModelProperty(value = "序号A")
     private Integer sequence;
 
     @ApiModelProperty(value = "部门Id", hidden = true)
     private Long deptId;
 
     @ApiModelProperty(value = "部门")
-    @ExcelAttribute(name = "部门", column = "A")
+    @ExcelAttribute(name = "部门", column = "B")
     private String deptName;
 
     @ApiModelProperty(value = "商机总量")
-    @ExcelAttribute(name = "商机总量", column = "B")
+    @ExcelAttribute(name = "商机总量", column = "C")
     private int businessNum;
 
     @ApiModelProperty(value = "已跟进商机量")
-    @ExcelAttribute(name = "已跟进商机量", column = "C")
+    @ExcelAttribute(name = "已跟进商机量", column = "D")
     private int followNum;
 
     @ApiModelProperty(value = "有效商机量")
-    @ExcelAttribute(name = "有效商机量", column = "D")
+    @ExcelAttribute(name = "有效商机量", column = "E")
     private int validNum;
 
     @ApiModelProperty(value = "有效商机率")
-    @ExcelAttribute(name = "有效商机率", column = "E")
+    @ExcelAttribute(name = "有效商机率", column = "F")
     private String validRate;
 
     @ApiModelProperty(value = "非失败商机量")
-    @ExcelAttribute(name = "非失败商机量", column = "F")
+    @ExcelAttribute(name = "非失败商机量", column = "G")
     private int unFailNum;
 
     @ApiModelProperty(value = "非失败率")
-    @ExcelAttribute(name = "非失败率", column = "G")
+    @ExcelAttribute(name = "非失败率", column = "H")
     private String unFailRate;
 
     @ApiModelProperty(value = "商机上门量")
-    @ExcelAttribute(name = "商机上门量", column = "H")
+    @ExcelAttribute(name = "商机上门量", column = "I")
     private int visitNum;
 
     @ApiModelProperty(value = "有效上门量")
-    @ExcelAttribute(name = "有效上门量", column = "I")
+    @ExcelAttribute(name = "有效上门量", column = "L")
     private int visitValidNum;
 
     @ApiModelProperty(value = "有效上门率")
-    @ExcelAttribute(name = "有效上门率", column = "J")
+    @ExcelAttribute(name = "有效上门率", column = "K")
     private String visitValidRate;
 
     @ApiModelProperty(value = "意向量")
-    @ExcelAttribute(name = "意向量", column = "K")
+    @ExcelAttribute(name = "意向量", column = "L")
     private int intentionNum;
 
     @ApiModelProperty(value = "上门意向率")
-    @ExcelAttribute(name = "上门意向率", column = "L")
+    @ExcelAttribute(name = "上门意向率", column = "M")
     private String visitIntentionRate;
 
     @ApiModelProperty(value = "成交量")
-    @ExcelAttribute(name = "成交量", column = "M")
+    @ExcelAttribute(name = "成交量", column = "N")
     private int dealNum;
 
     @ApiModelProperty(value = "上门成交率")
-    @ExcelAttribute(name = "上门成交率", column = "N")
+    @ExcelAttribute(name = "上门成交率", column = "O")
     private String visitDealRate;
 
 

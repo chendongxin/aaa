@@ -4,9 +4,9 @@ import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.export.model.query.DailyQueryParams;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
-import com.hqjy.mustang.transfer.export.model.query.QueryParams;
+import com.hqjy.mustang.transfer.export.model.query.CustomerQueryParams;
+import com.hqjy.mustang.transfer.export.service.PromotionCustomerService;
 import com.hqjy.mustang.transfer.export.service.PromotionDailyService;
-import com.hqjy.mustang.transfer.export.service.PromotionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +24,11 @@ import org.springframework.web.bind.annotation.*;
 public class PromotionReportController {
 
     private PromotionDailyService promotionDailyService;
-    private PromotionService promotionService;
+    private PromotionCustomerService promotionCustomerService;
 
     @Autowired
-    public void setPromotionService(PromotionService promotionService) {
-        this.promotionService = promotionService;
+    public void setPromotionService(PromotionCustomerService promotionCustomerService) {
+        this.promotionCustomerService = promotionCustomerService;
     }
 
     @Autowired
@@ -49,16 +49,16 @@ public class PromotionReportController {
         return promotionDailyService.exportPromotionDaily(query);
     }
 
-    @ApiOperation(value = "招转推广报表数据列表", notes = "请求参数格式：\n")
-    @PostMapping("/promotionList")
-    public R promotionList(@ModelAttribute PageParams params,@RequestBody(required = false) QueryParams query) {
-        return promotionService.promotionList(params, query);
+    @ApiOperation(value = "客服推广报表数据列表", notes = "请求参数格式：\n")
+    @PostMapping("/promotionCustomerList")
+    public R promotionCustomerList(@ModelAttribute PageParams params,@RequestBody(required = false) CustomerQueryParams query) {
+        return promotionCustomerService.promotionCustomerList(params, query);
     }
 
     @SysLog("导出招转推广报表数据")
-    @ApiOperation(value = "导出招转推广报表数据", notes = "请求参数格式:\n")
-    @PostMapping("/exportPromotion")
-    public R exportPromotion(@RequestBody QueryParams query) {
-        return promotionService.exportPromotion(query);
+    @ApiOperation(value = "导出客服推广报表数据", notes = "请求参数格式:\n")
+    @PostMapping("/exportPromotionCustomer")
+    public R exportPromotionCustomer(@RequestBody CustomerQueryParams query) {
+        return promotionCustomerService.exportPromotionCustomer(query);
     }
 }

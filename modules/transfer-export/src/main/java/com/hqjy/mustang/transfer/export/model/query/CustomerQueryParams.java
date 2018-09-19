@@ -12,8 +12,8 @@ import lombok.EqualsAndHashCode;
  * @apiNote 招转推广报表高级查询参数
  */
 @Data
-@ApiModel(value = "招转推广报表高级查询参数")
-public class QueryParams {
+@ApiModel(value = "客服推广报表高级查询参数")
+public class CustomerQueryParams {
 
     @ApiModelProperty(value = "日期（必选）")
     private String date;
@@ -30,6 +30,6 @@ public class QueryParams {
     @ApiModelProperty(value = "获取方式")
     private Long getWay;
 
-    @ApiModelProperty(value = "推广费用类型：人民币或虚拟币")
-    private int costType;
+    @ApiModelProperty(value = "客服人员")
+    private int userId;
 }
