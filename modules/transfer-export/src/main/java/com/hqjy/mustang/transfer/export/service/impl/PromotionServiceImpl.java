@@ -6,8 +6,10 @@ import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.export.model.dto.*;
+import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.model.query.QueryParams;
 import com.hqjy.mustang.transfer.export.service.PromotionService;
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,24 +32,45 @@ public class PromotionServiceImpl implements PromotionService {
     private final static Logger LOG = LoggerFactory.getLogger(PromotionServiceImpl.class);
 
     @Override
-    public R promotionList(QueryParams params) {
+    public R promotionList(PageParams params, QueryParams query) {
         List<PromotionReportData> list = new ArrayList<>();
-        PromotionReportTotal total = new PromotionReportTotal();
-
         //TODO 数据统计业务待完成
-        return R.result(new PromotionReportResult().setList(list).setTotal(total));
+
+        if (params != null) {
+            //需要分页
+            return R.result(new PageUtil<>(params, list));
+        }
+        //不需要分页
+        return R.result(list);
+    }
+
+    /**
+     * 合计报表数据
+     *
+     * @param list 报表数据集合
+     * @return 返回合计对象
+     */
+    private PromotionReportTotal countTotal(List<PromotionReportData> list) {
+        PromotionReportTotal total = new PromotionReportTotal();
+        list.forEach(x -> {
+            //TODO,导出报表统计待处理
+        });
+        return total;
     }
 
     @Override
-    public R exportPromotion(QueryParams params) {
+    public R exportPromotion(QueryParams query) {
         try {
-            R r = this.promotionList(params);
+            R r = this.promotionList(null, query);
             if (MapUtils.getLong(r, Constant.CODE) == 0) {
                 String result = MapUtils.getString(r, Constant.RESULT);
-                PromotionReportResult report = JSON.parseObject(result, PromotionReportResult.class);
+                List<PromotionReportData> list = JSON.parseArray(result, PromotionReportData.class);
+                PromotionReportTotal total = this.countTotal(list);
+
                 ExcelUtil<PromotionReportData, PromotionReportTotal> util1 = new ExcelUtil<>(PromotionReportData.class, PromotionReportTotal.class);
                 ByteArrayOutputStream os = new ByteArrayOutputStream();
-                util1.getListToExcel(report.getList(), "招转推广报表", report.getTotal(), os);
+                util1.getListToExcel(list, "招转推广报表", total, os);
+
                 //aliyun目录
                 String dir = "export";
                 //文件名称
