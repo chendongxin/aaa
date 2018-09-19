@@ -70,6 +70,17 @@ public class Tools {
         return null;
     }
 
+    /**
+     * 休眠
+     */
+    public static void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     /**
      * 获取异常的详细情况String(包括异常类和位置等debug信息，可以存放到数据库)

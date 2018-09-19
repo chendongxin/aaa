@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @date : 2018/9/7 17:35
  */
 @Data
-public class TqCallResult implements Serializable {
+public class TqCallDTO implements Serializable {
     private Integer result_status;
     private String result_desc;
 }

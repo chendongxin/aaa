@@ -30,7 +30,9 @@ public class SysAuthApi {
     @Autowired
     private RedisUtils redisUtils;
 
-    // 校验token，通过返回角色和权限信息
+    /**
+     * 校验token，通过返回角色和权限信息
+     */
     @GetMapping(value = "/check/{userId}/{jti}")
     public AuthCheckResult checkToken(@PathVariable("userId") Long userId, @PathVariable("jti") String jti) {
         AuthCheckResult authCheckResult = new AuthCheckResult();

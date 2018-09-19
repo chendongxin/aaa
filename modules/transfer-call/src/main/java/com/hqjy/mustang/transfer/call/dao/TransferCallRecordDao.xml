@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.transfer.call.dao.TransferCallRecordDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.call.model.entity.TransferCallRecordEntity">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="params" jdbcType="VARCHAR" property="params"/>
+        <result column="customer_id" jdbcType="BIGINT" property="customerId"/>
+        <result column="unique_id" jdbcType="VARCHAR" property="uniqueId"/>
+        <result column="cno" jdbcType="VARCHAR" property="cno"/>
+        <result column="client_number" jdbcType="VARCHAR" property="clientNumber"/>
+        <result column="customer_number" jdbcType="VARCHAR" property="customerNumber"/>
+        <result column="customer_area" jdbcType="VARCHAR" property="customerArea"/>
+        <result column="call_style" jdbcType="VARCHAR" property="callStyle"/>
+        <result column="pathway" jdbcType="VARCHAR" property="pathway"/>
+        <result column="status" jdbcType="VARCHAR" property="status"/>
+        <result column="start_time" jdbcType="TIMESTAMP" property="startTime"/>
+        <result column="total_duration" jdbcType="BIGINT" property="totalDuration"/>
+        <result column="record_file" jdbcType="VARCHAR" property="recordFile"/>
+        <result column="ring_time" jdbcType="BIGINT" property="ringTime"/>
+        <result column="insert_db_time" jdbcType="BIGINT" property="insertDbTime"/>
+        <result column="create_user_id" jdbcType="BIGINT" property="createUserId"/>
+        <result column="create_user_name" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+        id, params, customer_id, unique_id, cno, client_number, customer_number, customer_area,
+        call_style, pathway, status, start_time, total_duration, record_file, ring_time, insert_db_time,
+        create_user_id, create_user_name, create_time
+    </sql>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Where_SQL">
+        <where>
+            <if test="params != null and !&quot;&quot;.equals(params)">and params = #{params}</if>
+            <if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+            <if test="uniqueId != null and !&quot;&quot;.equals(uniqueId)">and unique_id = #{uniqueId}</if>
+            <if test="cno != null and !&quot;&quot;.equals(cno)">and cno = #{cno}</if>
+            <if test="clientNumber != null and !&quot;&quot;.equals(clientNumber)">and client_number = #{clientNumber}</if>
+            <if test="customerNumber != null and !&quot;&quot;.equals(customerNumber)">and customer_number = #{customerNumber}</if>
+            <if test="customerArea != null and !&quot;&quot;.equals(customerArea)">and customer_area = #{customerArea}</if>
+            <if test="callStyle != null and !&quot;&quot;.equals(callStyle)">and call_style = #{callStyle}</if>
+            <if test="pathway != null and !&quot;&quot;.equals(pathway)">and pathway = #{pathway}</if>
+            <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+            <if test="startTime != null and !&quot;&quot;.equals(startTime)">and DATE_FORMAT(start_time,'%Y-%m-%d') = STR_TO_DATE(#{startTime},'%Y-%m-%d')</if>
+            <if test="totalDuration != null and !&quot;&quot;.equals(totalDuration)">and total_duration = #{totalDuration}</if>
+            <if test="recordFile != null and !&quot;&quot;.equals(recordFile)">and record_file = #{recordFile}</if>
+            <if test="ringTime != null and !&quot;&quot;.equals(ringTime)">and ring_time = #{ringTime}</if>
+            <if test="insertDbTime != null and !&quot;&quot;.equals(insertDbTime)">and DATE_FORMAT(insert_db_time,'%Y-%m-%d') = STR_TO_DATE(#{insertDbTime},'%Y-%m-%d')</if>
+            <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+            <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+        </where>
+    </sql>
+
+    <!-- 插入一条记录,已经存在的忽略 -->
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        insert ignore into transfer_call_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != params">params,</if>
+            <if test="null != customerId">customer_id,</if>
+            <if test="null != uniqueId">unique_id,</if>
+            <if test="null != cno">cno,</if>
+            <if test="null != clientNumber">client_number,</if>
+            <if test="null != customerNumber">customer_number,</if>
+            <if test="null != customerArea">customer_area,</if>
+            <if test="null != callStyle">call_style,</if>
+            <if test="null != pathway">pathway,</if>
+            <if test="null != status">status,</if>
+            <if test="null != startTime">start_time,</if>
+            <if test="null != totalDuration">total_duration,</if>
+            <if test="null != recordFile">record_file,</if>
+            <if test="null != ringTime">ring_time,</if>
+            <if test="null != insertDbTime">insert_db_time,</if>
+            <if test="null != createUserId">create_user_id,</if>
+            <if test="null != createUserName">create_user_name,</if>
+            <if test="null != createTime">create_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != params">#{params},</if>
+            <if test="null != customerId">#{customerId},</if>
+            <if test="null != uniqueId">#{uniqueId},</if>
+            <if test="null != cno">#{cno},</if>
+            <if test="null != clientNumber">#{clientNumber},</if>
+            <if test="null != customerNumber">#{customerNumber},</if>
+            <if test="null != customerArea">#{customerArea},</if>
+            <if test="null != callStyle">#{callStyle},</if>
+            <if test="null != pathway">#{pathway},</if>
+            <if test="null != status">#{status},</if>
+            <if test="null != startTime">#{startTime},</if>
+            <if test="null != totalDuration">#{totalDuration},</if>
+            <if test="null != recordFile">#{recordFile},</if>
+            <if test="null != ringTime">#{ringTime},</if>
+            <if test="null != insertDbTime">#{insertDbTime},</if>
+            <if test="null != createUserId">#{createUserId},</if>
+            <if test="null != createUserName">#{createUserName},</if>
+            <if test="null != createTime">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新一条记录 -->
+    <update id="update">
+        update transfer_call_record
+        <set>
+            <if test="null != params">params = #{params},</if>
+            <if test="null != customerId">customer_id = #{customerId},</if>
+            <if test="null != uniqueId">unique_id = #{uniqueId},</if>
+            <if test="null != cno">cno = #{cno},</if>
+            <if test="null != clientNumber">client_number = #{clientNumber},</if>
+            <if test="null != customerNumber">customer_number = #{customerNumber},</if>
+            <if test="null != customerArea">customer_area = #{customerArea},</if>
+            <if test="null != callStyle">call_style = #{callStyle},</if>
+            <if test="null != pathway">pathway = #{pathway},</if>
+            <if test="null != status">status = #{status},</if>
+            <if test="null != startTime">start_time = #{startTime},</if>
+            <if test="null != totalDuration">total_duration = #{totalDuration},</if>
+            <if test="null != recordFile">record_file = #{recordFile},</if>
+            <if test="null != ringTime">ring_time = #{ringTime},</if>
+            <if test="null != insertDbTime">insert_db_time = #{insertDbTime},</if>
+            <if test="null != createUserId">create_user_id = #{createUserId},</if>
+            <if test="null != createUserName">create_user_name = #{createUserName},</if>
+            <if test="null != createTime">create_time = #{createTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 删除给定主键的记录 -->
+    <delete id="delete">
+        delete
+        from transfer_call_record
+        where
+            id = #{id}
+    </delete>
+
+    <!-- 多个主键批量删除记录 -->
+    <delete id="deleteBatch">
+        delete
+        from transfer_call_record
+        where
+        id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 多个实体批量删除记录 -->
+    <delete id="deleteList">
+        delete
+        from transfer_call_record
+        where
+        id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_call_record
+        where id = #{id}
+    </select>
+
+    <!-- 查询多条 -->
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_call_record
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_call_record
+        <where>
+            <if test="params != null and !&quot;&quot;.equals(params)">and params like concat('%',#{params},'%')</if>
+            <if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+            <if test="uniqueId != null and !&quot;&quot;.equals(uniqueId)">and unique_id like concat('%',#{uniqueId},'%')</if>
+            <if test="cno != null and !&quot;&quot;.equals(cno)">and cno like concat('%',#{cno},'%')</if>
+            <if test="clientNumber != null and !&quot;&quot;.equals(clientNumber)">and client_number like concat('%',#{clientNumber},'%')</if>
+            <if test="customerNumber != null and !&quot;&quot;.equals(customerNumber)">and customer_number like concat('%',#{customerNumber},'%')</if>
+            <if test="customerArea != null and !&quot;&quot;.equals(customerArea)">and customer_area like concat('%',#{customerArea},'%')</if>
+            <if test="callStyle != null and !&quot;&quot;.equals(callStyle)">and call_style like concat('%',#{callStyle},'%')</if>
+            <if test="pathway != null and !&quot;&quot;.equals(pathway)">and pathway like concat('%',#{pathway},'%')</if>
+            <if test="status != null and !&quot;&quot;.equals(status)">and status like concat('%',#{status},'%')</if>
+            <if test="startTime != null and !&quot;&quot;.equals(startTime)">and DATE_FORMAT(start_time,'%Y-%m-%d') = STR_TO_DATE(#{startTime},'%Y-%m-%d')</if>
+            <if test="totalDuration != null and !&quot;&quot;.equals(totalDuration)">and total_duration = #{totalDuration}</if>
+            <if test="recordFile != null and !&quot;&quot;.equals(recordFile)">and record_file like concat('%',#{recordFile},'%')</if>
+            <if test="ringTime != null and !&quot;&quot;.equals(ringTime)">and ring_time = #{ringTime}</if>
+            <if test="insertDbTime != null and !&quot;&quot;.equals(insertDbTime)">and DATE_FORMAT(insert_db_time,'%Y-%m-%d') = STR_TO_DATE(#{insertDbTime},'%Y-%m-%d')</if>
+            <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+            <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+        </where>
+    </select>
+
+    <!-- 查询记录数量 -->
+    <select id="count" resultType="int">
+        select
+        count(*)
+        from transfer_call_record
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 查询记录是否存在 -->
+    <select id="exsit" resultType="boolean">
+        select
+        count(*)
+        from transfer_call_record
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+
+    <!-- 查询数据库中最后一条记录 -->
+    <select id="findLast" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_call_record
+        order by id desc
+        limit 1
+    </select>
+
+</mapper>

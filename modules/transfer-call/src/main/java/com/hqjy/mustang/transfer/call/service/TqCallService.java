@@ -1,5 +1,7 @@
 package com.hqjy.mustang.transfer.call.service;
 
+import java.util.Date;
+
 /**
  * @author : heshuangshuang
  * @date : 2018/9/7 16:45
@@ -8,5 +10,10 @@ public interface TqCallService {
     /**
      * TQ 外呼
      */
-    boolean callOut(String phone);
+    boolean callOut(Long customerId, String phone);
+
+    /**
+     * 同步通话记录
+     */
+    void syncRecord(long startTime);
 }

@@ -28,7 +28,7 @@ import java.util.HashMap;
  */
 @Api(tags = "部门管理", description = "SysDeptController")
 @RestController
-@RequestMapping("//dept")
+@RequestMapping("/dept")
 public class SysDeptController extends AbstractController {
 
 

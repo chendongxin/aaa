@@ -16,9 +16,9 @@ import org.springframework.context.annotation.ComponentScan;
  * @date : 2018/03/22 10:54
  */
 @ComponentScan(basePackages = {"com.hqjy.mustang.transfer.call", "com.hqjy.mustang.common"})
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 @EnableDiscoveryClient
 @EnableFeignClients
+@SpringBootApplication
 public class TransferCallApplication {
 
     public static void main(String[] args) {

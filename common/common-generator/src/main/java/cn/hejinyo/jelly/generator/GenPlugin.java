@@ -455,7 +455,7 @@ public class GenPlugin extends PluginAdapter {
     }
 
     public static void generate() {
-        String config = GenPlugin.class.getClassLoader().getResource("generator.xml").getFile();
+        String config = GenPlugin.class.getClassLoader().getResource("cn/hejinyo/jelly/generator/generator.xml").getFile();
         String[] arg = {"-configfile", config, "-overwrite"};
         ShellRunner.main(arg);
     }

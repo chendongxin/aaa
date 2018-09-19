@@ -17,7 +17,7 @@ import java.util.HashMap;
  */
 @Api(tags = "消息中心", description = "SysMessageController")
 @RestController
-@RequestMapping("//message")
+@RequestMapping("/message")
 public class SysMessageController {
 
     @Autowired

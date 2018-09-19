@@ -31,7 +31,7 @@ import java.util.List;
  */
 @Api(tags = "用户管理", description = "SysUserController")
 @RestController
-@RequestMapping("//user")
+@RequestMapping("/user")
 public class SysUserController extends AbstractController {
 
     @Autowired

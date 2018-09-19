@@ -6,6 +6,9 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -178,6 +181,20 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
             return hour * 3600 + minute * 60 + second;
         }
         return 0;
+    }
+
+    /**
+     * 时间戳转时间，10位，精确只到秒
+     */
+    public static Date timestampToDate(long timestamp) {
+        return Date.from(timestampToLocalDateTime(timestamp).atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * 时间戳转时间，10位，精确只到秒
+     */
+    public static LocalDateTime timestampToLocalDateTime(long timestamp) {
+        return LocalDateTime.ofEpochSecond(timestamp, 0, ZoneOffset.ofHours(8));
     }
 
     public static void main(String[] args) {

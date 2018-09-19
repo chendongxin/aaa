@@ -16,4 +16,14 @@ public class MessageSendVO implements Serializable {
     private String title;
     private String content;
     private Serializable data;
+
+    public MessageSendVO() {
+    }
+
+    public MessageSendVO(Long userId, String title, String content, Serializable data) {
+        this.userId = userId;
+        this.title = title;
+        this.content = content;
+        this.data = data;
+    }
 }

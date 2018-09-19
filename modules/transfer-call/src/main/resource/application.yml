@@ -1,13 +1,14 @@
 server:
-    port: 8330
+  port: 8330
+  context-path: /
 
 spring:
-    application:
+  application:
     # 应用名称
-      name: transfer-call
-    # 环境 dev|test|pro
-    profiles:
-        active: dev
+    name: transfer-call
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
 info:
   app:
     name: transfer-call
@@ -28,6 +29,8 @@ eureka:
     lease-renewal-interval-in-seconds: 5
     # 服务失效时间，默认90秒
     lease-expiration-duration-in-seconds: 20
+    #状态页面和健康指标
+    statusPageUrlPath: ${server.context-path}/swagger-ui.html
 
 # Feign 开启 Hystrix
 feign:
@@ -38,11 +41,46 @@ feign:
 shiro:
   anon:
     path:
-      # spring cloud 健康检查
-      - /info
-      - /actuator/**
-      - /doc
-      - /swagger-ui.html
-      - /webjars/**
-      - /swagger-resources/**
-      - /v2/api-docs
+    # spring cloud 健康检查
+    - /info
+    - /actuator/**
+    - /doc
+    - /swagger-ui.html
+    - /webjars/**
+    - /swagger-resources/**
+    - /v2/api-docs
+
+# tq 参数及其接口
+tq:
+  # 管理员账号
+  adminUin: 9773112
+  # 管理员密码
+  password: dodi2035
+  # 外呼接口
+  call:
+    # 获取token
+    getToken: http://passport.mobile.tq.cn:81/pulse
+    # 点击外呼
+    clickCall: http://vip.mobile.tq.cn/vip/workMobile/clickCall
+  # 服务接口地址
+  webservice:
+    host: http://webservice.mobile.tq.cn
+    # 获取token
+    getAccessToken: ${tq.webservice.host}/webservice/getAccessToken
+    # 获取通话记录
+    phoneRecord: ${tq.webservice.host}/webservice/phoneRecord/list
+
+
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath*:com/hqjy/mustang/transfer/call/dao/*Dao.xml
+    configuration:
+        map-underscore-to-camel-case: true
+
+
+pagehelper:
+    helperDialect: mysql
+    page-size-zero: true
+    reasonable: true
+    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+    row-bounds-with-count: true

@@ -26,7 +26,7 @@ import java.util.HashMap;
  */
 @Api(tags = "角色管理", description = "SysRoleController")
 @RestController
-@RequestMapping("//role")
+@RequestMapping("/role")
 public class SysRoleController extends AbstractController {
 
     @Autowired

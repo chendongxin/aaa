@@ -68,4 +68,14 @@ public interface ConfigConstant {
      * 邮件发送地址
      */
     String MAIL_SEND_TO = "MAIL_SEND_TO";
+
+    /**
+     * Transfer首次分配超时时间 单位天
+     */
+    String TRANSFER_ALLOT_FIRST_TIMEOUT = "TRANSFER_ALLOT_FIRST_TIMEOUT";
+
+    /**
+     * Transfer二次分配超时间 单位天
+     */
+    String TRANSFER_ALLOT_REPEAT_TIMEOUT = "TRANSFER_ALLOT_REPEAT_TIMEOUT";
 }

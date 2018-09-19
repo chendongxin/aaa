@@ -39,7 +39,7 @@ public class AuthFilter extends AccessControlFilter {
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String accessToken = ((HttpServletRequest) request).getHeader(TOKEN_PARAM_KEY);
-        log.error("url:{} ,accessToken:{}", ((HttpServletRequest) request).getRequestURL(),accessToken);
+        log.error("url:{} ,accessToken:{}", ((HttpServletRequest) request).getRequestURL(), accessToken);
         try {
             Long userId = TokenUtils.tokenInfo(accessToken, Constant.JWT_TOKEN_USERID, Long.class);
             String userName = TokenUtils.tokenInfo(accessToken, Constant.JWT_TOKEN_USERNAME, String.class);
@@ -49,6 +49,13 @@ public class AuthFilter extends AccessControlFilter {
             if (null != userDTO) {
                 //验证jwt token的完整性和有效性
                 TokenUtils.verify(accessToken, Constant.JWT_SIGN_KEY);
+                String jti = TokenUtils.tokenInfo(accessToken, Constant.JWT_ID, String.class);
+
+                if (!jti.equals(userDTO.getJti())) {
+                    ResponseUtils.response(httpResponse, HttpStatus.OK.value(), R.error(StatusCode.TOKEN_OUT));
+                    return false;
+                }
+
                 //委托给Realm进行登录
                 try {
                     getSubject(request, response).login(new AuthToken(userId, userName, accessToken));

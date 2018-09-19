@@ -26,7 +26,7 @@ import java.util.HashMap;
  */
 @Api(tags = "系统配置", description = "SysConfigController")
 @RestController
-@RequestMapping("//config")
+@RequestMapping("/config")
 public class SysConfigController {
 
     @Autowired
