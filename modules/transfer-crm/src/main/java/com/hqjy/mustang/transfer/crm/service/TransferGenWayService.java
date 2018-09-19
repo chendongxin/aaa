@@ -8,13 +8,18 @@ import java.util.List;
 
 public interface TransferGenWayService extends BaseService<TransferGenWayEntity, Long> {
 
-//    /**
-//     * 获取不属于指定平台的推广方式
-//     */
-//    List<TransferGenWayEntity> findNotBySourceId(Long sourceId);
+    /**
+     * 获取不属于指定平台的推广方式
+     */
+    List<TransferGenWayEntity> findNotBySourceId(Long sourceId);
 
     /**
      * 获取指定来源平台的推广方式
      */
     List<TransferGenWayEntity> findBySourceId(Long sourceId);
+
+    /**
+     * 获取所有推广方式
+     */
+    List<TransferGenWayEntity> getAllGenWayList();
 }

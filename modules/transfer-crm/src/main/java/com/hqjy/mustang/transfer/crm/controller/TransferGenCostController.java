@@ -99,7 +99,6 @@ public class TransferGenCostController {
             "        \"proId\": 1,\n" +
             "        \"companyId\": 1,\n" +
             "        \"deptId\": 1,\n" +
-            "        \"deptName\": \"广西校区\",\n" +
             "        \"sourceId\": 1,\n" +
             "        \"wayId\": 1,\n" +
             "        \"genDay\": \"2018-09-06 17:19:24\",\n" +
@@ -121,7 +120,7 @@ public class TransferGenCostController {
             "}")
     @ApiImplicitParam(paramType = "body", name = "TransferGenCostEntity", value = "推广费用信息对象", required = true, dataType = "TransferGenCostEntity")
     @SysLog("新增推广费用")
-    @PostMapping("/save")
+    @PostMapping
     public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferGenCostEntity transferGenCostEntity) {
         int count = transferGenCostService.save(transferGenCostEntity);
         if (count > 0) {
@@ -137,17 +136,15 @@ public class TransferGenCostController {
      * 获取所有部门
      */
 
-
-
     /**
      * 删除推广费用
      */
     @ApiOperation(value = "删除推广费用", notes = "删除推广费用：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "id", value = "推广费用ID", required = true, dataType = "Long")
     @SysLog("删除推广费用")
-    @DeleteMapping("/{id}")
-    public R delete(@PathVariable("id") Long id) {
-        int count = transferGenCostService.delete(id);
+    @DeleteMapping("/{ids}")
+    public R delete(@PathVariable("ids") Long[] ids) {
+        int count = transferGenCostService.deleteBatch(ids);
         if (count > 0) {
             return R.ok();
         }

@@ -65,12 +65,20 @@ public class TransferGenWayServiceImpl extends BaseServiceImpl<TransferGenWayDao
         return baseDao.findBySourceId(sourceId);
     }
 
-//    /**
-//     * 获取不属于指定平台的推广方式
-//     */
-//    @Override
-//    public List<TransferGenWayEntity> findNotBySourceId(Long sourceId) {
-//        return baseDao.findNotBySourceId(sourceId);
-//    }
+    /**
+     * 获取所有推广方式
+     */
+    @Override
+    public List<TransferGenWayEntity> getAllGenWayList() {
+        return baseDao.getAllGenWayList();
+    }
+
+    /**
+     * 获取不属于指定平台的推广方式
+     */
+    @Override
+    public List<TransferGenWayEntity> findNotBySourceId(Long sourceId) {
+        return baseDao.findNotBySourceId(sourceId);
+    }
 
 }

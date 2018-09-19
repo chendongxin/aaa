@@ -7,8 +7,9 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="way_id" jdbcType="BIGINT" property="wayId" />
     <result column="source_id" jdbcType="BIGINT" property="sourceId" />
-	  <result column="seq" jdbcType="INTEGER" property="seq" />
+	<result column="seq" jdbcType="INTEGER" property="seq" />
     <result column="status" jdbcType="TINYINT" property="status" />
+	<result column="gen_way" jdbcType="VARCHAR" property="genWay" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -136,11 +137,8 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-	  tws.id, tws.way_id, tws.source_id, tws.seq, tws.status, tws.create_user_id, tws.create_user_name,
-	  tws.create_time, tws.update_user_id, tws.update_user_name, tws.update_time, tgw.gen_way, ts.name
-	from transfer_way_source tws
-	left join transfer_gen_way tgw on tws.way_id = tgw.way_id
-	left join transfer_source ts on tws.source_id = ts.source_id
+	  <include refid="Base_Column_List" />
+	from transfer_way_source
 		<where>
 		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and tws.way_id = #{wayId}</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and tws.source_id = #{sourceId}</if>
@@ -177,6 +175,16 @@
 		from transfer_way_source
 		where
 		source_id = #{sourceId}
+	</select>
+
+	<select id="listPageSource" resultMap="BaseResultMap">
+		select
+			tws.id, tws.way_id, tws.source_id, tws.seq, tws.status, tws.create_user_id, tws.create_user_name, tws.create_time, tws.update_user_id,
+    		tws.update_user_name, tws.update_time, tw.gen_way
+		from transfer_way_source tws
+		left join transfer_gen_way tw on tw.way_id = tws.way_id
+		where
+			tws.source_id = #{sourceId}
 	</select>
   
 

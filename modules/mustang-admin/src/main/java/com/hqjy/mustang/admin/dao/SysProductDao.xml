@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.admin.dao.SysProductDao">
+  
+  <!-- 实体映射 -->
+  <resultMap id="BaseResultMap" type="com.hqjy.mustang.admin.model.entity.SysProductEntity">
+    <id column="pro_id" jdbcType="BIGINT" property="proId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="memo" jdbcType="VARCHAR" property="memo" />
+    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+  </resultMap>
+  
+  <!-- 表基本列 -->
+  <sql id="Base_Column_List">
+    pro_id, name, status, memo, create_user_id, create_time, update_user_id, update_time
+  </sql>
+  
+  <!-- 通用查询sql -->
+  <sql id="Base_Where_SQL">
+    <where>
+		<if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+        <if test="memo != null and !&quot;&quot;.equals(memo)">and memo = #{memo}</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+	</where>
+  </sql>
+  
+  <!-- 插入一条记录 -->
+  <insert id="save" keyProperty="proId" useGeneratedKeys="true">
+    insert into sys_product
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != name">name, </if>
+			<if test="null != status">status, </if>
+            <if test="null != memo">memo, </if>
+			<if test="null != createUserId">create_user_id, </if>
+			<if test="null != createTime">create_time, </if>
+			<if test="null != updateUserId">update_user_id, </if>
+			<if test="null != updateTime">update_time, </if>
+		</trim>
+	values
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != name">#{name}, </if>
+			<if test="null != status">#{status}, </if>
+            <if test="null != memo">#{memo}, </if>
+			<if test="null != createUserId">#{createUserId}, </if>
+			<if test="null != createTime">#{createTime}, </if>
+			<if test="null != updateUserId">#{updateUserId}, </if>
+			<if test="null != updateTime">#{updateTime}, </if>
+		</trim>
+  </insert>
+  
+  <!-- 更新一条记录 -->
+  <update id="update">
+    update sys_product 
+		<set>
+			<if test="null != name">name = #{name}, </if>
+			<if test="null != status">status = #{status}, </if>
+            <if test="null != memo">memo = #{memo}, </if>
+			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
+			<if test="null != createTime">create_time = #{createTime}, </if>
+			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
+			<if test="null != updateTime">update_time = #{updateTime}, </if>
+		</set>
+		where pro_id = #{proId}
+  </update>
+  
+  <!-- 删除给定主键的记录 -->
+  <delete id="delete">
+    delete
+		from sys_product
+	where
+		pro_id = #{proId}
+  </delete>
+  
+  <!-- 多个主键批量删除记录 -->
+  <delete id="deleteBatch">
+    delete
+		from sys_product
+	where
+		pro_id in 
+		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+  </delete>
+  
+  <!-- 多个实体批量删除记录 -->
+  <delete id="deleteList">
+    delete
+		from sys_product
+	where
+		pro_id in 
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item.proId}
+		</foreach>
+  </delete>
+  
+  <!-- 主键查找一条记录 -->
+  <select id="findOne" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from sys_product
+	where pro_id = #{proId}
+  </select>
+  
+  <!-- 查询多条 -->
+  <select id="findList" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from sys_product
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+  <!-- 分页查询 -->
+  <select id="findPage" resultMap="BaseResultMap">
+    select
+		<include refid="Base_Column_List" />
+	from sys_product
+		<where>
+		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+        <if test="memo != null and !&quot;&quot;.equals(memo)">and memo like concat('%',#{memo},'%')</if>
+        <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+	</where>
+  </select>
+  
+  <!-- 查询记录数量 -->
+  <select id="count" resultType="int">
+    select
+		count(*)
+	from sys_product
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+  <!-- 查询记录是否存在 -->
+  <select id="exsit" resultType="boolean">
+    select
+		count(*)
+	from sys_product
+		<include refid="Base_Where_SQL" />
+  </select>
+  
+
+</mapper>

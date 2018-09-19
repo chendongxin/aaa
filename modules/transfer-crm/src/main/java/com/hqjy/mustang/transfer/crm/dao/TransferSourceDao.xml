@@ -183,16 +183,6 @@
         </where>
     </select>
 
-    <select id="listPageSource" resultMap="BaseResultMap">
-        select
-        <include refid="Base_Column_List"/>
-        from transfer_source ts
-        where ts.source_id in
-            (select tcs.source_id
-            from transfer_company_source tcs
-            where company_id = #{companyId})
-    </select>
-
     <!-- 查询记录数量 -->
     <select id="count" resultType="int">
         select

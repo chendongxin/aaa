@@ -18,7 +18,7 @@ public class TransferGenWaySourceDTO {
     /**
      * 推广方式名称
      */
-    private String wayName;
+    private String genWay;
 
     /**
      * 推广平台id

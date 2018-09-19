@@ -33,9 +33,4 @@ public interface TransferSourceDao extends BaseDao<TransferSourceEntity, Long> {
      */
     List<TransferSourceEntity> getAllSourceList();
 
-    /**
-     * 获取制定公司下的推广方式列表
-     *
-     */
-    List<TransferSourceEntity> listPageSource(PageQuery pageQuery);
 }

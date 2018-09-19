@@ -30,9 +30,9 @@ public class TransferGenWayEntity implements Serializable {
     private Integer seq;
 
     /**
-     * 状态,见数据字典STATUS status( 0-禁用 1-启用)
+     * 状态,见数据字典STATUS status( 0-启用 1-禁用)
      **/
-    private Byte status;
+    private byte status;
 
     /**
      * 父推广方式名称

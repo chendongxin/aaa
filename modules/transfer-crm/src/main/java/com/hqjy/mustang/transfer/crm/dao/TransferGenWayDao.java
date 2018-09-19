@@ -15,10 +15,11 @@ import java.util.List;
  */
 @Mapper
 public interface TransferGenWayDao extends BaseDao<TransferGenWayEntity, Long> {
+
     /**
      * 获取所有推广方式列表
      */
-//    List<TransferGenWayEntity> getAllGenWayList();
+    List<TransferGenWayEntity> getAllGenWayList();
 
     /**
      * 通过名称查询推广方式
@@ -35,8 +36,8 @@ public interface TransferGenWayDao extends BaseDao<TransferGenWayEntity, Long> {
      */
     List<TransferGenWayEntity> findBySourceId(Long sourceId);
 
-//    /**
-//     * 查询不在指定推广平台下的推广方式
-//     */
-//    List<TransferGenWayEntity> findNotBySourceId(Long sourceId);
+    /**
+     * 查询不在指定推广平台下的推广方式
+     */
+    List<TransferGenWayEntity> findNotBySourceId(Long sourceId);
 }

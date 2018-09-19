@@ -26,6 +26,11 @@ public class TransferWaySourceEntity implements Serializable {
     /**
      * 推广方式名称
      */
+    private String genWay;
+
+    /**
+     * 推广方式名称
+     */
     private String wayName;
 
     /**

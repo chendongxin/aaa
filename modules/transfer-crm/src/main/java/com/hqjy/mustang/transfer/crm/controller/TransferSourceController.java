@@ -32,14 +32,12 @@ public class TransferSourceController {
 
     @Autowired
     private TransferSourceService transferSourceService;
-    @Autowired
-    private TransferGenWayService transferGenWayService;
 
     /**
      * 来源平台管理树数据
      */
     @ApiOperation(value = "来源平台管理树数据", notes = "来源平台管理树数据，包含所有来源平台数据")
-    @GetMapping("/source/tree")
+    @GetMapping("/tree")
     public R tree() {
         return R.ok(transferSourceService.getRecursionTree(true));
     }
@@ -87,10 +85,21 @@ public class TransferSourceController {
     /**
      * 新增一条来源
      */
-    @ApiOperation(value = "新增来源", notes = "新增一条来源")
-    @ApiImplicitParam(paramType = "body", name = "transferSourceEntity", value = "来源信息对象", required = true, dataType = "TransferSourceEntity")
+    @ApiOperation(value = "新增来源", notes = "请求参数：\n" +
+            "参数说明：\n" +
+            "【来源平台名称:name】,【状态(0:正常; 1:禁用):status】\n" +
+            "示例：\n" +
+            "{\n" +
+            "  \"name\": 58,\n" +
+            "  \"status\": 1,\n" +
+            "}\n" +
+            "新增成功响应数据：\n" +
+            "{\n" +
+            "  \"msg\": \"成功\",\n" +
+            "  \"code\": 0\n" +
+            "}")
     @SysLog("新增来源")
-    @PostMapping("/save")
+    @PostMapping
     public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferSourceEntity transferSourceEntity) {
         int count = transferSourceService.save(transferSourceEntity);
         if (count > 0) {
@@ -100,14 +109,14 @@ public class TransferSourceController {
     }
 
     /**
-     * 删除一条来源
+     * 删除来源
      */
     @ApiOperation(value = "删除来源", notes = "删除一条来源：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "sourceId", value = "来源ID", required = true, dataType = "Long")
     @SysLog("删除来源")
-    @DeleteMapping("/{sourceId}")
-    public R delete(@PathVariable("sourceId") Long sourceId) {
-        int count = transferSourceService.delete(sourceId);
+    @DeleteMapping("/{sourceIds}")
+    public R delete(@PathVariable("sourceIds") Long[] sourceIds) {
+        int count = transferSourceService.deleteBatch(sourceIds);
         if (count > 0) {
             return R.ok();
         }
@@ -150,18 +159,9 @@ public class TransferSourceController {
     /**
      * 获取所有的来源平台
      */
-    @GetMapping("/source/all")
+    @GetMapping("/all")
     public R getAllSource() {
         return R.ok(transferSourceService.getAllSourceList());
     }
-
-    /**
-     * 获取指定来源平台的推广方式
-     */
-    @GetMapping("/source/way/{sourceId}")
-    public R getWayBySourceId(@PathVariable("sourceId") Long sourceId) {
-        return R.ok(transferGenWayService.findBySourceId(sourceId));
-    }
-
 
 }

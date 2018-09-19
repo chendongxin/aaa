@@ -70,6 +70,11 @@ public class TransferSourceEntity implements Serializable {
     private Date updateTime;
 
     /**
+     * 子推广公司
+     */
+    private List<TransferSourceEntity> children;
+
+    /**
      * 该推广方式下的推广平台
      */
     private List<TransferGenWayEntity> genWayList;

@@ -29,9 +29,14 @@ public class TransferCompanySourceEntity implements Serializable {
     private Long sourceId;
 
     /**
+     * 来源名称
+     */
+    private String name;
+
+    /**
      * 部门Id
      */
-    private Integer deptId;
+    private Long deptId;
 
     /**
      * 部门名称
@@ -41,7 +46,7 @@ public class TransferCompanySourceEntity implements Serializable {
     /**
      * 状态 0启用 1禁用 status
      **/
-    private Integer status;
+    private byte status;
 
     /**
      * 创建人编号 create_user_id

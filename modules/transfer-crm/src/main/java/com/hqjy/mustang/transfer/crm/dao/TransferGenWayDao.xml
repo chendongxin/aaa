@@ -53,9 +53,9 @@
 		</trim>
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != genWay">#{genWay}, </if>
 			<if test="null != seq">#{seq}, </if>
 			<if test="null != status">#{status}, </if>
-			<if test="null != genWay">#{genWay}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -162,12 +162,11 @@
 		<include refid="Base_Where_SQL" />
   </select>
 
-	<!--<select id="getAllGenWayList" resultMap="BaseResultMap">-->
-		<!--select-->
-			<!--<include refid="Base_Column_List"/>-->
-		<!--from transfer_gen_way-->
-		<!--order by parent_id-->
-	<!--</select>-->
+	<select id="getAllGenWayList" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from transfer_gen_way
+	</select>
 
 	<!-- 通过名称查找一条记录 -->
 	<select id="findOneByGenName" resultMap="BaseResultMap">
@@ -198,14 +197,14 @@
 			and tws.source_id = #{sourceId})
 	</select>
 
-    <!--<select id="findNotBySourceId" resultMap="BaseResultMap">-->
-        <!--select-->
-        <!--<include refid="Base_Column_List"/>-->
-        <!--from transfer_gen_way tgw-->
-        <!--where tgw.way_id not in-->
-        <!--(select tws.way_id-->
-        <!--from transfer_way_source tws-->
-        <!--where tws.source_id = #{sourceId})-->
-    <!--</select>-->
+    <select id="findNotBySourceId" resultMap="BaseResultMap">
+        select
+        	<include refid="Base_Column_List"/>
+        from transfer_gen_way tgw
+        where tgw.way_id not in
+			(select tws.way_id
+			from transfer_way_source tws
+			where tws.source_id = #{sourceId})
+    </select>
 
 </mapper>
