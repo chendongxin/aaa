@@ -8,6 +8,8 @@
 	<id column="parent_id" jdbcType="BIGINT" property="parentId" />
     <result column="source_id" jdbcType="INTEGER" property="sourceId" />
     <result column="gen_way" jdbcType="VARCHAR" property="genWay" />
+	<result column="seq" jdbcType="INTEGER" property="seq" />
+	<result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -18,7 +20,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    way_id, parent_id, source_id, gen_way, create_user_id, create_user_name, create_time, update_user_id,
+    way_id, parent_id, source_id, gen_way, seq, status, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
   
@@ -28,6 +30,8 @@
 		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
 		<if test="genWay != null and !&quot;&quot;.equals(genWay)">and gen_way = #{genWay}</if>
+		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -44,6 +48,8 @@
 			<if test="null != parentId">parent_id, </if>
 			<if test="null != sourceId">source_id, </if>
 			<if test="null != genWay">gen_way, </if>
+			<if test="null != seq">seq, </if>
+			<if test="null != status">status, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
 			<if test="null != createTime">create_time, </if>
@@ -55,6 +61,8 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != parentId">#{parentId}, </if>
 			<if test="null != sourceId">#{sourceId}, </if>
+			<if test="null != seq">#{seq}, </if>
+			<if test="null != status">#{status}, </if>
 			<if test="null != genWay">#{genWay}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
@@ -71,6 +79,8 @@
 		<set>
 			<if test="null != parentId">parent_id = #{parentId}, </if>
 			<if test="null != sourceId">source_id = #{sourceId}, </if>
+			<if test="null != seq">seq = #{seq}, </if>
+			<if test="null != status">status = #{status}, </if>
 			<if test="null != genWay">gen_way = #{genWay}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
@@ -131,18 +141,21 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-		<include refid="Base_Column_List" />
-	from transfer_gen_way
+	  tgw.way_id, tgw.parent_id, tgw.source_id, tgw.gen_way, tgw.seq, tgw.status, tgw.create_user_id, tgw.create_user_name,
+	  tgw.create_time, tgw.update_user_id, tgw.update_user_name, tgw.update_time
+	from transfer_gen_way tgw
+	left join transfer_gen_way tgw1 on tgw1.id = tgw.parent_id
 		<where>
-		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
-		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
-		<if test="genWay != null and !&quot;&quot;.equals(genWay)">and gen_way like concat('%',#{genWay},'%')</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="id != null and !&quot;&quot;.equals(id)">and tgw.parent_id = #{wayId} or tgw.way_id = #{wayId}</if>
+		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and tgw.source_id = #{sourceId}</if>
+		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and tgw.parent_id = #{parentId}</if>
+		<if test="genWay != null and !&quot;&quot;.equals(genWay)">and tgw.gen_way like concat('%',#{genWay},'%')</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tgw.create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tgw.create_user_name like concat('%',#{createUserName},'%')</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and tgw.DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and tgw.update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and tgw.update_user_name like concat('%',#{updateUserName},'%')</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and tgw.DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
 	</where>
   </select>
   
@@ -168,6 +181,22 @@
 		from transfer_gen_way
 		order by parent_id
 	</select>
-  
+
+	<!-- 通过名称查找一条记录 -->
+	<select id="findOneByGenName" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from transfer_gen_way
+		where gen_way = #{genWay}
+	</select>
+
+	<select id="findByParentId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from transfer_gen_way
+		WHERE
+		parent_id = #{parentId}
+		order by seq asc
+	</select>
 
 </mapper>

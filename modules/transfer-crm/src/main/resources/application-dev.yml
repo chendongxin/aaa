@@ -44,7 +44,7 @@ spring:
                     config:
                         multi-statement-allow: true
 
-#NC接口参数
+#NC接口地址
 nc:
   #商机信息保存到NC
   studentFromXN: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.StudentFromXNServlet

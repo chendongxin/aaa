@@ -19,4 +19,14 @@ public interface TransferKeywordDao extends BaseDao<TransferKeywordEntity, Integ
      * 获取所有关键词列表
      */
     List<TransferKeywordEntity> getAllKeywordList();
+
+    /**
+     * 获取父ID下对应关键词
+     */
+    List<TransferKeywordEntity> findByParentId(Integer parentId);
+
+    /**
+     * 通过名称查询一条关键词
+     */
+    TransferKeywordEntity findOneByName(String name);
 }

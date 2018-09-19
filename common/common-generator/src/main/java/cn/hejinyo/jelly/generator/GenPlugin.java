@@ -33,7 +33,7 @@ public class GenPlugin extends PluginAdapter {
         interfaze.addJavaDocLine("/**");
         interfaze.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable() + " 持久化层");
         interfaze.addJavaDocLine(" * ");
-        interfaze.addJavaDocLine(" * @author : HejinYo   hejinyo@gmail.com ");
+        interfaze.addJavaDocLine(" * @author : xyq");
         interfaze.addJavaDocLine(" * @date : " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(new Date()));
         interfaze.addJavaDocLine(" */");
 
@@ -96,7 +96,7 @@ public class GenPlugin extends PluginAdapter {
         topLevelClass.addJavaDocLine("/**");
         topLevelClass.addJavaDocLine(" * " + introspectedTable.getFullyQualifiedTable() + " 实体类");
         topLevelClass.addJavaDocLine(" * ");
-        topLevelClass.addJavaDocLine(" * @author : HejinYo   hejinyo@gmail.com ");
+        topLevelClass.addJavaDocLine(" * @author : xyq");
         topLevelClass.addJavaDocLine(" * @date : " + new SimpleDateFormat("yyyy/MM/dd HH:mm").format(new Date()));
         topLevelClass.addJavaDocLine(" */");
 

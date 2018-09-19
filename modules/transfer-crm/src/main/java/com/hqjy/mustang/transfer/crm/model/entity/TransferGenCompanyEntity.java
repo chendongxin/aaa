@@ -30,19 +30,29 @@ public class TransferGenCompanyEntity implements Serializable {
     private String name;
 
     /**
-	 * 状态 0启用 1禁用 status
-	 **/
-    private Integer status;
+     *  排序号
+     */
+    private Integer seq;
 
     /**
-     * 父推广公司名称
+	 * 状态 0启用 1禁用 status
+	 **/
+    private Byte status;
+
+    /**
+     * 注释
      */
-    private String parentName;
+    private String memo;
 
     /**
      * 子推广公司
      */
     private List<TransferGenCompanyEntity> children;
+
+    /**
+     * 推广公司下的推广平台
+     */
+    private List<TransferCompanySourceEntity> childrenSource;
 
     /**
 	 * 创建人编号 create_user_id

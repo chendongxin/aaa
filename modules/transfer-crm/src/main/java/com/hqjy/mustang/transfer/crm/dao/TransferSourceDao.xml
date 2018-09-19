@@ -6,6 +6,7 @@
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity">
     <id column="source_id" jdbcType="BIGINT" property="sourceId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
+	<result column="email_domain" jdbcType="VARCHAR" property="emailDomain" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -17,152 +18,180 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    source_id, name, status, create_user_id, create_user_name, create_time, update_user_id, 
+    source_id, name, email_domain, status, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
-  
-  <!-- 通用查询sql -->
-  <sql id="Base_Where_SQL">
-    <where>
-		<if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
-		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-	</where>
-  </sql>
-  
-  <!-- 插入一条记录 -->
-  <insert id="save" keyProperty="sourceId" useGeneratedKeys="true">
-    insert into transfer_source
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != name">name, </if>
-			<if test="null != status">status, </if>
-			<if test="null != createUserId">create_user_id, </if>
-			<if test="null != createUserName">create_user_name, </if>
-			<if test="null != createTime">create_time, </if>
-			<if test="null != updateUserId">update_user_id, </if>
-			<if test="null != updateUserName">update_user_name, </if>
-			<if test="null != updateTime">update_time, </if>
-		</trim>
-	values
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != name">#{name}, </if>
-			<if test="null != status">#{status}, </if>
-			<if test="null != createUserId">#{createUserId}, </if>
-			<if test="null != createUserName">#{createUserName}, </if>
-			<if test="null != createTime">#{createTime}, </if>
-			<if test="null != updateUserId">#{updateUserId}, </if>
-			<if test="null != updateUserName">#{updateUserName}, </if>
-			<if test="null != updateTime">#{updateTime}, </if>
-		</trim>
-  </insert>
-  
-  <!-- 更新一条记录 -->
-  <update id="update">
-    update transfer_source 
-		<set>
-			<if test="null != name">name = #{name}, </if>
-			<if test="null != status">status = #{status}, </if>
-			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
-			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
-			<if test="null != createTime">create_time = #{createTime}, </if>
-			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
-			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
-			<if test="null != updateTime">update_time = #{updateTime}, </if>
-		</set>
-		where source_id = #{sourceId}
-  </update>
-  
-  <!-- 删除给定主键的记录 -->
-  <delete id="delete">
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Where_SQL">
+        <where>
+            <if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
+            <if test="emailDomain != null and !&quot;&quot;.equals(emailDomain)">and email_domain = #{emailDomain}</if>
+            <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+            <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id =
+                #{createUserId}
+            </if>
+            <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name =
+                #{createUserName}
+            </if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{createTime},'%Y-%m-%d')
+            </if>
+            <if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id =
+                #{updateUserId}
+            </if>
+            <if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name =
+                #{updateUserName}
+            </if>
+            <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{updateTime},'%Y-%m-%d')
+            </if>
+        </where>
+    </sql>
+
+    <!-- 插入一条记录 -->
+    <insert id="save" keyProperty="sourceId" useGeneratedKeys="true">
+        insert into transfer_source
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != name">name,</if>
+            <if test="null != emailDomain">email_domain,</if>
+            <if test="null != status">status,</if>
+            <if test="null != createUserId">create_user_id,</if>
+            <if test="null != createUserName">create_user_name,</if>
+            <if test="null != createTime">create_time,</if>
+            <if test="null != updateUserId">update_user_id,</if>
+            <if test="null != updateUserName">update_user_name,</if>
+            <if test="null != updateTime">update_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != name">#{name},</if>
+            <if test="null != emailDomain">#{emailDomain},</if>
+            <if test="null != status">#{status},</if>
+            <if test="null != createUserId">#{createUserId},</if>
+            <if test="null != createUserName">#{createUserName},</if>
+            <if test="null != createTime">#{createTime},</if>
+            <if test="null != updateUserId">#{updateUserId},</if>
+            <if test="null != updateUserName">#{updateUserName},</if>
+            <if test="null != updateTime">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新一条记录 -->
+    <update id="update">
+        update transfer_source
+        <set>
+            <if test="null != name">name = #{name},</if>
+            <if test="null != emailDomain">email_domain = #{emailDomain},</if>
+            <if test="null != status">status = #{status},</if>
+            <if test="null != createUserId">create_user_id = #{createUserId},</if>
+            <if test="null != createUserName">create_user_name = #{createUserName},</if>
+            <if test="null != createTime">create_time = #{createTime},</if>
+            <if test="null != updateUserId">update_user_id = #{updateUserId},</if>
+            <if test="null != updateUserName">update_user_name = #{updateUserName},</if>
+            <if test="null != updateTime">update_time = #{updateTime},</if>
+        </set>
+        where source_id = #{sourceId}
+    </update>
+
+    <!-- 删除给定主键的记录 -->
+    <delete id="delete">
     delete
 		from transfer_source
 	where
 		source_id = #{sourceId}
   </delete>
-  
-  <!-- 多个主键批量删除记录 -->
-  <delete id="deleteBatch">
-    delete
-		from transfer_source
-	where
-		source_id in 
-		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
-			#{item}
-		</foreach>
-  </delete>
-  
-  <!-- 多个实体批量删除记录 -->
-  <delete id="deleteList">
-    delete
-		from transfer_source
-	where
-		source_id in 
-		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-			#{item.sourceId}
-		</foreach>
-  </delete>
-  
-  <!-- 主键查找一条记录 -->
-  <select id="findOne" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_source
-	where source_id = #{sourceId}
-  </select>
 
-	<!-- 通过名称查找一条记录 -->
-	<select id="findOneByName" resultMap="BaseResultMap">
-		select
-		<include refid="Base_Column_List" />
-		from transfer_source
-		where name = #{name}
-	</select>
-  
-  <!-- 查询多条 -->
-  <select id="findList" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_source
-		<include refid="Base_Where_SQL" />
-  </select>
-  
-  <!-- 分页查询 -->
-  <select id="findPage" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_source
-		<where>
-		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
-		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-	</where>
-  </select>
-  
-  <!-- 查询记录数量 -->
-  <select id="count" resultType="int">
-    select
-		count(*)
-	from transfer_source
-		<include refid="Base_Where_SQL" />
-  </select>
-  
-  <!-- 查询记录是否存在 -->
-  <select id="exsit" resultType="boolean">
-    select
-		count(*)
-	from transfer_source
-		<include refid="Base_Where_SQL" />
-  </select>
-  
+    <!-- 多个主键批量删除记录 -->
+    <delete id="deleteBatch">
+        delete
+        from transfer_source
+        where
+        source_id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 多个实体批量删除记录 -->
+    <delete id="deleteList">
+        delete
+        from transfer_source
+        where
+        source_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.sourceId}
+        </foreach>
+    </delete>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_source
+        where source_id = #{sourceId}
+    </select>
+
+    <!-- 通过名称查找一条记录 -->
+    <select id="findOneByName" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_source
+        where name = #{name}
+    </select>
+    <!-- 查询多条 -->
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_source
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_source
+        <where>
+            <if test="emailDomain != null and !&quot;&quot;.equals(emailDomain)">and email_domain = #{emailDomain}</if>
+            <if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
+            <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+            <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id =
+                #{createUserId}
+            </if>
+            <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like
+                concat('%',#{createUserName},'%')
+            </if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{createTime},'%Y-%m-%d')
+            </if>
+            <if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id =
+                #{updateUserId}
+            </if>
+            <if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like
+                concat('%',#{updateUserName},'%')
+            </if>
+            <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{updateTime},'%Y-%m-%d')
+            </if>
+        </where>
+    </select>
+
+    <!-- 查询记录数量 -->
+    <select id="count" resultType="int">
+        select
+        count(*)
+        from transfer_source
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 查询记录是否存在 -->
+    <select id="exsit" resultType="boolean">
+        select
+        count(*)
+        from transfer_source
+        <include refid="Base_Where_SQL"/>
+    </select>
+
 
 </mapper>

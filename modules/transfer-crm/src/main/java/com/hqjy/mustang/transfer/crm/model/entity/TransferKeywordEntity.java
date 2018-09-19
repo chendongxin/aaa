@@ -30,7 +30,12 @@ public class TransferKeywordEntity implements Serializable {
     private String name;
 
     /**
-	 * 状态,见数据字典STATUS status
+     * 排序号 seq
+     **/
+    private Integer seq;
+
+    /**
+	 * 状态,见数据字典STATUS status( 0-禁用 1-启用)
 	 **/
     private Byte status;
 
