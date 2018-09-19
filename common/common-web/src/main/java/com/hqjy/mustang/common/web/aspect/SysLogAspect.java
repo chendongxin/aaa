@@ -52,6 +52,11 @@ public class SysLogAspect {
     }
 
     private void saveSysLog(ProceedingJoinPoint joinPoint, long time) {
+
+        if (rabbitTemplate == null) {
+            return;
+        }
+
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();
 
