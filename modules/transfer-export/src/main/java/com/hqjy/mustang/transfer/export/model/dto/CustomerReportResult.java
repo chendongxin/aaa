@@ -13,10 +13,10 @@ import java.util.List;
  */
 @Data
 @Accessors(chain = true)
-@ApiModel(value = "招转推广报表数据输出对象")
-public class PromotionReportResult {
+@ApiModel(value = "客服推广报表数据输出对象")
+public class CustomerReportResult {
 
-    private List<PromotionReportData> list;
+    private List<CustomerReportData> list;
 
-    private PromotionReportTotal total;
+    private CustomerReportTotal total;
 }
