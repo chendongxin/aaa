@@ -28,7 +28,7 @@ public class TrasferResumerTask {
     }
 
     /**
-     * 简历抓取任务
+     * 简历抓取任务，继续
      */
     public void resumeStart() {
         boolean result = trasferResumeApiService.start();
