@@ -1,14 +1,15 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- * transfer_customer_detail 客户详情信息实体类
+ * transfer_customer_detail 客户明细信息实体类
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/14 11:19
  */
 @Data
 public class TransferCustomerDetailEntity implements Serializable {
@@ -28,7 +29,7 @@ public class TransferCustomerDetailEntity implements Serializable {
     private Byte age;
 
     /**
-	 * 性别:见数据字典SEX枚举 sex
+	 * 性别:见数据字典SEX枚举(0-未知，1-男，2-女) sex
 	 **/
     private Byte sex;
 
@@ -38,19 +39,9 @@ public class TransferCustomerDetailEntity implements Serializable {
     private String address;
 
     /**
-	 * 备注 note
-	 **/
-    private String note;
-
-    /**
 	 * 邮箱 email
 	 **/
     private String email;
-
-    /**
-	 * 生日 birthday
-	 **/
-    private Date birthday;
 
     /**
 	 * 毕业学校 school
@@ -58,9 +49,9 @@ public class TransferCustomerDetailEntity implements Serializable {
     private String school;
 
     /**
-	 * 毕业时间 graduate_time
+	 * 毕业年份 graduate_date
 	 **/
-    private Date graduateTime;
+    private Date graduateDate;
 
     /**
 	 * 专业 major
@@ -68,12 +59,27 @@ public class TransferCustomerDetailEntity implements Serializable {
     private String major;
 
     /**
-	 * 学历 education_id
+	 * 学历ID(数据来源于transfer_education学历表) education_id
 	 **/
     private Long educationId;
 
     /**
-	 * 应聘职位 position_applied
+	 * 学历名称(数据来源于transfer_education学历表) education_name
+	 **/
+    private String educationName;
+
+    /**
+	 * 应聘类别 apply_type
+	 **/
+    private String applyType;
+
+    /**
+	 * 应聘关键词 apply_key
+	 **/
+    private String applyKey;
+
+    /**
+	 * 期望职位 position_applied
 	 **/
     private String positionApplied;
 
@@ -83,64 +89,14 @@ public class TransferCustomerDetailEntity implements Serializable {
     private String workingPlace;
 
     /**
-	 * 期望薪酬 salary
+	 * 工作经验 work_experience
 	 **/
-    private String salary;
+    private Byte workExperience;
 
     /**
-	 * 工作经历 work_experience
+	 * 备注 note
 	 **/
-    private String workExperience;
-
-    /**
-	 * 教育经历 education_experience
-	 **/
-    private String educationExperience;
-
-    /**
-	 * 项目经验 project_experience
-	 **/
-    private String projectExperience;
-
-    /**
-	 * 社会实践 social_practice
-	 **/
-    private String socialPractice;
-
-    /**
-	 * 培训经历 trained_experience
-	 **/
-    private String trainedExperience;
-
-    /**
-	 * 语言能力 language_ability
-	 **/
-    private String languageAbility;
-
-    /**
-	 * IT技能 it_skills
-	 **/
-    private String itSkills;
-
-    /**
-	 * 证书 certificate
-	 **/
-    private String certificate;
-
-    /**
-	 * 自我描述 self_description
-	 **/
-    private String selfDescription;
-
-    /**
-	 * 获得奖励 rewards
-	 **/
-    private String rewards;
-
-    /**
-	 * 其他信息 other
-	 **/
-    private String other;
+    private String note;
 
     /**
 	 * 创建人编号 create_user_id
@@ -171,6 +127,11 @@ public class TransferCustomerDetailEntity implements Serializable {
 	 * 更新时间 update_time
 	 **/
     private Date updateTime;
+
+    /**
+	 * 简历详情 resume_detail
+	 **/
+    private String resumeDetail;
 
     private static final long serialVersionUID = 1L;
 }

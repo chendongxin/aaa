@@ -6,6 +6,11 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.ComponentScan;
 
+/**
+ * @author xyq
+ * @date create on 2018/9/17
+ * @apiNote 报表服务应用入口
+ */
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableFeignClients

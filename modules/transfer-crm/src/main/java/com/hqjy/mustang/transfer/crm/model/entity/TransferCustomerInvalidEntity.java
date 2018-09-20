@@ -1,14 +1,15 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
-import java.io.Serializable;
-import java.util.Date;
 import lombok.Data;
 
+import java.io.Serializable;
+import java.util.Date;
+
 /**
- * transfer_customer_invalid 无效客户实体类
+ * transfer_customer_invalid 失败客户实体类
  * 
  * @author : xyq
- * @date : 2018/09/07 10:16
+ * @date : 2018/09/14 11:19
  */
 @Data
 public class TransferCustomerInvalidEntity implements Serializable {
@@ -23,39 +24,19 @@ public class TransferCustomerInvalidEntity implements Serializable {
     private Long customerId;
 
     /**
-	 * 质检人id user_id
-	 **/
-    private Long userId;
-
-    /**
-	 * 质检员姓名 user_name
-	 **/
-    private String userName;
-
-    /**
-	 * 0：未质检（默认）   1：已质检 status
+	 * 失败状态（1-(失败)有效，2-（失败）无效 status
 	 **/
     private Byte status;
 
     /**
-	 * 商机状态 商机状态（0-有效商机，1-无效有效 biz_status
-	 **/
-    private Byte bizStatus;
-
-    /**
-	 * 无效说明 memo
-	 **/
-    private String memo;
-
-    /**
-	 * 见数据字典 见数据字典：无效类型（INVALID_TYPE） type
+	 * 见数据字典：失败(有效)类型（VALID_TYPE）和失败(无效)类型（INVALID） type
 	 **/
     private Byte type;
 
     /**
-	 * 确认说明 result
+	 * 失败操作说明 memo
 	 **/
-    private String result;
+    private String memo;
 
     /**
 	 * 创建人编号 create_user_id

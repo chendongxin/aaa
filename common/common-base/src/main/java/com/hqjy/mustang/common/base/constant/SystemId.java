@@ -19,6 +19,11 @@ public interface SystemId {
     Long TREE_ROOT = 1L;
 
     /**
+     * 树根节点ID
+     */
+    Integer TREE_ROOT_INTE = 1;
+
+    /**
      * 校区树根节点ID
      */
     String SCHOOL_TREE_ROOT = "0";

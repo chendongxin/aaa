@@ -7,6 +7,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="source_id" jdbcType="INTEGER" property="sourceId" />
+	<result column="status" jdbcType="INTEGER" property="status" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -17,7 +18,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    id, company_id, source_id, create_user_id, create_user_name, create_time, update_user_id, 
+    id, company_id, source_id, status, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
   
@@ -26,6 +27,7 @@
     <where>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -41,6 +43,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != companyId">company_id, </if>
 			<if test="null != sourceId">source_id, </if>
+			<if test="null != status">status, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
 			<if test="null != createTime">create_time, </if>
@@ -52,6 +55,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != companyId">#{companyId}, </if>
 			<if test="null != sourceId">#{sourceId}, </if>
+			<if test="null != status">#{status}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -67,6 +71,7 @@
 		<set>
 			<if test="null != companyId">company_id = #{companyId}, </if>
 			<if test="null != sourceId">source_id = #{sourceId}, </if>
+			<if test="null != status">status = #{status}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
@@ -131,6 +136,7 @@
 		<where>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -155,6 +161,16 @@
 	from transfer_company_source
 		<include refid="Base_Where_SQL" />
   </select>
+
+	<select id="findByCompanyId" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List" />
+		from transfer_company_source
+		where
+			company_id = #{companyId}
+	</select>
+
+
   
 
 </mapper>

@@ -18,4 +18,14 @@ public interface TransferGenWayDao extends BaseDao<TransferGenWayEntity, Long> {
      * 获取所有推广方式列表
      */
     List<TransferGenWayEntity> getAllGenWayList();
+
+    /**
+     * 通过名称查询推广方式
+     */
+    TransferGenWayEntity findOneByGenName(String genWay);
+
+    /**
+     * 获取父ID下对应推广方式
+     */
+    List<TransferGenWayEntity> findByParentId(Long parentId);
 }

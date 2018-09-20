@@ -7,13 +7,14 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface TransferKeywordService extends BaseService<TransferKeywordEntity, Integer> {
+
     /**
-     * 获取所有推广公司列表
+     * 获取所有关键词列表
      */
     List<TransferKeywordEntity> getAllKeywordList();
 
     /**
-     * 推广公司管理树数据
+     * 关键词管理树数据
      */
     HashMap<String, List<TransferKeywordEntity>> getRecursionTree(boolean showRoot);
 }

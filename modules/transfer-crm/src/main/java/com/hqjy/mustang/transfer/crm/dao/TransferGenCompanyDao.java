@@ -19,4 +19,9 @@ public interface TransferGenCompanyDao extends BaseDao<TransferGenCompanyEntity,
      * 获取所有推广公司列表
      */
     List<TransferGenCompanyEntity> getAllGenCompanyList();
+
+    /**
+     * 通过名称查询推广公司
+     */
+    TransferGenCompanyEntity findOneByName(String name);
 }
