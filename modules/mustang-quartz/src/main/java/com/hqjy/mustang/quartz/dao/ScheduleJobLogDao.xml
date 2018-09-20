@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.quartz.dao.ScheduleJobLogDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.mustang.quartz.entity.ScheduleJobLogEntity">
+        <id column="log_id" jdbcType="BIGINT" property="logId"/>
+        <result column="job_id" jdbcType="BIGINT" property="jobId"/>
+        <result column="bean_name" jdbcType="VARCHAR" property="beanName"/>
+        <result column="method_name" jdbcType="VARCHAR" property="methodName"/>
+        <result column="params" jdbcType="VARCHAR" property="params"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="error" jdbcType="VARCHAR" property="error"/>
+        <result column="times" jdbcType="INTEGER" property="times"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+        log_id, job_id, bean_name, method_name, params, status, error, times, create_time
+    </sql>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Where_SQL">
+        <where>
+            <if test="jobId != null and !&quot;&quot;.equals(jobId)">and job_id = #{jobId}</if>
+            <if test="beanName != null and !&quot;&quot;.equals(beanName)">and bean_name = #{beanName}</if>
+            <if test="methodName != null and !&quot;&quot;.equals(methodName)">and method_name = #{methodName}</if>
+            <if test="params != null and !&quot;&quot;.equals(params)">and params = #{params}</if>
+            <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+            <if test="error != null and !&quot;&quot;.equals(error)">and error = #{error}</if>
+            <if test="times != null and !&quot;&quot;.equals(times)">and times = #{times}</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+        </where>
+    </sql>
+
+    <!-- 插入一条记录 -->
+    <insert id="save" keyProperty="logId" useGeneratedKeys="true">
+        insert into schedule_job_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != jobId">job_id,</if>
+            <if test="null != beanName">bean_name,</if>
+            <if test="null != methodName">method_name,</if>
+            <if test="null != params">params,</if>
+            <if test="null != status">status,</if>
+            <if test="null != error">error,</if>
+            <if test="null != times">times,</if>
+            <if test="null != createTime">create_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != jobId">#{jobId},</if>
+            <if test="null != beanName">#{beanName},</if>
+            <if test="null != methodName">#{methodName},</if>
+            <if test="null != params">#{params},</if>
+            <if test="null != status">#{status},</if>
+            <if test="null != error">#{error},</if>
+            <if test="null != times">#{times},</if>
+            <if test="null != createTime">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <!-- 更新一条记录 -->
+    <update id="update">
+        update schedule_job_log
+        <set>
+            <if test="null != jobId">job_id = #{jobId},</if>
+            <if test="null != beanName">bean_name = #{beanName},</if>
+            <if test="null != methodName">method_name = #{methodName},</if>
+            <if test="null != params">params = #{params},</if>
+            <if test="null != status">status = #{status},</if>
+            <if test="null != error">error = #{error},</if>
+            <if test="null != times">times = #{times},</if>
+            <if test="null != createTime">create_time = #{createTime},</if>
+        </set>
+        where log_id = #{logId}
+    </update>
+
+    <!-- 删除给定主键的记录 -->
+    <delete id="delete">
+        delete
+        from schedule_job_log
+        where
+            log_id = #{logId}
+    </delete>
+
+    <!-- 多个主键批量删除记录 -->
+    <delete id="deleteBatch">
+        delete
+        from schedule_job_log
+        where
+        log_id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 多个实体批量删除记录 -->
+    <delete id="deleteList">
+        delete
+        from schedule_job_log
+        where
+        log_id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.logId}
+        </foreach>
+    </delete>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from schedule_job_log
+        where log_id = #{logId}
+    </select>
+
+    <!-- 查询多条 -->
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from schedule_job_log
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from schedule_job_log
+        <where>
+            <if test="jobId != null and !&quot;&quot;.equals(jobId)">and job_id = #{jobId}</if>
+            <if test="beanName != null and !&quot;&quot;.equals(beanName)">and bean_name like concat('%',#{beanName},'%')</if>
+            <if test="methodName != null and !&quot;&quot;.equals(methodName)">and method_name like concat('%',#{methodName},'%')</if>
+            <if test="params != null and !&quot;&quot;.equals(params)">and params like concat('%',#{params},'%')</if>
+            <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+            <if test="error != null and !&quot;&quot;.equals(error)">and error like concat('%',#{error},'%')</if>
+            <if test="times != null and !&quot;&quot;.equals(times)">and times = #{times}</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+        </where>
+    </select>
+
+    <!-- 查询记录数量 -->
+    <select id="count" resultType="int">
+        select
+        count(*)
+        from schedule_job_log
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!-- 查询记录是否存在 -->
+    <select id="exsit" resultType="boolean">
+        select
+        count(*)
+        from schedule_job_log
+        <include refid="Base_Where_SQL"/>
+    </select>
+
+
+</mapper>
