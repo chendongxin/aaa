@@ -4,38 +4,52 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
- * transfer_source 推广来源（平台）实体类
- *
+ * transfer_way_source 实体类
+ * 
  * @author : xyq
- * @date : 2018/09/14 11:19
+ * @date : 2018/09/17 12:04
  */
 @Data
-public class TransferSourceEntity implements Serializable {
+public class TransferWaySourceEntity implements Serializable {
     /**
-	 * 主键 source_id
+	 * 编号 id
+	 **/
+    private Long id;
+
+    /**
+	 * 推广方式id way_id
+	 **/
+    private Long wayId;
+
+    /**
+     * 推广方式名称
+     */
+    private String genWay;
+
+    /**
+     * 推广方式名称
+     */
+    private String wayName;
+
+    /**
+	 * 来源id source_id
 	 **/
     private Long sourceId;
 
     /**
-     * 主键 parent_id
+     * 推广平台名称
+     */
+    private String sourceName;
+
+    /**
+     * 排序号 seq
      **/
-    private Long parentId;
+    private Integer seq;
 
     /**
-	 * 来源名称 name
-	 **/
-    private String name;
-
-    /**
-	 * 电子邮件域名 email_domain
-	 **/
-    private String emailDomain;
-
-    /**
-	 * 状态( 0-正常 1-禁用) status
+	 * 状态,数据字典STATUS( 0-正常 1-禁用) status
 	 **/
     private Byte status;
 
@@ -68,16 +82,6 @@ public class TransferSourceEntity implements Serializable {
 	 * 更新时间 update_time
 	 **/
     private Date updateTime;
-
-    /**
-     * 子推广公司
-     */
-    private List<TransferSourceEntity> children;
-
-    /**
-     * 该推广方式下的推广平台
-     */
-    private List<TransferGenWayEntity> genWayList;
 
     private static final long serialVersionUID = 1L;
 }
