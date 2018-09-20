@@ -143,9 +143,9 @@
     select
 		<include refid="Base_Column_List" />
 	from transfer_gen_company
-	where parent_id = 1
 		<where>
-		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = 1 </if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
 		<if test="memo != null and !&quot;&quot;.equals(memo)">and memo = like concat('%',#{memo},'%')</if>

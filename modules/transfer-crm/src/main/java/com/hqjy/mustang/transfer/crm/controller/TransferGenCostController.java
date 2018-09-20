@@ -38,10 +38,10 @@ public class TransferGenCostController {
     @ApiOperation(value = "分页查询-推广费用", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "返回参数：【当前页:currPage】，【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
-            "【编号:id】,【部门ID:deptId】,【部门名称:name】,【推广公司ID:companyId】,【推广方式ID:wayId】\n" +
-            "【推广日期:genDay】,【人民币主动:initiativeMoney】,【人民币被动:passiveMoney】,【虚拟币主动:initiativeVirtual】\n" +
+            "【编号:id】,【赛道ID:proId】,【推广公司ID:companyId】,【部门ID:deptId】,【部门名称:deptName】,【来源平台ID:sourceId】\n" +
+            "【推广方式ID:wayId】,【推广日期:genDay】,【人民币主动:initiativeMoney】,【人民币被动:passiveMoney】,【虚拟币主动:initiativeVirtual】\n" +
             "【虚拟币被动:passiveVirtual】,【创建人ID:createUserId】,【创建人名称:createUserName】,【创建时间:createTime】\n" +
-            "【更新人ID:updateId】,【更新人名称:updateUserName】,【更新时间:updateTime】\n" +
+            "【更新人ID:updateUserId】,【更新人名称:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
             "{\n" +
             "  \"msg\": \"成功\",\n" +
@@ -51,9 +51,11 @@ public class TransferGenCostController {
             "    \"list\": [\n" +
             "      {\n" +
             "        \"id\": 1,\n" +
-            "        \"deptId\": 1,\n" +
-            "        \"deptName\": \"灵儿\",\n" +
+            "        \"proId\": 1,\n" +
             "        \"companyId\": 1,\n" +
+            "        \"deptId\": 1,\n" +
+            "        \"deptName\": \"广西校区\",\n" +
+            "        \"sourceId\": 1,\n" +
             "        \"wayId\": 1,\n" +
             "        \"genDay\": \"2018-09-06 17:19:24\",\n" +
             "        \"initiativeMoney\": 1000,\n" +
@@ -65,7 +67,7 @@ public class TransferGenCostController {
             "        \"createTime\": \"2018-09-06 17:19:24\",\n" +
             "        \"updateUserId\": 1,\n" +
             "        \"updateUserName\": \"灵儿\",\n" +
-            "        \"updateName\": \"2018-09-06 17:19:24\",\n" +
+            "        \"updateTime\": \"2018-09-06 17:19:24\",\n" +
             "      }\n" +
             "    ],\n" +
             "    \"pageSize\": 10,\n" +
@@ -86,10 +88,39 @@ public class TransferGenCostController {
     /**
      * 新增推广费用
      */
-    @ApiOperation(value = "新增推广费用", notes = "新增推广费用")
+    @ApiOperation(value = "新增推广费用", notes = "请求参数：\n" +
+            "参数说明：\n" +
+            "【赛道ID:proId】,【推广公司ID:companyId】,【部门ID:deptId】,【推广来源ID:sourceId】,【推广方式ID:wayId】\n" +
+            "【推广时间:genDay】,【人民币主动:initiativeMoney】,【人民币被动:passiveMoney】,【虚拟币主动:initiativeVirtual】\n" +
+            "【虚拟币被动:passiveVirtual】,【创建人ID:createUserId】,【创建人名称:createUserName】,【创建时间:createTime】\n" +
+            "【更新人ID:updateUserId】,【更新人名称:updateUserName】,【更新时间:updateTime】\n" +
+            "示例：\n" +
+            "{\n" +
+            "        \"proId\": 1,\n" +
+            "        \"companyId\": 1,\n" +
+            "        \"deptId\": 1,\n" +
+            "        \"sourceId\": 1,\n" +
+            "        \"wayId\": 1,\n" +
+            "        \"genDay\": \"2018-09-06 17:19:24\",\n" +
+            "        \"initiativeMoney\": 1000,\n" +
+            "        \"passiveMoney\": 800,\n" +
+            "        \"initiativeVirtual\": 100,\n" +
+            "        \"passiveVirtual\": 100,\n" +
+            "        \"createUserId\": 1,\n" +
+            "        \"createUserName\": \"灵儿\",\n" +
+            "        \"createTime\": \"2018-09-06 17:19:24\",\n" +
+            "        \"updateUserId\": 1,\n" +
+            "        \"updateUserName\": \"灵儿\",\n" +
+            "        \"updateTime\": \"2018-09-06 17:19:24\",\n" +
+            "}\n" +
+            "新增成功响应数据：\n" +
+            "{\n" +
+            "  \"msg\": \"成功\",\n" +
+            "  \"code\": 0\n" +
+            "}")
     @ApiImplicitParam(paramType = "body", name = "TransferGenCostEntity", value = "推广费用信息对象", required = true, dataType = "TransferGenCostEntity")
     @SysLog("新增推广费用")
-    @PostMapping("/save")
+    @PostMapping
     public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferGenCostEntity transferGenCostEntity) {
         int count = transferGenCostService.save(transferGenCostEntity);
         if (count > 0) {
@@ -99,14 +130,21 @@ public class TransferGenCostController {
     }
 
     /**
+     * 获取所有赛道
+     */
+    /**
+     * 获取所有部门
+     */
+
+    /**
      * 删除推广费用
      */
     @ApiOperation(value = "删除推广费用", notes = "删除推广费用：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "id", value = "推广费用ID", required = true, dataType = "Long")
     @SysLog("删除推广费用")
-    @DeleteMapping("/{id}")
-    public R delete(@PathVariable("id") Long id) {
-        int count = transferGenCostService.delete(id);
+    @DeleteMapping("/{ids}")
+    public R delete(@PathVariable("ids") Long[] ids) {
+        int count = transferGenCostService.deleteBatch(ids);
         if (count > 0) {
             return R.ok();
         }
