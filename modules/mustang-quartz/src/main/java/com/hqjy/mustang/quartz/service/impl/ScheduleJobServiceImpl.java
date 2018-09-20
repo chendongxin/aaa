@@ -61,8 +61,11 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int update(ScheduleJobEntity scheduleJob) {
-        ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
-        return baseDao.update(scheduleJob);
+        int count = baseDao.update(scheduleJob);
+        if (count > 0) {
+            ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
+        }
+        return count;
     }
 
     @Override
@@ -101,4 +104,13 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
         updateBatch(jobIds, Constant.ScheduleStatus.NORMAL.getValue());
     }
 
+    @Override
+    public int delete(Long jobId) {
+        //删除数据
+        int count = super.delete(jobId);
+        if (count > 0) {
+            ScheduleUtils.deleteScheduleJob(scheduler, jobId);
+        }
+        return count;
+    }
 }

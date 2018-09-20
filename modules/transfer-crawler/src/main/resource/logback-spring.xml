@@ -4,6 +4,8 @@
 
     <contextName>mustang-log</contextName>
 
+    <logger name="com.hqjy.mustang.transfer.crawler.dao.TransferResumeDao.save" level="info"/>
+
     <!-- 开发、测试环境 -->
     <springProfile name="dev,test">
         <logger name="org.springframework.web" level="INFO"/>

@@ -1,11 +1,13 @@
 package com.hqjy.mustang.transfer.crawler.api;
 
 import com.hqjy.mustang.common.base.constant.Constant;
-import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
 import com.hqjy.mustang.transfer.crawler.service.TrasferResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -44,5 +46,4 @@ public class TrasferResumeApi {
                 });
         return trasferResumeService.start(beforeDate);
     }
-
 }

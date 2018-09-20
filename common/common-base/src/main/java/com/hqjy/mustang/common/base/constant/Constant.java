@@ -1,6 +1,8 @@
 package com.hqjy.mustang.common.base.constant;
 
 
+import com.hqjy.mustang.common.base.utils.StringUtils;
+
 /**
  * @author XYQ
  * 常量
@@ -263,6 +265,47 @@ public class Constant {
         public int getValue() {
             return value;
         }
+    }
+
+    /**
+     * 学历
+     */
+    public enum Education {
+        NONE("无"),
+        PRIMARY("小学"),
+        MIDDLE("初中"),
+        HIGH("高中"),
+        COLLEGE("专科,大专"),
+        UNDERGRADUATE("本科"),
+        MASTER("硕士"),
+        DOCTORAL("博士");
+
+        private String value;
+
+        Education(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        /**
+         * 获取学历
+         */
+        public String handleEducationName(String educationName) {
+            if (StringUtils.isNotEmpty(educationName)) {
+                for (Constant.Education e : Constant.Education.values()) {
+                    for (String s : e.getValue().split(",")) {
+                        if (educationName.contains(s)) {
+                            return e.getValue();
+                        }
+                    }
+                }
+            }
+            return Constant.Education.NONE.getValue();
+        }
+
     }
 
 }

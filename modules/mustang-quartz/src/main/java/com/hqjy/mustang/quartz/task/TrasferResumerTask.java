@@ -16,9 +16,9 @@ public class TrasferResumerTask {
     private TrasferResumeApiService trasferResumeApiService;
 
     /**
-     * 简历抓取任务
+     * 简历抓取任务，指定时间之前
      */
-    public void resumeStart(String hourStr) {
+    public void resumeStartBefor(String hourStr) {
         boolean result = trasferResumeApiService.start(Integer.valueOf(hourStr));
         if (result) {
             log.info("简历抓取任务执行成功，参数为：" + hourStr);
