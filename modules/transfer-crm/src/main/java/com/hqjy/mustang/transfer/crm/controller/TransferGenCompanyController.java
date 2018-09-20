@@ -10,7 +10,6 @@ import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCompanySourceDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCompanyEntity;
-import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCompanySourceService;
 import com.hqjy.mustang.transfer.crm.service.TransferGenCompanyService;
 import com.hqjy.mustang.transfer.crm.service.TransferSourceService;
@@ -246,7 +245,7 @@ public class TransferGenCompanyController {
      * 获取不属于指定公司的推广平台
      */
     @GetMapping("/source/get/{companyId}")
-    @ApiOperation(value = "获取推广平台接口", notes = "请求参数说明")
+    @ApiOperation(value = "获取不属于指定公司的推广平台", notes = "请求参数说明")
     public R listPage(@PathVariable("companyId") Long companyId) {
         return R.ok(transferSourceService.findNotByCompanyId(companyId));
     }
@@ -255,7 +254,7 @@ public class TransferGenCompanyController {
      * 获取所有部门列表
      */
     @GetMapping(value = "/dept")
-    @ApiOperation(value = "获取部门接口", notes = "请求参数说明")
+    @ApiOperation(value = "获取所有部门接口", notes = "请求参数说明")
     public R listPageDept() {
         return R.ok(sysDeptServiceFeign.getAllDept());
     }

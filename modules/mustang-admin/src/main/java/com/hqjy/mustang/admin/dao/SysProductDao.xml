@@ -148,6 +148,13 @@
 	from sys_product
 		<include refid="Base_Where_SQL" />
   </select>
+
+	<!-- 所有部门数据列表 -->
+	<select id="findAllProductList" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from sys_product
+	</select>
   
 
 </mapper>

@@ -1,7 +1,6 @@
 package com.hqjy.mustang.admin.api;
 
-
-import com.hqjy.mustang.admin.service.SysDeptService;
+import com.hqjy.mustang.admin.service.SysProductService;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.R;
 import io.swagger.annotations.ApiOperation;
@@ -12,24 +11,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @author xyq
- * @date create on 2018/9/17
+ * @author gmm
+ * @date create on 2018/9/20
  */
 @RestController
 @RequestMapping(Constant.API_PATH)
 @Slf4j
-public class SysDeptApi {
+public class SysProductApi {
 
     @Autowired
-    private SysDeptService sysDeptService;
+    private SysProductService sysProductService;
 
     /**
-     * 获取所有部门
+     * 获取所有赛道
      */
-    @ApiOperation(value = "获取所有部门信息", notes = "获取所有部门信息")
-    @GetMapping(value = "/dept/all")
-    public R getAllDept() {
-        return R.ok(sysDeptService.getAllDeptList());
+    @ApiOperation(value = "获取所有赛道信息", notes = "获取所有赛道信息")
+    @GetMapping(value = "/product/all")
+    public R getAllProduct() {
+        return R.ok(sysProductService.getAllProductList());
     }
-}
 
+}
