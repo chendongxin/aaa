@@ -56,9 +56,9 @@ public class TrasferEmailController {
             "}")
     @GetMapping("/{id}")
     public R info(@PathVariable("id") Long id) {
-        TransferEmailEntity roleEntity = trasferEmailService.findOne(id);
-        if (roleEntity != null) {
-            return R.ok(roleEntity);
+        TransferEmailEntity emailEntity = trasferEmailService.findOne(id);
+        if (emailEntity != null) {
+            return R.ok(emailEntity);
         }
         return R.error(StatusCode.DATABASE_SELECT_FAILURE);
     }
@@ -123,8 +123,8 @@ public class TrasferEmailController {
             "        \"userName\": \"admin\"\n" +
             "    }")
     @PostMapping
-    public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferEmailEntity role) {
-        int count = trasferEmailService.save(role);
+    public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferEmailEntity email) {
+        int count = trasferEmailService.save(email);
         if (count > 0) {
             return R.ok();
         }
@@ -149,8 +149,8 @@ public class TrasferEmailController {
             "        \"userName\": \"admin\"\n" +
             "    }")
     @PutMapping
-    public R update(@Validated(RestfulValid.PUT.class) @RequestBody TransferEmailEntity role) {
-        int count = trasferEmailService.update(role);
+    public R update(@Validated(RestfulValid.PUT.class) @RequestBody TransferEmailEntity email) {
+        int count = trasferEmailService.update(email);
         if (count > 0) {
             return R.ok();
         }
@@ -160,7 +160,7 @@ public class TrasferEmailController {
     /**
      * 删除邮箱配置
      */
-    @ApiOperation(value = "删除邮箱配置", notes = "支持单个和多个删除，主键用逗号分割\n示例:\t/1,2,3")
+    @ApiOperation(value = "删除邮箱配置", notes = "只支持单个")
     @DeleteMapping("/{id}")
     public R delete(@PathVariable("id") Long id) {
         int count = trasferEmailService.delete(id);

@@ -25,7 +25,7 @@
         <module>modules</module>
     </modules>
 
-    <name>transfer</name>
+    <name>mustang-transfer</name>
     <description>transfer for Spring Boot</description>
 
     <parent>
