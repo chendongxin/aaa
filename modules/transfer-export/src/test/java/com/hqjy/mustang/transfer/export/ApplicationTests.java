@@ -37,12 +37,4 @@ public class ApplicationTests {
         }
     }
 
-    @Test
-    public void testPage() {
-        PageParams queryParams = new PageParams();
-        List<PromotionReportData> list = new ArrayList<>();
-        PageUtil<PromotionReportData> pageBean = new PageUtil<>(queryParams, list);
-        System.out.println(R.result(JSON.toJSONString(pageBean)));
-    }
-
 }
