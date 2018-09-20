@@ -140,7 +140,7 @@ public class SchoolShiroConfig extends AuthShiroConfig {
                 }
             }
             ResponseUtils.response(response, HttpStatus.FORBIDDEN.value(), R.error(StatusCode.TOKEN_FAULT));
-            log.debug("userToken 验证失败 ：" + userToken);
+            log.debug("URL:{},  userToken 验证失败:{}", ((HttpServletRequest) request).getRequestURL(), userToken);
             return false;
         }
     }

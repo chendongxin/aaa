@@ -132,6 +132,7 @@ shiro:
       - /actuator/**
       - /doc
       - /swagger-ui.html
+      - /csrf
       - /webjars/**
       - /swagger-resources/**
       - /v2/api-docs
