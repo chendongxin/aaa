@@ -61,7 +61,7 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
 
         //3、微信存在，保存微信
         if (StringUtils.isNotEmpty(weChat)) {
-            result = save(result, proId, customerId, WEI_XIN.getValue(), weChat, isPrimary, createId);
+            result = save(result, proId, customerId, WE_CHAT.getValue(), weChat, isPrimary, createId);
             if (isPrimary && !result.getContacStatus()) {
                 //如果是微信主联系，状态为false，说明重单。直接返回结果
                 return result;

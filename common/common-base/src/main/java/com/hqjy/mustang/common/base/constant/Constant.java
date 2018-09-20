@@ -37,10 +37,9 @@ public class Constant {
     public static final String API_PATH = "/api/private/";
     public static final String API_PATH_ANON = API_PATH + "**";
 
-    public static final String CODE="code";
-    public static final String MSG="msg";
-    public static final String RESULT="result";
-
+    public static final String CODE = "code";
+    public static final String MSG = "msg";
+    public static final String RESULT = "result";
 
 
     /**
@@ -211,6 +210,35 @@ public class Constant {
         public int getValue() {
             return value;
         }
+    }
+
+    /**
+     * 性别枚举
+     */
+    public enum Gender {
+
+        WOMEN(2, "女"),
+
+        UNKNOWN(0, "未知"),
+
+        MAN(1, "男");
+
+        private Integer value;
+        private String code;
+
+        Gender(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
     }
 
 }

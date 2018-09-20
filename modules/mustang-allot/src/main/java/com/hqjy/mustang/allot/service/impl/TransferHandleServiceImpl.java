@@ -6,14 +6,13 @@ import com.hqjy.mustang.allot.exception.MqException;
 import com.hqjy.mustang.allot.feign.SysMessageApiService;
 import com.hqjy.mustang.allot.model.dto.ContactSaveResultDTO;
 import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerContactEntity;
-import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerRepeatEntity;
 import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerEntity;
+import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerRepeatEntity;
 import com.hqjy.mustang.allot.model.entity.TransferAllotProcessEntity;
 import com.hqjy.mustang.allot.service.AbstractAllotService;
 import com.hqjy.mustang.allot.service.AbstractHandleService;
 import com.hqjy.mustang.allot.service.TransferAllotContactService;
 import com.hqjy.mustang.common.base.constant.ConfigConstant;
-import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.model.crm.MessageSendVO;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
@@ -93,8 +92,8 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setCreateUserId(Optional.ofNullable(customerEntity.getCreateUserId()).orElse(NO_CREATE_ID.getValue()));
         // 如果没有姓名，设置为未知
         customerEntity.setName(StringUtils.isNotEmpty(customerEntity.getName()) ? customerEntity.getName() : "未知");
-        // 状态默认潜在
-        customerEntity.setStatus(Constant.CustomerStatus.POTENTIAL.getValue());
+        // 状态默认潜在 TODO
+        //customerEntity.setStatus(Constant.CustomerStatus.POTENTIAL.getValue());
         // 推广方式
         customerEntity.setGetWay(0);
         // 设置分配时间为当前时间
@@ -196,13 +195,13 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
             StringBuilder content = new StringBuilder();
             if (contactEntity != null) {
                 if (PHONE.equals(contactEntity.getType())) {
-                    content.append(PHONE.getLabel());
+                    content.append(PHONE.getValue());
                 } else if (LAND_LINE.equals(contactEntity.getType())) {
-                    content.append(PHONE.getLabel());
-                } else if (WEI_XIN.equals(contactEntity.getType())) {
-                    content.append(WEI_XIN.getLabel());
+                    content.append(PHONE.getValue());
+                } else if (WE_CHAT.equals(contactEntity.getType())) {
+                    content.append(WE_CHAT.getValue());
                 } else if (QQ.equals(contactEntity.getType())) {
-                    content.append(QQ.getLabel());
+                    content.append(QQ.getValue());
                 }
                 content.append(":").append(contactEntity.getDetail());
             }
