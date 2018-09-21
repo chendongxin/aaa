@@ -12,4 +12,9 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface TransferCustomerDetailDao extends BaseDao<TransferCustomerDetailEntity, Long> {
+
+    /**
+     * 根据客户ID查询一条记录
+     */
+    TransferCustomerDetailEntity getCustomerDetailByCustomerId(Long customerId);
 }

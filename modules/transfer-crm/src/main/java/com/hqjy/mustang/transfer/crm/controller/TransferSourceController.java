@@ -159,6 +159,7 @@ public class TransferSourceController {
     /**
      * 获取所有的来源平台
      */
+    @ApiOperation(value = "获取所有的来源平台", notes = "获取所有的来源平台")
     @GetMapping("/all")
     public R getAllSource() {
         return R.ok(transferSourceService.getAllSourceList());

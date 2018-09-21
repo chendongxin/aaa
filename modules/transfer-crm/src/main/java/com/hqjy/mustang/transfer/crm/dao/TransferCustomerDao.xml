@@ -11,7 +11,7 @@
     <result column="source_id" jdbcType="BIGINT" property="sourceId" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="get_way" jdbcType="TINYINT" property="getWay" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />

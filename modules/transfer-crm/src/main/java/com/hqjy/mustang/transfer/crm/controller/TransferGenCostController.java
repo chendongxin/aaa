@@ -6,6 +6,7 @@ import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
+import com.hqjy.mustang.transfer.crm.feign.SysProductServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCostEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferGenCostService;
 import io.swagger.annotations.Api;
@@ -31,6 +32,8 @@ public class TransferGenCostController {
 
     @Autowired
     private TransferGenCostService transferGenCostService;
+    @Autowired
+    private SysProductServiceFeign sysProductServiceFeign;
 
     /**
      * 分页查询推广费用
@@ -132,9 +135,11 @@ public class TransferGenCostController {
     /**
      * 获取所有赛道
      */
-    /**
-     * 获取所有部门
-     */
+    @GetMapping(value = "/product")
+    @ApiOperation(value = "获取所有赛道接口", notes = "请求参数说明")
+    public R listPageProduct() {
+        return R.ok(sysProductServiceFeign.getAllProduct());
+    }
 
     /**
      * 删除推广费用

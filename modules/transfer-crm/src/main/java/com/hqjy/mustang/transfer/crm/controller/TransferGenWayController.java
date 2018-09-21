@@ -211,6 +211,7 @@ public class TransferGenWayController {
     /**
      * 获取指定来源平台的推广方式
      */
+    @ApiOperation(value = "获取指定来源平台的推广方式", notes = "获取指定来源平台的推广方式")
     @GetMapping("/source/{sourceId}")
     public R getWayBySourceId(@PathVariable("sourceId") Long sourceId) {
         return R.ok(transferGenWayService.findBySourceId(sourceId));
@@ -219,6 +220,7 @@ public class TransferGenWayController {
     /**
      * 获取不属于指定来源平台的推广方式
      */
+    @ApiOperation(value = "获取不属于指定来源平台的推广方式", notes = "获取不属于指定来源平台的推广方式")
     @GetMapping("/source/not/{sourceId}")
     public R listPage(@PathVariable("sourceId") Long sourceId) {
         return R.ok(transferGenWayService.findNotBySourceId(sourceId));

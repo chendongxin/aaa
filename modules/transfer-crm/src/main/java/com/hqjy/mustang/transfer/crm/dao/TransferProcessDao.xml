@@ -10,7 +10,7 @@
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="active" jdbcType="BIGINT" property="active" />
+    <result column="active" jdbcType="TINYINT" property="active" />
     <result column="follow_count" jdbcType="BIGINT" property="followCount" />
     <result column="last_follow_id" jdbcType="BIGINT" property="lastFollowId" />
     <result column="memo" jdbcType="VARCHAR" property="memo" />
@@ -204,6 +204,20 @@
 	from transfer_process
 		<include refid="Base_Where_SQL" />
   </select>
+
+
+	<select id="getProcessByCustomerId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from transfer_process
+		where customer_id = #{customerId} and active=false
+	</select>
+
+	<update id="disableProcessActive">
+        update transfer_process
+        set active = true
+        where process_id = #{processId} and active=false
+    </update>
   
 
 </mapper>

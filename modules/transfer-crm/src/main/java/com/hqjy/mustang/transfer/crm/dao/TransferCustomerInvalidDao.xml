@@ -6,7 +6,7 @@
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerInvalidEntity">
     <id column="invalid_id" jdbcType="BIGINT" property="invalidId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="memo" jdbcType="VARCHAR" property="memo" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />

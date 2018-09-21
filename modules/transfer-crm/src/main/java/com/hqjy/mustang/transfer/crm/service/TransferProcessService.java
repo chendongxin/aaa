@@ -1,17 +1,9 @@
-package com.hqjy.mustang.transfer.crm.dao;
+package com.hqjy.mustang.transfer.crm.service;
 
-import com.hqjy.mustang.common.base.base.BaseDao;
+import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
-import org.apache.ibatis.annotations.Mapper;
 
-/**
- * transfer_process 持久化层
- * 
- * @author : xyq
- * @date : 2018/09/07 10:16
- */
-@Mapper
-public interface TransferProcessDao extends BaseDao<TransferProcessEntity, Long> {
+public interface TransferProcessService extends BaseService<TransferProcessEntity, Long> {
 
     /**
      * 获取当前流程为激活状态的流程数据
@@ -22,7 +14,7 @@ public interface TransferProcessDao extends BaseDao<TransferProcessEntity, Long>
     TransferProcessEntity getProcessByCustomerId(Long customerId);
 
     /**
-     * 修改原来激活状态的流程为过期状态
+     * 设置客户流程过期
      *
      * @param entity 流程对象
      * @return 退回结果

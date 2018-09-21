@@ -1,9 +1,11 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * transfer_customer 客户主表实体类
@@ -12,7 +14,9 @@ import java.util.Date;
  * @date : 2018/09/14 11:19
  */
 @Data
+@Accessors(chain = true)
 public class TransferCustomerEntity implements Serializable {
+
     /**
 	 * 客户编号 customer_id
 	 **/
@@ -51,7 +55,7 @@ public class TransferCustomerEntity implements Serializable {
     /**
 	 * 客户状态,BIZ_STATUS(0-潜在，1-(失败)有效，2-(失败)无效，3-预约，4-成交) status
 	 **/
-    private Byte status;
+    private Integer status;
 
     /**
 	 * 推广方式：见数据字典GET_WAY枚举(1-主动获取，2-被动获取) get_way
@@ -162,6 +166,11 @@ public class TransferCustomerEntity implements Serializable {
 	 * 更新时间 update_time
 	 **/
     private Date updateTime;
+
+    /**
+     * 客户详细资料
+     */
+    private TransferCustomerDetailEntity customerDetail;
 
     private static final long serialVersionUID = 1L;
 }
