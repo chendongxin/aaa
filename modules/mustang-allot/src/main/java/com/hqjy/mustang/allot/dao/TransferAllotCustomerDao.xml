@@ -101,10 +101,10 @@
             <if test="null != lastUserName">last_user_name,</if>
             <if test="null != genUserId">gen_user_id,</if>
             <if test="null != genUserName">gen_user_name,</if>
-            <if test="null != phone">phone,</if>
+            <!--<if test="null != phone">phone,</if>
             <if test="null != weChat">we_chat,</if>
             <if test="null != qq">qq,</if>
-            <if test="null != landLine">land_line,</if>
+            <if test="null != landLine">land_line,</if>-->
             <if test="null != createUserId">create_user_id,</if>
             <if test="null != createUserName">create_user_name,</if>
             <if test="null != createTime">create_time,</if>
@@ -133,10 +133,10 @@
             <if test="null != lastUserName">#{lastUserName},</if>
             <if test="null != genUserId">#{genUserId},</if>
             <if test="null != genUserName">#{genUserName},</if>
-            <if test="null != phone">#{phone},</if>
+            <!--<if test="null != phone">#{phone},</if>
             <if test="null != weChat">#{weChat},</if>
             <if test="null != qq">#{qq},</if>
-            <if test="null != landLine">#{landLine},</if>
+            <if test="null != landLine">#{landLine},</if>-->
             <if test="null != createUserId">#{createUserId},</if>
             <if test="null != createUserName">#{createUserName},</if>
             <if test="null != createTime">#{createTime},</if>

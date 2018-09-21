@@ -63,7 +63,7 @@ public class ScheduleJobServiceImpl extends BaseServiceImpl<ScheduleJobDao, Sche
     public int update(ScheduleJobEntity scheduleJob) {
         int count = baseDao.update(scheduleJob);
         if (count > 0) {
-            ScheduleUtils.updateScheduleJob(scheduler, scheduleJob);
+            ScheduleUtils.updateScheduleJob(scheduler, baseDao.findOne(scheduleJob.getJobId()));
         }
         return count;
     }

@@ -13,8 +13,7 @@
         <result column="school" jdbcType="VARCHAR" property="school"/>
         <result column="graduate_date" jdbcType="DATE" property="graduateDate"/>
         <result column="major" jdbcType="VARCHAR" property="major"/>
-        <result column="education_id" jdbcType="BIGINT" property="educationId"/>
-        <result column="education_name" jdbcType="VARCHAR" property="educationName"/>
+        <result column="education" jdbcType="VARCHAR" property="education"/>
         <result column="apply_type" jdbcType="VARCHAR" property="applyType"/>
         <result column="apply_key" jdbcType="VARCHAR" property="applyKey"/>
         <result column="position_applied" jdbcType="VARCHAR" property="positionApplied"/>
@@ -31,7 +30,7 @@
 
     <!-- 表基本列 -->
     <sql id="Base_Column_List">
-        id, customer_id, age, sex, address, email, school, graduate_date, major, education_id, education_name, apply_type,
+        id, customer_id, age, sex, address, email, school, graduate_date, major, education, apply_type,
         apply_key, position_applied, working_place, work_experience, note, create_user_id,
         create_user_name, create_time, update_user_id, update_user_name, update_time
     </sql>
@@ -47,8 +46,7 @@
             <if test="school != null and !&quot;&quot;.equals(school)">and school = #{school}</if>
             <if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
             <if test="major != null and !&quot;&quot;.equals(major)">and major = #{major}</if>
-            <if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
-            <if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name = #{educationName}</if>
+            <if test="education != null and !&quot;&quot;.equals(education)">and education = #{education}</if>
             <if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type = #{applyType}</if>
             <if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key = #{applyKey}</if>
             <if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied = #{positionApplied}</if>
@@ -77,8 +75,7 @@
             <if test="null != school">school,</if>
             <if test="null != graduateDate">graduate_date,</if>
             <if test="null != major">major,</if>
-            <if test="null != educationId">education_id,</if>
-            <if test="null != educationName">education_name,</if>
+            <if test="null != education">education,</if>
             <if test="null != applyType">apply_type,</if>
             <if test="null != applyKey">apply_key,</if>
             <if test="null != positionApplied">position_applied,</if>
@@ -103,8 +100,7 @@
             <if test="null != school">#{school},</if>
             <if test="null != graduateDate">#{graduateDate},</if>
             <if test="null != major">#{major},</if>
-            <if test="null != educationId">#{educationId},</if>
-            <if test="null != educationName">#{educationName},</if>
+            <if test="null != education">#{education},</if>
             <if test="null != applyType">#{applyType},</if>
             <if test="null != applyKey">#{applyKey},</if>
             <if test="null != positionApplied">#{positionApplied},</if>
@@ -133,8 +129,7 @@
             <if test="null != school">school = #{school},</if>
             <if test="null != graduateDate">graduate_date = #{graduateDate},</if>
             <if test="null != major">major = #{major},</if>
-            <if test="null != educationId">education_id = #{educationId},</if>
-            <if test="null != educationName">education_name = #{educationName},</if>
+            <if test="null != education">education = #{education},</if>
             <if test="null != applyType">apply_type = #{applyType},</if>
             <if test="null != applyKey">apply_key = #{applyKey},</if>
             <if test="null != positionApplied">position_applied = #{positionApplied},</if>
@@ -212,8 +207,7 @@
             <if test="school != null and !&quot;&quot;.equals(school)">and school like concat('%',#{school},'%')</if>
             <if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
             <if test="major != null and !&quot;&quot;.equals(major)">and major like concat('%',#{major},'%')</if>
-            <if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
-            <if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name like concat('%',#{educationName},'%')</if>
+            <if test="education != null and !&quot;&quot;.equals(education)">and education like concat('%',#{education},'%')</if>
             <if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type like concat('%',#{applyType},'%')</if>
             <if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key like concat('%',#{applyKey},'%')</if>
             <if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied like concat('%',#{positionApplied},'%')</if>
@@ -258,8 +252,7 @@
             <if test="null != school">school,</if>
             <if test="null != graduateDate">graduate_date,</if>
             <if test="null != major">major,</if>
-            <if test="null != educationId">education_id,</if>
-            <if test="null != educationName">education_name,</if>
+            <if test="null != education">education,</if>
             <if test="null != applyType">apply_type,</if>
             <if test="null != applyKey">apply_key,</if>
             <if test="null != positionApplied">position_applied,</if>
@@ -284,8 +277,7 @@
             <if test="null != school">#{school},</if>
             <if test="null != graduateDate">#{graduateDate},</if>
             <if test="null != major">#{major},</if>
-            <if test="null != educationId">#{educationId},</if>
-            <if test="null != educationName">#{educationName},</if>
+            <if test="null != education">#{education},</if>
             <if test="null != applyType">#{applyType},</if>
             <if test="null != applyKey">#{applyKey},</if>
             <if test="null != positionApplied">#{positionApplied},</if>

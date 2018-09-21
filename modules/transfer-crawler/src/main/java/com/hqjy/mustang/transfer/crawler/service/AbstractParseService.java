@@ -24,7 +24,8 @@ public abstract class AbstractParseService {
     public static Float handleWorkExperience(String educationName) {
         try {
             if (StringUtils.isNotEmpty(educationName)) {
-                educationName = educationName.replaceAll("一", "1")
+                educationName = educationName
+                        .replaceAll("一", "1")
                         .replaceAll("二", "2")
                         .replaceAll("三", "3")
                         .replaceAll("四", "4")

@@ -19,6 +19,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class TqApiServiceImpl implements TqApiService {
-    @Autowired
+    @Resource(name = "openRestTemplate")
     private RestTemplate restTemplate;
 
     /**

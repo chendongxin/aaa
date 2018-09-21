@@ -275,7 +275,7 @@ public class Constant {
         PRIMARY("小学"),
         MIDDLE("初中"),
         HIGH("高中"),
-        COLLEGE("专科,大专"),
+        COLLEGE("大专"),
         UNDERGRADUATE("本科"),
         MASTER("硕士"),
         DOCTORAL("博士");
