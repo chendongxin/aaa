@@ -4,8 +4,9 @@
   
   <!-- 实体映射 -->
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerContactEntity">
-    <id column="contact_id" jdbcType="INTEGER" property="contactId" />
-    <result column="customer_id" jdbcType="INTEGER" property="customerId" />
+    <id column="contact_id" jdbcType="BIGINT" property="contactId" />
+    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+	<result column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="type" jdbcType="INTEGER" property="type" />
     <result column="detail" jdbcType="VARCHAR" property="detail" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
@@ -18,7 +19,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    contact_id, customer_id, type, detail, create_user_id, create_user_name, create_time, 
+    contact_id, customer_id, pro_id, type, detail, create_user_id, create_user_name, create_time,
     update_user_id, update_user_name, update_time
   </sql>
   
@@ -26,6 +27,7 @@
   <sql id="Base_Where_SQL">
     <where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
 		<if test="type != null and !&quot;&quot;.equals(type)">and type = #{type}</if>
 		<if test="detail != null and !&quot;&quot;.equals(detail)">and detail = #{detail}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
@@ -42,6 +44,7 @@
     insert into transfer_customer_contact
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != customerId">customer_id, </if>
+			<if test="null != proId">pro_id, </if>
 			<if test="null != type">type, </if>
 			<if test="null != detail">detail, </if>
 			<if test="null != createUserId">create_user_id, </if>
@@ -54,6 +57,7 @@
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != customerId">#{customerId}, </if>
+			<if test="null != proId">#{proId}, </if>
 			<if test="null != type">#{type}, </if>
 			<if test="null != detail">#{detail}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
@@ -70,6 +74,7 @@
     update transfer_customer_contact 
 		<set>
 			<if test="null != customerId">customer_id = #{customerId}, </if>
+			<if test="null != proId">pro_id = #{proId}, </if>
 			<if test="null != type">type = #{type}, </if>
 			<if test="null != detail">detail = #{detail}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
@@ -135,6 +140,7 @@
 	from transfer_customer_contact
 		<where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
 		<if test="type != null and !&quot;&quot;.equals(type)">and type = #{type}</if>
 		<if test="detail != null and !&quot;&quot;.equals(detail)">and detail like concat('%',#{detail},'%')</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
@@ -161,6 +167,14 @@
 	from transfer_customer_contact
 		<include refid="Base_Where_SQL" />
   </select>
+
+	<!-- 根据联系方式和详情，查询具体信息 @author HSS 2018-06-25 -->
+	<select id="findOneByDetail" resultMap="BaseResultMap">
+		select
+			<include refid="Base_Column_List"/>
+		from transfer_customer_contact
+		where type = #{type} and detail = #{detail}
+	</select>
   
 
 </mapper>

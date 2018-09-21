@@ -241,4 +241,39 @@ public class Constant {
 
     }
 
+    /**
+     * 客户状态
+     */
+    public enum CustomerStatus {
+
+        FAILED_VALID(1, "有效失败"),
+
+        FAILED_INVALID(2, "无效失败");
+
+        private Integer value;
+
+        private String code;
+
+        CustomerStatus(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+    }
+
 }

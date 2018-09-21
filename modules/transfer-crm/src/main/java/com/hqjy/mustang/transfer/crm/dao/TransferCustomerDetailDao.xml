@@ -250,5 +250,13 @@
         <include refid="Base_Where_SQL" />
     </select>
 
+    <select id="getCustomerDetailByCustomerId" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List" />
+        from transfer_customer_detail
+        where
+          customer_id = #{customerId}
+    </select>
+
 
 </mapper>
