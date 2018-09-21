@@ -1,23 +1,10 @@
 package com.hqjy.mustang.admin.api;
 
-import com.hqjy.mustang.admin.model.entity.SysConfigEntity;
-import com.hqjy.mustang.admin.model.entity.SysConfigInfoEntity;
 import com.hqjy.mustang.admin.service.SysConfigService;
-import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.constant.Constant;
-import com.hqjy.mustang.common.base.constant.StatusCode;
-import com.hqjy.mustang.common.base.utils.PageInfo;
-import com.hqjy.mustang.common.base.utils.PageQuery;
-import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.common.base.validator.RestfulValid;
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
 
 /**
  * 系统配置
@@ -39,4 +26,14 @@ public class SysConfigApi {
     public Object getInfoList(@PathVariable("code") String code) {
         return sysConfigService.getConfig(code);
     }
+
+    /**
+     * 根据code获取系统配置信息
+     */
+    @ApiOperation(value = "根据code获取系统配置信息", notes = "根据code获取系统配置信息")
+    @GetMapping(value = "/get/config")
+    public String getConfig(String code) {
+        return sysConfigService.getConfig(code);
+    }
+
 }

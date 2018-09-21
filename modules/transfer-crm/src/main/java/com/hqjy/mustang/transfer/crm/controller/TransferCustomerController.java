@@ -7,15 +7,19 @@ import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerTransferDTO;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerUpDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerDetailService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 
@@ -281,6 +285,23 @@ public class TransferCustomerController {
         } catch (Exception e) {
             return R.error("客户资料修改异常：" + e.getMessage());
         }
+    }
+
+    @ApiOperation(value = "导入客户列表", notes = "请求参数方式：multipart/form-data,支持多参数类型请求")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "proId", paramType = "query", value = "赛道ID", dataType = "Long"),
+            @ApiImplicitParam(name = "companyId", paramType = "query", value = "推广公司ID", dataType = "Long"),
+            @ApiImplicitParam(name = "deptId", paramType = "query", value = "部门ID", dataType = "Long"),
+            @ApiImplicitParam(name = "firstUserId", paramType = "query", value = "首次跟进人ID", dataType = "Long"),
+            @ApiImplicitParam(name = "sourceId", paramType = "query", value = "来源平台ID", dataType = "Long"),
+            @ApiImplicitParam(name = "getWay", paramType = "query", value = "获取方式", dataType = "Byte"),
+            @ApiImplicitParam(name = "notAllot", paramType = "query", value = "是否不分配：true-不分配，false-自动分配", dataType = "boolean")
+    })
+    @PostMapping("/importCustomer")
+//    @RequiresPermissions("biz:customer:import")
+    @SysLog("客户列表导入")
+    public R importCustomer(@RequestParam("file") MultipartFile file, @ModelAttribute TransferCustomerUpDTO dto) {
+        return transferCustomerService.importCustomer(file, dto);
     }
 
 }

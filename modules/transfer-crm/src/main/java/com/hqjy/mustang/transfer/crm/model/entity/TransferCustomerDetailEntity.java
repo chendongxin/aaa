@@ -46,6 +46,11 @@ public class TransferCustomerDetailEntity implements Serializable {
     private String email;
 
     /**
+     * 手机
+     */
+    private String phone;
+
+    /**
 	 * 毕业学校 school
 	 **/
     private String school;

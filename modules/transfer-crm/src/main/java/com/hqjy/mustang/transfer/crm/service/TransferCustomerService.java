@@ -4,7 +4,9 @@ import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerTransferDTO;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerUpDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface TransferCustomerService extends BaseService<TransferCustomerEntity, Long> {
 
@@ -32,10 +34,12 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
     R transferCustomer(TransferCustomerTransferDTO dto);
 
     /**
-     * 更新客户基本信息：此方法只更新customerDetail中的信息
+     * 导入客户
      *
-     * @param dto 客户信息
-     * @author gmm 2018年9月21日16:23:13
+     * @param file 导入的文件
+     * @param dto  请求输入参数
+     * @return 返回导入结果
      */
-    void updateBaseData(TransferCustomerDTO dto);
+    R importCustomer(MultipartFile file, TransferCustomerUpDTO dto);
+
 }
