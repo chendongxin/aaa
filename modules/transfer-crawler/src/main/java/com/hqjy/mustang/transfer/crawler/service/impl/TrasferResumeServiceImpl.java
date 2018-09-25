@@ -12,7 +12,7 @@ import com.hqjy.mustang.transfer.crawler.feign.TrasferSourceApiService;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferEmailEntity;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
 import com.hqjy.mustang.transfer.crawler.service.MqSendService;
-import com.hqjy.mustang.transfer.crawler.service.ParseMessageService;
+import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferEmailService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferResumeService;
 import com.hqjy.mustang.transfer.crawler.utils.MailUtils;
@@ -140,7 +140,7 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
 
                     // 解析邮件内容
                     if (StringUtils.isNotEmpty(sendMali)) {
-                        ParseMessageService praService = ParseMailFactory.build(sendMali);
+                        AbstractParseService praService = ParseMailFactory.build(sendMali);
                         if (praService != null) {
                             praService.parseMessage(resumeEntity);
                         }
@@ -227,6 +227,5 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
         log.error("{},重试登录邮箱 3 次 失败", JsonUtil.toJson(emailConfig));
         return null;
     }
-
 
 }

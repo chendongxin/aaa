@@ -1,6 +1,5 @@
 package com.hqjy.mustang.transfer.call.service.impl;
 
-import com.alibaba.fastjson.JSONObject;
 import com.google.gson.reflect.TypeToken;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.JsonUtil;
@@ -20,6 +19,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +32,7 @@ import java.util.List;
 @Service
 @Slf4j
 public class TqApiServiceImpl implements TqApiService {
-    @Autowired
+    @Resource(name = "openRestTemplate")
     private RestTemplate restTemplate;
 
     /**

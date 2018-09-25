@@ -205,14 +205,9 @@ public class TransferAllotCustomerEntity implements Serializable {
     private String major;
 
     /**
-     * 学历ID(数据来源于transfer_education学历表) education_id
+     * 学历名称
      **/
-    private Long educationId;
-
-    /**
-     * 学历名称(数据来源于transfer_education学历表) education_name
-     **/
-    private String educationName;
+    private String education;
 
     /**
      * 应聘类别 apply_type
@@ -237,7 +232,7 @@ public class TransferAllotCustomerEntity implements Serializable {
     /**
      * 工作经验 work_experience
      **/
-    private Integer workExperience;
+    private Float workExperience;
 
     /**
      * 备注 note

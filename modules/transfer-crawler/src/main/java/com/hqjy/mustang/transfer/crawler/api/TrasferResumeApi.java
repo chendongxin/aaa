@@ -1,11 +1,13 @@
 package com.hqjy.mustang.transfer.crawler.api;
 
 import com.hqjy.mustang.common.base.constant.Constant;
-import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
 import com.hqjy.mustang.transfer.crawler.service.TrasferResumeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -28,7 +30,7 @@ public class TrasferResumeApi {
      * 提供给定时任务调用的接口
      */
     @GetMapping("/start")
-    public R start(@RequestParam(value = "hour", required = false) Integer hour) {
+    public boolean start(@RequestParam(value = "hour", required = false) Integer hour) {
         // 指定时间
         Date beforeDate = Optional.ofNullable(hour)
                 .map(h -> Date.from(LocalDateTime.now().minus(hour, ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant()))
@@ -42,8 +44,6 @@ public class TrasferResumeApi {
                     // 都不存在，获取24个小时之前的
                     return Date.from(LocalDateTime.now().minus(24, ChronoUnit.HOURS).atZone(ZoneId.systemDefault()).toInstant());
                 });
-        trasferResumeService.start(beforeDate);
-        return R.ok();
+        return trasferResumeService.start(beforeDate);
     }
-
 }

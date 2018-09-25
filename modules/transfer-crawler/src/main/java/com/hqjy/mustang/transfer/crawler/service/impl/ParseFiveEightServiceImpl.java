@@ -2,7 +2,7 @@ package com.hqjy.mustang.transfer.crawler.service.impl;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.transfer.crawler.service.ParseMessageService;
+import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -26,7 +26,7 @@ import static com.hqjy.mustang.common.base.constant.Constant.Gender.*;
  */
 @Service("parseFiveEightService")
 @Slf4j
-public class ParseFiveEightServiceImpl implements ParseMessageService {
+public class ParseFiveEightServiceImpl extends AbstractParseService {
     /**
      * 解析邮件
      */
@@ -59,11 +59,11 @@ public class ParseFiveEightServiceImpl implements ParseMessageService {
                             switch (index) {
                                 case 0:
                                     // 学历
-                                    resumeEntity.setEducationName(StringUtils.cutPrefix(xlText, "学历"));
+                                    resumeEntity.setEducation(Constant.Education.NONE.handleEducationName(StringUtils.cutPrefix(xlText, "学历")));
                                     break;
                                 case 1:
                                     // 工作经验
-                                    resumeEntity.setWorkExperience(StringUtils.cutPrefix(xlText, "工作经验"));
+                                    resumeEntity.setWorkExperience(handleWorkExperience(StringUtils.cutPrefix(xlText, "工作经验")));
                                     break;
                                 case 2:
                                     // 籍贯

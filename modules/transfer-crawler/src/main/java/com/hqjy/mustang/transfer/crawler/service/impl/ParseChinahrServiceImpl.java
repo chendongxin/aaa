@@ -2,7 +2,7 @@ package com.hqjy.mustang.transfer.crawler.service.impl;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.transfer.crawler.service.ParseMessageService;
+import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
@@ -24,7 +24,7 @@ import static com.hqjy.mustang.common.base.constant.Constant.Gender.*;
  */
 @Service("parseChinahrService")
 @Slf4j
-public class ParseChinahrServiceImpl implements ParseMessageService {
+public class ParseChinahrServiceImpl extends AbstractParseService {
     /**
      * 解析邮件
      */
@@ -49,9 +49,9 @@ public class ParseChinahrServiceImpl implements ParseMessageService {
                             // 年龄
                             resumeEntity.setAge(StringUtils.cut(sexAndAge[1], "", "岁"));
                             // 学历
-                            resumeEntity.setEducationName(sexAndAge[2]);
+                            resumeEntity.setEducation(Constant.Education.NONE.handleEducationName(sexAndAge[2]));
                             // 工作经验
-                            resumeEntity.setWorkExperience(sexAndAge[3]);
+                            resumeEntity.setWorkExperience(handleWorkExperience(sexAndAge[3]));
                         }
 
                     } else if (current.attr("style").startsWith("font-size:14px;  margin-right:30px;vertical-align: middle")) {

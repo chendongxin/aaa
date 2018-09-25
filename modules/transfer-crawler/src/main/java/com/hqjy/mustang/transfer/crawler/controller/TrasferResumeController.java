@@ -45,8 +45,7 @@ public class TrasferResumeController {
             "                \"[收集时间] createTime\": \"2018-09-19 18:03:07\",\n" +
             "                \"[部门ID] deptId\": 8000,\n" +
             "                \"[部门名称] deptName\": \"野马部门\",\n" +
-            "                \"[学历ID] educationId\": 1,\n" +
-            "                \"[学历] educationName\": \"大专\",\n" +
+            "                \"[学历] education\": \"大专\",\n" +
             "                \"[邮箱] email\": \"hejinyo@gmail.com\",\n" +
             "                \"[邮件标题] emailTitle\": \"(58.com)应聘贵公司高薪python开发助理-西安-胡小丽\",\n" +
             "                \"[推广人ID] genUserId\": 1,\n" +
@@ -68,7 +67,7 @@ public class TrasferResumeController {
             "                \"[来源ID] sourceId\": 0,\n" +
             "                \"[来源名称] sourceName\": \"默认来源\",\n" +
             "                \"[发送状态] status\": 0,\n" +
-            "                \"[工作经验] workExperience\": \"1-2年工作经验\",\n" +
+            "                \"[工作经验] workExperience\": \"1\",\n" +
             "                \"[工作地点] workingPlace\": \"工作地点或者城市\"\n" +
             "            }\n" +
             "        ],\n" +

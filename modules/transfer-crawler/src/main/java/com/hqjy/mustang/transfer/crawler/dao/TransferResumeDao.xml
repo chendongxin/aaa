@@ -5,7 +5,6 @@
     <!-- 实体映射 -->
     <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <id column="major" jdbcType="VARCHAR" property="major"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="age" jdbcType="VARCHAR" property="age"/>
         <result column="sex" jdbcType="TINYINT" property="sex"/>
@@ -15,12 +14,12 @@
         <result column="birthday" jdbcType="DATE" property="birthday"/>
         <result column="school" jdbcType="VARCHAR" property="school"/>
         <result column="graduate_date" jdbcType="TIMESTAMP" property="graduateDate"/>
-        <result column="education_id" jdbcType="BIGINT" property="educationId"/>
-        <result column="education_name" jdbcType="VARCHAR" property="educationName"/>
+        <result column="major" jdbcType="VARCHAR" property="major"/>
+        <result column="education" jdbcType="VARCHAR" property="education"/>
         <result column="position_applied" jdbcType="VARCHAR" property="positionApplied"/>
         <result column="working_place" jdbcType="VARCHAR" property="workingPlace"/>
         <result column="salary" jdbcType="VARCHAR" property="salary"/>
-        <result column="work_experience" jdbcType="VARCHAR" property="workExperience"/>
+        <result column="work_experience" jdbcType="REAL" property="workExperience"/>
         <result column="send_mail" jdbcType="VARCHAR" property="sendMail"/>
         <result column="send_time" jdbcType="TIMESTAMP" property="sendTime"/>
         <result column="email_title" jdbcType="VARCHAR" property="emailTitle"/>
@@ -44,7 +43,7 @@
     <!-- 表基本列 -->
     <sql id="Base_Column_List">
         id, name, age, sex, address, phone, email, birthday, school, graduate_date,
-        major, education_id, education_name, position_applied, working_place, salary,
+        major, education, position_applied, working_place, salary,
         work_experience, send_mail, send_time, email_title, resume_detail, status, dept_id,
         dept_name, create_email_id, create_email, pro_id, pro_name, company_id,
         company_name, source_id, source_name, gen_user_id, gen_user_name, create_time, sync_time
@@ -53,7 +52,6 @@
     <!-- 通用查询sql -->
     <sql id="Base_Where_SQL">
         <where>
-            <if test="major != null and !&quot;&quot;.equals(major)">and major = #{major}</if>
             <if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
             <if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
             <if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
@@ -63,8 +61,8 @@
             <if test="birthday != null and !&quot;&quot;.equals(birthday)">and birthday = #{birthday}</if>
             <if test="school != null and !&quot;&quot;.equals(school)">and school = #{school}</if>
             <if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and DATE_FORMAT(graduate_date,'%Y-%m-%d') = STR_TO_DATE(#{graduateDate},'%Y-%m-%d')</if>
-            <if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
-            <if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name = #{educationName}</if>
+            <if test="major != null and !&quot;&quot;.equals(major)">and major = #{major}</if>
+            <if test="education != null and !&quot;&quot;.equals(education)">and education = #{education}</if>
             <if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied = #{positionApplied}</if>
             <if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place = #{workingPlace}</if>
             <if test="salary != null and !&quot;&quot;.equals(salary)">and salary = #{salary}</if>
@@ -95,7 +93,6 @@
     <insert id="save" keyProperty="id" useGeneratedKeys="true">
         insert ignore into transfer_resume
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="null != major">major,</if>
             <if test="null != name">name,</if>
             <if test="null != age">age,</if>
             <if test="null != sex">sex,</if>
@@ -105,8 +102,8 @@
             <if test="null != birthday">birthday,</if>
             <if test="null != school">school,</if>
             <if test="null != graduateDate">graduate_date,</if>
-            <if test="null != educationId">education_id,</if>
-            <if test="null != educationName">education_name,</if>
+            <if test="null != major">major,</if>
+            <if test="null != education">education,</if>
             <if test="null != positionApplied">position_applied,</if>
             <if test="null != workingPlace">working_place,</if>
             <if test="null != salary">salary,</if>
@@ -133,7 +130,6 @@
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="null != major">#{major},</if>
             <if test="null != name">#{name},</if>
             <if test="null != age">#{age},</if>
             <if test="null != sex">#{sex},</if>
@@ -143,8 +139,8 @@
             <if test="null != birthday">#{birthday},</if>
             <if test="null != school">#{school},</if>
             <if test="null != graduateDate">#{graduateDate},</if>
-            <if test="null != educationId">#{educationId},</if>
-            <if test="null != educationName">#{educationName},</if>
+            <if test="null != major">#{major},</if>
+            <if test="null != education">#{education},</if>
             <if test="null != positionApplied">#{positionApplied},</if>
             <if test="null != workingPlace">#{workingPlace},</if>
             <if test="null != salary">#{salary},</if>
@@ -175,7 +171,6 @@
     <update id="update">
         update transfer_resume
         <set>
-            <if test="null != major">major = #{major},</if>
             <if test="null != name">name = #{name},</if>
             <if test="null != age">age = #{age},</if>
             <if test="null != sex">sex = #{sex},</if>
@@ -185,8 +180,8 @@
             <if test="null != birthday">birthday = #{birthday},</if>
             <if test="null != school">school = #{school},</if>
             <if test="null != graduateDate">graduate_date = #{graduateDate},</if>
-            <if test="null != educationId">education_id = #{educationId},</if>
-            <if test="null != educationName">education_name = #{educationName},</if>
+            <if test="null != major">major = #{major},</if>
+            <if test="null != education">education = #{education},</if>
             <if test="null != positionApplied">position_applied = #{positionApplied},</if>
             <if test="null != workingPlace">working_place = #{workingPlace},</if>
             <if test="null != salary">salary = #{salary},</if>
@@ -208,7 +203,7 @@
             <if test="null != genUserId">gen_user_id = #{genUserId},</if>
             <if test="null != genUserName">gen_user_name = #{genUserName},</if>
             <if test="null != createTime">create_time = #{createTime},</if>
-            <if test="null != createTime">create_time = #{createTime},</if>
+            <if test="null != syncTime">sync_time = #{syncTime},</if>
             <if test="null != resumeDetail">resume_detail = #{resumeDetail},</if>
         </set>
         where id = #{id}
@@ -266,7 +261,6 @@
         <include refid="Base_Column_List"/>
         from transfer_resume
         <where>
-            <if test="major != null and !&quot;&quot;.equals(major)">and major like concat('%',#{major},'%')</if>
             <if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
             <if test="age != null and !&quot;&quot;.equals(age)">and age like concat('%',#{age},'%')</if>
             <if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
@@ -276,12 +270,12 @@
             <if test="birthday != null and !&quot;&quot;.equals(birthday)">and birthday = #{birthday}</if>
             <if test="school != null and !&quot;&quot;.equals(school)">and school like concat('%',#{school},'%')</if>
             <if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and DATE_FORMAT(graduate_date,'%Y-%m-%d') = STR_TO_DATE(#{graduateDate},'%Y-%m-%d')</if>
-            <if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
-            <if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name like concat('%',#{educationName},'%')</if>
+            <if test="major != null and !&quot;&quot;.equals(major)">and major like concat('%',#{major},'%')</if>
+            <if test="education != null and !&quot;&quot;.equals(education)">and education like concat('%',#{education},'%')</if>
             <if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied like concat('%',#{positionApplied},'%')</if>
             <if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place like concat('%',#{workingPlace},'%')</if>
             <if test="salary != null and !&quot;&quot;.equals(salary)">and salary like concat('%',#{salary},'%')</if>
-            <if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience like concat('%',#{workExperience},'%')</if>
+            <if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience = #{workExperience}</if>
             <if test="sendMail != null and !&quot;&quot;.equals(sendMail)">and send_mail like concat('%',#{sendMail},'%')</if>
             <if test="sendTime != null and !&quot;&quot;.equals(sendTime)">and DATE_FORMAT(send_time,'%Y-%m-%d') = STR_TO_DATE(#{sendTime},'%Y-%m-%d')</if>
             <if test="emailTitle != null and !&quot;&quot;.equals(emailTitle)">and email_title like concat('%',#{emailTitle},'%')</if>
@@ -299,7 +293,7 @@
             <if test="genUserId != null and !&quot;&quot;.equals(genUserId)">and gen_user_id = #{genUserId}</if>
             <if test="genUserName != null and !&quot;&quot;.equals(genUserName)">and gen_user_name like concat('%',#{genUserName},'%')</if>
             <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="syncTime != null and !&quot;&quot;.equals(syncTime)">and DATE_FORMAT(sync_time,'%Y-%m-%d') = STR_TO_DATE(#{syncTime},'%Y-%m-%d')</if>
             <if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
         </where>
     </select>
@@ -319,6 +313,7 @@
         from transfer_resume
         <include refid="Base_Where_SQL"/>
     </select>
+
 
     <!-- 查询数据库中最后一条记录 -->
     <select id="findLast" resultMap="BaseResultMap">

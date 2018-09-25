@@ -1,4 +1,4 @@
-package com.hqjy.mustang.transfer.crm.config;
+package com.hqjy.mustang.quartz.config;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.constant.StatusCode;
@@ -11,7 +11,7 @@ import com.hqjy.mustang.common.web.shiro.AuthToken;
 import com.hqjy.mustang.common.web.shiro.FilterAnonConfig;
 import com.hqjy.mustang.common.web.utils.ResponseUtils;
 import com.hqjy.mustang.common.web.utils.TokenUtils;
-import com.hqjy.mustang.transfer.crm.feign.AuthApiService;
+import com.hqjy.mustang.quartz.feign.AuthApiService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.web.filter.AccessControlFilter;
@@ -33,9 +33,9 @@ import java.util.*;
  */
 @Configuration
 @Slf4j
-public class CrmShiroConfig extends AuthShiroConfig {
+public class QuartzShiroConfig extends AuthShiroConfig {
 
-    private static final String JELLY_AUTH_NAME = "jelly";
+    private static final String AUTH_NAME = "quartz";
 
     /**
      * 自定义realms
@@ -55,7 +55,7 @@ public class CrmShiroConfig extends AuthShiroConfig {
     @Bean
     protected Map<String, Filter> getFilters() {
         Map<String, Filter> list = new HashMap<>();
-        list.put(JELLY_AUTH_NAME, authFilter());
+        list.put(AUTH_NAME, authFilter());
         return list;
     }
 
@@ -67,13 +67,13 @@ public class CrmShiroConfig extends AuthShiroConfig {
         // 拦截器链
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterAnonConfig().getPath().forEach(path -> {
-            log.info("transfer-crm 不拦截路径 => {}", path);
+            log.info("transfer-crawler 不拦截路径 => {}", path);
             filterMap.put(path, "anon");
         });
         // 不拦截内部服务调用
         filterMap.put(Constant.API_PATH_ANON, "anon");
 
-        filterMap.put("/**", JELLY_AUTH_NAME);
+        filterMap.put("/**", AUTH_NAME);
         return filterMap;
     }
 

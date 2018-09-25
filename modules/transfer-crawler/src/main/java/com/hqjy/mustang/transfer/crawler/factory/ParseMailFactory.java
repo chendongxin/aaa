@@ -2,7 +2,7 @@ package com.hqjy.mustang.transfer.crawler.factory;
 
 import com.hqjy.mustang.common.base.utils.SpringContextUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.transfer.crawler.service.ParseMessageService;
+import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
 
 /**
  * @author : heshuangshuang
@@ -10,15 +10,15 @@ import com.hqjy.mustang.transfer.crawler.service.ParseMessageService;
  */
 public class ParseMailFactory {
 
-    public static ParseMessageService build(String mail) {
+    public static AbstractParseService build(String mail) {
         String suffix = StringUtils.cutFrom(mail, "@");
         switch (suffix) {
             // 58同城
             case "@zp.58.com":
-                return (ParseMessageService) SpringContextUtils.getBean("parseFiveEightService");
+                return (AbstractParseService) SpringContextUtils.getBean("parseFiveEightService");
             // 中华英才网
             case "@info.chinahr.com":
-                return (ParseMessageService) SpringContextUtils.getBean("parseChinahrService");
+                return (AbstractParseService) SpringContextUtils.getBean("parseChinahrService");
             default:
                 return null;
         }

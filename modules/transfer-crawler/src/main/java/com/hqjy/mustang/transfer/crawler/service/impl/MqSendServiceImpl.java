@@ -30,10 +30,8 @@ public class MqSendServiceImpl implements MqSendService {
     public void send(TransferResumeEntity resumeEntity) {
         CorrelationData correlationData = new CorrelationData(CrawlerConstant.RESUME_MESSAGE_ID + resumeEntity.getId().toString());
         MessageQueueDTO messageQueueDTO = new MessageQueueDTO();
-        // 数据字典显示和值，待处理 TODO
-        resumeEntity.setWorkExperience(null);
-        resumeEntity.setResumeDetail(null);
         messageQueueDTO.setMsgBody(resumeEntity);
+        // 3代表招转的商机类型
         messageQueueDTO.setMsgType(3);
         rabbitTemplate.convertAndSend(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE, messageQueueDTO, correlationData);
     }
