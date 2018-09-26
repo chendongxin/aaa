@@ -49,7 +49,7 @@ public class ParseFiveEightServiceImpl extends AbstractParseService {
                             // 性别
                             resumeEntity.setSex(MAN.getCode().contains((sexAndAge[0])) ? MAN.getValue() : WOMEN.getCode().contains((sexAndAge[0])) ? Constant.Gender.WOMEN.getValue() : UNKNOWN.getValue());
                             // 年龄
-                            resumeEntity.setAge(StringUtils.cut(sexAndAge[1], "", "岁"));
+                            resumeEntity.setAge(handleAge(sexAndAge[1]));
                         }
 
                         ListIterator<Element> xllist = current.nextElementSibling().select("li").listIterator();

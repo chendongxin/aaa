@@ -8,30 +8,6 @@ server:
     #context-path: /mustang
     context-path: /
 
-info:
-  app:
-    name: mustang-admin
-    version: 1.0
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://transfer:password@localhost:8000/eureka
-    # 缓存清单每隔30秒跟新一次
-    registry-fetch-interval-seconds: 10
-  instance:
-    hostname: mustang-admin
-    # 实例使用ip进行访问
-    prefer-ip-address: true
-    # 实例显示id
-    instance-id: ${spring.application.name}:${server.port}
-    # 服务续约任务调用间隔时间，默认30秒
-    lease-renewal-interval-in-seconds: 5
-    # 服务失效时间，默认90秒
-    lease-expiration-duration-in-seconds: 20
-    #状态页面和健康指标
-    statusPageUrlPath: ${server.context-path}/swagger-ui.html
-
 spring:
     application:
     # 应用名称
@@ -59,6 +35,33 @@ spring:
                         auth: true
                         enable: true
                         required: true
+
+
+info:
+  app:
+    name: mustang-admin
+    version: 1.0
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://transfer:password@localhost:8000/eureka
+    # 缓存清单每隔30秒跟新一次
+    registry-fetch-interval-seconds: 10
+  instance:
+    hostname: mustang-admin
+    # 实例使用ip进行访问
+    prefer-ip-address: true
+    # 实例显示id
+    instance-id: ${spring.application.name}:${server.port}
+    # 服务续约任务调用间隔时间，默认30秒
+    lease-renewal-interval-in-seconds: 5
+    # 服务失效时间，默认90秒
+    lease-expiration-duration-in-seconds: 20
+    #状态页面和健康指标
+    statusPageUrlPath: ${server.context-path}/swagger-ui.html
+
+
 # Mybatis配置
 mybatis:
     mapperLocations: classpath*:com/hqjy/mustang/admin/dao/*Dao.xml

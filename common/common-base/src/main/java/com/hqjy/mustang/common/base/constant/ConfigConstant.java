@@ -16,9 +16,14 @@ public interface ConfigConstant {
     String WEBSOCKET_HOST = "WEBSOCKET_HOST";
 
     /**
+     * 分配算法类型，0 只根据权重 ；1 根据权重和排班
+     */
+    String TRANSFER_ALLOT_ALGORITHM = "TRANSFER_ALLOT_ALGORITHM";
+
+    /**
      * 没有指定商机归属，或则分配部门不存在，指定分配到此部门
      */
-    String ALLOT_DEFAULT_DEPTID = "ALLOT_DEFAULT_DEPTID";
+    String TRANSFER_ALLOT_DEFAULT_DEPTID = "TRANSFER_ALLOT_DEFAULT_DEPTID";
 
     /**
      * Transfer首次分配超时时间 单位天

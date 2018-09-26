@@ -1,14 +1,15 @@
 package com.hqjy.mustang.allot.service.impl;
 
-import com.hqjy.mustang.common.base.utils.DateUtils;
-import com.hqjy.mustang.common.base.utils.JsonUtil;
-import com.hqjy.mustang.common.base.utils.JsonUtil;
-import com.hqjy.mustang.common.redis.utils.RedisKeys;
-import com.hqjy.mustang.common.redis.utils.RedisUtils;
 import com.hqjy.mustang.allot.dao.WeigthRoundDao;
+import com.hqjy.mustang.allot.feign.SysConfigApiService;
 import com.hqjy.mustang.allot.model.dto.AllotClassDTO;
 import com.hqjy.mustang.allot.model.dto.WeigthRoundDTO;
 import com.hqjy.mustang.allot.service.AbstractWeightRound;
+import com.hqjy.mustang.common.base.constant.ConfigConstant;
+import com.hqjy.mustang.common.base.utils.DateUtils;
+import com.hqjy.mustang.common.base.utils.JsonUtil;
+import com.hqjy.mustang.common.redis.utils.RedisKeys;
+import com.hqjy.mustang.common.redis.utils.RedisUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,10 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.hqjy.mustang.common.base.utils.JsonUtil.toObject;
 
 /**
  * 根据用户权重，获取部门的一个用户
@@ -38,6 +42,9 @@ public class WeightRoundUserImpl extends AbstractWeightRound {
     @Autowired
     private RedisUtils redisUtils;
 
+    @Autowired
+    private SysConfigApiService sysConfigApiService;
+
     @Override
     public String keyPrefix() {
         return RedisKeys.Allot.key("user");
@@ -45,14 +52,28 @@ public class WeightRoundUserImpl extends AbstractWeightRound {
 
     @Override
     public List<Object> initData(Long id) {
-        // 排班list
-        List<AllotClassDTO> classList = getScheduleList(id);
-        if (classList.size() > 0) {
-            log.debug("设置失效时间为当前班次的下班时间");
-            // 根据class的最早的排版，下班时间进行重置
-            redisUtils.set(RedisKeys.Allot.expire(id), DateUtils.formatPattern(classList.get(0).getStop()), classList.get(0).getStop());
-            // 排班用户List
-            List<WeigthRoundDTO> userList = weigthRoundDao.getUserList(LocalDate.now().format(YMD), id, classList);
+        // 获取算法配置
+        Integer allotAlgorithm = Optional.ofNullable(sysConfigApiService.getConfig(ConfigConstant.TRANSFER_ALLOT_ALGORITHM))
+                .map(c -> toObject(c, Integer.class))
+                .orElse(0);
+
+        List<WeigthRoundDTO> userList = new ArrayList<>();
+
+        if (allotAlgorithm.equals(0)) {
+            userList = weigthRoundDao.getUserList(id);
+        } else {
+            // 排班list
+            List<AllotClassDTO> classList = getScheduleList(id);
+            if (classList.size() > 0) {
+                log.debug("设置失效时间为当前班次的下班时间");
+                // 根据class的最早的排版，下班时间进行重置
+                redisUtils.set(RedisKeys.Allot.expire(id), DateUtils.formatPattern(classList.get(0).getStop()), classList.get(0).getStop());
+                // 排班用户List
+                userList = weigthRoundDao.getUserListByClass(LocalDate.now().format(YMD), id, classList);
+            }
+        }
+
+        if (userList.size() > 0) {
             return userList.stream().map(JsonUtil::toJson).collect(Collectors.toList());
         }
         return new ArrayList<>();

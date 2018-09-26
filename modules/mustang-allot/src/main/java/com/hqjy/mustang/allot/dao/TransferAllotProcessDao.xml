@@ -212,26 +212,38 @@
             active,
             <if test="null != customerId">customer_id,</if>
             <if test="null != deptId">dept_id,</if>
+            <if test="null != deptName">dept_name,</if>
             <if test="null != userId">user_id,</if>
+            <if test="null != userName">user_name,</if>
             <if test="null != followCount">follow_count,</if>
             <if test="null != lastFollowId">last_follow_id,</if>
             <if test="null != memo">memo,</if>
             <if test="null != expireTime">expire_time,</if>
             <if test="null != createUserId">create_user_id,</if>
+            <if test="null != createUserName">create_user_name,</if>
             <if test="null != createTime">create_time,</if>
+            <if test="null != updateUserId">update_user_id,</if>
+            <if test="null != updateUserName">update_user_name,</if>
+            <if test="null != updateTime">update_time,</if>
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
             1,
             <if test="null != customerId">#{customerId},</if>
             <if test="null != deptId">#{deptId},</if>
+            <if test="null != deptName">#{deptName},</if>
             <if test="null != userId">#{userId},</if>
+            <if test="null != userName">#{userName},</if>
             <if test="null != followCount">#{followCount},</if>
             <if test="null != lastFollowId">#{lastFollowId},</if>
             <if test="null != memo">#{memo},</if>
             <if test="null != expireTime">#{expireTime},</if>
             <if test="null != createUserId">#{createUserId},</if>
+            <if test="null != createUserName">#{createUserName},</if>
             <if test="null != createTime">#{createTime},</if>
+            <if test="null != updateUserId">#{updateUserId},</if>
+            <if test="null != updateUserName">#{updateUserName},</if>
+            <if test="null != updateTime">#{updateTime},</if>
         </trim>
     </insert>
 

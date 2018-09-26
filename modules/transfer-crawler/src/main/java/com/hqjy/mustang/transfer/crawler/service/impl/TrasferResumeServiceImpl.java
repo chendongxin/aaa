@@ -175,8 +175,11 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
                     // 同步开始时间
                     resumeEntity.setSyncTime(beforeDate);
 
+                    // 只爬取年龄段需要在18-30（包含18和30岁）之间的
+                    int age = Optional.ofNullable(resumeEntity.getAge()).orElse(0);
+
                     // 有手机号码才进行保存
-                    if (StringUtils.isNotEmpty(resumeEntity.getPhone())) {
+                    if (StringUtils.isNotEmpty(resumeEntity.getPhone()) && age >= 18 && age <= 30) {
                         int count = baseDao.save(resumeEntity);
                         if (count > 0) {
                             // 保存成功，发送mq
@@ -207,7 +210,6 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
         }
 
     }
-
 
     /**
      * 连接邮箱，重试机制

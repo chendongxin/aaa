@@ -13,11 +13,11 @@ import java.util.Date;
  * @date : 2018/09/14 10:08
  */
 @Data
-@Accessors(chain = true)
 public class TransferAllotCustomerEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private boolean notAllot;
+    private boolean isNotAllot;
+
     /**
      * 客户编号 customer_id
      **/
@@ -39,14 +39,24 @@ public class TransferAllotCustomerEntity implements Serializable {
     private String proName;
 
     /**
-     * 客户来源 source_id
+     * 来源平台ID source_id
      **/
     private Long sourceId;
 
     /**
-     * 推广公司 company_id
+     * 来源平台名称 source_name
+     **/
+    private String sourceName;
+
+    /**
+     * 推广公司ID company_id
      **/
     private Long companyId;
+
+    /**
+     * 推广公司名称 company_name
+     **/
+    private String companyName;
 
     /**
      * 名称 name
@@ -149,7 +159,7 @@ public class TransferAllotCustomerEntity implements Serializable {
     private Date createTime;
 
     /**
-     * 分配时间 create_time
+     * 分配时间 allot_time
      **/
     private Date allotTime;
 

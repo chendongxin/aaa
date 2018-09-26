@@ -1,19 +1,19 @@
 package com.hqjy.mustang.allot.service.impl;
 
 import com.hqjy.mustang.allot.constant.AllotCode;
-import com.hqjy.mustang.allot.dao.*;
+import com.hqjy.mustang.allot.dao.TransferAllotCustomerContactDao;
+import com.hqjy.mustang.allot.dao.TransferAllotCustomerDao;
+import com.hqjy.mustang.allot.dao.TransferAllotProcessDao;
 import com.hqjy.mustang.allot.exception.MqException;
 import com.hqjy.mustang.allot.feign.SysMessageApiService;
 import com.hqjy.mustang.allot.model.dto.ContactSaveResultDTO;
 import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerContactEntity;
 import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerEntity;
-import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerRepeatEntity;
 import com.hqjy.mustang.allot.model.entity.TransferAllotProcessEntity;
 import com.hqjy.mustang.allot.service.AbstractAllotService;
 import com.hqjy.mustang.allot.service.AbstractHandleService;
 import com.hqjy.mustang.allot.service.TransferAllotContactService;
 import com.hqjy.mustang.common.base.constant.ConfigConstant;
-import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.model.crm.MessageSendVO;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisLockUtils;
@@ -46,8 +46,6 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
     @Autowired
     private TransferAllotCustomerDao transferAllotCustomerDao;
 
-    @Autowired
-    private TransferAllotCustomerDetailDao transferAllotCustomerDetailDao;
 
     @Autowired
     private TransferAllotContactService transferAllotContactService;
@@ -61,11 +59,8 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
     @Autowired
     private TransferAllotProcessDao transferAllotProcessDao;
 
-    @Autowired
-    private TransferAllotCustomerRepeatDao allotCustRepeatDao;
-
     @Resource(name = "transferAllotService")
-    private AbstractAllotService transferAllotService;
+    private AbstractAllotService<TransferAllotCustomerEntity> transferAllotService;
 
 
     /**
@@ -92,15 +87,16 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setCreateUserId(Optional.ofNullable(customerEntity.getCreateUserId()).orElse(NO_CREATE_ID.getValue()));
         // 如果没有姓名，设置为未知
         customerEntity.setName(StringUtils.isNotEmpty(customerEntity.getName()) ? customerEntity.getName() : "未知");
-        // 状态默认潜在 TODO
-        //customerEntity.setStatus(Constant.CustomerStatus.POTENTIAL.getValue());
-        // 推广方式
-        customerEntity.setGetWay(0);
+        // 状态默认潜在
+        customerEntity.setStatus(0);
+        // 推广方式，默认 1：主动
+        customerEntity.setGetWay(1);
         // 设置分配时间为当前时间
         customerEntity.setAllotTime(new Date());
+        customerEntity.setCreateUserId(Optional.ofNullable(customerEntity.getCreateUserId()).orElse(0L));
+        customerEntity.setCreateUserName(Optional.ofNullable(customerEntity.getCreateUserName()).orElse("系统"));
 
-        // 商机处理开始
-        // TODO 先直接保存用户信息，获取用户编号，不写入nc_id，phone，we_chat，qq， land_line
+        // 先直接保存用户信息，获取用户编号，不写入nc_id，phone，we_chat，qq， land_line
         transferAllotCustomerDao.save(customerEntity);
 
         // 保存用户联系方式
@@ -119,9 +115,9 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
      * 分配,设置用户ID和部门ID
      */
     @Override
-    public void allot(ContactSaveResultDTO resultDTO, TransferAllotCustomerEntity customerEntity) {
+    public TransferAllotCustomerEntity allot(ContactSaveResultDTO resultDTO, TransferAllotCustomerEntity customerEntity) {
         // 分配处理
-        transferAllotService.allot(resultDTO, customerEntity);
+        return transferAllotService.allot(resultDTO, customerEntity);
     }
 
     /**
@@ -133,27 +129,31 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         allotProcess.setCustomerId(customerEntity.getCustomerId());
         // 设置部门
         allotProcess.setDeptId(customerEntity.getDeptId());
+        allotProcess.setDeptName(customerEntity.getDeptName());
         // 设置分配人员
         allotProcess.setUserId(customerEntity.getUserId());
+        allotProcess.setUserName(customerEntity.getUserName());
         // 设置状态有效
         allotProcess.setActive(1);
         // 0 默认为系统
         allotProcess.setCreateUserId(0L);
         // 联系次数默认0
         allotProcess.setFollowCount(0);
+        allotProcess.setCreateUserId(customerEntity.getCreateUserId());
+        allotProcess.setCreateUserName(customerEntity.getCreateUserName());
         int count;
         //首次咨询
         if (resultDTO.getContacStatus()) {
             allotProcess.setMemo("首次咨询，自动分配");
             // 流程的到期时间，默认为0天，写到系统配置里面
-            allotProcess.setExpireTime(processTimeout(ConfigConstant.TRANSFER_ALLOT_FIRST_TIMEOUT, 0));
+            allotProcess.setExpireTime(processTimeout(ConfigConstant.TRANSFER_ALLOT_FIRST_TIMEOUT, 15));
         }
 
         //二次咨询
         else {
             allotProcess.setMemo("二次咨询，自动分配");
             // 流程的到期时间，默认为3天，写到系统配置里面
-            allotProcess.setExpireTime(processTimeout(ConfigConstant.TRANSFER_ALLOT_REPEAT_TIMEOUT, 3));
+            allotProcess.setExpireTime(processTimeout(ConfigConstant.TRANSFER_ALLOT_REPEAT_TIMEOUT, 15));
         }
 
         //保存流程
@@ -169,23 +169,6 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
 
 
     /**
-     * 重单商机保存处理
-     */
-    @Override
-    protected void repeatSave(ContactSaveResultDTO resultDTO, TransferAllotCustomerEntity customer) {
-        // 二次咨询处理，保存重单商机
-        if (!resultDTO.getContacStatus()) {
-            log.debug("记录到客户二次咨询表");
-            //记录到客户二次咨询表
-            TransferAllotCustomerRepeatEntity custRepeatEntity = PojoConvertUtil.convert(customer, TransferAllotCustomerRepeatEntity.class);
-            custRepeatEntity.setCustomerId(resultDTO.getOldCustomerId());
-            custRepeatEntity.setDeptId(customer.getDeptId());
-            custRepeatEntity.setUserId(customer.getUserId());
-            allotCustRepeatDao.save(custRepeatEntity);
-        }
-    }
-
-    /**
      * 发送webSocket消息,招转首次，二次都是视为首次咨询
      */
     @Override
@@ -195,17 +178,17 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
             StringBuilder content = new StringBuilder();
             if (contactEntity != null) {
                 if (PHONE.equals(contactEntity.getType())) {
-                    content.append(PHONE.getValue());
+                    content.append("电话");
                 } else if (LAND_LINE.equals(contactEntity.getType())) {
-                    content.append(PHONE.getValue());
+                    content.append("座机");
                 } else if (WE_CHAT.equals(contactEntity.getType())) {
-                    content.append(WE_CHAT.getValue());
+                    content.append("微信");
                 } else if (QQ.equals(contactEntity.getType())) {
-                    content.append(QQ.getValue());
+                    content.append("QQ");
                 }
-                content.append(":").append(contactEntity.getDetail());
+                content.append("：").append(contactEntity.getDetail());
             }
-            // 首次咨询
+            // 首次咨询,招转消息提示都是首次咨询
             sysMessageApiService.sendMessage(new MessageSendVO(customer.getUserId(), "首次咨询", content.toString(), contactEntity));
         }
 
@@ -223,16 +206,21 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         TransferAllotCustomerEntity customerEntity = new TransferAllotCustomerEntity();
         customerEntity.setCustomerId(customer.getCustomerId());
         customerEntity.setDeptId(process.getDeptId());
+        customerEntity.setDeptName(process.getDeptName());
         customerEntity.setUserId(process.getUserId());
-        // 设置主联系方式,只能是手机
+        customerEntity.setUserName(process.getUserName());
+        customerEntity.setFirstUserId(customer.getFirstUserId());
+        customerEntity.setFirstUserName(customer.getFirstUserName());
+        customerEntity.setLastUserId(process.getUserId());
+        customerEntity.setLastUserName(process.getUserName());
+
+        // 设置联系方式
         customerEntity.setPhone(customer.getPhone());
+        customerEntity.setLandLine(customer.getLandLine());
+        customerEntity.setWeChat(customer.getWeChat());
+        customerEntity.setQq(customer.getQq());
         // 更新分配时间
-        // customerEntity.setAllotTime(process.getCreateTime());
+        customerEntity.setAllotTime(process.getCreateTime());
         transferAllotCustomerDao.updateProcessInfo(customerEntity);
-        // 保存简历详情
-        transferAllotCustomerDetailDao.saveCustomer(customer);
-
-        // 发送到redis消息队列，异步处理，不关心处理结果 TODO
-
     }
 }
