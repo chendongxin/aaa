@@ -3,6 +3,9 @@ package com.hqjy.mustang.transfer.crm.dao;
 import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * transfer_process 持久化层
@@ -28,4 +31,13 @@ public interface TransferProcessDao extends BaseDao<TransferProcessEntity, Long>
      * @return 退回结果
      */
     int disableProcessActive(TransferProcessEntity entity);
+
+    /**
+     * (批量)获取 商机首次分配给用户流程
+     *
+     * @param customerIds 客户ID字符串
+     * @return 返回结果
+     * @author gmm 2018年9月25日19:51:46
+     */
+    List<TransferProcessEntity> getFirstAllotProcessBatch(@Param("customerIds") String customerIds);
 }

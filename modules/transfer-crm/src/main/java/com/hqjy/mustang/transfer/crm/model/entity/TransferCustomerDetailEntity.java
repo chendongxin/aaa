@@ -33,7 +33,7 @@ public class TransferCustomerDetailEntity implements Serializable {
     /**
 	 * 性别:见数据字典SEX枚举(0-未知，1-男，2-女) sex
 	 **/
-    private Byte sex;
+    private Integer sex;
 
     /**
 	 * 地址 address

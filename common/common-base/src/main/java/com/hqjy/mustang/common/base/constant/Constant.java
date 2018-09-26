@@ -133,7 +133,11 @@ public class Constant {
         /**
          * 4：QQ
          */
-        QQ(4);
+        QQ(4),
+        /**
+         * 5：邮箱
+         */
+        EMAIL(5);
 
 
         private Integer value;
@@ -340,6 +344,58 @@ public class Constant {
 
         public void setCode(String code) {
             this.code = code;
+        }
+    }
+
+    /**
+     * 跟进状态
+     */
+    public enum FollowStatus {
+
+        POTENTIAL("A潜在", 0),
+        VALID_DATA("B(失败)有效", 1),
+        INVALID_DATA("C(失败)无效", 2),
+        RESERVATION("D预约", 3),
+        DEAL("E成交", 4);
+
+        private int value;
+        private String code;
+
+        FollowStatus(String code, int value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+    /**
+     * 推广方式
+     */
+    public enum GetWayStatus {
+
+        ACTIVE_GET("主动获取",1),
+        PASSIVE_GET("被动获取",2);
+        private int value;
+        private String code;
+
+        GetWayStatus(String code, int value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getCode() {
+            return code;
         }
     }
 

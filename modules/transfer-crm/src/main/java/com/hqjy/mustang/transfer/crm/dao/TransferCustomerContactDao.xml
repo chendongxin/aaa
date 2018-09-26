@@ -175,6 +175,11 @@
 		from transfer_customer_contact
 		where type = #{type} and detail = #{detail}
 	</select>
-  
+
+	<select id="findListByCustomerIdBatch" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from transfer_customer_contact where customer_id IN ${customerIds}
+	</select>
 
 </mapper>

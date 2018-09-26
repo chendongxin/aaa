@@ -43,9 +43,19 @@ public class TransferCustomerEntity implements Serializable {
     private Long sourceId;
 
     /**
+     * 来源平台名称 source_name
+     */
+    private String sourceName;
+
+    /**
 	 * 推广公司 company_id
 	 **/
     private Long companyId;
+
+    /**
+     * 推广公司名称
+     */
+    private String companyName;
 
     /**
 	 * 名称 name

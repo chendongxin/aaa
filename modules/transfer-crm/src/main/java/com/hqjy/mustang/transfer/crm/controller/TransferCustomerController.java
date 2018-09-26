@@ -304,4 +304,14 @@ public class TransferCustomerController {
         return transferCustomerService.importCustomer(file, dto);
     }
 
+    @ApiOperation(value = "导出客户列表", notes = "请求参数格式:见swagger的model:客户报表导出参数模型")
+    @PostMapping("/exportCustomer")
+//    @RequiresPermissions("biz:customer:export")
+    @SysLog("客户列表导出")
+    public R exportCustomer(@RequestBody(required = false) HashMap<String, Object> queryParam) {
+        return transferCustomerService.exportCustomer(PageQuery.buildQuery(queryParam));
+    }
+
+
+
 }

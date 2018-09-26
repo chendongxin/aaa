@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.service;
 
 import com.hqjy.mustang.common.base.base.BaseService;
+import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerTransferDTO;
@@ -41,5 +42,13 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      * @return 返回导入结果
      */
     R importCustomer(MultipartFile file, TransferCustomerUpDTO dto);
+
+    /**
+     * 导出客户
+     *
+     * @param query 导出帅选条件
+     * @return 返回导出结果
+     */
+    R exportCustomer(PageQuery query);
 
 }

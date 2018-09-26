@@ -3,6 +3,8 @@ package com.hqjy.mustang.transfer.crm.service;
 import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
 
+import java.util.List;
+
 public interface TransferProcessService extends BaseService<TransferProcessEntity, Long> {
 
     /**
@@ -20,4 +22,12 @@ public interface TransferProcessService extends BaseService<TransferProcessEntit
      * @return 退回结果
      */
     int disableProcessActive(TransferProcessEntity entity);
+
+    /**
+     * (批量)获取 商机首次分配给用户流程
+     * @param customerIds 客户ID字符串
+     * @return 返回结果
+     * @author gmm 2018年9月25日19:51:46
+     */
+    List<TransferProcessEntity> getFirstAllotProcessBatch(String customerIds);
 }

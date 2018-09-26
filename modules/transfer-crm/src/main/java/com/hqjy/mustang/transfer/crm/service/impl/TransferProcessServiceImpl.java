@@ -6,6 +6,8 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferProcessService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessDao, TransferProcessEntity, Long> implements TransferProcessService {
 
@@ -29,5 +31,10 @@ public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessD
     @Override
     public int disableProcessActive(TransferProcessEntity entity) {
         return baseDao.disableProcessActive(entity);
+    }
+
+    @Override
+    public List<TransferProcessEntity> getFirstAllotProcessBatch(String customerIds) {
+        return baseDao.getFirstAllotProcessBatch(customerIds);
     }
 }

@@ -9,7 +9,9 @@
     <result column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="pro_name" jdbcType="VARCHAR" property="proName" />
     <result column="source_id" jdbcType="BIGINT" property="sourceId" />
+	<result column="source_name" jdbcType="VARCHAR" property="sourceName" />
     <result column="company_id" jdbcType="BIGINT" property="companyId" />
+	<result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="get_way" jdbcType="TINYINT" property="getWay" />
@@ -35,10 +37,15 @@
     <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+	<resultMap id="answerCount" type="com.hqjy.mustang.transfer.crm.model.entity.TransferAnswerCountEntity">
+		<result column="customer_id" jdbcType="BIGINT" property="customerId"/>
+		<result column="answerNum" jdbcType="BIGINT" property="answerNum"/>
+	</resultMap>
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    customer_id, nc_id, pro_id, pro_name, source_id, company_id, name, status, get_way, 
+    customer_id, nc_id, pro_id, pro_name, source_id, source_name, company_id, company_name, name, status, get_way,
     user_id, user_name, dept_id, dept_name, first_user_id, first_user_name, last_user_id, 
     last_user_name, gen_user_id, gen_user_name, phone, we_chat, qq, land_line, create_user_id, 
     create_user_name, create_time, allot_time, update_user_id, update_user_name, update_time
@@ -51,7 +58,9 @@
 		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
 		<if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name = #{proName}</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="sourceName != null and !&quot;&quot;.equals(sourceName)">and source_name = #{sourceName}</if>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="companyName != null and !&quot;&quot;.equals(companyName)">and company_name = #{companyName}</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="getWay != null and !&quot;&quot;.equals(getWay)">and get_way = #{getWay}</if>
@@ -86,7 +95,9 @@
 			<if test="null != proId">pro_id, </if>
 			<if test="null != proName">pro_name, </if>
 			<if test="null != sourceId">source_id, </if>
+			<if test="null != sourceName">source_name, </if>
 			<if test="null != companyId">company_id, </if>
+			<if test="null != companyName">company_name, </if>
 			<if test="null != name">name, </if>
 			<if test="null != status">status, </if>
 			<if test="null != getWay">get_way, </if>
@@ -118,7 +129,9 @@
 			<if test="null != proId">#{proId}, </if>
 			<if test="null != proName">#{proName}, </if>
 			<if test="null != sourceId">#{sourceId}, </if>
+			<if test="null != sourceName">#{sourceName}, </if>
 			<if test="null != companyId">#{companyId}, </if>
+			<if test="null != companyName">#{companyName}, </if>
 			<if test="null != name">#{name}, </if>
 			<if test="null != status">#{status}, </if>
 			<if test="null != getWay">#{getWay}, </if>
@@ -154,7 +167,9 @@
 			<if test="null != proId">pro_id = #{proId}, </if>
 			<if test="null != proName">pro_name = #{proName}, </if>
 			<if test="null != sourceId">source_id = #{sourceId}, </if>
+			<if test="null != sourceName">source_name = #{sourceName}, </if>
 			<if test="null != companyId">company_id = #{companyId}, </if>
+			<if test="null != companyName">company_name = #{companyName}, </if>
 			<if test="null != name">name = #{name}, </if>
 			<if test="null != status">status = #{status}, </if>
 			<if test="null != getWay">get_way = #{getWay}, </if>
@@ -239,7 +254,9 @@
 		<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
 		<if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name like concat('%',#{proName},'%')</if>
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+		<if test="sourceName != null and !&quot;&quot;.equals(sourceName)">and source_name like concat('%',#{sourceName},'%')</if>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+		<if test="companyName != null and !&quot;&quot;.equals(companyName)">and company_name like concat('%',#{companyName},'%')</if>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="getWay != null and !&quot;&quot;.equals(getWay)">and get_way = #{getWay}</if>
@@ -281,6 +298,55 @@
 	from transfer_customer
 		<include refid="Base_Where_SQL" />
   </select>
+
+	<select id="getAnswerCountBatch" resultMap="answerCount">
+		SELECT
+			COUNT(id) AS answerNum ,customer_id
+		FROM
+			transfer_call_record
+		WHERE
+			total_duration IS NOT NULL
+		AND customer_id IN ${customerIds}
+		GROUP BY customer_id;
+    </select>
+
+	<select id="countExportCustomer" resultType="java.lang.Integer">
+		select
+		count(*)
+		from transfer_customer tc
+		left join sys_user su1 on su1.user_id= tc.create_user_id
+		left join sys_user su2 on tc.user_id = su2.user_id
+		left join sys_dept sd on sd.dept_id = tc.dept_id
+		left join transfer_process tp on tp.process_id = tc.pro_id
+		<where>
+			<!-- 高级查询筛选部门-->
+			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+				and tc.dept_id in ${deptIds}
+			</if>
+			<if test="proIds != null and !&quot;&quot;.equals(proIds)">
+				and tc.pro_id in ${proIds}
+			</if>
+			<if test="userId !=null and !&quot;&quot;.equals(userId)">
+				and tc.user_id=#{userId}
+			</if>
+			<if test="createName != null and !&quot;&quot;.equals(createName)">and su1.user_name like
+				concat('%',#{createName},'%')
+			</if>
+			<if test="userName != null and !&quot;&quot;.equals(userName)">and su2.user_name like
+				concat('%',#{userName},'%')
+			</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
+			<if test="status != null and !&quot;&quot;.equals(status)">and tc.status = #{status}</if>
+			<if test="sourceName != null and !&quot;&quot;.equals(sourceName)">and tc.source_name = #{sourceName}</if>
+			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+				and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+			</if>
+			<if test="beginAllotTime != null and beginAllotTime != '' and endAllotTime != null and endAllotTime != ''">
+				and tc.allot_time between #{beginAllotTime} and #{endAllotTime}
+			</if>
+		</where>
+	</select>
   
 
 </mapper>

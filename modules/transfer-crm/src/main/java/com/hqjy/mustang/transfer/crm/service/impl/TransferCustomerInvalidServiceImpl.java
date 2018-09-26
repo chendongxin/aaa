@@ -1,7 +1,6 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
-import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.R;
@@ -12,11 +11,13 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerInvalidEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerInvalidService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
+@Service
 public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<TransferCustomerInvalidDao, TransferCustomerInvalidEntity, Long> implements TransferCustomerInvalidService {
 
     @Autowired

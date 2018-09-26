@@ -1,8 +1,10 @@
 package com.hqjy.mustang.transfer.crm.model.dto;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class TransferCustomerMsgBodyDTO {
 
     /**
@@ -19,11 +21,6 @@ public class TransferCustomerMsgBodyDTO {
      * 部门ID
      */
     private Long deptId;
-
-    /**
-     * 分配url
-     **/
-    private String url;
 
     /**
      * 分配ip
@@ -108,12 +105,12 @@ public class TransferCustomerMsgBodyDTO {
     /**
      * 性别(-1：女   0：未知   1：男) sex
      **/
-    private Byte sex;
+    private Integer sex;
 
     /**
      * 年龄 age
      **/
-    private String age;
+    private Byte age;
 
     /**
      * 邮箱 email

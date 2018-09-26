@@ -7,7 +7,7 @@
         <id column="id" jdbcType="BIGINT" property="id" />
         <result column="customer_id" jdbcType="BIGINT" property="customerId" />
         <result column="age" jdbcType="TINYINT" property="age" />
-        <result column="sex" jdbcType="TINYINT" property="sex" />
+        <result column="sex" jdbcType="INTEGER" property="sex" />
         <result column="address" jdbcType="VARCHAR" property="address" />
         <result column="email" jdbcType="VARCHAR" property="email" />
         <result column="school" jdbcType="VARCHAR" property="school" />
@@ -257,6 +257,17 @@
         where
           customer_id = #{customerId}
     </select>
+
+    <select id="getAllInformationExport" resultMap="BaseResultMap">
+		select
+          tcd.id,tcd.customer_id,tcd.age,tcd.sex,tcd.address,tcd.email,tcd.school,tcd.graduate_date,tcd.major,tcd.education,tcd.apply_type,tcd.apply_key,
+		  tcd.position_applied,tcd.working_place,tcd.work_experience,tcd.note,tcd.create_user_id,tcd.create_user_name,tcd.create_time,tcd.update_user_id,
+		  tcd.update_user_name,tcd.update_time,tcd.resume_detail,tc.name,tc.phone,tc.we_Chat,tc.qq,tc.land_line,tc.user_id,tc.user_name,tc.dept_id,tc.dept_name,
+		  tc.source_id,tc.source_name,tc.company_id,tc.company_name
+		from transfer_customer_detail tcd
+		left join
+			transfer_customer tc on tc.customer_id = tcd.customer_id;
+	</select>
 
 
 </mapper>

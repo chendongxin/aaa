@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 /**
- * @author xyq
+ * @author gmm
  * @date create on 2018/9/17
  */
 @RestController
@@ -31,5 +33,15 @@ public class SysDeptApi {
     public R getAllDept() {
         return R.ok(sysDeptService.getAllDeptList());
     }
+
+    /**
+     * 获取所有部门ID
+     */
+    @ApiOperation(value="获取所选部门的旗下部门", notes = "获取所选部门的旗下部门")
+    @GetMapping(value = "/dept/all/id")
+    public List<Long> getAllDeptId(Long deptId) {
+        return sysDeptService.getAllDeptUnderDeptId(deptId);
+    }
+
 }
 
