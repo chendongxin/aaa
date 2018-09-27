@@ -35,4 +35,9 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
      */
     int countExportCustomer(PageQuery pageQuery);
 
+    /**
+     * 根据客户ID查询一个客户
+     */
+    TransferCustomerEntity getCustomerByCustomerId(Long customerId);
+
 }

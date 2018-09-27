@@ -4,6 +4,7 @@ import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDetailDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerTransferDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerUpDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
@@ -17,7 +18,7 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      * @param customerId 客户编号
      * @return 返回结果
      */
-    TransferCustomerEntity getCustomerData(Long customerId);
+    TransferCustomerDetailDTO getCustomerData(Long customerId);
 
     /**
      * 新增客户

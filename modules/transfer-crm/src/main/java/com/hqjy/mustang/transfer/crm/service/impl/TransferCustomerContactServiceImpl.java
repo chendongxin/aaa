@@ -42,7 +42,7 @@ public class TransferCustomerContactServiceImpl extends BaseServiceImpl<Transfer
         if (StringUtils.isNotEmpty(dto.getPhone())) {
             i = baseDao.save(
                     new TransferCustomerContactEntity()
-                            .setCustomerId(dto.getCompanyId())
+                            .setCustomerId(dto.getCustomerId())
                             .setProId(dto.getProId())
                             .setType(Constant.CustomerContactType.PHONE.getValue())
                             .setDetail(dto.getPhone())
@@ -53,7 +53,7 @@ public class TransferCustomerContactServiceImpl extends BaseServiceImpl<Transfer
         if (StringUtils.isNotEmpty(dto.getQq())) {
             i = baseDao.save(
                     new TransferCustomerContactEntity()
-                            .setCustomerId(dto.getCompanyId())
+                            .setCustomerId(dto.getCustomerId())
                             .setProId(dto.getProId())
                             .setType(Constant.CustomerContactType.QQ.getValue())
                             .setDetail(dto.getQq())
@@ -64,7 +64,7 @@ public class TransferCustomerContactServiceImpl extends BaseServiceImpl<Transfer
         if (StringUtils.isNotEmpty(dto.getWeChat())) {
             i = baseDao.save(
                     new TransferCustomerContactEntity()
-                            .setCustomerId(dto.getCompanyId())
+                            .setCustomerId(dto.getCustomerId())
                             .setProId(dto.getProId())
                             .setType(Constant.CustomerContactType.WE_CHAT.getValue())
                             .setDetail(dto.getWeChat())
@@ -76,7 +76,7 @@ public class TransferCustomerContactServiceImpl extends BaseServiceImpl<Transfer
             i = baseDao.save(
                     new TransferCustomerContactEntity()
                             .setProId(dto.getProId())
-                            .setCustomerId(dto.getCompanyId())
+                            .setCustomerId(dto.getCustomerId())
                             .setType(Constant.CustomerContactType.LAND_LINE.getValue())
                             .setDetail(dto.getLandLine())
                             .setCreateUserId(getUserId())
@@ -166,6 +166,11 @@ public class TransferCustomerContactServiceImpl extends BaseServiceImpl<Transfer
             dtoList.add(dto);
         });
         return dtoList;
+    }
+
+    @Override
+    public List<TransferCustomerContactEntity> findListByCustomerId(Long customerId) {
+        return baseDao.findListByCustomerId(customerId);
     }
 
 }

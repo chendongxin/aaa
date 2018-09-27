@@ -182,4 +182,10 @@
 		from transfer_customer_contact where customer_id IN ${customerIds}
 	</select>
 
+    <select id="findListByCustomerId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_customer_contact where customer_id = #{customerId}
+    </select>
+
 </mapper>

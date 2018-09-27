@@ -6,9 +6,9 @@ import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDetailDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerTransferDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerUpDTO;
-import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerDetailService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
@@ -122,64 +122,47 @@ public class TransferCustomerController {
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
             "        \"customerId\": 1,\n" +
-            "        \"ncId\": 1,\n" +
-            "        \"proId\": 1,\n" +
-            "        \"proName\": \"IT赛道\",\n" +
-            "        \"sourceId\": 1,\n" +
-            "        \"sourceName\": \"智联\",\n" +
-            "        \"companyId\": 1,\n" +
-            "        \"companyName\": \"广州海度网络科技有限公司\",\n" +
             "        \"name\": \"灵儿\",\n" +
             "        \"status\": 1,\n" +
-            "        \"getWay\": 1,\n" +
-            "        \"userId\": 1,\n" +
-            "        \"userName\": \"王超\",\n" +
-            "        \"deptId\": 1,\n" +
-            "        \"deptName\": \"益阳校区\",\n" +
-            "        \"firstUserId\": 1,\n" +
-            "        \"firstUserName\": \"丫丫\",\n" +
-            "        \"lastUserId\": 1,\n" +
-            "        \"lastUserName\": \"美丽\",\n" +
-            "        \"genUserId\": 1,\n" +
-            "        \"genUserName\": \"翰林\",\n" +
-            "        \"phone\": \"18578548523\",\n" +
-            "        \"weChat\": \"18578548523\",\n" +
-            "        \"qq\": \"18578548523\",\n" +
-            "        \"landLine\": \"6541236\",\n" +
             "        \"createUserId\": 1,\n" +
-            "        \"createUserName\": \"王超群\",\n" +
+            "        \"createUserName\": \"王超d群\",\n" +
             "        \"createTime\": \"2018-06-11 17:19:24\",\n" +
-            "        \"updateUserId\": 1,\n" +
-            "        \"updateUserName\": \"王超群\",\n" +
-            "        \"createTime\": \"2018-06-11 17:19:24\",\n" +
-            "        \"customerDetailList\": [\n" +
-            "           {\n" +
-            "               \"id(编号)\": 1,\n" +
-            "               \"customerId(客户编号)\": 1,\n" +
-            "               \"resume_detail(简历详情)\": \"应聘前端工程师\",\n" +
-            "               \"age(年龄)\": 18,\n" +
-            "               \"sex(性别(0-未知，1-男，2-女))\": 1,\n" +
-            "               \"address(地址)\": \"广州白云区\",\n" +
-            "               \"email(邮箱)\": \"146431@163.com\",\n" +
-            "               \"school(毕业学校)\": \"中山大学\",\n" +
-            "               \"graduate_date(毕业年份)\": \"2016.07\",\n" +
-            "               \"major(专业)\": \"计算机\",\n" +
-            "               \"education_id(学历ID)\": 1,\n" +
-            "               \"education_name(学历名称)\": \"本科\",\n" +
-            "               \"apply_type(应聘类别)\": \"测试\",\n" +
-            "               \"apply_key(应聘关键词)\": \"测试\",\n" +
-            "               \"position_applied(期望职位)\": \"测试员\",\n" +
-            "               \"working_place(期望工作地点)\": \"广州\",\n" +
-            "               \"work_experience(工作经验)\": 1,\n" +
-            "               \"note(备注)\": \"测试员\",\n" +
-            "               \"create_user_id(创建人编号)\": 1,\n" +
-            "               \"create_user_name(创建人姓名)\": \"丫丫\",\n" +
-            "               \"createTime\": \"2018-06-04 16:11:46\",\n" +
-            "               \"update_user_id(更新人编号)\": 1,\n" +
-            "               \"update_user_name(更新人姓名)\": \"丫丫\",\n" +
-            "               \"createTime\": \"2018-06-11 17:19:24\",\n" +
-            "           },\n" +
-            "        ],\n" +
+            "        \"sex\": 1,\n" +
+            "        \"age\": 18,\n" +
+            "        \"getWay\": 1,\n" +
+            "        \"educationId(0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士，7-博士)\": 1,\n" +
+            "        \"positionApplied\": \"工程师\",\n" +
+            "        \"major\": \"软件\",\n" +
+            "        \"school\": \"中大\",\n" +
+            "        \"applyType(1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它)\": 1,\n" +
+            "        \"graduateDate\": \"2018-06-11\",\n" +
+            "        \"applyKey\": \"软件\",\n" +
+            "        \"workingPlace\": \"广州\",\n" +
+            "        \"workExperience\": \"2年\",\n" +
+            "        \"resumeDetail\": \"广州-工程师\",\n" +
+            "        \"note\": \"无\",\n" +
+            "    \"contactList\": [\n" +
+            "      {\n" +
+            "        \"contactId\": 1,\n" +
+            "        \"createId\": 1,\n" +
+            "        \"createTime\": \"2018-06-04 16:11:46\",\n" +
+            "        \"customerId\": 1,\n" +
+            "        \"detail\": \"13631153950\",\n" +
+            "        \"isPrimary\": 1,\n" +
+            "        \"type\": 0,\n" +
+            "        \"updateTime\": \"2018-06-04 16:27:34\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"contactId\": 2,\n" +
+            "        \"createId\": 1,\n" +
+            "        \"createTime\": \"2018-06-04 16:27:32\",\n" +
+            "        \"customerId\": 1,\n" +
+            "        \"detail\": \"微信号\",\n" +
+            "        \"isPrimary\": 0,\n" +
+            "        \"type\": 1,\n" +
+            "        \"updateTime\": \"2018-06-04 16:27:55\"\n" +
+            "      }\n" +
+            "    ],\n" +
             "  },\n" +
             "  \"code\": 0\n" +
             "}"
@@ -194,25 +177,31 @@ public class TransferCustomerController {
      */
     @ApiOperation(value = "新增客户", notes = "请求参数：\n" +
             "参数说明：\n" +
-            "【手机:phone】,【座机：landLine】,【微信:weiXin】,【QQ:qq】,【来源平台ID:sourceId】,【部门ID:deptId】\n" +
-            "【推广公司ID:companyId】,【首次跟进人ID:firstUserId】,【姓名:name】,【性别(0-未知，1-男，2-女):sex】\n" +
-            "【年龄:age】,【学历(0-小学，1-初中，2-中专，3-高中，4-专科，5-本科，6-硕士研究生，7-博士研究生):education】\n" +
-            "【学校:school】,【专业:major】,【期望职位:positionApplied】,【毕业年份:graduateDate】,【应聘类别:applyType】\n" +
-            "【期望工作地点:workingPlace】,【应聘关键词:applyKey】,【获取方式(1-主动获取，2-被动获取):getWay】,【工作经验:workExperience】,【备注:memo】\n" +
+            "【手机:phone】,【座机：landLine】,【微信:weiXin】,【QQ:qq】,【赛道ID:proId】,【赛道名称:proName】,【来源平台ID:sourceId】,【来源平台名称:sourceName】,【部门ID:deptId】,【部门名称:deptName】\n" +
+            "【推广公司ID:companyId】,【推广公司名称:companyName】,【首次跟进人ID:firstUserId】,【首次跟进人名称:firstUserName】,【姓名:name】,【性别(0-未知，1-男，2-女):sex】\n" +
+            "【年龄:age】,【学历(0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士研究生，7-博士研究生):educationId】\n" +
+            "【学校:school】,【专业:major】,【期望职位:positionApplied】,【毕业年份:graduateDate】,【应聘类别(1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它):applyType】\n" +
+            "【期望工作地点:workingPlace】,【应聘关键词:applyKey】,【获取方式(1-主动获取，2-被动获取):getWay】,【工作经验(0-无经验，1-应届生，2-一年以内，3-两年，4-三年，5-三年以上):workExperience】,【备注:note】\n" +
             "示例：\n" +
             "{\n" +
             "  \"phone\": \"18578548523\",\n" +
             "  \"weChat\": \"18578548523\",\n" +
             "  \"qq\": \"18578548523\",\n" +
             "  \"landLine\": \"6541236\",\n" +
-            "  \"sourceId\": 1,\n" +
-            "  \"deptId\": 2,\n" +
-            "  \"companyId\": 33,\n" +
-            "  \"firstUserId\": 4,\n" +
+            "  \"proId\": 106,\n" +
+            "  \"proName\": \"未分配部门\",\n" +
+            "  \"sourceId\": 3,\n" +
+            "  \"sourceName\": \"前程\",\n" +
+            "  \"deptId\": 1709,\n" +
+            "  \"deptName\": \"飞虎自考网销\",\n" +
+            "  \"companyId\": 2,\n" +
+            "  \"companyName\": \"广州百单网网络科技有限公司\",\n" +
+            "  \"firstUserId\": 10143,\n" +
+            "  \"firstUserName\": \"李倩\",\n" +
             "  \"name\": \"丫丫\",\n" +
             "  \"sex\": 1,\n" +
             "  \"age\": 24,\n" +
-            "  \"education\": 5,\n" +
+            "  \"educationId\": 5,\n" +
             "  \"school\": \"中山大学\",\n" +
             "  \"major\": \"软件\",\n" +
             "  \"positionApplied\": \"测试\",\n" +
@@ -222,7 +211,7 @@ public class TransferCustomerController {
             "  \"workingPlace\": \"广州\",\n" +
             "  \"getWay\": 1,\n" +
             "  \"workExperience\": 5,\n" +
-            "  \"memo\": \"无\",\n" +
+            "  \"note\": \"无\",\n" +
             "}\n" +
             "新增成功响应数据：\n" +
             "{\n" +
@@ -267,20 +256,34 @@ public class TransferCustomerController {
      */
     @ApiOperation(value = "保存修改客户基本资料", notes = "输入参数：\n" +
             "参数说明：" +
-            " 【客户ID:customerId】【性别:sex】【姓名:name】\n" +
-            " 【性别(-1：女 0：未知 1：男):sex】\n" +
+            "【客户ID:customerId】,【姓名:name】,【性别(-1：女 0：未知 1：男):sex】,【创建时间:createTime】,【年龄:age】\n" +
+            "【获取方式(1-主动获取; 2-被动获取):getWay】,【学历(0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士，7-博士):educationId】\n" +
+            "【应聘职位:positionApplied】,【专业:major】,【学校:school】,【应聘类别(1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它):applyType】\n" +
+            "【毕业时间:graduateDate】,【应聘关键词:applyKey】,【期望工作地点:workingPlace】,【工作经验:workExperience】,【备注:note】\n" +
             "示例：\n" +
             "{\n" +
-            "    \"address\": \"无\",\n" +
-            "    \"customerId\": 33,\n" +
-            "    \"name\": \"test\",\n" +
-            "    \"sex\": 0\n" +
+            "        \"customerId\": 1,\n" +
+            "        \"name\": \"灵儿\",\n" +
+            "        \"createTime\": \"2018-06-11 17:19:24\",\n" +
+            "        \"sex\": 1,\n" +
+            "        \"age\": 18,\n" +
+            "        \"getWay\": 1,\n" +
+            "        \"educationId\": 1,\n" +
+            "        \"positionApplied\": \"工程师\",\n" +
+            "        \"major\": \"软件\",\n" +
+            "        \"school\": \"中大\",\n" +
+            "        \"applyType\": 1,\n" +
+            "        \"graduateDate\": \"2018-06-11\",\n" +
+            "        \"applyKey\": \"软件\",\n" +
+            "        \"workingPlace\": \"广州\",\n" +
+            "        \"workExperience\": \"2年\",\n" +
+            "        \"note\": \"无\",\n" +
             "}")
     @SysLog("保存修改客户资料")
     @PostMapping("/update")
-    public R update(@RequestBody TransferCustomerDetailEntity customerDetail) {
+    public R update(@RequestBody TransferCustomerDetailDTO customerDetail) {
         try {
-            transferCustomerDetailService.update(customerDetail);
+            transferCustomerDetailService.updateCustomerDetail(customerDetail);
             return R.ok();
         } catch (Exception e) {
             return R.error("客户资料修改异常：" + e.getMessage());

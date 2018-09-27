@@ -1,7 +1,5 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.hqjy.mustang.common.base.annotation.ExcelAttribute;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.ConfigConstant;
 import com.hqjy.mustang.common.base.constant.Constant;
@@ -19,7 +17,6 @@ import com.hqjy.mustang.transfer.crm.feign.SysMessageServiceFeign;
 import com.hqjy.mustang.transfer.crm.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.dto.*;
 import com.hqjy.mustang.transfer.crm.model.entity.*;
-import com.hqjy.mustang.transfer.crm.sender.CustomerSender;
 import com.hqjy.mustang.transfer.crm.service.*;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,8 +61,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private SysDeptServiceFeign sysDeptServiceFeign;
     @Autowired
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
-    @Autowired
-    private CustomerSender customerSender;
+//    @Autowired
+//    private CustomerSender customerSender;
 
     /**
      * 获取某客户的基本数据
@@ -74,9 +71,17 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
      * @return 返回结果
      */
     @Override
-    public TransferCustomerEntity getCustomerData(Long customerId) {
-        TransferCustomerEntity customer = baseDao.findOne(customerId);
-        customer.setCustomerDetail(transferCustomerDetailDao.getCustomerDetailByCustomerId(customerId));
+    public TransferCustomerDetailDTO getCustomerData(Long customerId) {
+        TransferCustomerEntity customerEntity = baseDao.findOne(customerId);
+        TransferCustomerDetailEntity customerDetail = transferCustomerDetailService.getCustomerDetailByCustomerId(customerId);
+        TransferCustomerDetailDTO customer = new TransferCustomerDetailDTO()
+                .setStatus(customerEntity.getStatus()).setName(customerEntity.getName()).setCreateUserId(customerEntity.getCreateUserId()).setCreateUserName(customerEntity.getCreateUserName())
+                .setCreateTime(customerEntity.getCreateTime()).setAge(customerDetail.getAge()).setSex(customerDetail.getSex()).setGetWay(customerEntity.getGetWay())
+                .setEducationId(customerDetail.getEducationId()).setPositionApplied(customerDetail.getPositionApplied())
+                .setMajor(customerDetail.getMajor()).setApplyType(customerDetail.getApplyType()).setApplyKey(customerDetail.getApplyKey())
+                .setSchool(customerDetail.getSchool()).setGraduateDate(customerDetail.getGraduateDate()).setWorkExperience(customerDetail.getWorkExperience())
+                .setWorkingPlace(customerDetail.getWorkingPlace()).setResumeDetail(customerDetail.getResumeDetail()).setNote(customerDetail.getNote());
+        customer.setContactList(transferCustomerContactService.findListByCustomerId(customerId));
         return customer;
     }
 
@@ -96,21 +101,25 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             List<TransferCustomerContactEntity> list = this.checkContactHasExit(customerDto);
             if (list.size() > 0) {
                 //如果存在，将客户添加到重单客户表中
+                System.out.println("list.get(0) = " + list.get(0));
+                TransferCustomerEntity customer = baseDao.findOne(list.get(0).getCustomerId());
                 transferCustomerRepeatService.save(
                         new TransferCustomerRepeatEntity()
-                                .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeChat()).setQq(customerDto.getWeChat())
-                                .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setCompanyId(customerDto.getCompanyId())
-                                .setSourceId(customerDto.getSourceId()).setName(customerDto.getName()).setMemo(customerDto.getNote())
-                                .setUserId(customerDto.getFirstUserId()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-                                .setProId(customerDto.getProId())
+                                .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeChat()).setQq(customerDto.getWeChat())
+                                .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
+                                .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
+                                .setMemo(customerDto.getNote()).setUserId(customerDto.getFirstUserId()).setUserName(customerDto.getFirstUserName()).setCreateUserId(getUserId()).
+                                setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
                 );
                 return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
             } else {
+                Date date = new Date();
                 TransferCustomerEntity entity = new TransferCustomerEntity()
                         .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeChat()).setQq(customerDto.getQq()).setLandLine(customerDto.getLandLine())
-                        .setDeptId(customerDto.getDeptId()).setCompanyId(customerDto.getCompanyId()).setSourceId(customerDto.getSourceId())
-                        .setProId(customerDto.getProId()).setFirstUserId(customerDto.getFirstUserId()).setName(customerDto.getName())
-                        .setCreateUserId(getUserId()).setCreateUserName(getUserName());
+                        .setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId()).setCompanyName(customerDto.getCompanyName())
+                        .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
+                        .setFirstUserId(customerDto.getFirstUserId()).setFirstUserName(customerDto.getFirstUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+                        .setAllotTime(date).setGetWay(customerDto.getGetWay());
                 super.save(entity);
                 customerDto.setCustomerId(entity.getCustomerId());
                 transferCustomerDetailService.save(
@@ -259,13 +268,13 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             .setUserId(upDTO.getUserId()).setGetWay(upDTO.getGetWay()).setNotAllot(upDTO.getNotAllot()).setCustomerId(c.getCustomerId())
                             .setName(c.getName()).setSex(c.getSex()).setAge(c.getAge()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                             .setPhone(c.getPhone()).setEmail(c.getEmail()).setPositionApplied(c.getPositionApplied()).setWorkingPlace(c.getWorkingPlace())
-                            .setSchool(c.getSchool()).setMajor(c.getMajor()).setEducationName(c.getEducationName()).setWorkExperience(c.getWorkExperience())
+                            .setSchool(c.getSchool()).setMajor(c.getMajor()).setWorkExperience(c.getWorkExperience())
                             .setNote(c.getNote());
 
                     //发送客户数据到商机分配消息队列
-                    customerSender.send(JSON.toJSONString(new TransferCustomerQueueDTO()
-                            .setMsgType(2)
-                            .setMsgBody(JSON.toJSON(msgBody))));
+//                    customerSender.send(JSON.toJSONString(new TransferCustomerQueueDTO()
+//                            .setMsgType(2)
+//                            .setMsgBody(JSON.toJSON(msgBody))));
                 });
                 Thread.sleep(1000L);
                 return R.ok("导入数据已提交到队列中");

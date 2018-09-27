@@ -2,7 +2,6 @@ package com.hqjy.mustang.transfer.crm.dao;
 
 import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
-import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerExportEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

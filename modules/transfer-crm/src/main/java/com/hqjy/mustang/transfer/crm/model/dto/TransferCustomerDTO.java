@@ -1,9 +1,12 @@
 package com.hqjy.mustang.transfer.crm.model.dto;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
+
 import java.util.Date;
 
 @Data
+@Accessors(chain = true)
 public class TransferCustomerDTO {
 
     /**
@@ -37,9 +40,19 @@ public class TransferCustomerDTO {
     private Long deptId;
 
     /**
+     * 当前跟进人部门名称 dept_name
+     **/
+    private String deptName;
+
+    /**
      * 推广公司 company_id
      **/
     private Long companyId;
+
+    /**
+     * 推广公司 company_name
+     **/
+    private String companyName;
 
     /**
      * 客户来源 source_id
@@ -47,14 +60,30 @@ public class TransferCustomerDTO {
     private Long sourceId;
 
     /**
+     * 客户来源 source_name
+     **/
+    private String sourceName;
+
+    /**
      * 赛道ID pro_id
      */
     private Long proId;
 
     /**
+     * 赛道ID pro_name
+     */
+    private String proName;
+
+    /**
      * 首次跟进人 first_user_id
      **/
     private Long firstUserId;
+
+    /**
+     * 首次跟进人 first_user_name
+     **/
+    private String firstUserName;
+
 
     /**
      * 姓名 name
@@ -94,7 +123,7 @@ public class TransferCustomerDTO {
     /**
      * 应聘类别 apply_type
      **/
-    private String applyType;
+    private Long applyType;
 
     /**
      * 期望职位 position_applied

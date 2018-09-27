@@ -1,10 +1,12 @@
 package com.hqjy.mustang.transfer.crm.model.dto;
 
 import com.hqjy.mustang.common.base.annotation.ExcelAttribute;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerContactEntity;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author gmm
@@ -74,19 +76,14 @@ public class TransferCustomerDetailDTO {
     private String major;
 
     /**
-     * 学历ID(数据来源于transfer_education学历表) education_id
+     * 学历ID education_id (0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士，7-博士)
      **/
     private Long educationId;
 
     /**
-     * 学历名称(数据来源于transfer_education学历表) education_name
+     * 应聘类别 apply_type (1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它)
      **/
-    private String educationName;
-
-    /**
-     * 应聘类别 apply_type
-     **/
-    private String applyType;
+    private Long applyType;
 
     /**
      * 应聘关键词 apply_key
@@ -149,6 +146,22 @@ public class TransferCustomerDetailDTO {
      * 简历详情 resume_detail
      **/
     private String resumeDetail;
+
+
+    /**
+     * 客户状态,BIZ_STATUS(0-潜在，1-(失败)有效，2-(失败)无效，3-预约，4-成交) status
+     **/
+    private Integer status;
+
+    /**
+     * 推广方式：见数据字典GET_WAY枚举(1-主动获取，2-被动获取) get_way
+     **/
+    private Byte getWay;
+
+    /**
+     * 客户联系方式 (冗余)
+     */
+    List<TransferCustomerContactEntity> contactList;
 
     private static final long serialVersionUID = 1L;
 }

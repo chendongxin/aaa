@@ -66,19 +66,19 @@ public class TransferCustomerDetailEntity implements Serializable {
     private String major;
 
     /**
-	 * 学历ID(数据来源于transfer_education学历表) education_id
+	 * 学历ID education_id (0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士，7-博士)
 	 **/
     private Long educationId;
 
     /**
-	 * 学历名称(数据来源于transfer_education学历表) education_name
+	 * 学历名称
 	 **/
     private String educationName;
 
     /**
-	 * 应聘类别 apply_type
+	 * 应聘类别 apply_type (1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它)
 	 **/
-    private String applyType;
+    private Long applyType;
 
     /**
 	 * 应聘关键词 apply_key
@@ -96,7 +96,7 @@ public class TransferCustomerDetailEntity implements Serializable {
     private String workingPlace;
 
     /**
-	 * 工作经验 work_experience
+	 * 工作经验 work_experience (0-无经验，1-应届生，2-一年以内，3-两年，4-三年，5-三年以上)
 	 **/
     private Byte workExperience;
 

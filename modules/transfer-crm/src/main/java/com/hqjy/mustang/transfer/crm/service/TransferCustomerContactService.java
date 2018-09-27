@@ -51,4 +51,12 @@ public interface TransferCustomerContactService extends BaseService<TransferCust
      * @author XYQ 2018年8月20日10:25:46
      */
     List<TransferCustomerContactDTO> findByCustomerIds(String customerIds);
+
+    /**
+     * 获取该客户的所有联系方式
+     *
+     * @param customerId 客户ID
+     * @return 客户的所有联系方式
+     */
+    List<TransferCustomerContactEntity> findListByCustomerId(Long customerId);
 }
