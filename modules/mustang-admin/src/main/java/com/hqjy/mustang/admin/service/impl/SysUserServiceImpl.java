@@ -2,6 +2,7 @@ package com.hqjy.mustang.admin.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.hqjy.mustang.admin.dao.SysUserDao;
+import com.hqjy.mustang.admin.feign.AllotApiService;
 import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
 import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
@@ -47,10 +48,6 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     private SysUserRoleService sysUserRoleService;
     @Autowired
     private SysUserDeptService sysUserDeptService;
-    /*   @Autowired
-       private SysScheduleService sysScheduleService;
-       @Autowired
-       private BizUserExtendService bizUserExtendService;*/
     @Autowired
     private SysDeptService sysDeptService;
     @Autowired
@@ -61,11 +58,13 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     private RedisUtils redisUtils;
     @Autowired
     private SysUserDao sysUserDao;
-    /* @Autowired
-     private BizAllotService bizAllotService;*/
+    @Autowired
+    private AllotApiService allotApiService;
     @Autowired
     private SysDeleteService sysDeleteService;
-/*    @Autowired
+    /*@Autowired
+    private SysScheduleService sysScheduleService;
+    @Autowired
     private BizCustomerService bizCustomerService;*/
 
     /**
@@ -264,8 +263,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             }
         }
         changeWeightDeptIdset.forEach(deptId -> {
-            // 修改了权重部门下人员需要刷新分配算法 TODO
-            // bizAllotService.listRest(false, deptId);
+            // 修改了权重部门下人员需要刷新分配算法
+            allotApiService.restUserList(deptId);
         });
         return result;
     }
@@ -310,8 +309,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
                 deptIdSet.add(userDept.getDeptId());
             }
             deptIdSet.forEach(deptId -> {
-                // 新的部门和旧的部门都需要刷新分配算法 todo
-                // bizAllotService.listRest(false, deptId);
+                // 新的部门和旧的部门都需要刷新分配算法
+                allotApiService.restUserList(deptId);
             });
             // 清空这个用户的授权缓存
             sysCacheService.cleanUserAuz(user.getUserId());
@@ -415,10 +414,10 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             sysCacheService.cleanUserAuz(userId);
             //清空用户认证缓存
             sysCacheService.cleanUserAut(userId);
-            // 刷新分配算法 TODO
+            // 刷新分配算法
             List<Long> deptIdList = sysUserDeptService.getUserDeptId(userId);
             deptIdList.forEach(deptId -> {
-                // bizAllotService.listRest(false, deptId);
+                allotApiService.restUserList(deptId);
             });
         }
         return count;
