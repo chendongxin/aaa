@@ -1,6 +1,7 @@
 package com.hqjy.mustang.admin.service.impl;
 
 import com.google.gson.reflect.TypeToken;
+import com.hqjy.mustang.admin.feign.AllotApiService;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.constant.SystemId;
@@ -47,8 +48,8 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
      private CustAreaDeptService custAreaDeptService;*/
     @Autowired
     private SysCacheService sysCacheService;
-   /* @Autowired
-    private BizAllotService bizAllotService;*/
+    @Autowired
+    private AllotApiService allotApiService;
     @Autowired
     private RedisUtils redisUtils;
 
@@ -132,8 +133,8 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             int count = super.save(newDept);
             if (count > 0) {
                 sysCacheService.cleanDept();
-                // 刷新部门分配算法  TODO
-                /*bizAllotService.listRest(true, newDept.getParentId());*/
+                // 刷新部门分配算法
+                allotApiService.restDeptList(newDept.getParentId());
             }
             return count;
         }
@@ -165,8 +166,8 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             int count = super.update(newDept);
             if (count > 0) {
                 sysCacheService.cleanDept();
-                // 修改部门需要刷新分配算法  TODO
-                /*bizAllotService.listRest(true, newDept.getDeptId());*/
+                // 修改部门需要刷新分配算法
+                allotApiService.restDeptList(newDept.getParentId());
             }
             return count;
         }
@@ -222,8 +223,8 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         int count = baseDao.delete(deptId);
         if (count > 0) {
             sysCacheService.cleanDept();
-            // 刷新部门分配算法  TODO
-            /*bizAllotService.listRest(true, deptId);*/
+            // 刷新部门分配算法
+            allotApiService.restDeptList(deptInfo.getParentId());
         }
         return count;
     }

@@ -18,6 +18,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
+ * 拷贝对象，不要在对象类上面注解 @Accessors(chain = true)
+ *
  * @author : HejinYo   hejinyo@gmail.com
  * @date : 2017/6/22 21:24
  */

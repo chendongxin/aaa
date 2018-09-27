@@ -2,8 +2,8 @@ package com.hqjy.mustang.transfer.crawler.service.impl;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
+import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
 import lombok.extern.slf4j.Slf4j;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -47,7 +47,7 @@ public class ParseChinahrServiceImpl extends AbstractParseService {
                             // 性别
                             resumeEntity.setSex(MAN.getCode().contains((sexAndAge[0])) ? MAN.getValue() : WOMEN.getCode().contains((sexAndAge[0])) ? Constant.Gender.WOMEN.getValue() : UNKNOWN.getValue());
                             // 年龄
-                            resumeEntity.setAge(StringUtils.cut(sexAndAge[1], "", "岁"));
+                            resumeEntity.setAge(handleAge(sexAndAge[1]));
                             // 学历
                             resumeEntity.setEducation(Constant.Education.NONE.handleEducationName(sexAndAge[2]));
                             // 工作经验

@@ -1,9 +1,10 @@
 package com.hqjy.mustang.allot.api;
 
+import com.hqjy.mustang.allot.service.impl.TransferAllotServiceImpl;
 import com.hqjy.mustang.common.base.constant.Constant;
-import com.hqjy.mustang.common.model.allot.CustomerInfo;
-import org.apache.commons.lang3.RandomUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,12 +16,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(Constant.API_PATH)
 public class AllotApi {
 
-    @GetMapping("/reset")
-    public CustomerInfo reset() {
-        CustomerInfo customerInfoDTO = new CustomerInfo();
-        customerInfoDTO.setCustomerId(RandomUtils.nextLong());
-        customerInfoDTO.setName("测试客户");
-        customerInfoDTO.setPhone("1388888888");
-        return customerInfoDTO;
+    @Autowired
+    private TransferAllotServiceImpl transferAllotService;
+
+    /**
+     * 招转重置部门分配算法
+     */
+    @GetMapping("/transfer/reset/dept/{deptId}")
+    public void restDeptList(@PathVariable("deptId") Long deptId) {
+        transferAllotService.restDeptList(deptId);
+    }
+
+    /**
+     * 招转重置用户分配算法
+     */
+    @GetMapping("/transfer/reset/user/{deptId}")
+    public void restUserList(@PathVariable("deptId") Long deptId) {
+        transferAllotService.restUserList(deptId);
     }
 }

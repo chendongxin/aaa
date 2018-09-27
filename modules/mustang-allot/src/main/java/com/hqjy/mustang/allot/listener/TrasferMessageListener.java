@@ -66,13 +66,15 @@ public class TrasferMessageListener {
     @RabbitListener(queues = {RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE})
     public void onMessage(Message message, Channel channel) throws IOException {
 
-        // 设置messageId  记录日志
         String jsonMessage = new String(message.getBody());
-        log.info("消息队列消费监听器：{}", jsonMessage);
+
         if (StringUtils.isEmpty(jsonMessage)) {
             return;
         }
-        String msgId = message.getMessageProperties().getHeaders().getOrDefault("spring_listener_return_correlation", UUID.randomUUID()).toString();
+
+        log.info("新的商机消息：{}", jsonMessage);
+
+        String msgId = UUID.randomUUID().toString();
 
         // 设置messageId  记录日志
         LogMessageQueue mqLog = new LogMessageQueue(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE, msgId, JsonUtil.toJson(jsonMessage), STATUS_PENDING);
@@ -102,6 +104,7 @@ public class TrasferMessageListener {
             } else {
                 log.error("没有进行分配:{}", msgId);
             }
+
         } catch (MqException e) {
             int code = e.getCode();
             String msg = e.getMsg();
@@ -126,8 +129,6 @@ public class TrasferMessageListener {
         rabbitTemplate.convertAndSend(RabbitQueueConstant.LOG_MESSAGE_QUEUE, JsonUtil.toJson(mqLog));
         // 确认消息
         channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
-
-        System.out.println("message.getMessageProperties().getDeliveryTag()====>" + message.getMessageProperties().getDeliveryTag());
     }
 
 }

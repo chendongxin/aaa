@@ -27,9 +27,6 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
     @Override
     public ContactSaveResultDTO saveDetail(TransferAllotCustomerEntity content) {
         ContactSaveResultDTO result = new ContactSaveResultDTO();
-        long customerId = content.getCustomerId();
-        long createId = content.getCreateUserId();
-        Long proId = content.getProId();
         String phone = content.getPhone();
         String landLine = content.getLandLine();
         String weChat = content.getWeChat();
@@ -40,7 +37,7 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
         //1、电话存在，保存电话，
         if (StringUtils.isNotEmpty(phone)) {
             //因为第一个执行，默认主联系方式
-            result = save(result, proId, customerId, PHONE.getValue(), phone, true, createId);
+            result = save(result, PHONE.getValue(), phone, true, content);
             if (!result.getContacStatus()) {
                 //如果是主联系，而且主联系方式状态为false，说明重单。直接返回结果
                 return result;
@@ -51,7 +48,7 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
 
         //2、座机存在，保存座机
         if (StringUtils.isNotEmpty(landLine)) {
-            result = save(result, proId, customerId, LAND_LINE.getValue(), landLine, isPrimary, createId);
+            result = save(result, LAND_LINE.getValue(), landLine, isPrimary, content);
             if (isPrimary && !result.getContacStatus()) {
                 //如果是座机主联系，状态为false，说明重单。直接返回结果
                 return result;
@@ -61,7 +58,7 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
 
         //3、微信存在，保存微信
         if (StringUtils.isNotEmpty(weChat)) {
-            result = save(result, proId, customerId, WE_CHAT.getValue(), weChat, isPrimary, createId);
+            result = save(result, WE_CHAT.getValue(), weChat, isPrimary, content);
             if (isPrimary && !result.getContacStatus()) {
                 //如果是微信主联系，状态为false，说明重单。直接返回结果
                 return result;
@@ -71,7 +68,7 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
 
         //4、QQ存在，保存QQ
         if (StringUtils.isNotEmpty(qq)) {
-            result = save(result, proId, customerId, QQ.getValue(), qq, isPrimary, createId);
+            result = save(result, QQ.getValue(), qq, isPrimary, content);
             if (isPrimary && !result.getContacStatus()) {
                 return result;
             }
@@ -88,15 +85,16 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
     /**
      * 保存一种联系方式到数据库
      */
-    private ContactSaveResultDTO save(ContactSaveResultDTO result, long proId, long customerId, int type, String detail, boolean isPrimary, long createId) {
+    private ContactSaveResultDTO save(ContactSaveResultDTO result, int type, String detail, boolean isPrimary, TransferAllotCustomerEntity content) {
         TransferAllotCustomerContactEntity contactEntity = new TransferAllotCustomerContactEntity();
-        contactEntity.setCustomerId(customerId);
+        contactEntity.setCustomerId(content.getCustomerId());
         // 如果是电话才设置主联系方式
         // contactEntity.setIsPrimary(type == PHONE.getValue() ? (isPrimary ? 1 : 0) : 0);
-        contactEntity.setProId(proId);
-        contactEntity.setCreateUserId(createId);
+        contactEntity.setProId(content.getProId());
+        contactEntity.setCreateUserId(content.getCreateUserId());
         contactEntity.setType(type);
         contactEntity.setDetail(detail);
+        contactEntity.setCreateUserName(content.getCreateUserName());
         // 如果保存失败，代表重单
         boolean saveStatus = baseDao.save(contactEntity) > 0;
         if (isPrimary) {

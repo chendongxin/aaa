@@ -28,7 +28,7 @@ public class MessageQueueServiceImpl implements MessageQueueService {
      * 招转分配处理
      */
     @Resource(name = "transferHandleService")
-    private AbstractHandleService transferHandleService;
+    private AbstractHandleService<TransferAllotCustomerEntity> transferHandleService;
 
     /**
      * 处理消息

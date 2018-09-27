@@ -21,7 +21,7 @@ public abstract class AbstractParseService {
     /**
      * 工作经验，通过文字去匹配，不准确，但是非要这样做也没办法；
      */
-    public static Float handleWorkExperience(String educationName) {
+    public Float handleWorkExperience(String educationName) {
         try {
             if (StringUtils.isNotEmpty(educationName)) {
                 educationName = educationName
@@ -56,5 +56,17 @@ public abstract class AbstractParseService {
         } catch (Exception e) {
             return 0f;
         }
+    }
+
+    public Integer handleAge(String age) {
+        if (StringUtils.isNotEmpty(age)) {
+            age = age.replaceAll("岁", "").replaceAll(" ", "");
+            try {
+                return Integer.parseInt(age);
+            } catch (Exception ignored) {
+
+            }
+        }
+        return null;
     }
 }

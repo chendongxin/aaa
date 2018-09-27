@@ -9,7 +9,9 @@
         <result column="pro_id" jdbcType="BIGINT" property="proId"/>
         <result column="pro_name" jdbcType="VARCHAR" property="proName"/>
         <result column="company_id" jdbcType="BIGINT" property="companyId"/>
+        <result column="company_name" jdbcType="VARCHAR" property="companyName"/>
         <result column="source_id" jdbcType="BIGINT" property="sourceId"/>
+        <result column="source_name" jdbcType="VARCHAR" property="sourceName"/>
         <result column="dept_id" jdbcType="BIGINT" property="deptId"/>
         <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
@@ -31,9 +33,10 @@
 
     <!-- 表基本列 -->
     <sql id="Base_Column_List">
-        repeat_id, customer_id, pro_id, pro_name, company_id, source_id, dept_id, dept_name,
-        user_id, user_name, name, address, phone, we_chat, qq, land_line, memo, create_user_id,
-        create_user_name, create_time, update_user_id, update_user_name, update_time
+        repeat_id, customer_id, pro_id, pro_name, company_id, company_name, source_id, source_name,
+        dept_id, dept_name, user_id, user_name, name, address, phone, we_chat, qq, land_line,
+        memo, create_user_id, create_user_name, create_time, update_user_id, update_user_name,
+        update_time
     </sql>
 
     <!-- 通用查询sql -->
@@ -43,7 +46,9 @@
             <if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
             <if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name = #{proName}</if>
             <if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+            <if test="companyName != null and !&quot;&quot;.equals(companyName)">and company_name = #{companyName}</if>
             <if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+            <if test="sourceName != null and !&quot;&quot;.equals(sourceName)">and source_name = #{sourceName}</if>
             <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
             <if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
             <if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
@@ -72,7 +77,9 @@
             <if test="null != proId">pro_id,</if>
             <if test="null != proName">pro_name,</if>
             <if test="null != companyId">company_id,</if>
+            <if test="null != companyName">company_name,</if>
             <if test="null != sourceId">source_id,</if>
+            <if test="null != sourceName">source_name,</if>
             <if test="null != deptId">dept_id,</if>
             <if test="null != deptName">dept_name,</if>
             <if test="null != userId">user_id,</if>
@@ -97,7 +104,9 @@
             <if test="null != proId">#{proId},</if>
             <if test="null != proName">#{proName},</if>
             <if test="null != companyId">#{companyId},</if>
+            <if test="null != companyName">#{companyName},</if>
             <if test="null != sourceId">#{sourceId},</if>
+            <if test="null != sourceName">#{sourceName},</if>
             <if test="null != deptId">#{deptId},</if>
             <if test="null != deptName">#{deptName},</if>
             <if test="null != userId">#{userId},</if>
@@ -126,7 +135,9 @@
             <if test="null != proId">pro_id = #{proId},</if>
             <if test="null != proName">pro_name = #{proName},</if>
             <if test="null != companyId">company_id = #{companyId},</if>
+            <if test="null != companyName">company_name = #{companyName},</if>
             <if test="null != sourceId">source_id = #{sourceId},</if>
+            <if test="null != sourceName">source_name = #{sourceName},</if>
             <if test="null != deptId">dept_id = #{deptId},</if>
             <if test="null != deptName">dept_name = #{deptName},</if>
             <if test="null != userId">user_id = #{userId},</if>
@@ -204,7 +215,9 @@
             <if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
             <if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name like concat('%',#{proName},'%')</if>
             <if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
+            <if test="companyName != null and !&quot;&quot;.equals(companyName)">and company_name like concat('%',#{companyName},'%')</if>
             <if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+            <if test="sourceName != null and !&quot;&quot;.equals(sourceName)">and source_name like concat('%',#{sourceName},'%')</if>
             <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
             <if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
             <if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
@@ -239,6 +252,21 @@
         count(*)
         from transfer_customer_repeat
         <include refid="Base_Where_SQL"/>
+    </select>
+    <!-- 根据联系方式和详情查询一条数据 -->
+    <select id="findOneByTypeAndDetail" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_customer_contact
+        where type=#{type} and detail=#{detail}
+    </select>
+
+    <!-- 查询主联系方式 -->
+    <select id="findPrimary" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_customer_contact
+        where customer_id=#{customerId} order by type limit 1
     </select>
 
 

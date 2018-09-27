@@ -158,7 +158,7 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
                     resumeEntity.setGenUserId(emailConfig.getUserId());
                     resumeEntity.setGenUserName(emailConfig.getUserName());
 
-                    // 来源信息 读取 transfer_source 表中配置
+                    // 来源信息 读取 transfer_source 表中配置 TODO
                     TransferSourceInfo sourceInfo = trasferSourceApiService.findByEmailDomain(StringUtils.cutFrom(sendMali, "@"));
                     resumeEntity.setSourceId(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getSourceId).orElse(null));
                     resumeEntity.setSourceName(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getName).orElse(null));
@@ -175,8 +175,10 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
                     // 同步开始时间
                     resumeEntity.setSyncTime(beforeDate);
 
-                    // 有手机号码才进行保存
-                    if (StringUtils.isNotEmpty(resumeEntity.getPhone())) {
+                    int age = Optional.ofNullable(resumeEntity.getAge()).orElse(0);
+
+                    // 有手机号码才进行保存 and 只爬取年龄段需要在18-30（包含18和30岁）之间的
+                    if (StringUtils.isNotEmpty(resumeEntity.getPhone()) && age >= 18 && age <= 30) {
                         int count = baseDao.save(resumeEntity);
                         if (count > 0) {
                             // 保存成功，发送mq
@@ -207,7 +209,6 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
         }
 
     }
-
 
     /**
      * 连接邮箱，重试机制

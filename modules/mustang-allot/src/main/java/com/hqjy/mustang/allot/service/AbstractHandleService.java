@@ -32,12 +32,7 @@ public abstract class AbstractHandleService<T extends Serializable> {
     /**
      * 分配,设置用户ID和部门ID
      */
-    protected abstract void allot(ContactSaveResultDTO resultDTO, T customer);
-
-    /**
-     * 重单商机保存处理
-     */
-    protected abstract void repeatSave(ContactSaveResultDTO resultDTO, T customer);
+    protected abstract T allot(ContactSaveResultDTO resultDTO, T customer);
 
     /**
      * 保存到数据库
@@ -71,17 +66,15 @@ public abstract class AbstractHandleService<T extends Serializable> {
         // 预处理
         ContactSaveResultDTO saveResultDTO = pretreatment(customer);
         // 分配，根据部门获取人员
-        allot(saveResultDTO, customer);
+        customer = allot(saveResultDTO, customer);
         // 保存流程记录
         Long processId = saveProcess(saveResultDTO, customer);
         //发送webSocket消息,需要分别处理，首次和二次
         if (processId != null) {
             sendMessage(saveResultDTO, customer);
+            // 最后处理
+            finalTreatment(processId, customer);
         }
-        // 重单商机保存处理
-        repeatSave(saveResultDTO, customer);
-        // 最后处理
-        finalTreatment(processId, customer);
         return true;
     }
 

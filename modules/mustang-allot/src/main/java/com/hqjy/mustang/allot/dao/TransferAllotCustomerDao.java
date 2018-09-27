@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Param;
 /**
  * transfer_customer 持久化层
  *
- * @author : xyq
+ * @author : HejinYo   hejinyo@gmail.com
  * @date : 2018/09/07 10:16
  */
 @Mapper
