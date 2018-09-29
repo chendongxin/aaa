@@ -410,7 +410,11 @@ public class Constant {
 
         FAILED_VALID(1, "有效失败"),
 
-        FAILED_INVALID(2, "无效失败");
+        FAILED_INVALID(2, "无效失败"),
+
+        RESERVATION(3, "预约"),
+
+        DEAL(4, "成交");
 
         private Integer value;
 
@@ -437,6 +441,86 @@ public class Constant {
             this.code = code;
         }
     }
+
+    /**
+     * 有效失败包括
+     */
+    public enum ValidType {
+
+        JOB_SEARCH(1, "找工作不学"),
+        LOAN_REJECTION(2, "拒绝贷款"),
+        GET_JOB(3, "找到工作"),
+        SUM_WIN_PART_TIME(4, "寒/暑假工"),
+        NO_INTEREST(5, "没投过简历/无兴趣"),
+        PASSIVE_MESSAGE(6, "负面信息"),
+        OTHER_JOB(7, "想从事其他岗位"),
+        INTERNAL_SCHOOL(8, "在校生不能离校"),
+        AGE_OVERSTEP(9, "年龄＜18岁或＞30岁"),
+        EXPERIENCE_ONE_YEAR(10, "已有同岗位经验1年以上"),
+        OTHER(11, "其他");
+
+        private Integer value;
+
+        private String code;
+
+        ValidType(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+    }
+
+    /**
+     * 无效失败包括
+     */
+    public enum Valid {
+
+        SAME_TRAIN(1, "参加过同类培训"),
+        LOW_DEGREE(2, "小学初中学历"),
+        ADVERTISING_INFORMATION(3, "广告信息"),
+        PEER_SPY(4, "同行探子");
+
+        private Integer value;
+
+        private String code;
+
+        Valid(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+    }
+
 
     /**
      * 跟进状态

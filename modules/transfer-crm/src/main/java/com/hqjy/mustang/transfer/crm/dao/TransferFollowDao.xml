@@ -147,8 +147,10 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-		<include refid="Base_Column_List" />
-	from transfer_follow
+	  tf.follow_id, tf.customer_id, tf.process_id, tf.follow_status, tf.contact_type, tf.memo, tf.next_time,
+	  tf.create_user_id, tf.create_time, tf.create_user_name, su.user_name as followUserName
+	  from transfer_follow tf
+	  left join sys_user su on su.user_id=tf.create_user_id
 		<where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
 		<if test="processId != null and !&quot;&quot;.equals(processId)">and process_id = #{processId}</if>
