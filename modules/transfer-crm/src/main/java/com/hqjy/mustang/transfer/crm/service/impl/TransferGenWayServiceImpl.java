@@ -2,9 +2,7 @@ package com.hqjy.mustang.transfer.crm.service.impl;
 
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
-import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.exception.RRException;
-import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferGenWayDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferGenWayService;
@@ -12,8 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -21,23 +17,6 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
 @Service
 public class TransferGenWayServiceImpl extends BaseServiceImpl<TransferGenWayDao, TransferGenWayEntity, Long> implements TransferGenWayService {
-
-    /**
-     * 获取所有推广方式
-     */
-    @Override
-    public List<TransferGenWayEntity> getAllGenWayList() {
-        return baseDao.getAllGenWayList();
-    }
-
-
-    /**
-     * 推广方式管理树数据
-     */
-    @Override
-    public HashMap<String, List<TransferGenWayEntity>> getRecursionTree(boolean showRoot) {
-        return RecursionUtil.listTree(showRoot, TransferGenWayEntity.class, "getWayId", getAllGenWayList(), Collections.singletonList(SystemId.TREE_ROOT));
-    }
 
     /**
      * 增加推广方式
@@ -76,6 +55,30 @@ public class TransferGenWayServiceImpl extends BaseServiceImpl<TransferGenWayDao
         transferGenWayEntity.setUpdateUserId(getUserId());
         transferGenWayEntity.setUpdateUserName(getUserName());
         return baseDao.update(transferGenWayEntity);
+    }
+
+    /**
+     * 获取指定来源平台的推广方式
+     */
+    @Override
+    public List<TransferGenWayEntity> findBySourceId(Long sourceId) {
+        return baseDao.findBySourceId(sourceId);
+    }
+
+    /**
+     * 获取所有推广方式
+     */
+    @Override
+    public List<TransferGenWayEntity> getAllGenWayList() {
+        return baseDao.getAllGenWayList();
+    }
+
+    /**
+     * 获取不属于指定平台的推广方式
+     */
+    @Override
+    public List<TransferGenWayEntity> findNotBySourceId(Long sourceId) {
+        return baseDao.findNotBySourceId(sourceId);
     }
 
 }

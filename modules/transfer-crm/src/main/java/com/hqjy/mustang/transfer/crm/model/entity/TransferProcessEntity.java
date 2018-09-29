@@ -3,6 +3,7 @@ package com.hqjy.mustang.transfer.crm.model.entity;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * transfer_process 客户流程记录实体类
@@ -11,6 +12,7 @@ import lombok.Data;
  * @date : 2018/09/07 10:16
  */
 @Data
+@Accessors(chain = true)
 public class TransferProcessEntity implements Serializable {
     /**
 	 * 流程编号 process_id
@@ -45,7 +47,7 @@ public class TransferProcessEntity implements Serializable {
     /**
 	 * 当前流程状态,见数据字典STATUS active
 	 **/
-    private Long active;
+    private Boolean active;
 
     /**
 	 * 跟进次数 follow_count
