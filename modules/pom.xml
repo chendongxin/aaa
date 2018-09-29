@@ -46,6 +46,9 @@
         <!-- call QT通话中心 -->
         <module>transfer-call</module>
 
+        <!-- 短信模块 -->
+        <module>transfer-sms</module>
+
     </modules>
 
     <dependencies>

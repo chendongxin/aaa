@@ -320,4 +320,15 @@ public final class StringUtils {
     public static boolean isNotBlank(String str) {
         return jodd.util.StringUtil.isNotBlank(str);
     }
+
+    /**
+     * 去掉所有空白字符， 不限于空格
+     */
+    public static String trim(String str) {
+        if (isNotEmpty(str)) {
+            return str.replaceAll("\\s*", "");
+        }
+        return str;
+    }
+
 }

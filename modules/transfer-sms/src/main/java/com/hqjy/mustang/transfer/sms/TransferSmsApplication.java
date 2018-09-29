@@ -1,4 +1,4 @@
-package com.hqjy.mustang.transfer.call;
+package com.hqjy.mustang.transfer.sms;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,13 +12,13 @@ import org.springframework.context.annotation.ComponentScan;
  * @author : HejinYo   hejinyo@gmail.com
  * @date : 2018/03/22 10:54
  */
-@ComponentScan(basePackages = {"com.hqjy.mustang.transfer.call", "com.hqjy.mustang.common"})
+@ComponentScan(basePackages = {"com.hqjy.mustang.transfer.sms", "com.hqjy.mustang.common"})
 @EnableDiscoveryClient
 @EnableFeignClients
 @SpringBootApplication
-public class TransferCallApplication {
+public class TransferSmsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(TransferCallApplication.class, args);
+        SpringApplication.run(TransferSmsApplication.class, args);
     }
 }

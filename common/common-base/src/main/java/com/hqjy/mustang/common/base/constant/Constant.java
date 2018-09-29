@@ -39,6 +39,12 @@ public class Constant {
     public static final String API_PATH = "/api/private/";
     public static final String API_PATH_ANON = API_PATH + "**";
 
+    /**
+     * 开放接口前缀
+     */
+    public static final String API_OPEN_PATH = "/api/public/";
+    public static final String API_OPEN_PATH_ANON = API_OPEN_PATH + "**";
+
     public static final String CODE = "code";
     public static final String MSG = "msg";
     public static final String RESULT = "result";
