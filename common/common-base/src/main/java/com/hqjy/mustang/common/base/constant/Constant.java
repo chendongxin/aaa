@@ -139,7 +139,11 @@ public class Constant {
         /**
          * 4：QQ
          */
-        QQ(4);
+        QQ(4),
+        /**
+         * 5：邮箱
+         */
+        EMAIL(5);
 
 
         private Integer value;
@@ -277,23 +281,38 @@ public class Constant {
      * 学历
      */
     public enum Education {
-        NONE("无"),
-        PRIMARY("小学"),
-        MIDDLE("初中"),
-        HIGH("高中"),
-        COLLEGE("大专"),
-        UNDERGRADUATE("本科"),
-        MASTER("硕士"),
-        DOCTORAL("博士");
+        NONE(0, "无"),
+        PRIMARY(1, "小学"),
+        MIDDLE(2, "初中"),
+        HIGH(3, "高中"),
+        COLLEGE(4, "大专"),
+        UNDERGRADUATE(5, "本科"),
+        MASTER(6, "硕士"),
+        DOCTORAL(7, "博士");
 
-        private String value;
+        private Integer value;
 
-        Education(String value) {
+        private String code;
+
+        Education(Integer value, String code) {
             this.value = value;
+            this.code = code;
         }
 
-        public String getValue() {
+        public Integer getValue() {
             return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
         }
 
         /**
@@ -302,16 +321,179 @@ public class Constant {
         public String handleEducationName(String educationName) {
             if (StringUtils.isNotEmpty(educationName)) {
                 for (Constant.Education e : Constant.Education.values()) {
-                    for (String s : e.getValue().split(",")) {
+                    for (String s : e.getCode().split(",")) {
                         if (educationName.contains(s)) {
-                            return e.getValue();
+                            return e.getCode();
                         }
                     }
                 }
             }
-            return Constant.Education.NONE.getValue();
+            return Constant.Education.NONE.getCode();
         }
 
+    }
+
+    /**
+     * 应聘类别
+     */
+    public enum ApplyType {
+
+        DEVELOP(1, "开发类"),
+        DESIGN(2, "设计类"),
+        OPETATION(3, "运营类"),
+        PRODUCT(4, "产品类"),
+        TECHNICAL_SUPPORT(5,"技术支持类"),
+        OTHER(6,"其它");
+
+        private Integer value;
+
+        private String code;
+
+        ApplyType(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+    }
+
+    /**
+     * 工作经验
+     */
+    public enum  Experience {
+
+        NO_EXPERIENCE(0, "无经验"),
+        FRESH_GRADUATE(1, "应届生"),
+        WITHIN_A_YEAR(2, "1年以内"),
+        TWO_YEARS(3, "两年"),
+        THREE_YEARS(4, "三年"),
+        MORE_THREE_YEARS(5, "三年以上");
+        private Integer value;
+
+        private String code;
+
+        Experience(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
+    }
+
+    /**
+     * 客户状态
+     */
+    public enum CustomerStatus {
+
+        FAILED_VALID(1, "有效失败"),
+
+        FAILED_INVALID(2, "无效失败");
+
+        private Integer value;
+
+        private String code;
+
+        CustomerStatus(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+    }
+
+    /**
+     * 跟进状态
+     */
+    public enum FollowStatus {
+
+        POTENTIAL("A潜在", 0),
+        VALID_DATA("B(失败)有效", 1),
+        INVALID_DATA("C(失败)无效", 2),
+        RESERVATION("D预约", 3),
+        DEAL("E成交", 4);
+
+        private int value;
+        private String code;
+
+        FollowStatus(String code, int value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+    /**
+     * 推广方式
+     */
+    public enum GetWayStatus {
+
+        ACTIVE_GET("主动获取",1),
+        PASSIVE_GET("被动获取",2);
+        private int value;
+        private String code;
+
+        GetWayStatus(String code, int value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getCode() {
+            return code;
+        }
     }
 
 }

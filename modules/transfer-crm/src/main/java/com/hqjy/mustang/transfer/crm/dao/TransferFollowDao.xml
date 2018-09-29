@@ -180,6 +180,21 @@
 	from transfer_follow
 		<include refid="Base_Where_SQL" />
   </select>
+
+	<select id="getLatestByCustomerIdBatch" resultMap="BaseResultMap">
+        SELECT
+            f1.*
+        FROM
+            transfer_follow f1
+        INNER JOIN (
+            SELECT
+                MAX(follow_id) AS follow_id,customer_id
+            FROM
+                transfer_follow WHERE customer_id IN ${customerIds}
+            GROUP BY
+		        customer_id
+        ) f2 ON f1.follow_id = f2.follow_id;
+     </select>
   
 
 </mapper>

@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @date : 2018/09/14 11:19
  */
 @Data
+@Accessors(chain = true)
 public class TransferCustomerInvalidEntity implements Serializable {
     /**
 	 * 自增主键 invalid_id
@@ -26,7 +28,7 @@ public class TransferCustomerInvalidEntity implements Serializable {
     /**
 	 * 失败状态（1-(失败)有效，2-（失败）无效 status
 	 **/
-    private Byte status;
+    private Integer status;
 
     /**
 	 * 见数据字典：失败(有效)类型（VALID_TYPE）和失败(无效)类型（INVALID） type

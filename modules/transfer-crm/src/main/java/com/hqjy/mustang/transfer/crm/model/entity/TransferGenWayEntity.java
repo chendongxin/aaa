@@ -20,16 +20,6 @@ public class TransferGenWayEntity implements Serializable {
     private Long wayId;
 
     /**
-     * 父编号 parent_id
-     */
-    private Long parentId;
-
-    /**
-	 * 来源id source_id
-	 **/
-    private Integer sourceId;
-
-    /**
 	 * 推广方式 gen_way
 	 **/
     private String genWay;
@@ -40,9 +30,9 @@ public class TransferGenWayEntity implements Serializable {
     private Integer seq;
 
     /**
-     * 状态,见数据字典STATUS status( 0-禁用 1-启用)
+     * 状态,见数据字典STATUS status( 0-启用 1-禁用)
      **/
-    private Byte status;
+    private byte status;
 
     /**
      * 父推广方式名称
