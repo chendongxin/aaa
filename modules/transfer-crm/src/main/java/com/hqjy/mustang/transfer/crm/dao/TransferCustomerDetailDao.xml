@@ -1,248 +1,267 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferCustomerDetailDao">
-  
-  <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity">
-    <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
-    <result column="age" jdbcType="TINYINT" property="age" />
-    <result column="sex" jdbcType="TINYINT" property="sex" />
-    <result column="address" jdbcType="VARCHAR" property="address" />
-    <result column="email" jdbcType="VARCHAR" property="email" />
-    <result column="school" jdbcType="VARCHAR" property="school" />
-    <result column="graduate_date" jdbcType="DATE" property="graduateDate" />
-    <result column="major" jdbcType="VARCHAR" property="major" />
-    <result column="education_id" jdbcType="BIGINT" property="educationId" />
-    <result column="education_name" jdbcType="VARCHAR" property="educationName" />
-    <result column="apply_type" jdbcType="VARCHAR" property="applyType" />
-    <result column="apply_key" jdbcType="VARCHAR" property="applyKey" />
-    <result column="position_applied" jdbcType="VARCHAR" property="positionApplied" />
-    <result column="working_place" jdbcType="VARCHAR" property="workingPlace" />
-    <result column="work_experience" jdbcType="TINYINT" property="workExperience" />
-    <result column="note" jdbcType="VARCHAR" property="note" />
-    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
-    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
-    <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  
-  <!-- 表基本列 -->
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity">
-    <result column="resume_detail" jdbcType="LONGVARCHAR" property="resumeDetail" />
-  </resultMap>
-  
-  <!-- 通用查询sql -->
-  <sql id="Base_Where_SQL">
-    <where>
-		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
-		<if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
-		<if test="address != null and !&quot;&quot;.equals(address)">and address = #{address}</if>
-		<if test="email != null and !&quot;&quot;.equals(email)">and email = #{email}</if>
-		<if test="school != null and !&quot;&quot;.equals(school)">and school = #{school}</if>
-		<if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
-		<if test="major != null and !&quot;&quot;.equals(major)">and major = #{major}</if>
-		<if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
-		<if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name = #{educationName}</if>
-		<if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type = #{applyType}</if>
-		<if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key = #{applyKey}</if>
-		<if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied = #{positionApplied}</if>
-		<if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place = #{workingPlace}</if>
-		<if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience = #{workExperience}</if>
-		<if test="note != null and !&quot;&quot;.equals(note)">and note = #{note}</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-		<if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
-	</where>
-  </sql>
-  
-  <!-- 插入一条记录 -->
-  <insert id="save" keyProperty="id" useGeneratedKeys="true">
-    insert into transfer_customer_detail
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != customerId">customer_id, </if>
-			<if test="null != age">age, </if>
-			<if test="null != sex">sex, </if>
-			<if test="null != address">address, </if>
-			<if test="null != email">email, </if>
-			<if test="null != school">school, </if>
-			<if test="null != graduateDate">graduate_date, </if>
-			<if test="null != major">major, </if>
-			<if test="null != educationId">education_id, </if>
-			<if test="null != educationName">education_name, </if>
-			<if test="null != applyType">apply_type, </if>
-			<if test="null != applyKey">apply_key, </if>
-			<if test="null != positionApplied">position_applied, </if>
-			<if test="null != workingPlace">working_place, </if>
-			<if test="null != workExperience">work_experience, </if>
-			<if test="null != note">note, </if>
-			<if test="null != createUserId">create_user_id, </if>
-			<if test="null != createUserName">create_user_name, </if>
-			<if test="null != createTime">create_time, </if>
-			<if test="null != updateUserId">update_user_id, </if>
-			<if test="null != updateUserName">update_user_name, </if>
-			<if test="null != updateTime">update_time, </if>
-			<if test="null != resumeDetail">resume_detail, </if>
-		</trim>
-	values
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != customerId">#{customerId}, </if>
-			<if test="null != age">#{age}, </if>
-			<if test="null != sex">#{sex}, </if>
-			<if test="null != address">#{address}, </if>
-			<if test="null != email">#{email}, </if>
-			<if test="null != school">#{school}, </if>
-			<if test="null != graduateDate">#{graduateDate}, </if>
-			<if test="null != major">#{major}, </if>
-			<if test="null != educationId">#{educationId}, </if>
-			<if test="null != educationName">#{educationName}, </if>
-			<if test="null != applyType">#{applyType}, </if>
-			<if test="null != applyKey">#{applyKey}, </if>
-			<if test="null != positionApplied">#{positionApplied}, </if>
-			<if test="null != workingPlace">#{workingPlace}, </if>
-			<if test="null != workExperience">#{workExperience}, </if>
-			<if test="null != note">#{note}, </if>
-			<if test="null != createUserId">#{createUserId}, </if>
-			<if test="null != createUserName">#{createUserName}, </if>
-			<if test="null != createTime">#{createTime}, </if>
-			<if test="null != updateUserId">#{updateUserId}, </if>
-			<if test="null != updateUserName">#{updateUserName}, </if>
-			<if test="null != updateTime">#{updateTime}, </if>
-			<if test="null != resumeDetail">#{resumeDetail}, </if>
-		</trim>
-  </insert>
-  
-  <!-- 更新一条记录 -->
-  <update id="update">
-    update transfer_customer_detail 
-		<set>
-			<if test="null != customerId">customer_id = #{customerId}, </if>
-			<if test="null != age">age = #{age}, </if>
-			<if test="null != sex">sex = #{sex}, </if>
-			<if test="null != address">address = #{address}, </if>
-			<if test="null != email">email = #{email}, </if>
-			<if test="null != school">school = #{school}, </if>
-			<if test="null != graduateDate">graduate_date = #{graduateDate}, </if>
-			<if test="null != major">major = #{major}, </if>
-			<if test="null != educationId">education_id = #{educationId}, </if>
-			<if test="null != educationName">education_name = #{educationName}, </if>
-			<if test="null != applyType">apply_type = #{applyType}, </if>
-			<if test="null != applyKey">apply_key = #{applyKey}, </if>
-			<if test="null != positionApplied">position_applied = #{positionApplied}, </if>
-			<if test="null != workingPlace">working_place = #{workingPlace}, </if>
-			<if test="null != workExperience">work_experience = #{workExperience}, </if>
-			<if test="null != note">note = #{note}, </if>
-			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
-			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
-			<if test="null != createTime">create_time = #{createTime}, </if>
-			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
-			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
-			<if test="null != updateTime">update_time = #{updateTime}, </if>
-			<if test="null != resumeDetail">resume_detail = #{resumeDetail}, </if>
-		</set>
-		where id = #{id}
-  </update>
-  
-  <!-- 删除给定主键的记录 -->
-  <delete id="delete">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity">
+        <id column="id" jdbcType="BIGINT" property="id" />
+        <result column="customer_id" jdbcType="BIGINT" property="customerId" />
+        <result column="age" jdbcType="TINYINT" property="age" />
+        <result column="sex" jdbcType="INTEGER" property="sex" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="school" jdbcType="VARCHAR" property="school" />
+        <result column="graduate_date" jdbcType="DATE" property="graduateDate" />
+        <result column="major" jdbcType="VARCHAR" property="major" />
+        <result column="education_id" jdbcType="BIGINT" property="educationId" />
+        <result column="apply_type" jdbcType="BIGINT" property="applyType" />
+        <result column="apply_key" jdbcType="VARCHAR" property="applyKey" />
+        <result column="position_applied" jdbcType="VARCHAR" property="positionApplied" />
+        <result column="working_place" jdbcType="VARCHAR" property="workingPlace" />
+        <result column="work_experience" jdbcType="TINYINT" property="workExperience" />
+        <result column="note" jdbcType="VARCHAR" property="note" />
+        <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
+        <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+        <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
+        <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+        <result column="resume_detail" jdbcType="LONGVARCHAR" property="resumeDetail" />
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="cn.hejinyo.jelly.generator.model.TransferCustomerDetailEntity">-->
+
+    <!--</resultMap>-->
+    <sql id="Base_Column_List">
+		id,customer_id,age,sex,address,email,school,graduate_date,major,education_id,apply_type,apply_key,
+		position_applied,working_place,work_experience,note,create_user_id,create_user_name,create_time,update_user_id,
+		update_user_name,update_time,resume_detail
+	</sql>
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Where_SQL">
+        <where>
+            <if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+            <if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
+            <if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
+            <if test="address != null and !&quot;&quot;.equals(address)">and address = #{address}</if>
+            <if test="email != null and !&quot;&quot;.equals(email)">and email = #{email}</if>
+            <if test="school != null and !&quot;&quot;.equals(school)">and school = #{school}</if>
+            <if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
+            <if test="major != null and !&quot;&quot;.equals(major)">and major = #{major}</if>
+            <if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
+            <if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type = #{applyType}</if>
+            <if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key = #{applyKey}</if>
+            <if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied = #{positionApplied}</if>
+            <if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place = #{workingPlace}</if>
+            <if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience = #{workExperience}</if>
+            <if test="note != null and !&quot;&quot;.equals(note)">and note = #{note}</if>
+            <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+            <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+            <if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
+            <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+            <if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
+        </where>
+    </sql>
+
+    <!-- 插入一条记录 -->
+    <insert id="save" keyProperty="id" useGeneratedKeys="true">
+        insert into transfer_customer_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != customerId">customer_id, </if>
+            <if test="null != age">age, </if>
+            <if test="null != sex">sex, </if>
+            <if test="null != address">address, </if>
+            <if test="null != email">email, </if>
+            <if test="null != school">school, </if>
+            <if test="null != graduateDate">graduate_date, </if>
+            <if test="null != major">major, </if>
+            <if test="null != educationId">education_id, </if>
+            <if test="null != applyType">apply_type, </if>
+            <if test="null != applyKey">apply_key, </if>
+            <if test="null != positionApplied">position_applied, </if>
+            <if test="null != workingPlace">working_place, </if>
+            <if test="null != workExperience">work_experience, </if>
+            <if test="null != note">note, </if>
+            <if test="null != createUserId">create_user_id, </if>
+            <if test="null != createUserName">create_user_name, </if>
+            <if test="null != createTime">create_time, </if>
+            <if test="null != updateUserId">update_user_id, </if>
+            <if test="null != updateUserName">update_user_name, </if>
+            <if test="null != updateTime">update_time, </if>
+            <if test="null != resumeDetail">resume_detail, </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != customerId">#{customerId}, </if>
+            <if test="null != age">#{age}, </if>
+            <if test="null != sex">#{sex}, </if>
+            <if test="null != address">#{address}, </if>
+            <if test="null != email">#{email}, </if>
+            <if test="null != school">#{school}, </if>
+            <if test="null != graduateDate">#{graduateDate}, </if>
+            <if test="null != major">#{major}, </if>
+            <if test="null != educationId">#{educationId}, </if>
+            <if test="null != applyType">#{applyType}, </if>
+            <if test="null != applyKey">#{applyKey}, </if>
+            <if test="null != positionApplied">#{positionApplied}, </if>
+            <if test="null != workingPlace">#{workingPlace}, </if>
+            <if test="null != workExperience">#{workExperience}, </if>
+            <if test="null != note">#{note}, </if>
+            <if test="null != createUserId">#{createUserId}, </if>
+            <if test="null != createUserName">#{createUserName}, </if>
+            <if test="null != createTime">#{createTime}, </if>
+            <if test="null != updateUserId">#{updateUserId}, </if>
+            <if test="null != updateUserName">#{updateUserName}, </if>
+            <if test="null != updateTime">#{updateTime}, </if>
+            <if test="null != resumeDetail">#{resumeDetail}, </if>
+        </trim>
+    </insert>
+
+    <!-- 更新一条记录 -->
+    <update id="update">
+        update transfer_customer_detail
+        <set>
+            <if test="null != customerId">customer_id = #{customerId}, </if>
+            <if test="null != age">age = #{age}, </if>
+            <if test="null != sex">sex = #{sex}, </if>
+            <if test="null != address">address = #{address}, </if>
+            <if test="null != email">email = #{email}, </if>
+            <if test="null != school">school = #{school}, </if>
+            <if test="null != graduateDate">graduate_date = #{graduateDate}, </if>
+            <if test="null != major">major = #{major}, </if>
+            <if test="null != educationId">education_id = #{educationId}, </if>
+            <if test="null != applyType">apply_type = #{applyType}, </if>
+            <if test="null != applyKey">apply_key = #{applyKey}, </if>
+            <if test="null != positionApplied">position_applied = #{positionApplied}, </if>
+            <if test="null != workingPlace">working_place = #{workingPlace}, </if>
+            <if test="null != workExperience">work_experience = #{workExperience}, </if>
+            <if test="null != note">note = #{note}, </if>
+            <if test="null != createUserId">create_user_id = #{createUserId}, </if>
+            <if test="null != createUserName">create_user_name = #{createUserName}, </if>
+            <if test="null != createTime">create_time = #{createTime}, </if>
+            <if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
+            <if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
+            <if test="null != updateTime">update_time = #{updateTime}, </if>
+            <if test="null != resumeDetail">resume_detail = #{resumeDetail}, </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- 删除给定主键的记录 -->
+    <delete id="delete">
     delete
 		from transfer_customer_detail
 	where
 		id = #{id}
   </delete>
-  
-  <!-- 多个主键批量删除记录 -->
-  <delete id="deleteBatch">
-    delete
-		from transfer_customer_detail
-	where
-		id in 
-		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
-			#{item}
-		</foreach>
-  </delete>
-  
-  <!-- 多个实体批量删除记录 -->
-  <delete id="deleteList">
-    delete
-		from transfer_customer_detail
-	where
-		id in 
-		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-			#{item.id}
-		</foreach>
-  </delete>
-  
-  <!-- 主键查找一条记录 -->
-  <select id="findOne" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_detail
-	where id = #{id}
-  </select>
-  
-  <!-- 查询多条 -->
-  <select id="findList" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_detail
-		<include refid="Base_Where_SQL" />
-  </select>
-  
-  <!-- 分页查询 -->
-  <select id="findPage" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_detail
-		<where>
-		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
-		<if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
-		<if test="address != null and !&quot;&quot;.equals(address)">and address like concat('%',#{address},'%')</if>
-		<if test="email != null and !&quot;&quot;.equals(email)">and email like concat('%',#{email},'%')</if>
-		<if test="school != null and !&quot;&quot;.equals(school)">and school like concat('%',#{school},'%')</if>
-		<if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
-		<if test="major != null and !&quot;&quot;.equals(major)">and major like concat('%',#{major},'%')</if>
-		<if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
-		<if test="educationName != null and !&quot;&quot;.equals(educationName)">and education_name like concat('%',#{educationName},'%')</if>
-		<if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type like concat('%',#{applyType},'%')</if>
-		<if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key like concat('%',#{applyKey},'%')</if>
-		<if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied like concat('%',#{positionApplied},'%')</if>
-		<if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place like concat('%',#{workingPlace},'%')</if>
-		<if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience = #{workExperience}</if>
-		<if test="note != null and !&quot;&quot;.equals(note)">and note like concat('%',#{note},'%')</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-		<if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
-	</where>
-  </select>
-  
-  <!-- 查询记录数量 -->
-  <select id="count" resultType="int">
-    select
-		count(*)
-	from transfer_customer_detail
-		<include refid="Base_Where_SQL" />
-  </select>
-  
-  <!-- 查询记录是否存在 -->
-  <select id="exsit" resultType="boolean">
-    select
-		count(*)
-	from transfer_customer_detail
-		<include refid="Base_Where_SQL" />
-  </select>
-  
+
+    <!-- 多个主键批量删除记录 -->
+    <delete id="deleteBatch">
+        delete
+        from transfer_customer_detail
+        where
+        id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
+    <!-- 多个实体批量删除记录 -->
+    <delete id="deleteList">
+        delete
+        from transfer_customer_detail
+        where
+        id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item.id}
+        </foreach>
+    </delete>
+
+    <!-- 主键查找一条记录 -->
+    <select id="findOne" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from transfer_customer_detail
+        where id = #{id}
+    </select>
+
+    <!-- 查询多条 -->
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from transfer_customer_detail
+        <include refid="Base_Where_SQL" />
+    </select>
+
+    <!-- 分页查询 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from transfer_customer_detail
+        <where>
+            <if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+            <if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
+            <if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
+            <if test="address != null and !&quot;&quot;.equals(address)">and address like concat('%',#{address},'%')</if>
+            <if test="email != null and !&quot;&quot;.equals(email)">and email like concat('%',#{email},'%')</if>
+            <if test="school != null and !&quot;&quot;.equals(school)">and school like concat('%',#{school},'%')</if>
+            <if test="graduateDate != null and !&quot;&quot;.equals(graduateDate)">and graduate_date = #{graduateDate}</if>
+            <if test="major != null and !&quot;&quot;.equals(major)">and major like concat('%',#{major},'%')</if>
+            <if test="educationId != null and !&quot;&quot;.equals(educationId)">and education_id = #{educationId}</if>
+            <if test="applyType != null and !&quot;&quot;.equals(applyType)">and apply_type like concat('%',#{applyType},'%')</if>
+            <if test="applyKey != null and !&quot;&quot;.equals(applyKey)">and apply_key like concat('%',#{applyKey},'%')</if>
+            <if test="positionApplied != null and !&quot;&quot;.equals(positionApplied)">and position_applied like concat('%',#{positionApplied},'%')</if>
+            <if test="workingPlace != null and !&quot;&quot;.equals(workingPlace)">and working_place like concat('%',#{workingPlace},'%')</if>
+            <if test="workExperience != null and !&quot;&quot;.equals(workExperience)">and work_experience = #{workExperience}</if>
+            <if test="note != null and !&quot;&quot;.equals(note)">and note like concat('%',#{note},'%')</if>
+            <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
+            <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
+            <if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
+            <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+            <if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
+        </where>
+    </select>
+
+    <!-- 查询记录数量 -->
+    <select id="count" resultType="int">
+        select
+        count(*)
+        from transfer_customer_detail
+        <include refid="Base_Where_SQL" />
+    </select>
+
+    <!-- 查询记录是否存在 -->
+    <select id="exsit" resultType="boolean">
+        select
+        count(*)
+        from transfer_customer_detail
+        <include refid="Base_Where_SQL" />
+    </select>
+
+    <select id="getCustomerDetailByCustomerId" resultMap="BaseResultMap">
+        select
+          <include refid="Base_Column_List" />
+        from transfer_customer_detail
+        where
+          customer_id = #{customerId}
+    </select>
+
+    <select id="getAllInformationExport" resultMap="BaseResultMap">
+		select
+          tcd.id,tcd.customer_id,tcd.age,tcd.sex,tcd.address,tcd.email,tcd.school,tcd.graduate_date,tcd.major,tcd.education,tcd.apply_type,tcd.apply_key,
+		  tcd.position_applied,tcd.working_place,tcd.work_experience,tcd.note,tcd.create_user_id,tcd.create_user_name,tcd.create_time,tcd.update_user_id,
+		  tcd.update_user_name,tcd.update_time,tcd.resume_detail,tc.name,tc.phone,tc.we_Chat,tc.qq,tc.land_line,tc.user_id,tc.user_name,tc.dept_id,tc.dept_name,
+		  tc.source_id,tc.source_name,tc.company_id,tc.company_name
+		from transfer_customer_detail tcd
+		left join
+			transfer_customer tc on tc.customer_id = tcd.customer_id;
+	</select>
+
 
 </mapper>

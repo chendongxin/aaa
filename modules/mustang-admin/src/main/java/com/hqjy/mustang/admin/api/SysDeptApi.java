@@ -23,6 +23,25 @@ public class SysDeptApi {
     private SysDeptService sysDeptService;
 
     /**
+     * 获取所有部门
+     */
+    @ApiOperation(value = "获取所有部门信息", notes = "获取所有部门信息")
+    @GetMapping(value = "/dept/all")
+    public R getAllDept() {
+        return R.ok(sysDeptService.getAllDeptList());
+    }
+
+    /**
+     * 获取所有部门ID
+     */
+    @ApiOperation(value="获取所选部门的旗下部门", notes = "获取所选部门的旗下部门")
+    @GetMapping(value = "/dept/all/id")
+    public List<Long> getAllDeptId(Long deptId) {
+        return sysDeptService.getAllDeptUnderDeptId(deptId);
+    }
+
+}
+
      * 根据部门Id查询
      */
     @GetMapping("/{deptId}")

@@ -5,8 +5,6 @@
   <!-- 实体映射 -->
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity">
     <id column="way_id" jdbcType="BIGINT" property="wayId" />
-	<id column="parent_id" jdbcType="BIGINT" property="parentId" />
-    <result column="source_id" jdbcType="INTEGER" property="sourceId" />
     <result column="gen_way" jdbcType="VARCHAR" property="genWay" />
 	<result column="seq" jdbcType="INTEGER" property="seq" />
 	<result column="status" jdbcType="TINYINT" property="status" />
@@ -20,15 +18,13 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    way_id, parent_id, source_id, gen_way, seq, status, create_user_id, create_user_name, create_time, update_user_id,
+    way_id, gen_way, seq, status, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
   
   <!-- 通用查询sql -->
   <sql id="Base_Where_SQL">
     <where>
-		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = #{parentId}</if>
-		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
 		<if test="genWay != null and !&quot;&quot;.equals(genWay)">and gen_way = #{genWay}</if>
 		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
@@ -45,8 +41,6 @@
   <insert id="save" keyProperty="wayId" useGeneratedKeys="true">
     insert into transfer_gen_way
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != parentId">parent_id, </if>
-			<if test="null != sourceId">source_id, </if>
 			<if test="null != genWay">gen_way, </if>
 			<if test="null != seq">seq, </if>
 			<if test="null != status">status, </if>
@@ -59,11 +53,9 @@
 		</trim>
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != parentId">#{parentId}, </if>
-			<if test="null != sourceId">#{sourceId}, </if>
+			<if test="null != genWay">#{genWay}, </if>
 			<if test="null != seq">#{seq}, </if>
 			<if test="null != status">#{status}, </if>
-			<if test="null != genWay">#{genWay}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -77,8 +69,6 @@
   <update id="update">
     update transfer_gen_way 
 		<set>
-			<if test="null != parentId">parent_id = #{parentId}, </if>
-			<if test="null != sourceId">source_id = #{sourceId}, </if>
 			<if test="null != seq">seq = #{seq}, </if>
 			<if test="null != status">status = #{status}, </if>
 			<if test="null != genWay">gen_way = #{genWay}, </if>
@@ -141,14 +131,11 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-	  tgw.way_id, tgw.parent_id, tgw.source_id, tgw.gen_way, tgw.seq, tgw.status, tgw.create_user_id, tgw.create_user_name,
-	  tgw.create_time, tgw.update_user_id, tgw.update_user_name, tgw.update_time
-	from transfer_gen_way tgw
-	left join transfer_gen_way tgw1 on tgw1.id = tgw.parent_id
+	  <include refid="Base_Column_List" />
+	from transfer_gen_way
 		<where>
-		<if test="id != null and !&quot;&quot;.equals(id)">and tgw.parent_id = #{wayId} or tgw.way_id = #{wayId}</if>
-		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and tgw.source_id = #{sourceId}</if>
-		<if test="parentId != null and !&quot;&quot;.equals(parentId)">and tgw.parent_id = #{parentId}</if>
+		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
+		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 		<if test="genWay != null and !&quot;&quot;.equals(genWay)">and tgw.gen_way like concat('%',#{genWay},'%')</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tgw.create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tgw.create_user_name like concat('%',#{createUserName},'%')</if>
@@ -179,7 +166,6 @@
 		select
 			<include refid="Base_Column_List"/>
 		from transfer_gen_way
-		order by parent_id
 	</select>
 
 	<!-- 通过名称查找一条记录 -->
@@ -198,5 +184,27 @@
 		parent_id = #{parentId}
 		order by seq asc
 	</select>
+
+	<select id="findBySourceId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from transfer_gen_way tgw
+		WHERE
+			(select tgw.way_id
+			from transfer_way_source tws
+			where
+			tws.way_id = tgw.way_id
+			and tws.source_id = #{sourceId})
+	</select>
+
+    <select id="findNotBySourceId" resultMap="BaseResultMap">
+        select
+        	<include refid="Base_Column_List"/>
+        from transfer_gen_way tgw
+        where tgw.way_id not in
+			(select tws.way_id
+			from transfer_way_source tws
+			where tws.source_id = #{sourceId})
+    </select>
 
 </mapper>

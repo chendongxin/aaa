@@ -320,4 +320,18 @@ public final class StringUtils {
     public static boolean isNotBlank(String str) {
         return jodd.util.StringUtil.isNotBlank(str);
     }
+
+    /**
+     * 将手机号码的第四到第五位数字加密**
+     *
+     * @param phone 手机号码
+     * @return 返回部门加密的手机字符串
+     */
+    public static String encryptPhone(String phone) {
+        if (isNotEmpty(phone)){
+            StringBuilder sb = new StringBuilder(phone);
+            return sb.replace(3, 5, "**").toString();
+        }
+        return "";
+    }
 }

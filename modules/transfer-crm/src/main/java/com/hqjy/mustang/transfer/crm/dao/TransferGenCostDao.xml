@@ -8,6 +8,8 @@
     <result column="dept_id" jdbcType="INTEGER" property="deptId" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="pro_id" jdbcType="BIGINT" property="proId" />
+    <result column="source_id" jdbcType="BIGINT" property="sourceId" />
     <result column="way_id" jdbcType="INTEGER" property="wayId" />
     <result column="gen_day" jdbcType="TIMESTAMP" property="genDay" />
     <result column="initiative_money" jdbcType="DECIMAL" property="initiativeMoney" />
@@ -24,7 +26,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    id, dept_id, dept_name, company_id, way_id, gen_day, initiative_money, passive_money, 
+    id, dept_id, dept_name, company_id, pro_id, source_id, way_id, gen_day, initiative_money, passive_money,
     initiative_virtual, passive_virtual, create_user_id, create_user_name, create_time, 
     update_user_id, update_user_name, update_time
   </sql>
@@ -35,7 +37,9 @@
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
 		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
-		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and way_id = #{wayId}</if>
+        <if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
+        <if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
+        <if test="wayId != null and !&quot;&quot;.equals(wayId)">and way_id = #{wayId}</if>
 		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and DATE_FORMAT(gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>
 		<if test="initiativeMoney != null and !&quot;&quot;.equals(initiativeMoney)">and initiative_money = #{initiativeMoney}</if>
 		<if test="passiveMoney != null and !&quot;&quot;.equals(passiveMoney)">and passive_money = #{passiveMoney}</if>
@@ -57,6 +61,8 @@
 			<if test="null != deptId">dept_id, </if>
 			<if test="null != deptName">dept_name, </if>
 			<if test="null != companyId">company_id, </if>
+            <if test="null != proId">pro_id, </if>
+            <if test="null != sourceId">source_id, </if>
 			<if test="null != wayId">way_id, </if>
 			<if test="null != genDay">gen_day, </if>
 			<if test="null != initiativeMoney">initiative_money, </if>
@@ -75,6 +81,8 @@
 			<if test="null != deptId">#{deptId}, </if>
 			<if test="null != deptName">#{deptName}, </if>
 			<if test="null != companyId">#{companyId}, </if>
+            <if test="null != proId">#{proId}, </if>
+            <if test="null != sourceId">#{sourceId}, </if>
 			<if test="null != wayId">#{wayId}, </if>
 			<if test="null != genDay">#{genDay}, </if>
 			<if test="null != initiativeMoney">#{initiativeMoney}, </if>
@@ -97,6 +105,8 @@
 			<if test="null != deptId">dept_id = #{deptId}, </if>
 			<if test="null != deptName">dept_name = #{deptName}, </if>
 			<if test="null != companyId">company_id = #{companyId}, </if>
+            <if test="null != proId">pro_id = #{proId}, </if>
+            <if test="null != sourceId">source_id = #{sourceId}, </if>
 			<if test="null != wayId">way_id = #{wayId}, </if>
 			<if test="null != genDay">gen_day = #{genDay}, </if>
 			<if test="null != initiativeMoney">initiative_money = #{initiativeMoney}, </if>
@@ -162,24 +172,28 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-		<include refid="Base_Column_List" />
-	from transfer_gen_cost
+	  tgc.id, tgc.dept_id, tgc.dept_name, tgc.company_id, tgc.pro_id, tgc.source_id, tgc.way_id, tgc.gen_day, tgc.initiative_money,
+	  tgc.passive_money, tgc.initiative_virtual, tgc.passive_virtual, tgc.create_user_id, tgc.create_user_name,
+	  tgc.create_time, tgc.update_user_id, tgc.update_user_name, tgc.update_time, tgc1.name, tgw.gen_way
+	from transfer_gen_cost tgc
+	left join transfer_gen_company tgc1 on tgc.company_id = tgc1.company_id
+	left join transfer_gen_way tgw on tgc.way_id = tgw.way_id
 		<where>
-		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
-		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
-		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
-		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and way_id = #{wayId}</if>
-		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and DATE_FORMAT(gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>
-		<if test="initiativeMoney != null and !&quot;&quot;.equals(initiativeMoney)">and initiative_money = #{initiativeMoney}</if>
-		<if test="passiveMoney != null and !&quot;&quot;.equals(passiveMoney)">and passive_money = #{passiveMoney}</if>
-		<if test="initiativeVirtual != null and !&quot;&quot;.equals(initiativeVirtual)">and initiative_virtual = #{initiativeVirtual}</if>
-		<if test="passiveVirtual != null and !&quot;&quot;.equals(passiveVirtual)">and passive_virtual = #{passiveVirtual}</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and tgc.dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and tgc.dept_name like concat('%',#{deptName},'%')</if>
+		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and tgc.company_id = #{companyId}</if>
+		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and tgc.way_id = #{wayId}</if>
+		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and tgc.DATE_FORMAT(gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>
+		<if test="initiativeMoney != null and !&quot;&quot;.equals(initiativeMoney)">and tgc.initiative_money = #{initiativeMoney}</if>
+		<if test="passiveMoney != null and !&quot;&quot;.equals(passiveMoney)">and tgc.passive_money = #{passiveMoney}</if>
+		<if test="initiativeVirtual != null and !&quot;&quot;.equals(initiativeVirtual)">and tgc.initiative_virtual = #{initiativeVirtual}</if>
+		<if test="passiveVirtual != null and !&quot;&quot;.equals(passiveVirtual)">and tgc.passive_virtual = #{passiveVirtual}</if>
+		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tgc.create_user_id = #{createUserId}</if>
+		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tgc.create_user_name like concat('%',#{createUserName},'%')</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and tgc.DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and tgc.update_user_id = #{updateUserId}</if>
+		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and tgc.update_user_name like concat('%',#{updateUserName},'%')</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and tgc.DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
 	</where>
   </select>
   
