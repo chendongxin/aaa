@@ -16,4 +16,10 @@ public interface SysDeptServiceFeign {
 
     @GetMapping(Constant.API_PATH + "/dept/all/id")
     List<Long> getAllDeptId(Long deptId);
+
+    @GetMapping(Constant.API_PATH + "/dept/customerId/userId")
+    List<Long> getUserDeptIdList(Long userId);
+
+    @GetMapping(Constant.API_PATH + "/dept/userId")
+    R getUserDeptList(Long userId);
 }

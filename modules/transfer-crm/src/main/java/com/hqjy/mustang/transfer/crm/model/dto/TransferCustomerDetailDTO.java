@@ -61,6 +61,16 @@ public class TransferCustomerDetailDTO {
     private String phone;
 
     /**
+     * 部门ID
+     */
+    private Long deptId;
+
+    /**
+     * 部门名称
+     */
+    private String deptName;
+
+    /**
      * 毕业学校 school
      **/
     private String school;

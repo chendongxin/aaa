@@ -1,7 +1,8 @@
 package com.hqjy.mustang.admin.api;
 
-
+import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.service.SysDeptService;
+import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.R;
 import io.swagger.annotations.ApiOperation;
@@ -24,6 +25,8 @@ public class SysDeptApi {
 
     @Autowired
     private SysDeptService sysDeptService;
+    @Autowired
+    private SysUserDeptService sysUserDeptService;
 
     /**
      * 获取所有部门
@@ -35,7 +38,7 @@ public class SysDeptApi {
     }
 
     /**
-     * 获取所有部门ID
+     * 获取所选部门的旗下部门
      */
     @ApiOperation(value="获取所选部门的旗下部门", notes = "获取所选部门的旗下部门")
     @GetMapping(value = "/dept/all/id")
@@ -43,5 +46,31 @@ public class SysDeptApi {
         return sysDeptService.getAllDeptUnderDeptId(deptId);
     }
 
+    /**
+     * 查询用户对应的部门列表
+     */
+    @ApiOperation(value="查询用户对应的部门", notes = "查询用户对应的部门")
+    @GetMapping(value = "/dept/entity/userId")
+    public List<SysUserDeptEntity> getDeptByCustomerId(Long userId) {
+        return sysUserDeptService.getUserDeptList(userId);
+    }
+
+    /**
+     * 获取用户对应的部门列表ID
+     */
+    @ApiOperation(value="查询用户对应的部门", notes = "查询用户对应的部门")
+    @GetMapping(value = "/dept/long/userId")
+    public List<Long> getUserDeptIdList(Long userId) {
+        return sysUserDeptService.getUserDeptIdList(userId);
+    }
+
+    /**
+     * 获取用户对应的部门列表
+     */
+    @ApiOperation(value="查询用户对应的部门", notes = "查询用户对应的部门")
+    @GetMapping(value = "/dept/userId")
+    public R getUserDeptList(Long userId) {
+        return R.ok(sysDeptService.getUserDeptList(userId));
+    }
 }
 

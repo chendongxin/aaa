@@ -51,7 +51,7 @@ public class TransferCustomerDetailServiceImpl extends BaseServiceImpl<TransferC
         int count = transferCustomerDao.update(transferCustomerDao.getCustomerByCustomerId(customerDetail.getCustomerId())
                 .setGetWay(customerDetail.getGetWay()).setName(customerDetail.getName())
         );
-        return countDetail > 0 && count > 0 ? countDetail : 0;
+        return countDetail > 0 && count > 0 ? countDetail : -1;
     }
 
 }

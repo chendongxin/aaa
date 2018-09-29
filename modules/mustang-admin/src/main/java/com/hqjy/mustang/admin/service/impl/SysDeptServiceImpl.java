@@ -282,4 +282,12 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         });
         return StringUtils.listToString(ids);
     }
+
+    /**
+     * 获取用户所在部门及子部门
+     */
+    @Override
+    public List<SysDeptEntity> getUserDeptList(Long userId) {
+        return baseDao.findDeptListByUserId(userId);
+    }
 }
