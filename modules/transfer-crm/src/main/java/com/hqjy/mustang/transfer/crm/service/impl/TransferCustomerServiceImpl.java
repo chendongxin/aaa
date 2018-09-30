@@ -636,37 +636,37 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     }
 
 
-    @Override
-    public List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery) {
-        transferCustomerContactService.setCustomerIdByContact(pageQuery);
-        Long customerId = MapUtils.getLong(pageQuery, "customerId");
-        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
-            return null;
-        }
-        Long deptId = MapUtils.getLong(pageQuery, "deptId");
-        //高级查询部门刷选
-        if (null != deptId) {
-            //部门下所有子部门
-            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-            List<String> ids = new ArrayList<>();
-            allDeptUnderDeptId.forEach(x -> {
-                ids.add(String.valueOf(x));
-            });
-            pageQuery.put("deptIds", StringUtils.listToString(ids));
-        }
-        this.formatQueryTime(pageQuery);
-        //如果没有刷选部门过滤条件
-        if (null == deptId) {
-            //获取当前用户的部门以及子部门
-            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
-            List<String> ids = new ArrayList<>();
-            userAllDeptId.forEach(x -> {
-                ids.add(String.valueOf(x));
-            });
-            pageQuery.put("deptIds", StringUtils.listToString(ids));
-        }
-        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
-        return baseDao.findPrivatePage(pageQuery);
-    }
+//    @Override
+//    public List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery) {
+//        transferCustomerContactService.setCustomerIdByContact(pageQuery);
+//        Long customerId = MapUtils.getLong(pageQuery, "customerId");
+//        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
+//            return null;
+//        }
+//        Long deptId = MapUtils.getLong(pageQuery, "deptId");
+//        //高级查询部门刷选
+//        if (null != deptId) {
+//            //部门下所有子部门
+//            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
+//            List<String> ids = new ArrayList<>();
+//            allDeptUnderDeptId.forEach(x -> {
+//                ids.add(String.valueOf(x));
+//            });
+//            pageQuery.put("deptIds", StringUtils.listToString(ids));
+//        }
+//        this.formatQueryTime(pageQuery);
+//        //如果没有刷选部门过滤条件
+//        if (null == deptId) {
+//            //获取当前用户的部门以及子部门
+//            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
+//            List<String> ids = new ArrayList<>();
+//            userAllDeptId.forEach(x -> {
+//                ids.add(String.valueOf(x));
+//            });
+//            pageQuery.put("deptIds", StringUtils.listToString(ids));
+//        }
+//        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
+//        return baseDao.findPrivatePage(pageQuery);
+//    }
 
 }

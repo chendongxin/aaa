@@ -21,7 +21,7 @@ import java.util.HashMap;
  */
 @Api(tags = "客户管理-预约", description = "TransferCustomerReservationController")
 @RestController
-@RequestMapping("/customer/appointment")
+@RequestMapping("/customer/reservation")
 public class TransferCustomerReservationController extends AbstractMethodError {
 
     @Autowired
