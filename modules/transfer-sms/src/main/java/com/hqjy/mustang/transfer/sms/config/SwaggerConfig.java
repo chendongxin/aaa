@@ -1,4 +1,4 @@
-package com.hqjy.mustang.admin.config;
+package com.hqjy.mustang.transfer.sms.config;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.context.annotation.Bean;
@@ -42,7 +42,7 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("野马mustang 用户授权微服务 api文档")
+                .title("野马mustang 招转 短信微服务 api文档")
                 .description("请求参数请参考示例，大部分请求测试需要token参数，请在登录接口获取token后进行测试，http://crm.hqjy.cn")
                 .termsOfServiceUrl("公司主页，http://hqjy.cn")
                 .version("1.0")
