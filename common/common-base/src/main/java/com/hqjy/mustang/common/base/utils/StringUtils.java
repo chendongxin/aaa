@@ -322,6 +322,17 @@ public final class StringUtils {
     }
 
     /**
+     * 去掉所有空白字符， 不限于空格
+     */
+    public static String trim(String str) {
+        if (isNotEmpty(str)) {
+            return str.replaceAll("\\s*", "");
+        }
+        return str;
+    }
+
+
+    /**
      * 将手机号码的第四到第五位数字加密**
      *
      * @param phone 手机号码

@@ -8,7 +8,7 @@ spring:
       name: mustang-quartz
     # 环境 dev|test|pro
     profiles:
-        active: dev-hss
+        active: dev
 info:
   app:
     name: mustang-quartz

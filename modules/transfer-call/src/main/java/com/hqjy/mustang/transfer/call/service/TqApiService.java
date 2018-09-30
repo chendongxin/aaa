@@ -1,7 +1,6 @@
 package com.hqjy.mustang.transfer.call.service;
 
 import com.hqjy.mustang.common.model.admin.SysUserExtendInfo;
-import com.hqjy.mustang.transfer.call.model.dto.TqCallClienIdDTO;
 import com.hqjy.mustang.transfer.call.model.dto.TqCallRecordDTO;
 
 import java.util.List;

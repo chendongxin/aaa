@@ -4,10 +4,12 @@ import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.admin.service.SysDeptService;
+import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.common.base.utils.R;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,10 +28,20 @@ import java.util.List;
 @RequestMapping(Constant.API_PATH + "/dept")
 public class SysDeptApi {
 
-    @Autowired
+
     private SysDeptService sysDeptService;
+
     @Autowired
+    public void setSysDeptService(SysDeptService sysDeptService) {
+        this.sysDeptService = sysDeptService;
+    }
+
     private SysUserDeptService sysUserDeptService;
+
+    @Autowired
+    public void setSysUserDeptService(SysUserDeptService sysUserDeptService) {
+        this.sysUserDeptService = sysUserDeptService;
+    }
 
     /**
      * 根据部门Id查询

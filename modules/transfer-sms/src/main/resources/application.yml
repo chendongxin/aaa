@@ -1,0 +1,79 @@
+server:
+  port: 8340
+  context-path: /
+
+spring:
+  application:
+    # 应用名称
+    name: transfer-sms
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
+info:
+  app:
+    name: transfer-sms
+    version: 1.0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://transfer:password@localhost:8000/eureka
+    # 缓存清单每隔30秒跟新一次
+    registry-fetch-interval-seconds: 10
+  instance:
+    hostname: transfer-sms
+    # 实例使用ip进行访问
+    prefer-ip-address: true
+    # 实例显示id
+    instance-id: ${spring.application.name}:${server.port}
+    # 服务续约任务调用间隔时间，默认30秒
+    lease-renewal-interval-in-seconds: 5
+    # 服务失效时间，默认90秒
+    lease-expiration-duration-in-seconds: 20
+    #状态页面和健康指标
+    statusPageUrlPath: ${server.context-path}/swagger-ui.html
+
+# Feign 开启 Hystrix
+feign:
+  hystrix:
+    enabled: true
+
+# shiro 不拦截路径
+shiro:
+  anon:
+    path:
+    # spring cloud 健康检查
+    - /info
+    - /actuator/**
+    - /doc
+    - /swagger-ui.html
+    - /csrf
+    - /webjars/**
+    - /swagger-resources/**
+    - /v2/api-docs
+
+# tq 参数及其接口
+sms:
+  youxinyun:
+    # 管理员账号
+    userName: duodi
+    # 管理员密码
+    password: 104543
+    # 主机
+    host: http://www.youxinyun.com:3070
+    # 接口
+    api:
+      sendSms: ${sms.youxinyun.host}/Platform_Http_Service/servlet/SendSms
+
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath*:com/hqjy/mustang/transfer/sms/dao/*Dao.xml
+    configuration:
+        map-underscore-to-camel-case: true
+
+
+pagehelper:
+    helperDialect: mysql
+    page-size-zero: true
+    reasonable: true
+    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+    row-bounds-with-count: true
