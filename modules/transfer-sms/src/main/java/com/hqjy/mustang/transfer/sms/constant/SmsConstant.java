@@ -22,7 +22,11 @@ public class SmsConstant {
         /**
          * 发送失败
          */
-        FAILURE("发送失败", -1);
+        FAILURE("发送失败", -1),
+        /**
+         * 发送失败
+         */
+        ILLEGAL("内容不合法", -502);
 
         private String value;
         private Integer code;
@@ -50,4 +54,31 @@ public class SmsConstant {
         }
     }
 
+    /**
+     * 短信回复状态
+     */
+    public enum SendReply {
+
+        /**
+         * 未发送
+         */
+        UNSENT(0),
+
+        /**
+         * 已发送
+         */
+        SENT(1);
+
+        private Integer code;
+
+        SendReply(Integer code) {
+            this.code = code;
+        }
+
+
+        public Integer getCode() {
+            return code;
+        }
+
+    }
 }

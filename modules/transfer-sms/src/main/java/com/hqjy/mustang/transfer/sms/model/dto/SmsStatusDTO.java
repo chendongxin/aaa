@@ -2,12 +2,16 @@ package com.hqjy.mustang.transfer.sms.model.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author : heshuangshuang
  * @date : 2018/9/28 17:51
  */
 @Data
-public class SmsStatusDTO {
+public class SmsStatusDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     /**
      * 通道号

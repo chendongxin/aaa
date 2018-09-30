@@ -56,6 +56,7 @@ public class TarnsferSmsController {
             "        \"[部门名称] deptName\": \"野马部门\",\n" +
             "        \"[短信接收时间] doneTime\": \"2018-09-29 12:11:06\",\n" +
             "        \"[短信内容] content\": \"【Lolipop】您好嘛，HejinYo。2018-09-29 11:14\",\n" +
+            "        \"[用户姓名] name\": \"王二\",\n" +
             "        \"[收件人] phone\": \"13265115030\",\n" +
             "        \"[提交发送时间] sendTime\": \"2018-09-29 12:10:48\",\n" +
             "        \"[状态码] status\": 2,\n" +
@@ -92,6 +93,7 @@ public class TarnsferSmsController {
             "             \"[部门名称] deptName\": \"野马部门\",\n" +
             "             \"[短信接收时间] doneTime\": \"2018-09-29 12:11:06\",\n" +
             "             \"[短信内容] content\": \"【Lolipop】您好嘛，HejinYo。2018-09-29 11:14\",\n" +
+            "             \"[用户姓名] name\": \"王二\",\n" +
             "             \"[收件人] phone\": \"13265115030\",\n" +
             "             \"[提交发送时间] sendTime\": \"2018-09-29 12:10:48\",\n" +
             "             \"[状态码] status\": 2,\n" +

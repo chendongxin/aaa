@@ -17,6 +17,8 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class TransferSmsEntity implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     /**
      * 编号 id
      **/
@@ -35,6 +37,11 @@ public class TransferSmsEntity implements Serializable {
     private String deptName;
 
     /**
+     * 客户名称
+     */
+    private String name;
+
+    /**
      * 手机号码 phone
      **/
     @NotBlank(message = "手机号码不能为空", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
@@ -43,7 +50,7 @@ public class TransferSmsEntity implements Serializable {
     /**
      * 发送内容 content
      **/
-    @NotBlank(message = "内容不能为空", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
+    @NotBlank(message = "内容不能为空", groups = {RestfulValid.POST.class, RestfulValid.PUT.class, RestfulValid.DELETE.class})
     private String content;
 
     /**
@@ -100,6 +107,4 @@ public class TransferSmsEntity implements Serializable {
      * 更新时间 update_time
      **/
     private Date updateTime;
-
-    private static final long serialVersionUID = 1L;
 }
