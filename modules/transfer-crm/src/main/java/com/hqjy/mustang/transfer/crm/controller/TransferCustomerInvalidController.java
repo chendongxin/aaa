@@ -88,18 +88,18 @@ public class TransferCustomerInvalidController {
         return transferCustomerInvalidService.setCustomerInvalid(dto);
     }
 
-    @ApiOperation(value = "退回私海操作", notes = "请求参数：\n" +
-            "参数说明：[customerId:客户ID]\n" +
-            "示例：\n" +
-            "{\n" +
-            "    \"customerId\": 1,\n" +
-            "}")
-    @PostMapping("/return/private")
+//    @ApiOperation(value = "退回私海操作", notes = "请求参数：\n" +
+//            "参数说明：[customerId:客户ID]\n" +
+//            "示例：\n" +
+//            "{\n" +
+//            "    \"customerId\": 1,\n" +
+//            "}")
+//    @PostMapping("/return/private")
 //    @RequiresPermissions("biz:invalid:inspect")
-    @SysLog("退回私海操作")
-    public R quantityInspect(@RequestBody Long customerId) {
-        return transferCustomerInvalidService.returnToPrivate(customerId);
-    }
+//    @SysLog("退回私海操作")
+//    public R quantityInspect(@RequestBody Long customerId) {
+//        return transferCustomerInvalidService.returnToPrivate(customerId);
+//    }
 
 
 
