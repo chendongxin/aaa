@@ -32,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -64,7 +63,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private SysDeptServiceFeign sysDeptServiceFeign;
     @Autowired
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
-//    @Autowired
+    //    @Autowired
 //    private ThreadPoolExecutor receiveExecutor;
     @Autowired
     private RedisLockUtils redisLockUtils;
@@ -246,8 +245,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     /**
      * 导入客户
      *
-     * @param file 导入的文件
-     * @param upDTO  请求输入参数
+     * @param file  导入的文件
+     * @param upDTO 请求输入参数
      * @return 返回导入结果
      */
     @Override
@@ -343,6 +342,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         }
     }
 
+    @Override
     public void formatQueryTime(PageQuery pageQuery) {
         if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginCreateTime"))) {
             pageQuery.put("beginCreateTime", DateUtils.getBeginTime(MapUtils.getString(pageQuery, "beginCreateTime")));
@@ -477,7 +477,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                     .setApplyKey(x.getApplyKey()).setPositionApplied(x.getPositionApplied()).setMajor(x.getMajor()).setSourceName(x.getSourceName())
                     .setCompanyName(x.getCompanyName());
             this.setGender(x, exportDTO);
-            this.setGetWay(x,exportDTO);
+            this.setGetWay(x, exportDTO);
             //设置归属人
             exportDTO.setUserName(x.getUserName());
             //设置备注
@@ -514,6 +514,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     /**
      * 公海客户数据
+     *
      * @param pageQuery 查询参数对象
      * @return
      */
@@ -592,8 +593,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                                 //更新客户主表(同步激活状态流程)
                                 TransferCustomerEntity transferCustomerEntity = new TransferCustomerEntity().setUpdateUserId(userId).setUpdateUserName(userName)
                                         .setUserId(userId).setUserName(userName).setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUpdateTime(new Date())
-                                        .setAllotTime(new Date()).setCustomerId(c).setDeptId(process.getDeptId()).setDeptName(process.getDeptName())
-                                        ;
+                                        .setAllotTime(new Date()).setCustomerId(c).setDeptId(process.getDeptId()).setDeptName(process.getDeptName());
                                 int update = baseDao.update(transferCustomerEntity);
                                 if (update > 0) {
                                     Boolean unlock = redisLockUtils.unLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version);
@@ -669,4 +669,22 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 //        return baseDao.findPrivatePage(pageQuery);
 //    }
 
+
+    /**
+     * 根据电话和部门，查询一个客户信息
+     */
+    @Override
+    public TransferCustomerEntity findByPhoneAndDeptId(Long deptId, String phone) {
+        TransferCustomerContactEntity contactEntity = new TransferCustomerContactEntity();
+        contactEntity.setDetail(phone);
+        contactEntity.setType(Constant.CustomerContactType.PHONE.getValue());
+        List<TransferCustomerContactEntity> list = transferCustomerContactService.findList(contactEntity);
+        for (TransferCustomerContactEntity contact : list) {
+            TransferCustomerEntity customerEntity = baseDao.findOne(contact.getCustomerId());
+            if (deptId.equals(customerEntity.getDeptId())) {
+                return customerEntity;
+            }
+        }
+        return null;
+    }
 }

@@ -6,6 +6,7 @@ import com.hqjy.mustang.allot.dao.TransferAllotCustomerDao;
 import com.hqjy.mustang.allot.dao.TransferAllotProcessDao;
 import com.hqjy.mustang.allot.exception.MqException;
 import com.hqjy.mustang.allot.feign.SysMessageApiService;
+import com.hqjy.mustang.allot.feign.TransferKeywordApiService;
 import com.hqjy.mustang.allot.model.dto.ContactSaveResultDTO;
 import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerContactEntity;
 import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerEntity;
@@ -58,6 +59,9 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
 
     @Autowired
     private TransferAllotProcessDao transferAllotProcessDao;
+
+    @Autowired
+    private TransferKeywordApiService transferKeywordApiService;
 
     @Resource(name = "transferAllotService")
     private AbstractAllotService<TransferAllotCustomerEntity> transferAllotService;
@@ -221,7 +225,8 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setQq(customer.getQq());
         // 更新分配时间
         customerEntity.setAllotTime(process.getCreateTime());
-        // 职位关键字获取 TODO
+        // 职位关键字获取
+        customerEntity.setApplyKey(transferKeywordApiService.getKeyword(customer.getPositionApplied()));
         transferAllotCustomerDao.updateProcessInfo(customerEntity);
     }
 }

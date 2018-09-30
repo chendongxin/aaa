@@ -85,4 +85,9 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
 //     */
 //    List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery);
 
+    /**
+     * 根据电话和部门，查询一个客户信息
+     */
+    TransferCustomerEntity findByPhoneAndDeptId(Long deptId, String phone);
+
 }

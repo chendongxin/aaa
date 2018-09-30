@@ -37,7 +37,7 @@ public class TransferSourceEntity implements Serializable {
     /**
 	 * 状态( 0-正常 1-禁用) status
 	 **/
-    private Byte status;
+    private Integer status;
 
     /**
 	 * 创建人编号 create_user_id

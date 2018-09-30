@@ -8,7 +8,6 @@ import java.util.List;
 
 public interface TransferSourceService extends BaseService<TransferSourceEntity, Long> {
 
-
     /**
      * 获取不属于指定公司的推广平台
      */
@@ -23,5 +22,10 @@ public interface TransferSourceService extends BaseService<TransferSourceEntity,
      * 推广平台管理树数据
      */
     HashMap<String, List<TransferSourceEntity>> getRecursionTree(boolean showRoot);
+
+    /**
+     * 根据邮箱后缀查询来源
+     */
+    TransferSourceEntity findByEmailDomain(String emailDomain);
 
 }

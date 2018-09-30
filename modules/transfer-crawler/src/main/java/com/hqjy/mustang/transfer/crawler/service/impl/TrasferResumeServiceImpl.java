@@ -11,8 +11,8 @@ import com.hqjy.mustang.transfer.crawler.factory.ParseMailFactory;
 import com.hqjy.mustang.transfer.crawler.feign.TrasferSourceApiService;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferEmailEntity;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
-import com.hqjy.mustang.transfer.crawler.service.MqSendService;
 import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
+import com.hqjy.mustang.transfer.crawler.service.MqSendService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferEmailService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferResumeService;
 import com.hqjy.mustang.transfer.crawler.utils.MailUtils;
@@ -158,8 +158,8 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
                     resumeEntity.setGenUserId(emailConfig.getUserId());
                     resumeEntity.setGenUserName(emailConfig.getUserName());
 
-                    // 来源信息 读取 transfer_source 表中配置 TODO
-                    TransferSourceInfo sourceInfo = trasferSourceApiService.findByEmailDomain(StringUtils.cutFrom(sendMali, "@"));
+                    // 来源信息 读取 transfer_source 表中配置
+                    TransferSourceInfo sourceInfo = trasferSourceApiService.findByEmailDomain(StringUtils.cutPrefix(StringUtils.cutFrom(sendMali, "@"), "@"));
                     resumeEntity.setSourceId(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getSourceId).orElse(null));
                     resumeEntity.setSourceName(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getName).orElse(null));
 
@@ -228,5 +228,4 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
         log.error("{},重试登录邮箱 3 次 失败", JsonUtil.toJson(emailConfig));
         return null;
     }
-
 }
