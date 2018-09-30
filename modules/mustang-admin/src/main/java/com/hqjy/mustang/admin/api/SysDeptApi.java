@@ -4,12 +4,10 @@ import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.admin.service.SysDeptService;
-import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.common.base.utils.R;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,10 +26,20 @@ import java.util.List;
 @RequestMapping(Constant.API_PATH + "/dept")
 public class SysDeptApi {
 
-    @Autowired
+
     private SysDeptService sysDeptService;
+
     @Autowired
+    public void setSysDeptService(SysDeptService sysDeptService) {
+        this.sysDeptService = sysDeptService;
+    }
+
     private SysUserDeptService sysUserDeptService;
+
+    @Autowired
+    public void setSysUserDeptService(SysUserDeptService sysUserDeptService) {
+        this.sysUserDeptService = sysUserDeptService;
+    }
 
     /**
      * 根据部门Id查询
@@ -41,7 +49,6 @@ public class SysDeptApi {
         return PojoConvertUtil.convert(sysDeptService.findOne(deptId), SysDeptInfo.class);
     }
 
-}
     /**
      * 获取所有部门
      */
@@ -54,7 +61,7 @@ public class SysDeptApi {
     /**
      * 获取所选部门的旗下部门
      */
-    @ApiOperation(value="获取所选部门的旗下部门", notes = "获取所选部门的旗下部门")
+    @ApiOperation(value = "获取所选部门的旗下部门", notes = "获取所选部门的旗下部门")
     @GetMapping(value = "/dept/all/id")
     public List<Long> getAllDeptId(Long deptId) {
         return sysDeptService.getAllDeptUnderDeptId(deptId);
@@ -63,7 +70,7 @@ public class SysDeptApi {
     /**
      * 查询用户对应的部门列表
      */
-    @ApiOperation(value="查询用户对应的部门", notes = "查询用户对应的部门")
+    @ApiOperation(value = "查询用户对应的部门", notes = "查询用户对应的部门")
     @GetMapping(value = "/dept/entity/userId")
     public List<SysUserDeptEntity> getDeptByCustomerId(Long userId) {
         return sysUserDeptService.getUserDeptList(userId);
@@ -72,7 +79,7 @@ public class SysDeptApi {
     /**
      * 获取用户对应的部门列表ID
      */
-    @ApiOperation(value="查询用户对应的部门", notes = "查询用户对应的部门")
+    @ApiOperation(value = "查询用户对应的部门", notes = "查询用户对应的部门")
     @GetMapping(value = "/dept/long/userId")
     public List<Long> getUserDeptIdList(Long userId) {
         return sysUserDeptService.getUserDeptIdList(userId);
@@ -81,7 +88,7 @@ public class SysDeptApi {
     /**
      * 获取用户对应的部门列表
      */
-    @ApiOperation(value="查询用户对应的部门", notes = "查询用户对应的部门")
+    @ApiOperation(value = "查询用户对应的部门", notes = "查询用户对应的部门")
     @GetMapping(value = "/dept/userId")
     public R getUserDeptList(Long userId) {
         return R.ok(sysDeptService.getUserDeptList(userId));
