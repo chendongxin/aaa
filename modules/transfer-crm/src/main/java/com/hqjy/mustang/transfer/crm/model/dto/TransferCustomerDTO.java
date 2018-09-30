@@ -161,7 +161,12 @@ public class TransferCustomerDTO {
     private Integer status;
 
     /**
-     * 失败原因 memo
+     * 失败原因列举 type
+     */
+    private Byte type;
+
+    /**
+     * 失败原因
      */
     private String memo;
 

@@ -11,6 +11,8 @@
     <result column="visit_status" jdbcType="TINYINT" property="visitStatus" />
     <result column="teacher_code" jdbcType="VARCHAR" property="teacherCode" />
     <result column="teacher_name" jdbcType="VARCHAR" property="teacherName" />
+	<result column="dept_id" jdbcType="BIGINT" property="deptId" />
+	<result column="dept_name" jdbcType="VARCHAR" property="deptName" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -22,7 +24,7 @@
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
     id, customer_id, appointment_time, status, visit_status, teacher_code, teacher_name, 
-    create_user_id, create_user_name, create_time, update_user_id, update_user_name, 
+    dept_id, dept_name, create_user_id, create_user_name, create_time, update_user_id, update_user_name,
     update_time
   </sql>
   
@@ -35,6 +37,8 @@
 		<if test="visitStatus != null and !&quot;&quot;.equals(visitStatus)">and visit_status = #{visitStatus}</if>
 		<if test="teacherCode != null and !&quot;&quot;.equals(teacherCode)">and teacher_code = #{teacherCode}</if>
 		<if test="teacherName != null and !&quot;&quot;.equals(teacherName)">and teacher_name = #{teacherName}</if>
+		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -54,6 +58,8 @@
 			<if test="null != visitStatus">visit_status, </if>
 			<if test="null != teacherCode">teacher_code, </if>
 			<if test="null != teacherName">teacher_name, </if>
+			<if test="null != deptId">dept_id, </if>
+			<if test="null != deptName">dept_name, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
 			<if test="null != createTime">create_time, </if>
@@ -69,6 +75,8 @@
 			<if test="null != visitStatus">#{visitStatus}, </if>
 			<if test="null != teacherCode">#{teacherCode}, </if>
 			<if test="null != teacherName">#{teacherName}, </if>
+			<if test="null != deptId">#{deptId}, </if>
+			<if test="null != deptName">#{deptName}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -88,6 +96,8 @@
 			<if test="null != visitStatus">visit_status = #{visitStatus}, </if>
 			<if test="null != teacherCode">teacher_code = #{teacherCode}, </if>
 			<if test="null != teacherName">teacher_name = #{teacherName}, </if>
+			<if test="null != deptId">dept_id = #{deptId}, </if>
+			<if test="null != deptName">dept_name = #{deptName}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
@@ -143,27 +153,44 @@
 	from transfer_customer_reservation
 		<include refid="Base_Where_SQL" />
   </select>
-  
-  <!-- 分页查询 -->
-  <select id="findPage" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_reservation
+
+	<!-- 分页查询 -->
+	<select id="findPage" resultMap="BaseResultMap">
+		select
+		tcr.id, tcr.appointment_time, tcr.visit_status, tcr.create_user_id, tcr.create_user_name, tcr.create_time,
+		tc.phone, tcr.teacher_code, tcr.teacher_name, tc.customer_id, tc.name, tcr.dept_id, tcr.dept_name
+		from transfer_customer_reservation tcr
+		inner join transfer_customer tc on tcr.customer_id=tc.customer_id
 		<where>
-		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="appointmentTime != null and !&quot;&quot;.equals(appointmentTime)">and DATE_FORMAT(appointment_time,'%Y-%m-%d') = STR_TO_DATE(#{appointmentTime},'%Y-%m-%d')</if>
-		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
-		<if test="visitStatus != null and !&quot;&quot;.equals(visitStatus)">and visit_status = #{visitStatus}</if>
-		<if test="teacherCode != null and !&quot;&quot;.equals(teacherCode)">and teacher_code like concat('%',#{teacherCode},'%')</if>
-		<if test="teacherName != null and !&quot;&quot;.equals(teacherName)">and teacher_name like concat('%',#{teacherName},'%')</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-	</where>
-  </select>
+			tc.status=3 and tc.user_id is not null
+			<!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
+			<if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
+				and tc.dept_id in ${userAllDeptId}
+			</if>
+			<if test="userId !=null and !&quot;&quot;.equals(userId)">
+				and tc.user_id=#{userId}
+			</if>
+			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
+			<if test="status != null and !&quot;&quot;.equals(status)">and tc.status = false</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+			<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+			<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
+			<if test="visitStatus != null and !&quot;&quot;.equals(visitStatus)">and visit_status = #{visitStatus}</if>
+			<if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
+			<if test="createName != null and !&quot;&quot;.equals(createName)">and tcr.create_user_name like
+				concat('%',#{createName},'%')
+			</if>
+			<if test="teacherName != null and !&quot;&quot;.equals(teacherName)">and tcr.teacher_name like
+				concat('%',#{teacherName},'%')
+			</if>
+			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+				and tcr.create_time between #{beginCreateTime} and #{endCreateTime}
+			</if>
+			<if test="beginAppointmentTime != null and beginAppointmentTime != '' and endAppointmentTime != null and endAppointmentTime != ''">
+				and tcr.appointment_time between #{beginAppointmentTime} and #{endAppointmentTime}
+			</if>
+		</where>
+	</select>
   
   <!-- 查询记录数量 -->
   <select id="count" resultType="int">

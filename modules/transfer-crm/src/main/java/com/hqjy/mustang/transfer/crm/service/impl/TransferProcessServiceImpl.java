@@ -7,6 +7,7 @@ import com.hqjy.mustang.transfer.crm.service.TransferProcessService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessDao, TransferProcessEntity, Long> implements TransferProcessService {
@@ -36,5 +37,31 @@ public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessD
     @Override
     public List<TransferProcessEntity> getFirstAllotProcessBatch(String customerIds) {
         return baseDao.getFirstAllotProcessBatch(customerIds);
+    }
+
+    @Override
+    public TransferProcessEntity getProcessByCustIdAndUserId(Long customerId) {
+        return baseDao.getProcessByCustIdAndUserId(customerId);
+    }
+
+
+    /**
+     * 查询当天用户拥有商机数量
+     *
+     * @param map 查询参数
+     * @return 返回数量
+     * @author gmm 2018-9-28 17:28:24
+     */
+    @Override
+    public int countHasTotal(Map<String, Object> map) {
+        return baseDao.countHasTotal(map);
+    }
+
+    /**
+     * 获取公海当前流程为激活状态的数据
+     */
+    @Override
+    public TransferProcessEntity getProcessByPublicCustomerId(Long customerId) {
+        return baseDao.getProcessByPublicCustomerId(customerId);
     }
 }

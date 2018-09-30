@@ -10,6 +10,8 @@ import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerUpDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 public interface TransferCustomerService extends BaseService<TransferCustomerEntity, Long> {
 
     /**
@@ -51,5 +53,28 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      * @return 返回导出结果
      */
     R exportCustomer(PageQuery query);
+
+    /**
+     * 公海客户数据
+     *
+     * @param pageQuery 查询参数对象
+     * @return 公海客户数据
+     */
+    List<TransferCustomerEntity> findCommonPage(PageQuery pageQuery);
+
+    /**
+     * 公海领取客户到私海
+     *
+     * @param customerId 客户Id
+     * @return 领取结果
+     */
+    R receiveTransferCustomer(List<Long> customerId);
+
+    /**
+     * 格式化 查询时间
+     *
+     * @param pageQuery 查询参数对象
+     */
+    void formatQueryTime(PageQuery pageQuery);
 
 }

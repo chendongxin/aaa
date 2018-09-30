@@ -31,7 +31,7 @@ import java.util.HashMap;
 @Api(tags = "客户管理", description = "TransferCustomerController")
 @RestController
 @RequestMapping("/customer")
-public class TransferCustomerController {
+public class TransferCustomerController extends AbstractMethodError {
 
     @Autowired
     private TransferCustomerService transferCustomerService;
@@ -124,6 +124,8 @@ public class TransferCustomerController {
             "        \"customerId\": 1,\n" +
             "        \"name\": \"灵儿\",\n" +
             "        \"status\": 1,\n" +
+            "        \"deptId\": 1,\n" +
+            "        \"deptName\": \"广州东圃校区\",\n" +
             "        \"createUserId\": 1,\n" +
             "        \"createUserName\": \"王超d群\",\n" +
             "        \"createTime\": \"2018-06-11 17:19:24\",\n" +
@@ -314,7 +316,5 @@ public class TransferCustomerController {
     public R exportCustomer(@RequestBody(required = false) HashMap<String, Object> queryParam) {
         return transferCustomerService.exportCustomer(PageQuery.buildQuery(queryParam));
     }
-
-
 
 }

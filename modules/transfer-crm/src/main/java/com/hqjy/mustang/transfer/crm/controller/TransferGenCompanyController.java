@@ -253,7 +253,7 @@ public class TransferGenCompanyController {
     /**
      * 获取所有部门列表
      */
-    @GetMapping(value = "/dept")
+    @GetMapping(value = "/dept/all")
     @ApiOperation(value = "获取所有部门接口", notes = "请求参数说明")
     public R listPageDept() {
         return R.ok(sysDeptServiceFeign.getAllDept());

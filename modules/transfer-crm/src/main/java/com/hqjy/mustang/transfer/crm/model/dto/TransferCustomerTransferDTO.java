@@ -23,6 +23,11 @@ public class TransferCustomerTransferDTO {
     private Long deptId;
 
     /**
+     * 部门name
+     **/
+    private String deptName;
+
+    /**
      * 业务员Id
      **/
     private Long userId;
