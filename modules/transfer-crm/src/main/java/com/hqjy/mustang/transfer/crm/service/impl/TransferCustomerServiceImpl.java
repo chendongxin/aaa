@@ -64,8 +64,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private SysDeptServiceFeign sysDeptServiceFeign;
     @Autowired
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
-    @Autowired
-    private ThreadPoolExecutor receiveExecutor;
+//    @Autowired
+//    private ThreadPoolExecutor receiveExecutor;
     @Autowired
     private RedisLockUtils redisLockUtils;
 //    @Autowired
@@ -551,17 +551,18 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     @Override
     public R receiveTransferCustomer(List<Long> customerId) {
         Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY));
-        Future<R> future = receiveExecutor.submit(() -> {
-            List<Long> success = new ArrayList<>();
-            this.doReceive(customerId, opportunity, success, getUserId(), getUserName());
-            return success.isEmpty() ? R.error("很遗憾您没有抢到商机") : R.ok("成功领取商机【" + success.size() + "】条");
-        });
-        try {
-            return future.get();
-        } catch (Exception e) {
-            e.printStackTrace();
-            return R.error(e.getCause().getMessage());
-        }
+//        Future<R> future = receiveExecutor.submit(() -> {
+//            List<Long> success = new ArrayList<>();
+//            this.doReceive(customerId, opportunity, success, getUserId(), getUserName());
+//            return success.isEmpty() ? R.error("很遗憾您没有抢到商机") : R.ok("成功领取商机【" + success.size() + "】条");
+//        });
+//        try {
+//            return future.get();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return R.error(e.getCause().getMessage());
+//        }
+        return null;
     }
 
     private void doReceive(List<Long> customerId, Integer opportunity, List<Long> success, Long userId, String userName) {
@@ -632,6 +633,40 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (count >= opportunity) {
             throw new RRException(StatusCode.BIZ_CUSTOMER_RECEIVE_REACH_MAX_LIMIT);
         }
+    }
+
+
+    @Override
+    public List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery) {
+        transferCustomerContactService.setCustomerIdByContact(pageQuery);
+        Long customerId = MapUtils.getLong(pageQuery, "customerId");
+        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
+            return null;
+        }
+        Long deptId = MapUtils.getLong(pageQuery, "deptId");
+        //高级查询部门刷选
+        if (null != deptId) {
+            //部门下所有子部门
+            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
+            List<String> ids = new ArrayList<>();
+            allDeptUnderDeptId.forEach(x -> {
+                ids.add(String.valueOf(x));
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(ids));
+        }
+        this.formatQueryTime(pageQuery);
+        //如果没有刷选部门过滤条件
+        if (null == deptId) {
+            //获取当前用户的部门以及子部门
+            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
+            List<String> ids = new ArrayList<>();
+            userAllDeptId.forEach(x -> {
+                ids.add(String.valueOf(x));
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(ids));
+        }
+        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
+        return baseDao.findPrivatePage(pageQuery);
     }
 
 }

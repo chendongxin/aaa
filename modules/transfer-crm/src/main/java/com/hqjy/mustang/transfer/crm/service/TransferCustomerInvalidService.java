@@ -17,11 +17,11 @@ public interface TransferCustomerInvalidService extends BaseService<TransferCust
      */
     R setCustomerInvalid(TransferCustomerDTO dto);
 
-    /**
-     * 无效客户退回私海
-     *
-     * @param customerId 客户Id
-     * @return 退回结果
-     */
-    R returnToPrivate(Long customerId);
+//    /**
+//     * 无效客户退回私海
+//     *
+//     * @param customerId 客户Id
+//     * @return 退回结果
+//     */
+//    R returnToPrivate(Long customerId);
 }
