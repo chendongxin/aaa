@@ -11,7 +11,6 @@ import com.hqjy.mustang.transfer.call.service.TransferCallRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,14 +28,13 @@ public class TransferCallRecordServiceImpl extends BaseServiceImpl<TransferCallR
         // 解析自定义参数,如果自定义参数没有，则不保存通话记录
         String params = tqCallRecordDTO.getClient_id();
         if (StringUtils.isEmpty(params)) {
-            // TODO 同步通话记录自定义参数处理
-            log.info("params 自定义参数获取失败，放弃保存通话记录=>>Fsunique_id:{}", tqCallRecordDTO.getFsunique_id());
+            log.error("params 自定义参数获取失败，放弃保存通话记录=>>Fsunique_id:{}", tqCallRecordDTO.getFsunique_id());
             TqCallClienIdDTO tqCallClienIdDTO = new TqCallClienIdDTO();
             tqCallClienIdDTO.setCustomerId(0L);
             tqCallClienIdDTO.setUserId(1L);
             tqCallClienIdDTO.setUserName("test");
             params = Tools.base64Encode(JsonUtil.toJson(tqCallClienIdDTO));
-            // return 0;
+            return 0;
         }
         // base64解码
         TqCallClienIdDTO tqCallClienIdDTO;

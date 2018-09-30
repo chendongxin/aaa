@@ -45,4 +45,9 @@ public interface ConfigConstant {
      */
     String BIZ_EXPORT_LIMIT = "BIZ_EXPORT_LIMIT";
 
+    /**
+     * 公海领取商机上限
+     */
+    String BIZ_CUSTOMER_OPPORTUNITY = "BIZ_CUSTOMER_OPPORTUNITY";
+
 }

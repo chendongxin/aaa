@@ -49,6 +49,16 @@ public class TransferCustomerReservationEntity implements Serializable {
     private String teacherName;
 
     /**
+     * 当前跟进人部门ID dept_id
+     **/
+    private Long deptId;
+
+    /**
+     * 部门名称 dept_name
+     **/
+    private String deptName;
+
+    /**
 	 * 创建人编号 create_user_id
 	 **/
     private Long createUserId;

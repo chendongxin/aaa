@@ -221,6 +221,7 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setQq(customer.getQq());
         // 更新分配时间
         customerEntity.setAllotTime(process.getCreateTime());
+        // 职位关键字获取 TODO
         transferAllotCustomerDao.updateProcessInfo(customerEntity);
     }
 }

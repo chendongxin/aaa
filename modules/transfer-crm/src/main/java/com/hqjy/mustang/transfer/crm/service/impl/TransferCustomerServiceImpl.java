@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.ConfigConstant;
 import com.hqjy.mustang.common.base.constant.Constant;
@@ -9,6 +10,7 @@ import com.hqjy.mustang.common.base.utils.*;
 import com.hqjy.mustang.common.base.validator.ValidatorUtils;
 import com.hqjy.mustang.common.model.crm.MessageSendVO;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
+import com.hqjy.mustang.common.redis.utils.RedisLockUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDetailDao;
 import com.hqjy.mustang.transfer.crm.feign.SysConfigServiceFeign;
@@ -18,6 +20,7 @@ import com.hqjy.mustang.transfer.crm.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.dto.*;
 import com.hqjy.mustang.transfer.crm.model.entity.*;
 import com.hqjy.mustang.transfer.crm.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ListOperations;
@@ -28,15 +31,15 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
 @Service
+@Slf4j
 public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustomerDao, TransferCustomerEntity, Long> implements TransferCustomerService {
 
     @Autowired
@@ -61,6 +64,10 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private SysDeptServiceFeign sysDeptServiceFeign;
     @Autowired
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
+    @Autowired
+    private ThreadPoolExecutor receiveExecutor;
+    @Autowired
+    private RedisLockUtils redisLockUtils;
 //    @Autowired
 //    private CustomerSender customerSender;
 
@@ -75,7 +82,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         TransferCustomerEntity customerEntity = baseDao.findOne(customerId);
         TransferCustomerDetailEntity customerDetail = transferCustomerDetailService.getCustomerDetailByCustomerId(customerId);
         TransferCustomerDetailDTO customer = new TransferCustomerDetailDTO()
-                .setStatus(customerEntity.getStatus()).setName(customerEntity.getName()).setCreateUserId(customerEntity.getCreateUserId()).setCreateUserName(customerEntity.getCreateUserName())
+                .setStatus(customerEntity.getStatus()).setName(customerEntity.getName()).setCreateUserId(customerEntity.getCreateUserId())
+                .setCreateUserName(customerEntity.getCreateUserName()).setDeptId(customerEntity.getDeptId()).setDeptName(customerEntity.getDeptName())
                 .setCreateTime(customerEntity.getCreateTime()).setAge(customerDetail.getAge()).setSex(customerDetail.getSex()).setGetWay(customerEntity.getGetWay())
                 .setEducationId(customerDetail.getEducationId()).setPositionApplied(customerDetail.getPositionApplied())
                 .setMajor(customerDetail.getMajor()).setApplyType(customerDetail.getApplyType()).setApplyKey(customerDetail.getApplyKey())
@@ -171,14 +179,14 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 }
                 //新增流程记录
                 TransferProcessEntity newProcess = new TransferProcessEntity().setCreateTime(date).setMemo("客户转移操作").setActive(Boolean.FALSE)
-                        .setDeptId(dto.getDeptId()).setUserId(dto.getUserId()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName());
+                        .setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName()).setUserId(dto.getUserId()).setUserName(getUserName()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName());
                 int save = transferProcessService.save(newProcess);
                 if (save == 0) {
                     return;
                 }
                 //更新客户主表(同步激活状态流程)
                 int update = baseDao.update(new TransferCustomerEntity().setAllotTime(date).setUpdateTime(date)
-                        .setCustomerId(c).setDeptId(dto.getDeptId()).setUserId(dto.getUserId()).setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
+                        .setCustomerId(c).setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName()).setUserId(dto.getUserId()).setUserName(getUserName()).setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
                 if (update == 0) {
                     return;
                 }
@@ -342,6 +350,12 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endCreateTime"))) {
             pageQuery.put("endCreateTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endCreateTime")));
         }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginAllotTime"))) {
+            pageQuery.put("beginAllotTime", DateUtils.getBeginTime(MapUtils.getString(pageQuery, "beginAllotTime")));
+        }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endAllotTime"))) {
+            pageQuery.put("endAllotTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endAllotTime")));
+        }
     }
 
     private List<TransferCustomerEntity> findExportCustomer(PageQuery pageQuery) {
@@ -496,7 +510,128 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             });
             exportList.add(exportDTO);
         });
+    }
 
+    /**
+     * 公海客户数据
+     * @param pageQuery 查询参数对象
+     * @return
+     */
+    @Override
+    public List<TransferCustomerEntity> findCommonPage(PageQuery pageQuery) {
+        transferCustomerContactService.setCustomerIdByContact(pageQuery);
+        Long customerId = MapUtils.getLong(pageQuery, "customerId");
+        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
+            return null;
+        }
+        Long deptId = MapUtils.getLong(pageQuery, "deptId");
+        List<String> ids = new ArrayList<>();
+        //高级查询部门刷选
+        if (null != deptId) {
+            //部门下所有子部门
+            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
+
+            allDeptUnderDeptId.forEach(x -> {
+                ids.add(String.valueOf(x));
+            });
+        } else {
+            //如果没有刷选部门过滤条件
+            //获取当前用户的部门以及子部门
+            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
+            userAllDeptId.forEach(x -> {
+                ids.add(String.valueOf(x));
+            });
+        }
+        pageQuery.put("deptIds", StringUtils.listToString(ids));
+        this.formatQueryTime(pageQuery);
+        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
+        return baseDao.findCommonPage(pageQuery);
+    }
+
+    @Override
+    public R receiveTransferCustomer(List<Long> customerId) {
+        Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY));
+        Future<R> future = receiveExecutor.submit(() -> {
+            List<Long> success = new ArrayList<>();
+            this.doReceive(customerId, opportunity, success, getUserId(), getUserName());
+            return success.isEmpty() ? R.error("很遗憾您没有抢到商机") : R.ok("成功领取商机【" + success.size() + "】条");
+        });
+        try {
+            return future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getCause().getMessage());
+        }
+    }
+
+    private void doReceive(List<Long> customerId, Integer opportunity, List<Long> success, Long userId, String userName) {
+        customerId.forEach(c -> {
+            this.checkOpportunity(opportunity, userId);
+            String version = UUID.randomUUID().toString();
+            try {
+                if (redisLockUtils.setLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version, 60000L)) {
+                    log.info("当前用户：姓名：" + userName + ",用户ID" + userId + ",尝试领取商机【" + c + "】," +
+                            "拿到锁KEY=>" + RedisKeys.Business.receiveLock(String.valueOf(c)));
+                    Thread.sleep(300L);
+                    TransferProcessEntity process = transferProcessService.getProcessByPublicCustomerId(c);
+                    if (null == process) {
+                        Boolean unlock = redisLockUtils.unLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version);
+                        log.error("当前用户：姓名：" + userName + ",用户ID" + userId + ",尝试领取商机【" + c + "】时，该商机已被领取。" +
+                                "解锁：【" + unlock + "】,锁KEY=>" + RedisKeys.Business.receiveLock(String.valueOf(c)));
+                    } else {
+                        //设置流程过期
+                        int i = transferProcessService.disableProcessActive(process);
+                        if (i > 0) {
+                            //新增激活状态，归属私人客户流程
+                            TransferProcessEntity processEntity = new TransferProcessEntity().setMemo("公海领取商机").setCustomerId(c)
+                                    .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(getUserName())
+                                    .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE);
+                            int save = transferProcessService.save(processEntity);
+                            if (save > 0) {
+                                //更新客户主表(同步激活状态流程)
+                                TransferCustomerEntity transferCustomerEntity = new TransferCustomerEntity().setUpdateUserId(userId).setUpdateUserName(userName)
+                                        .setUserId(userId).setUserName(userName).setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUpdateTime(new Date())
+                                        .setAllotTime(new Date()).setCustomerId(c).setDeptId(process.getDeptId()).setDeptName(process.getDeptName())
+                                        ;
+                                int update = baseDao.update(transferCustomerEntity);
+                                if (update > 0) {
+                                    Boolean unlock = redisLockUtils.unLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version);
+                                    log.info("当前用户：姓名：" + userName + ",用户ID" + userId + ",成功领取商机【" + c + "】。" +
+                                            "解锁：【" + unlock + "】,锁KEY->" + RedisKeys.Business.receiveLock(String.valueOf(c)));
+                                    success.add(c);
+                                }
+                            }
+                        } else {
+                            log.error("(当前用户：姓名：" + userName + ",用户ID" + userId + ",流程已过期：" + process.getProcessId());
+                            Boolean unlock = redisLockUtils.unLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version);
+                            log.error("当前用户：姓名：" + userName + ",用户ID" + userId + ",领取商机失败【" + c + "】。" +
+                                    "解锁：【" + unlock + "】,锁KEY->" + RedisKeys.Business.receiveLock(String.valueOf(c)));
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Boolean unlock = redisLockUtils.unLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version);
+                log.info("公海领取商机业务执行捕获异常，进解锁：【" + unlock + "】，异常原因：" + e.getMessage());
+                throw new RRException(e.getMessage());
+            }
+        });
+    }
+
+    /**
+     * 检查用户商机领取上限
+     *
+     * @param opportunity 领取上限
+     */
+    private void checkOpportunity(Integer opportunity, Long userId) {
+        Map<String, Object> map = new HashMap<>(1024);
+        map.put("userId", userId);
+        map.put("beginTime", DateUtils.getBeginTime(DateUtils.format(new Date())));
+        map.put("endTime", DateUtils.getEndTime(DateUtils.format(new Date())));
+        //查询当天用户拥有商机数量
+        int count = transferProcessService.countHasTotal(map);
+        if (count >= opportunity) {
+            throw new RRException(StatusCode.BIZ_CUSTOMER_RECEIVE_REACH_MAX_LIMIT);
+        }
     }
 
 }

@@ -2,7 +2,12 @@ package com.hqjy.mustang.websocket.config;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.base.constant.StatusCode;
+import com.hqjy.mustang.common.base.utils.JsonUtil;
+import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisUtils;
 import com.hqjy.mustang.websocket.constant.WsConstant;
@@ -20,6 +25,7 @@ import io.netty.handler.codec.http.HttpUtil;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 
 import static io.netty.handler.codec.http.HttpMethod.GET;
 import static io.netty.handler.codec.http.HttpResponseStatus.*;
@@ -88,13 +94,19 @@ public class WsHttpHandler extends SimpleChannelInboundHandler<FullHttpRequest> 
     private UserDTO checkToken(String token) {
         try {
             DecodedJWT dJWT = JWT.decode(token);
-            String userId = dJWT.getSubject();
-            //读取redis中token信息，但是不改变原来的超时时间
-            UserDTO redisUser = redisUtils.get(RedisKeys.User.token(Long.valueOf(userId)), UserDTO.class, -1);
+
             //验证jwt token的完整性和有效性
-            JWT.require(Algorithm.HMAC256(redisUser.getPassword())).build().verify(token);
+            JWT.require(Algorithm.HMAC256(Constant.JWT_SIGN_KEY)).build().verify(token);
+
+            Long userId = dJWT.getClaim(Constant.JWT_TOKEN_USERID).asLong();
+
+            //读取redis中token信息，但是不改变原来的超时时间
+            UserDTO redisUser = redisUtils.get(RedisKeys.User.token(userId), UserDTO.class, -1);
+
+            String jti = dJWT.getClaim(Constant.JWT_ID).asString();
+            //验证jwt token的完整性和有效性
             //对比此token是否与上次登录的token一致，做到单用户登录,注释这儿可以多用户同时登录
-            if (token.equals(redisUser.getToken())) {
+            if (jti.equals(redisUser.getJti())) {
                 return redisUser;
             }
         } catch (Exception e) {

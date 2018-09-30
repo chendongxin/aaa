@@ -20,7 +20,7 @@ public class AllotApi {
     private TransferAllotServiceImpl transferAllotService;
 
     /**
-     * 招转重置分配算法
+     * 招转重置部门分配算法
      */
     @GetMapping("/transfer/reset/dept/{deptId}")
     public void restDeptList(@PathVariable("deptId") Long deptId) {
@@ -28,7 +28,7 @@ public class AllotApi {
     }
 
     /**
-     * 招转重置分配算法
+     * 招转重置用户分配算法
      */
     @GetMapping("/transfer/reset/user/{deptId}")
     public void restUserList(@PathVariable("deptId") Long deptId) {

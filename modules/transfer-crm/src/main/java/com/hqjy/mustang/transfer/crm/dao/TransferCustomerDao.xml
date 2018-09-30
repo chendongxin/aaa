@@ -359,6 +359,37 @@
 		where
 		customer_id = #{customerId}
 	</select>
+
+	<!-- 公海客户分页查询 -->
+	<select id="findCommonPage" resultMap="BaseResultMap">
+		select
+		tc.customer_id, tc.nc_id, tc.pro_id, tc.pro_name, tc.source_id, tc.source_name, tc.company_id, tc.company_name,
+		tc.name, tc.status, tc.get_way, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.first_user_id,
+		tc.first_user_name, tc.last_user_id, tc.last_user_name, tc.gen_user_id, tc.gen_user_name, tc.phone, tc.we_chat,
+		tc.qq, tc.land_line, tc.create_user_id, tc.create_user_name, tc.create_time, tc.allot_time, tc.update_user_id,
+		tc.update_user_name, tc.update_time
+		from transfer_customer tc
+		left join sys_user su on su.user_id = tc.create_user_id
+		<where>
+			<!--该客户未分配人员-->
+			tc.status=0 and tc.user_id is null
+			<!-- 高级查询筛选部门-->
+			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+				and tc.dept_id in ${deptIds}
+			</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
+			<if test="status != null and !&quot;&quot;.equals(status)">and tc.status = #{status}</if>
+			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
+			<if test="source != null and !&quot;&quot;.equals(source)">and tc.source = #{source}</if>
+			<if test="createName != null and !&quot;&quot;.equals(createName)">and tc.create_user_name like
+				concat('%',#{createName},'%')
+			</if>
+			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+				and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+			</if>
+		</where>
+	</select>
   
 
 </mapper>
