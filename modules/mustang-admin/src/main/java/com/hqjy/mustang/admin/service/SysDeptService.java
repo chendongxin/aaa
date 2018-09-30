@@ -75,4 +75,8 @@ public interface SysDeptService extends BaseService<SysDeptEntity, Long> {
      */
     String deptIdListToString(List<Long> deptIdList);
 
+    /**
+     * 获取用户所在部门及子部门
+     */
+    List<SysDeptEntity> getUserDeptList(Long userId);
 }

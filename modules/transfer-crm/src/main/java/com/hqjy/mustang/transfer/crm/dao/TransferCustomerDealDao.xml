@@ -130,8 +130,35 @@
   
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
+	  select
+	  tc.customer_id, tc.name, tc.status, tc.source, tcd.user_name, tcd.user_id,
+	  tcd.create_time, tc.phone, tc.update_time as allot_time
+	  from transfer_customer_deal tcd
+	  inner join transfer_customer tc on tcd.customer_id=tc.customer_id
+	  <where>
+		  tc.status=4 and tc.user_id is not null
+		  <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
+		  <if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
+			  and tc.dept_id in ${userAllDeptId}
+		  </if>
+		  <if test="userId !=null and !&quot;&quot;.equals(userId)">
+			  and tc.user_id = #{userId}
+		  </if>
+		  <if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
+		  <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
+		  <if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+		  <if test="createName != null and !&quot;&quot;.equals(createName)">and tcd.user_name like
+			  concat('%',#{createName},'%')
+		  </if>
+		  <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+			  and tcd.create_time between #{beginCreateTime} and #{endCreateTime}
+		  </if>
+		  <if test="beginAllotTime != null and beginAllotTime != '' and endAllotTime != null and endAllotTime != ''">
+			  and tc.update_time between #{beginAllotTime} and #{endAllotTime}
+		  </if>
+	  </where>
+
+
 	from transfer_customer_deal
 		<where>
 		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>

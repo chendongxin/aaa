@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * transfer_process 持久化层
@@ -25,6 +26,14 @@ public interface TransferProcessDao extends BaseDao<TransferProcessEntity, Long>
     TransferProcessEntity getProcessByCustomerId(Long customerId);
 
     /**
+     * 获取私海当前流程为激活状态的流程数据
+     *
+     * @param customerId 客户Id
+     * @return 返回结果
+     */
+    TransferProcessEntity getProcessByCustIdAndUserId(Long customerId);
+
+    /**
      * 修改原来激活状态的流程为过期状态
      *
      * @param entity 流程对象
@@ -40,4 +49,21 @@ public interface TransferProcessDao extends BaseDao<TransferProcessEntity, Long>
      * @author gmm 2018年9月25日19:51:46
      */
     List<TransferProcessEntity> getFirstAllotProcessBatch(@Param("customerIds") String customerIds);
+
+    /**
+     * 查询当天用户拥有商机数量
+     *
+     * @param map 查询参数
+     * @return 返回数量
+     * @author gmm 2018-9-28 17:28:24
+     */
+    int countHasTotal(Map<String, Object> map);
+
+    /**
+     * 获取公海当前流程为激活状态的流程数据
+     *
+     * @param customerId 客户ID
+     * @return 返回流程对象
+     */
+    TransferProcessEntity getProcessByPublicCustomerId(Long customerId);
 }

@@ -227,4 +227,26 @@
         LEFT JOIN sys_user  u ON u.user_id=p.user_id
     </select>
 
+	<select id="getProcessByCustIdAndUserId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from transfer_process
+		where customer_id = #{customerId} and user_id is not null and active=true
+	</select>
+
+	<!-- 查询当天用户拥有商机数量 -->
+	<select id="countHasTotal" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM transfer_process
+        WHERE user_id = #{userId}
+              AND create_time BETWEEN #{beginTime} AND #{endTime} AND active = 0
+    </select>
+
+	<select id="getProcessByPublicCustomerId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from transfer_process
+		where customer_id = #{customerId} and user_id is null and active = 0
+	</select>
+
 </mapper>
