@@ -17,6 +17,7 @@ import com.hqjy.mustang.transfer.sms.service.TransferSmsReplyService;
 import com.hqjy.mustang.transfer.sms.service.TransferSmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -40,10 +41,15 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
     private Pattern PATTERN_PHONE = Pattern.compile("^$|^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\\d{8}$");
     private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
+    private final SmsApiService smsApiService;
+    private final TransferSmsReplyService transferSmsReplyService;
+
     @Autowired
-    private SmsApiService smsApiService;
-    @Autowired
-    private TransferSmsReplyService transferSmsReplyService;
+    @Lazy
+    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService) {
+        this.smsApiService = smsApiService;
+        this.transferSmsReplyService = transferSmsReplyService;
+    }
 
     /**
      * 短信保存
