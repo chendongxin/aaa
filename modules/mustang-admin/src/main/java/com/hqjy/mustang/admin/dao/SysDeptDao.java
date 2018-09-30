@@ -44,4 +44,9 @@ public interface SysDeptDao extends BaseDao<SysDeptEntity, Long> {
      * 根据部门id列表获取部门列表信息
      */
     List<SysDeptEntity> getListBydeptIdList(List<Long> deptIdList);
+
+    /**
+     * 查询用户部门关系列表
+     */
+    List<SysDeptEntity> findDeptListByUserId(Long userId);
 }

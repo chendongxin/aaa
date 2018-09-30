@@ -6,7 +6,7 @@
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerInvalidEntity">
     <id column="invalid_id" jdbcType="BIGINT" property="invalidId" />
     <result column="customer_id" jdbcType="BIGINT" property="customerId" />
-    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status" jdbcType="INTEGER" property="status" />
     <result column="type" jdbcType="TINYINT" property="type" />
     <result column="memo" jdbcType="VARCHAR" property="memo" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
@@ -133,25 +133,6 @@
 		<include refid="Base_Where_SQL" />
   </select>
   
-  <!-- 分页查询 -->
-  <select id="findPage" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_invalid
-		<where>
-		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
-		<if test="type != null and !&quot;&quot;.equals(type)">and type = #{type}</if>
-		<if test="memo != null and !&quot;&quot;.equals(memo)">and memo like concat('%',#{memo},'%')</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-	</where>
-  </select>
-  
   <!-- 查询记录数量 -->
   <select id="count" resultType="int">
     select
@@ -167,6 +148,39 @@
 	from transfer_customer_invalid
 		<include refid="Base_Where_SQL" />
   </select>
+
+	<!-- 分页查询 -->
+	<select id="findPage" resultMap="BaseResultMap">
+		select
+		tci.invalid_id, tci.create_user_name, tci.create_user_id, tci.type, tci.create_time, tci.status, tci.memo,
+		tc.customer_id, tc.name, tc.phone, tc.create_time as transfer_create_time
+		from transfer_customer_invalid tci
+		inner join transfer_customer tc on tc.customer_id = tci.customer_id
+		<where>
+			tc.status=1 or 2
+			<!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
+			<if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
+				and tc.dept_id in ${userAllDeptId}
+			</if>
+			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
+			<if test="userId !=null and !&quot;&quot;.equals(userId)">
+				and tc.user_id=#{userId}
+			</if>
+			<if test="createName != null and !&quot;&quot;.equals(createName)">and tci.create_user_name like
+				concat('%',#{createName},'%')
+			</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like
+				concat('%',#{name},'%')
+			</if>
+			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+				and tci.create_time between #{beginCreateTime} and #{endCreateTime}
+			</if>
+			<if test=" beginBizCreateTime != null and beginBizCreateTime != '' and endBizCreateTime != null and endBizCreateTime != ''">
+				and  tc.create_time between #{beginTransferCreateTime} and #{endTransferCreateTime}
+			</if>
+			<if test="status != null and !&quot;&quot;.equals(status)">and tci.status = #{status}</if>
+		</where>
+	</select>
   
 
 </mapper>

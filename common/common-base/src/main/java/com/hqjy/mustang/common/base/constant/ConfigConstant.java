@@ -35,4 +35,19 @@ public interface ConfigConstant {
      */
     String TRANSFER_ALLOT_REPEAT_TIMEOUT = "TRANSFER_ALLOT_REPEAT_TIMEOUT";
 
+    /**
+     * 导入客户上限
+     */
+    String BIZ_IMPORT_LIMIT = "BIZ_IMPORT_LIMIT";
+
+    /**
+     * 导出客户上限
+     */
+    String BIZ_EXPORT_LIMIT = "BIZ_EXPORT_LIMIT";
+
+    /**
+     * 公海领取商机上限
+     */
+    String BIZ_CUSTOMER_OPPORTUNITY = "BIZ_CUSTOMER_OPPORTUNITY";
+
 }

@@ -29,6 +29,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
+
 /**
  * 部门管理
  *
@@ -72,7 +74,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
      */
     @Override
     public List<SysDeptEntity> findPage(PageQuery pageQuery) {
-        List<Long> allDeptIdList = sysUserDeptService.getUserAllDeptId(ShiroUtils.getUserId());
+        List<Long> allDeptIdList = sysUserDeptService.getUserAllDeptId(getUserId());
         pageQuery.put("allDeptId", allDeptIdList);
         return super.findPage(pageQuery);
     }
@@ -84,10 +86,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     public HashMap<String, List<SysDeptEntity>> getRecursionTree(boolean showRoot) {
         List<Long> parentIdList = new ArrayList<>();
         //系统管理员，拥有最高权限
-        if (SystemId.SUPER_ADMIN.equals(ShiroUtils.getUserId())) {
+        if (SystemId.SUPER_ADMIN.equals(getUserId())) {
             parentIdList.add(SystemId.TREE_ROOT);
         } else {
-            parentIdList = sysUserDeptService.getUserDeptId(ShiroUtils.getUserId());
+            parentIdList = sysUserDeptService.getUserDeptId(getUserId());
         }
         return RecursionUtil.listTree(showRoot, SysDeptEntity.class, "getDeptId", getAllDeptList(), parentIdList);
     }
@@ -96,10 +98,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     public Map<String, List<SysDeptEntity>> getUserDeptTree(Boolean isRoot, Boolean showRoot) {
         List<Long> parentIdList = new ArrayList<>();
         //系统管理员，拥有最高权限
-        if (isRoot || SystemId.SUPER_ADMIN.equals(ShiroUtils.getUserId())) {
+        if (isRoot || SystemId.SUPER_ADMIN.equals(getUserId())) {
             parentIdList.add(SystemId.TREE_ROOT);
         } else {
-            parentIdList = sysUserDeptService.getUserDeptId(ShiroUtils.getUserId());
+            parentIdList = sysUserDeptService.getUserDeptId(getUserId());
         }
         return RecursionUtil.listTree(showRoot, SysDeptEntity.class, "getDeptId", getAllDeptList(), parentIdList);
     }
@@ -111,10 +113,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     public HashMap<String, List<SysDeptEntity>> getSelectTree(boolean showRoot) {
         List<Long> parentIdList = new ArrayList<>();
         //系统管理员，拥有最高权限
-        if (SystemId.SUPER_ADMIN.equals(ShiroUtils.getUserId())) {
+        if (SystemId.SUPER_ADMIN.equals(getUserId())) {
             parentIdList.add(SystemId.TREE_ROOT);
         } else {
-            parentIdList = sysUserDeptService.getUserDeptId(ShiroUtils.getUserId());
+            parentIdList = sysUserDeptService.getUserDeptId(getUserId());
         }
         return RecursionUtil.listTree(showRoot, SysDeptEntity.class, "getDeptId", baseDao.findValidDeptList(), parentIdList);
     }
@@ -127,7 +129,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         // 检测越权
         if (checkPermission(true, dept.getParentId())) {
             SysDeptEntity newDept = PojoConvertUtil.convert(dept, SysDeptEntity.class);
-            newDept.setCreateId(ShiroUtils.getUserId());
+            newDept.setCreateId(getUserId());
             int count = super.save(newDept);
             if (count > 0) {
                 sysCacheService.cleanDept();
@@ -159,7 +161,7 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             }
 
             SysDeptEntity newDept = PojoConvertUtil.convert(dept, SysDeptEntity.class);
-            newDept.setUpdateId(ShiroUtils.getUserId());
+            newDept.setUpdateId(getUserId());
 
             int count = super.update(newDept);
             if (count > 0) {
@@ -233,10 +235,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     @Override
     public boolean checkPermission(boolean userAllDept, Long deptId) {
         // 管理员直接通过
-        if (SystemId.SUPER_ADMIN.equals(ShiroUtils.getUserId())) {
+        if (SystemId.SUPER_ADMIN.equals(getUserId())) {
             return true;
         }
-        List<Long> allDeptIdList = userAllDept ? sysUserDeptService.getUserAllDeptId(ShiroUtils.getUserId()) : sysUserDeptService.getUserSubDeptId(ShiroUtils.getUserId());
+        List<Long> allDeptIdList = userAllDept ? sysUserDeptService.getUserAllDeptId(getUserId()) : sysUserDeptService.getUserSubDeptId(getUserId());
         for (Long id : allDeptIdList) {
             if (deptId.equals(id)) {
                 return true;
@@ -280,5 +282,13 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             ids.add(String.valueOf(x));
         });
         return StringUtils.listToString(ids);
+    }
+
+    /**
+     * 获取用户所在部门及子部门
+     */
+    @Override
+    public List<SysDeptEntity> getUserDeptList(Long userId) {
+        return baseDao.findDeptListByUserId(userId);
     }
 }

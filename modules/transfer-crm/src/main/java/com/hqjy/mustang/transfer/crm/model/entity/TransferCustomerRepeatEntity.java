@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @date : 2018/09/14 15:58
  */
 @Data
+@Accessors(chain = true)
 public class TransferCustomerRepeatEntity implements Serializable {
     /**
 	 * 重单主键 repeat_id
@@ -39,9 +41,19 @@ public class TransferCustomerRepeatEntity implements Serializable {
     private Long companyId;
 
     /**
+     * 推广公司名称
+     */
+    private String companyName;
+
+    /**
 	 * 客户来源ID source_id
 	 **/
     private Long sourceId;
+
+    /**
+     * 来源平台名称 source_name
+     */
+    private String sourceName;
 
     /**
 	 * 部门ID dept_id
