@@ -22,7 +22,7 @@ import java.util.HashMap;
  */
 @Api(tags = "系统日志", description = "SysLogController")
 @RestController
-@RequestMapping("/sys/log")
+@RequestMapping("/log")
 public class SysLogController {
 
     @Autowired
