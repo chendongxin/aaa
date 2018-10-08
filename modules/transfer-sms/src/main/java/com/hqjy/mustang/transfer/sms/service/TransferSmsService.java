@@ -4,6 +4,8 @@ import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsResultDTO;
 import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsEntity;
 
+import java.util.List;
+
 /**
  * @author : heshuangshuang
  * @date : 2018/9/28 14:46

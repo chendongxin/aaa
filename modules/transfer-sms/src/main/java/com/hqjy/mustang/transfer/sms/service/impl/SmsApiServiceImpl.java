@@ -58,6 +58,7 @@ public class SmsApiServiceImpl implements SmsApiService {
                     "Content=" + URLEncoder.encode(smsEntity.getContent(), "utf-8") + "&" +
                     "CharSet=utf-8&" +
                     "Mobiles=" + smsEntity.getPhone() + "&" +
+                    "ExpandNumber=" + smsEntity.getDeptId() + "&" +
                     "SMSID=" + smsId;
             InputStream _InputStream = SmsSendUtils.SendMessage(params.getBytes(StandardCharsets.UTF_8), header, sendSmsUrl);
             String response = SmsSendUtils.GetResponseString(_InputStream, "utf-8");

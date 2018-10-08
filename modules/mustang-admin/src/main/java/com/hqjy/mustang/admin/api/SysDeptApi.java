@@ -28,20 +28,10 @@ import java.util.List;
 @RequestMapping(Constant.API_PATH + "/dept")
 public class SysDeptApi {
 
-
+    @Autowired
     private SysDeptService sysDeptService;
-
     @Autowired
-    public void setSysDeptService(SysDeptService sysDeptService) {
-        this.sysDeptService = sysDeptService;
-    }
-
     private SysUserDeptService sysUserDeptService;
-
-    @Autowired
-    public void setSysUserDeptService(SysUserDeptService sysUserDeptService) {
-        this.sysUserDeptService = sysUserDeptService;
-    }
 
     /**
      * 根据部门Id查询

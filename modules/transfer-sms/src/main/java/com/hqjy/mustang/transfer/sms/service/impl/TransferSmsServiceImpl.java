@@ -7,13 +7,17 @@ import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.transfer.sms.constant.SmsConstant;
 import com.hqjy.mustang.transfer.sms.dao.TransferSmsDao;
+import com.hqjy.mustang.transfer.sms.model.dto.SmsReplyDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsResultDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsStatusDTO;
 import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsEntity;
+import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsReplyEntity;
 import com.hqjy.mustang.transfer.sms.service.SmsApiService;
+import com.hqjy.mustang.transfer.sms.service.TransferSmsReplyService;
 import com.hqjy.mustang.transfer.sms.service.TransferSmsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.io.UnsupportedEncodingException;
@@ -37,20 +41,21 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
     private Pattern PATTERN_PHONE = Pattern.compile("^$|^((13[0-9])|(14[0-9])|(15[0-9])|(16[0-9])|(17[0-9])|(18[0-9])|(19[0-9]))\\d{8}$");
     private DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
+    private final SmsApiService smsApiService;
+    private final TransferSmsReplyService transferSmsReplyService;
+
     @Autowired
-    private SmsApiService smsApiService;
+    @Lazy
+    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService) {
+        this.smsApiService = smsApiService;
+        this.transferSmsReplyService = transferSmsReplyService;
+    }
 
     /**
      * 短信保存
      */
     @Override
     public int saveSms(TransferSmsEntity smsEntity) {
-        // 数据初始化
-        smsEntity.setCreateUserId(ShiroUtils.getUserId());
-        smsEntity.setCreateUserName(ShiroUtils.getUserName());
-        smsEntity.setStatus(SmsConstant.SendStatus.AWAIT.getCode());
-        smsEntity.setStatusValue(SmsConstant.SendStatus.AWAIT.getValue());
-
         String phones = StringUtils.trim(smsEntity.getPhone());
         String[] phoneList = phones.split(",");
         int count = 0;
@@ -59,10 +64,21 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
             if (PATTERN_PHONE.matcher(phone).find()) {
                 TransferSmsEntity newSmsEntity = PojoConvertUtil.convert(smsEntity, TransferSmsEntity.class);
                 newSmsEntity.setPhone(phone);
-                count += baseDao.save(newSmsEntity);
+                count += save(newSmsEntity);
             }
         }
         return count;
+    }
+
+    @Override
+    public int save(TransferSmsEntity smsEntity) {
+        // 数据初始化
+        smsEntity.setCreateUserId(ShiroUtils.getUserId());
+        smsEntity.setCreateUserName(ShiroUtils.getUserName());
+        smsEntity.setStatus(SmsConstant.SendStatus.AWAIT.getCode());
+        smsEntity.setStatusValue(SmsConstant.SendStatus.AWAIT.getValue());
+        // 根据部门和手机号查询客户名称 TODO 需要调用CRM接口
+        return super.save(smsEntity);
     }
 
     /**
@@ -127,11 +143,30 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
             try {
                 params = StringUtils.cutPrefix(URLDecoder.decode(params, "utf-8"), "MO=");
                 log.info("sms短信回复回调：{}", params);
+                List<SmsReplyDTO> list = JSON.parseArray(params, SmsReplyDTO.class);
+                list.forEach(s -> {
+                    // 根据电话号码查询最新一条发送成功的记录
+                    TransferSmsEntity smsEntity = baseDao.findLastSuccessByPhone(Long.valueOf(s.getSrcTerminalId()));
+                    if (smsEntity != null) {
+                        TransferSmsReplyEntity transferSmsReplyEntity = new TransferSmsReplyEntity();
+                        transferSmsReplyEntity.setName(smsEntity.getName());
+                        transferSmsReplyEntity.setDeptId(smsEntity.getDeptId());
+                        transferSmsReplyEntity.setDeptName(smsEntity.getDeptName());
+                        transferSmsReplyEntity.setContent(s.getMsgContent());
+                        transferSmsReplyEntity.setPhone(s.getSrcTerminalId());
+                        transferSmsReplyEntity.setSubmitTime(dateFormat(s.getSubmitTime()));
+                        transferSmsReplyEntity.setCreateUserId(0L);
+                        transferSmsReplyEntity.setCreateUserName("系统回调");
+                        transferSmsReplyEntity.setStatus(SmsConstant.SendReply.UNSENT.getCode());
+                        // 保存回复记录
+                        transferSmsReplyService.save(transferSmsReplyEntity);
+                    }
+                });
+
             } catch (UnsupportedEncodingException e) {
                 log.error("短信回复回调处理异常:{}", e);
             }
         }
-
     }
 
     private Date dateFormat(String dateStr) {
