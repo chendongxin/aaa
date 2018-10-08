@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferSourceDao">
-  
-  <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity">
-    <id column="source_id" jdbcType="BIGINT" property="sourceId" />
-    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
-    <result column="name" jdbcType="VARCHAR" property="name" />
-	<result column="email_domain" jdbcType="VARCHAR" property="emailDomain" />
-    <result column="status" jdbcType="TINYINT" property="status" />
-    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
-    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
-    <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  
-  <!-- 表基本列 -->
-  <sql id="Base_Column_List">
-    source_id, parent_id, name, email_domain, status, create_user_id, create_user_name, create_time, update_user_id,
-    update_user_name, update_time
-  </sql>
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity">
+        <id column="source_id" jdbcType="BIGINT" property="sourceId"/>
+        <result column="parent_id" jdbcType="INTEGER" property="parentId"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="email_domain" jdbcType="VARCHAR" property="emailDomain"/>
+        <result column="status" jdbcType="TINYINT" property="status"/>
+        <result column="create_user_id" jdbcType="BIGINT" property="createUserId"/>
+        <result column="create_user_name" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_user_id" jdbcType="BIGINT" property="updateUserId"/>
+        <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
+        source_id, parent_id, name, email_domain, status, create_user_id, create_user_name, create_time, update_user_id,
+        update_user_name, update_time
+    </sql>
 
     <!-- 通用查询sql -->
     <sql id="Base_Where_SQL">
@@ -55,7 +55,7 @@
     <insert id="save" keyProperty="sourceId" useGeneratedKeys="true">
         insert into transfer_source
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="null != parentId">parent_id, </if>
+            <if test="null != parentId">parent_id,</if>
             <if test="null != name">name,</if>
             <if test="null != emailDomain">email_domain,</if>
             <if test="null != status">status,</if>
@@ -68,7 +68,7 @@
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="null != parentId">#{parentId}, </if>
+            <if test="null != parentId">#{parentId},</if>
             <if test="null != name">#{name},</if>
             <if test="null != emailDomain">#{emailDomain},</if>
             <if test="null != status">#{status},</if>
@@ -85,7 +85,7 @@
     <update id="update">
         update transfer_source
         <set>
-            <if test="null != parentId">parent_id = #{parentId}, </if>
+            <if test="null != parentId">parent_id = #{parentId},</if>
             <if test="null != name">name = #{name},</if>
             <if test="null != emailDomain">email_domain = #{emailDomain},</if>
             <if test="null != status">status = #{status},</if>
@@ -101,11 +101,10 @@
 
     <!-- 删除给定主键的记录 -->
     <delete id="delete">
-    delete
-		from transfer_source
-	where
-		source_id = #{sourceId}
-  </delete>
+        delete
+        from transfer_source
+        where source_id = #{sourceId}
+    </delete>
 
     <!-- 多个主键批量删除记录 -->
     <delete id="deleteBatch">
@@ -158,7 +157,7 @@
         <include refid="Base_Column_List"/>
         from transfer_source
         <where>
-            <if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = 1 </if>
+            <if test="parentId != null and !&quot;&quot;.equals(parentId)">and parent_id = 1</if>
             <if test="emailDomain != null and !&quot;&quot;.equals(emailDomain)">and email_domain = #{emailDomain}</if>
             <if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
             <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
@@ -202,20 +201,27 @@
 
     <select id="findNotByCompanyId" resultMap="BaseResultMap">
         select
-          <include refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         from transfer_source ts
         where ts.source_id not in
         (select tcs.source_id
-          from transfer_company_source tcs
-          where tcs.company_id = #{companyId})
+        from transfer_company_source tcs
+        where tcs.company_id = #{companyId})
     </select>
 
     <select id="getAllSourceList" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List"/>
-    from transfer_source
-    order by parent_id
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_source
+        order by parent_id
     </select>
 
+    <!-- 根据邮箱后缀查询来源 -->
+    <select id="findByEmailDomain" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from transfer_source
+        where email_domain like concat('%',#{emailDomain},'%') limit 1
+    </select>
 
 </mapper>

@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
+import com.hqjy.mustang.common.model.crm.TransferCustomerInfo;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.transfer.sms.constant.SmsConstant;
 import com.hqjy.mustang.transfer.sms.dao.TransferSmsDao;
+import com.hqjy.mustang.transfer.sms.fegin.TransferCustomerApiService;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsReplyDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsResultDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsStatusDTO;
@@ -43,12 +45,14 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
 
     private final SmsApiService smsApiService;
     private final TransferSmsReplyService transferSmsReplyService;
+    private final TransferCustomerApiService transferCustomerApiService;
 
     @Autowired
     @Lazy
-    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService) {
+    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService, TransferCustomerApiService transferCustomerApiService) {
         this.smsApiService = smsApiService;
         this.transferSmsReplyService = transferSmsReplyService;
+        this.transferCustomerApiService = transferCustomerApiService;
     }
 
     /**
@@ -77,7 +81,10 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
         smsEntity.setCreateUserName(ShiroUtils.getUserName());
         smsEntity.setStatus(SmsConstant.SendStatus.AWAIT.getCode());
         smsEntity.setStatusValue(SmsConstant.SendStatus.AWAIT.getValue());
-        // 根据部门和手机号查询客户名称 TODO 需要调用CRM接口
+        // 根据部门和手机号查询客户名称
+        smsEntity.setName(Optional.ofNullable(transferCustomerApiService.findByPhoneAndDeptId(smsEntity.getDeptId(), smsEntity.getPhone()))
+                .map(TransferCustomerInfo::getName)
+                .orElse(null));
         return super.save(smsEntity);
     }
 

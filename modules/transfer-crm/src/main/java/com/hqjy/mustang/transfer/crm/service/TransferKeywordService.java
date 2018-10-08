@@ -17,4 +17,9 @@ public interface TransferKeywordService extends BaseService<TransferKeywordEntit
      * 关键词管理树数据
      */
     HashMap<String, List<TransferKeywordEntity>> getRecursionTree(boolean showRoot);
+
+    /**
+     * 根据职位信息，遍历出关键字
+     */
+    String getKeyWork(String info);
 }

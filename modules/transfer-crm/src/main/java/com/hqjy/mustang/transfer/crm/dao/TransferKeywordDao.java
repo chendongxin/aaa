@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * transfer_keyword 持久化层
- * 
+ *
  * @author : xyq
  * @date : 2018/09/07 10:16
  */
@@ -29,4 +29,9 @@ public interface TransferKeywordDao extends BaseDao<TransferKeywordEntity, Integ
      * 通过名称查询一条关键词
      */
     TransferKeywordEntity findOneByName(String name);
+
+    /**
+     * 获取关键字字典列表
+     */
+    List<TransferKeywordEntity> findDictionaryList();
 }

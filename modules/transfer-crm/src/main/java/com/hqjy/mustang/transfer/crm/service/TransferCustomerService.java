@@ -93,4 +93,9 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      */
     R returnToCommon(List<Long> customerId);
 
+    /**
+     * 根据电话和部门，查询一个客户信息
+     */
+    TransferCustomerEntity findByPhoneAndDeptId(Long deptId, String phone);
+
 }
