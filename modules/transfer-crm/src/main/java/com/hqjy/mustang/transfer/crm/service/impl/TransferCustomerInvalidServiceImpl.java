@@ -15,7 +15,6 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerInvalidEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerContactService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerInvalidService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
-import com.hqjy.mustang.transfer.crm.service.TransferProcessService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +38,6 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
     private TransferCustomerContactService transferCustomerContactService;
     @Autowired
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
-    @Autowired
-    private TransferProcessService transferProcessService;
 
     /**
      * 设置客户无效
@@ -91,48 +88,20 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
         return super.findPage(query);
     }
 
-//    @Override
-//    @Transactional(rollbackFor = RRException.class)
-//    public R returnToPrivate(Long customerId) {
-//        Date date = new Date();
-//        try {
-//            String error = "用户【" + getUserId() + "】退回私海【" + customerId + "】:";
-//            TransferProcessEntity process = transferProcessService.getProcessByCustIdAndUserId(customerId);
-//            TransferCustomerEntity customerEntity = transferCustomerService.findOne(customerId);
-//            if (null == process) {
-//                log.error(error + StatusCode.BIZ_PROCESS_INACTIVE_OR_NOT_PRIVATE.getMsg());
-//                return;
-//            }
-//            if (!customerEntity.getStatus().equals(Constant.CustomerStatus.POTENTIAL.getValue())) {
-//                log.error(error + StatusCode.BIZ_CUSTOMER_NOT_POTENTIAL.getMsg());
-//                return;
-//            }
-//            //设置流程过期
-//            int i = bizProcessService.disableProcessActive(process);
-//            if (i == 0) {
-//                log.error(error + StatusCode.BIZ_PROCESS_UPDATE_INACTIVE.getMsg());
-//                return;
-//            }
-//            //新增激活状态的客户流程
-//            int save = bizProcessService.save(new BizProcessEntity().setCreateTime(date).setMemo("无效退回私海操作")
-//                    .setCustomerId(c).setDeptId(process.getDeptId()).setActive(Boolean.TRUE).setCreateId(getUserId()));
-//            if (save == 0) {
-//                log.error(error + StatusCode.BIZ_PROCESS_SAVE_FAULT.getMsg());
-//                return;
-//            }
-//            //更新客户主表(同步激活状态流程)
-//            int update = transferCustomerService.returnToCommon(new BizCustomerEntity().setAllotTime(date).setUpdateTime(date)
-//                    .setCustomerId(c).setUpdateId(getUserId()));
-//            if (update == 0) {
-//                log.error(error + StatusCode.BIZ_CUSTOMER_UPDATE_FAULT.getMsg());
-//            }
-//            return R.ok();
-//        } catch (Exception e) {
-//            log.error("《=========私海退回公海异常，原因如下==========》,{}", e.getMessage());
-//            e.printStackTrace();
-//            throw new RRException(e.getMessage());
-//        }
-//        return null;
-//    }
+    @Override
+    @Transactional(rollbackFor = RRException.class)
+    public R returnToPrivate(Long customerId) {
+        try {
+            TransferCustomerEntity customerEntity = transferCustomerService.findOne(customerId);
+            //更新客户状态为无效状态
+            customerEntity.setStatus(Constant.CustomerStatus.POTENTIAL.getValue())
+                    .setUpdateUserId(getUserId()).setUpdateUserName(getUserName()).setUpdateTime(new Date());
+            transferCustomerService.update(customerEntity);
+            return R.ok();
+        } catch (Exception e) {
+            log.error("客户无效转私海处理异常" + e.getMessage());
+            throw new RRException(StatusCode.BIZ_CUSTOMER_INVALID_TO_PRIVATE_EXCEPTION);
+        }
+    }
 
 }

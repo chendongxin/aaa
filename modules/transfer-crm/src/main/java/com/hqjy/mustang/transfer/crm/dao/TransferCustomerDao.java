@@ -48,12 +48,19 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
      */
     List<TransferCustomerEntity> findCommonPage(PageQuery pageQuery);
 
-//    /**
-//     * 私海客户
-//     *
-//     * @param pageQuery 查询条件
-//     * @return 私海客户数据
-//     */
-//    List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery);
+    /**
+     * 私海客户
+     *
+     * @param pageQuery 查询条件
+     * @return 私海客户数据
+     */
+    List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery);
+
+    /**
+     * 私海退回公海
+     *
+     * @param entity 客户对象
+     */
+    int returnToCommon(TransferCustomerEntity entity);
 
 }

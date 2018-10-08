@@ -369,7 +369,6 @@
 		tc.qq, tc.land_line, tc.create_user_id, tc.create_user_name, tc.create_time, tc.allot_time, tc.update_user_id,
 		tc.update_user_name, tc.update_time
 		from transfer_customer tc
-		left join sys_user su on su.user_id = tc.create_user_id
 		<where>
 			<!--该客户未分配人员-->
 			tc.status=0 and tc.user_id is null
@@ -390,5 +389,42 @@
 			</if>
 		</where>
 	</select>
+
+	<!-- 私海客户分页查询 -->
+	<select id="findPrivatePage" resultMap="BaseResultMap">
+		select
+		tc.customer_id, tc.name, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.phone,
+		tc.create_user_id, tc.create_user_name, tc.create_time, tc.status
+		from transfer_customer tc
+		<where>
+			tc.status in (0,3) and tc.user_id is not null
+			<!-- 高级查询筛选部门-->
+			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+				and tc.dept_id in ${deptIds}
+			</if>
+			<!--该客户已分配人员-->
+			<if test="userId !=null and !&quot;&quot;.equals(userId)">
+				and tc.user_id=#{userId}
+			</if>
+			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+			<if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
+			<if test="status != null and !&quot;&quot;.equals(status)">and tc.status = #{status}</if>
+			<if test="userName != null and !&quot;&quot;.equals(userName)">and tc.user_name like
+				concat('%',#{userName},'%')
+			</if>
+			<if test="deptId != null and !&quot;&quot;.equals(deptId)">and tc.dept_id = #{deptId}</if>
+			<if test="deptName != null and !&quot;&quot;.equals(deptName)">and tc.deptName like concat('%',#{deptName},'%')</if>
+			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+				and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+			</if>
+		</where>
+	</select>
+
+	<update id="returnToCommon">
+        update transfer_customer
+        set user_id = null, user_name = null, update_user_id = #{updateUserId}, update_user_name = #{updateUserName},update_time=#{updateTime},allot_time=#{allotTime}
+        where customer_id = #{customerId}
+    </update>
 
 </mapper>

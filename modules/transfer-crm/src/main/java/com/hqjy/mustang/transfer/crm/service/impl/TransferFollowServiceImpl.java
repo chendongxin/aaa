@@ -3,19 +3,18 @@ package com.hqjy.mustang.transfer.crm.service.impl;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
-import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDao;
-import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDetailDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferFollowDao;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferFollowEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
+import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
 import com.hqjy.mustang.transfer.crm.service.TransferFollowService;
 import com.hqjy.mustang.transfer.crm.service.TransferProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -26,6 +25,8 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
 
     @Autowired
     private TransferProcessService transferProcessService;
+    @Autowired
+    private TransferCustomerService transferCustomerService;
     @Autowired
     private TransferCustomerDao transferCustomerDao;
     /**
@@ -57,15 +58,17 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
         //更新流程的跟进部门信息
         process.setFollowCount(process.getFollowCount()+1);
         process.setLastFollowId(entity.getFollowId());
-        process.setExpireTime(DateUtils.addDays(new Date(), 3));
+//        process.setExpireTime(DateUtils.addDays(new Date(), 3));
         int update = transferProcessService.update(process);
         if( update < 0) {
             throw new RRException(StatusCode.BIZ_FOLLOW_UPDATE_PROCESS_FAULT);
         }
+        TransferCustomerEntity transferCustomerEntity = transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId());
         if (process.getFollowCount() == 1) {
-            transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId()).setFirstUserId(getUserId()).setFirstUserName(getUserName());
+            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName());
         }
-        transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId()).setLastUserId(getUserId()).setLastUserName(getUserName());
+        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName());
+        transferCustomerService.update(transferCustomerEntity);
         return update;
     }
 }

@@ -414,6 +414,8 @@ public class Constant {
      */
     public enum CustomerStatus {
 
+        POTENTIAL(0, "潜在"),
+
         FAILED_VALID(1, "有效失败"),
 
         FAILED_INVALID(2, "无效失败"),

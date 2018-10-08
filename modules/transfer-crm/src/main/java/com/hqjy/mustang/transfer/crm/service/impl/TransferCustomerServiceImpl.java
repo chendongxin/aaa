@@ -32,7 +32,6 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -106,11 +105,14 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             if (!phone) {
                 throw new RRException("手机号码格式错误");
             }
-            List<TransferCustomerContactEntity> list = this.checkContactHasExit(customerDto);
-            if (list.size() > 0) {
+            Map<String, Object> customerHashMap = new HashMap<>();
+            customerHashMap.put("proId", customerDto.getProId());
+            customerHashMap.put("phone", customerDto.getPhone());
+            List<TransferCustomerEntity> transferCustomerList = baseDao.findList(customerHashMap);
+            if (transferCustomerList.size() > 0) {
                 //如果存在，将客户添加到重单客户表中
-                System.out.println("list.get(0) = " + list.get(0));
-                TransferCustomerEntity customer = baseDao.findOne(list.get(0).getCustomerId());
+                System.out.println("list.get(0) = " + transferCustomerList.get(0));
+                TransferCustomerEntity customer = baseDao.findOne(transferCustomerList.get(0).getCustomerId());
                 transferCustomerRepeatService.save(
                         new TransferCustomerRepeatEntity()
                                 .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeChat()).setQq(customerDto.getWeChat())
@@ -550,7 +552,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     @Override
     public R receiveTransferCustomer(List<Long> customerId) {
-        Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY));
+//        Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY));
 //        Future<R> future = receiveExecutor.submit(() -> {
 //            List<Long> success = new ArrayList<>();
 //            this.doReceive(customerId, opportunity, success, getUserId(), getUserName());
@@ -636,37 +638,82 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     }
 
 
-//    @Override
-//    public List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery) {
-//        transferCustomerContactService.setCustomerIdByContact(pageQuery);
-//        Long customerId = MapUtils.getLong(pageQuery, "customerId");
-//        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
-//            return null;
-//        }
-//        Long deptId = MapUtils.getLong(pageQuery, "deptId");
-//        //高级查询部门刷选
-//        if (null != deptId) {
-//            //部门下所有子部门
-//            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-//            List<String> ids = new ArrayList<>();
-//            allDeptUnderDeptId.forEach(x -> {
-//                ids.add(String.valueOf(x));
-//            });
-//            pageQuery.put("deptIds", StringUtils.listToString(ids));
-//        }
-//        this.formatQueryTime(pageQuery);
-//        //如果没有刷选部门过滤条件
-//        if (null == deptId) {
-//            //获取当前用户的部门以及子部门
-//            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
-//            List<String> ids = new ArrayList<>();
-//            userAllDeptId.forEach(x -> {
-//                ids.add(String.valueOf(x));
-//            });
-//            pageQuery.put("deptIds", StringUtils.listToString(ids));
-//        }
-//        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
-//        return baseDao.findPrivatePage(pageQuery);
-//    }
+    @Override
+    public List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery) {
+        transferCustomerContactService.setCustomerIdByContact(pageQuery);
+        Long customerId = MapUtils.getLong(pageQuery, "customerId");
+        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
+            return null;
+        }
+        Long deptId = MapUtils.getLong(pageQuery, "deptId");
+        //高级查询部门刷选
+        if (null != deptId) {
+            //部门下所有子部门
+            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
+            List<String> ids = new ArrayList<>();
+            allDeptUnderDeptId.forEach(x -> {
+                ids.add(String.valueOf(x));
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(ids));
+        }
+        this.formatQueryTime(pageQuery);
+        //如果没有刷选部门过滤条件
+        if (null == deptId) {
+            //获取当前用户的部门以及子部门
+            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
+            List<String> ids = new ArrayList<>();
+            userAllDeptId.forEach(x -> {
+                ids.add(String.valueOf(x));
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(ids));
+        }
+        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
+        return baseDao.findPrivatePage(pageQuery);
+    }
+
+    @Override
+    @Transactional(rollbackFor = RRException.class)
+    public R returnToCommon(List<Long> customerId) {
+        Date date = new Date();
+        try {
+            customerId.forEach(c -> {
+                String error = "用户【" + getUserId() + "】退回公海【" + c + "】:";
+                TransferProcessEntity process = transferProcessService.getProcessByCustIdAndUserId(c);
+                TransferCustomerEntity customerEntity = baseDao.findOne(c);
+                if (null == process) {
+                    log.error(error + StatusCode.BIZ_PROCESS_INACTIVE_OR_NOT_PRIVATE.getMsg());
+                    return;
+                }
+                if (!customerEntity.getStatus().equals(Constant.CustomerStatus.POTENTIAL.getValue())) {
+                    log.error(error + StatusCode.BIZ_CUSTOMER_NOT_POTENTIAL.getMsg());
+                    return;
+                }
+                //设置流程过期
+                int i = transferProcessService.disableProcessActive(process);
+                if (i == 0) {
+                    log.error(error + StatusCode.BIZ_PROCESS_UPDATE_INACTIVE.getMsg());
+                    return;
+                }
+                //新增激活状态的客户流程
+                int save = transferProcessService.save(new TransferProcessEntity().setCreateTime(date).setMemo("私海退回公海操作").setCreateUserName(getUserName())
+                        .setCustomerId(c).setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setActive(Boolean.FALSE).setCreateUserId(getUserId()));
+                if (save == 0) {
+                    log.error(error + StatusCode.BIZ_PROCESS_SAVE_FAULT.getMsg());
+                    return;
+                }
+                //更新客户主表(同步激活状态流程)
+                int update = baseDao.returnToCommon(new TransferCustomerEntity().setAllotTime(date).setUpdateTime(date)
+                        .setCustomerId(c).setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
+                if (update == 0) {
+                    log.error(error + StatusCode.BIZ_CUSTOMER_UPDATE_FAULT.getMsg());
+                }
+            });
+            return R.ok();
+        } catch (Exception e) {
+            log.error("《=========私海退回公海异常，原因如下==========》,{}", e.getMessage());
+            e.printStackTrace();
+            throw new RRException(e.getMessage());
+        }
+    }
 
 }

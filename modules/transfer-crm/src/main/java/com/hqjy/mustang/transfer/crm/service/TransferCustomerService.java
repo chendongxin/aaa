@@ -77,12 +77,20 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      */
     void formatQueryTime(PageQuery pageQuery);
 
-//    /**
-//     * 私海客户数据
-//     *
-//     * @param pageQuery 查询参数对象
-//     * @return 私海客户数据
-//     */
-//    List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery);
+    /**
+     * 私海客户数据
+     *
+     * @param pageQuery 查询参数对象
+     * @return 私海客户数据
+     */
+    List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery);
+
+    /**
+     * 私海客户退回公海
+     *
+     * @param customerId 客户Id
+     * @return 退回结果
+     */
+    R returnToCommon(List<Long> customerId);
 
 }

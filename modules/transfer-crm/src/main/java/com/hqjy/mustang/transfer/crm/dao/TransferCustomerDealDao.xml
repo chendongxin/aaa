@@ -157,20 +157,6 @@
 			  and tc.update_time between #{beginAllotTime} and #{endAllotTime}
 		  </if>
 	  </where>
-
-
-	from transfer_customer_deal
-		<where>
-		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
-		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-	</where>
   </select>
   
   <!-- 查询记录数量 -->

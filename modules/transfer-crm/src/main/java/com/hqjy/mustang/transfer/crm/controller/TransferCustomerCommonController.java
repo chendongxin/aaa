@@ -38,7 +38,6 @@ public class TransferCustomerCommonController extends AbstractMethodError {
             "【当前跟进人部门名称:deptName】,【首次跟进人ID:firstUserId】,【首次跟进人姓名:firstUserName】,【最后跟进人ID:lastUserId】\n" +
             "【最后跟进人姓名:lastUserName】,【推广用户ID:genUserId】,【推广用户姓名:genUserName】,【手机号码:phone】,【微信:weChat】\n" +
             "【QQ:qq】,【座机:landLine】,【创建人ID:createUserId】,【创建人姓名:createUserName】,【创建时间:createTime】\n" +
-            "【更新人编号:updateUserId】,【更新人姓名:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
             "{\n" +
             "  \"msg\": \"成功\",\n" +
@@ -74,9 +73,6 @@ public class TransferCustomerCommonController extends AbstractMethodError {
             "        \"landLine\": \"6541236\",\n" +
             "        \"createUserId\": 1,\n" +
             "        \"createUserName\": \"王超群\",\n" +
-            "        \"createTime\": \"2018-06-11 17:19:24\",\n" +
-            "        \"updateUserId\": 1,\n" +
-            "        \"updateUserName\": \"王超群\",\n" +
             "        \"createTime\": \"2018-06-11 17:19:24\",\n" +
             "      }\n" +
             "    ],\n" +
