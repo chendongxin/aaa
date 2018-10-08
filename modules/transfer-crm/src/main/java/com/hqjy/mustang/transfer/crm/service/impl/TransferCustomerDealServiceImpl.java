@@ -7,8 +7,10 @@ import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDealDao;
+import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.dto.NcDealMsgDTO;
+import com.hqjy.mustang.transfer.crm.model.entity.SysDeptEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDealEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerContactService;
@@ -43,6 +45,12 @@ public class TransferCustomerDealServiceImpl extends BaseServiceImpl<TransferCus
     private TransferCustomerContactService transferCustomerContactService;
     private TransferCustomerService transferCustomerService;
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
+    private SysDeptServiceFeign sysDeptServiceFeign;
+
+    @Autowired
+    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    }
 
     @Autowired
     public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
@@ -96,12 +104,17 @@ public class TransferCustomerDealServiceImpl extends BaseServiceImpl<TransferCus
             TransferCustomerDealEntity deal = new TransferCustomerDealEntity();
             if (Y.equals(ncDeal.getState())) {
                 customerEntity.setStatus(Constant.CustomerStatus.DEAL.getValue());
+                String userName = customerEntity.getUserId() != null ? customerEntity.getUserName() : customerEntity.getLastUserName();
+
                 baseDao.save(deal.setCustomerId(customerEntity.getCustomerId())
                         .setCreateUserId(SystemId.User.NO_CREATE_ID.getValue())
                         .setCreateUserName("系统")
                         .setCreateTime(ncDeal.getMinRegDate())
-                        //TODO 成交人精确定位存在业务问题，待需求确定
-                        .setUserId(customerEntity.getUserId()));
+                        .setProId(customerEntity.getProId())
+                        .setDeptId(customerEntity.getLastUserDeptId())
+                        .setUserId(customerEntity.getUserId() == null ? customerEntity.getLastUserId() : customerEntity.getUserId())
+                        .setUserName(userName)
+                );
                 log.info("NC成交订单，修改客户状态为成交，并写入成交表");
             } else {
                 customerEntity.setStatus(Constant.CustomerStatus.RESERVATION.getValue());
