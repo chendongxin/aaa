@@ -1,12 +1,16 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
+import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
+import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDealDao;
 import com.hqjy.mustang.transfer.crm.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.dto.NcDealMsgDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDealEntity;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerContactService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerDealService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
@@ -17,7 +21,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 
@@ -80,21 +86,37 @@ public class TransferCustomerDealServiceImpl extends BaseServiceImpl<TransferCus
      * @date create on 2018/9/30
      */
     @Override
+    @SysLog("成交回推结果处理")
     @Transactional(rollbackFor = Exception.class)
     public int processDealMsg(NcDealMsgDTO ncDeal) {
         // 根据NC主键查询客户信息
-
-        // 成交
-        if (Y.equals(ncDeal.getState())) {
-            log.info("NC成交订单，修改客户状态为成交");
-            // 修改客户状态为成交
-            // 写入成交商机表
-        } else {
-            // 修改客户状态为预约
-            log.info("NC撤销订单，修改客户状态为预约");
-            // 删除成交表
+        TransferCustomerEntity customerEntity = transferCustomerService.getByNcId(ncDeal.getNcPk());
+        if (customerEntity != null) {
+            // 成交
+            TransferCustomerDealEntity deal = new TransferCustomerDealEntity();
+            if (Y.equals(ncDeal.getState())) {
+                customerEntity.setStatus(Constant.CustomerStatus.DEAL.getValue());
+                baseDao.save(deal.setCustomerId(customerEntity.getCustomerId())
+                        .setCreateUserId(SystemId.User.NO_CREATE_ID.getValue())
+                        .setCreateUserName("系统")
+                        .setCreateTime(ncDeal.getMinRegDate())
+                        //TODO 成交人精确定位存在业务问题，待需求确定
+                        .setUserId(customerEntity.getUserId()));
+                log.info("NC成交订单，修改客户状态为成交，并写入成交表");
+            } else {
+                customerEntity.setStatus(Constant.CustomerStatus.RESERVATION.getValue());
+                baseDao.updateIsDelete(deal.setUpdateUserId(SystemId.User.NO_CREATE_ID.getValue())
+                        .setUpdateUserName("系统")
+                        .setUpdateTime(new Date())
+                        .setDeleted(Boolean.TRUE)
+                        .setDeleteUserId(SystemId.User.NO_CREATE_ID.getValue())
+                        .setDeleteTime(new Date()));
+                log.info("NC撤销订单，修改客户状态为预约，并设置成交记录为删除状态");
+            }
+            return transferCustomerService.update(customerEntity.setUpdateTime(new Date())
+                    .setUpdateUserId(SystemId.User.NO_CREATE_ID.getValue())
+                    .setUpdateUserName("系统"));
         }
-        // 修改客户状态
-        return 1;
+        return 0;
     }
 }

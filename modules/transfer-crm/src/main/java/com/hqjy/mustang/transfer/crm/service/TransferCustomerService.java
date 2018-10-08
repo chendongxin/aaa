@@ -85,4 +85,14 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
 //     */
 //    List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery);
 
+    /**
+     * 根据NCid查询客户信息
+     *
+     * @param ncId NCid
+     * @return 客户信息
+     * @author xieyuqing
+     * @date create 2018年10月8日10:20:06
+     */
+    TransferCustomerEntity getByNcId(String ncId);
+
 }

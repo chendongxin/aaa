@@ -342,8 +342,8 @@ public class Constant {
         DESIGN(2, "设计类"),
         OPETATION(3, "运营类"),
         PRODUCT(4, "产品类"),
-        TECHNICAL_SUPPORT(5,"技术支持类"),
-        OTHER(6,"其它");
+        TECHNICAL_SUPPORT(5, "技术支持类"),
+        OTHER(6, "其它");
 
         private Integer value;
 
@@ -374,7 +374,7 @@ public class Constant {
     /**
      * 工作经验
      */
-    public enum  Experience {
+    public enum Experience {
 
         NO_EXPERIENCE(0, "无经验"),
         FRESH_GRADUATE(1, "应届生"),
@@ -413,6 +413,8 @@ public class Constant {
      * 客户状态
      */
     public enum CustomerStatus {
+
+        POTENTIAL(0, "潜在"),
 
         FAILED_VALID(1, "有效失败"),
 
@@ -561,8 +563,8 @@ public class Constant {
      */
     public enum GetWayStatus {
 
-        ACTIVE_GET("主动获取",1),
-        PASSIVE_GET("被动获取",2);
+        ACTIVE_GET("主动获取", 1),
+        PASSIVE_GET("被动获取", 2);
         private int value;
         private String code;
 
