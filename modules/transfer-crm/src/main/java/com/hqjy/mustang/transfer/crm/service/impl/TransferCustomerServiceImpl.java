@@ -717,6 +717,18 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         }
     }
 
+    /**
+     * 根据NCid查询客户信息
+     *
+     * @param ncId NCid
+     * @return 客户信息
+     * @author xieyuqing
+     * @date create 2018年10月8日10:20:06
+     */
+    @Override
+    public TransferCustomerEntity getByNcId(String ncId) {
+        return baseDao.getByNcId(ncId);
+    }
 
     /**
      * 根据电话和部门，查询一个客户信息

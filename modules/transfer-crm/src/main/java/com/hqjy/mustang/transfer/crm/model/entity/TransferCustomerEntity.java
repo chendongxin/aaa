@@ -97,6 +97,11 @@ public class TransferCustomerEntity implements Serializable {
     private Long firstUserId;
 
     /**
+     * 首次跟进人所属部门 first_user_dept_id
+     **/
+    private Long firstUserDeptId;
+
+    /**
      * 首次跟进人名称 first_user_name
      **/
     private String firstUserName;
@@ -105,6 +110,11 @@ public class TransferCustomerEntity implements Serializable {
      * 最后跟进人 last_user_id
      **/
     private Long lastUserId;
+
+    /**
+     * 最后跟进人所属部门 last_user_dept_id
+     **/
+    private Long lastUserDeptId;
 
     /**
      * 最后跟进人名称 last_user_name

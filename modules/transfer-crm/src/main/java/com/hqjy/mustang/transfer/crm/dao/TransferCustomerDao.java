@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * transfer_customer 持久化层
- * 
+ *
  * @author : xyq
  * @date : 2018/09/14 11:19
  */
@@ -29,6 +29,7 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
 
     /**
      * 客户列表统计导出数据条数
+     *
      * @param pageQuery 查询条件
      * @return 条数
      * @author xyq 2018年8月23日16:33:37
@@ -62,5 +63,15 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
      * @param entity 客户对象
      */
     int returnToCommon(TransferCustomerEntity entity);
+
+    /**
+     * 根据NCid查询客户信息
+     *
+     * @param ncId NCid
+     * @return 客户信息
+     * @author xieyuqing
+     * @date create 2018年10月8日10:20:06
+     */
+    TransferCustomerEntity getByNcId(String ncId);
 
 }

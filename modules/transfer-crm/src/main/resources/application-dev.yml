@@ -63,7 +63,6 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
-
 #NC接口地址
 nc:
   #商机信息保存到NC
@@ -78,3 +77,10 @@ nc:
   getZKSaleManUrl: http://nc.hqbis.com/servlet/~hq/nc.impl.hq.webservice.student.GetZKSaleManServlet
   #获取省份或者校区接口
   getProvinceSchoolUrl: http://api.hqjy.com/hq-school/org/get
+  #NC的rabbitmq
+  rabbitmq:
+    addresses: 10.0.98.46:5672
+    username: admin
+    password: mon4498
+    queuename:
+      deal: nc.success.reg.stu.cjym.dev

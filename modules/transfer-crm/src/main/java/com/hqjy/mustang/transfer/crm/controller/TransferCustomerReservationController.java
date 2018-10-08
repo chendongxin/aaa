@@ -137,14 +137,4 @@ public class TransferCustomerReservationController extends AbstractMethodError {
     public R reserveCustomer(@RequestBody TransferCustomerReservationEntity reservationEntity) {
         return transferCustomerReservationService.reserveCustomer(reservationEntity);
     }
-
-    /**
-     * 归属人所在部门及旗下部门
-     */
-    @GetMapping(value = "/dept/userId/{userId}")
-    @ApiOperation(value = "获取所有部门接口", notes = "请求参数说明")
-    public R getUserDeptList(Long userId) {
-        return R.ok(sysDeptServiceFeign.getUserDeptList(userId));
-    }
-
 }
