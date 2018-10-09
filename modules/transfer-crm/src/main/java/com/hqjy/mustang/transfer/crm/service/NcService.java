@@ -5,6 +5,7 @@ import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crm.model.dto.*;
 
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -24,23 +25,6 @@ public interface NcService {
      */
     NcBizSaveResultDTO requestNcSave(NcBizSaveParamDTO ncBizSaveDTO);
 
-    /**
-     * 请求nc新增跟进记录接口
-     *
-     * @param ncFollowUpRequest 请求参数
-     * @return 返回实体：如果请求保存成功 code值为0，msg值为Nc返回数据;
-     * 请求失败的，则code值为-1，msg值为错误信息
-     */
-    NcResponseDTO requestNcFollowUp(NcFollowUpRequestDTO ncFollowUpRequest);
-
-    /**
-     * 请求NC更新商机接口
-     *
-     * @param ncBizRequestVo 请求参数
-     * @return 返回实体：如果请求保存成功 code值为0，msg值为成功信息；
-     * 请求失败的，则code值为-1，msg值为错误信息
-     */
-    NcResponseDTO requestNcUpdate(NcBizRequestDTO ncBizRequestVo);
 
     /**
      * 请求nc获取招生老师接口
@@ -49,23 +33,15 @@ public interface NcService {
      * @return 返回实体：如果请求保存成功 code值为0，msg值为成功，result值为：招生老师对象集合；
      * 请求失败的，则code值为-1，msg值为错误信息，result值为null
      */
-    R requestNCGetTeacher(String schoolId);
+    List<NcTeacherDTO> requestNCGetTeacher(String schoolId);
+
 
     /**
-     * 请求NC自考销售人员数据
-     *
-     * @return @return 返回实体：如果请求保存成功 code值为0，msg值为成功，result值为：NC自考销售人员数据集合；
-     * 请求失败的，则code值为-1，msg值为错误信息，result值为null
+     * 根据校区名字获取NC校区数据
+     * @param name 校区名称
+     * @return 返回校区数据
      */
-    R getSelfTestSaleMan();
-
-    /**
-     * 获取所有省份或者省对应的所有校区
-     *
-     * @return @return 返回实体：如果请求保存成功 code值为0，msg值为成功，result值为：返回数据集合；
-     * 请求失败的，则code值为-1，msg值为错误信息，result值为null
-     */
-    R getSchoolOrProvince(Map<String, Object> params);
+    NcSchoolDTO getSchoolByName(String name);
 
     /**
      * 获取ncId

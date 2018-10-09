@@ -146,8 +146,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                         .setUserId(customerDto.getFirstUserId()).setCustomerId(entity.getCustomerId()).setDeptId(customerDto.getDeptId())
                         .setCreateTime(time).setExpireTime(time).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName());
                 transferProcessService.save(transferProcessEntity);
-                //发送客户到redis消息队列，异步回写NCId
-                this.sendNcSave(entity, customerDto);
                 return R.ok();
             }
         } catch (Exception e) {
@@ -237,13 +235,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         return list;
     }
 
-    private void sendNcSave(TransferCustomerEntity entity, TransferCustomerDTO dto) {
-        NcBizSaveParamDTO ncBizRequestDTO = new NcBizSaveParamDTO();
-        ncBizRequestDTO.setCustomerId(entity.getCustomerId()).setTrue_name("自考集训基地").setUserId(entity.getUserId())
-                .setTel(entity.getPhone()).setLxqq(dto.getQq()).setCreator(getUserName()).setNote(dto.getNote())
-                .setSaleType(0).setName(entity.getName());
-        listOperations.leftPush(RedisKeys.Nc.SAVE, JsonUtil.toJson(ncBizRequestDTO));
-    }
 
     /**
      * 导入客户
