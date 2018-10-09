@@ -1,18 +1,20 @@
-server:
-    port: 8240
-    context-path: /
-
-spring:
-    application:
-    # 应用名称
-      name: mustang-school
-    # 环境 dev|test|pro
-    profiles:
-        active: dev
 info:
   app:
     name: mustang-school
     version: 1.0
+
+server:
+  port: 8240
+  context-path: /
+
+spring:
+  application:
+    # 应用名称
+    name: mustang-school
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
+
 eureka:
   client:
     serviceUrl:
@@ -32,16 +34,23 @@ eureka:
     #状态页面和健康指标
     statusPageUrlPath: ${server.context-path}/swagger-ui.html
 
+# Feign 开启 Hystrix
+feign:
+  hystrix:
+    enabled: true
+  httpclient:
+    connection-timeout: 5000
+
 # shiro 不拦截路径
 shiro:
   anon:
     path:
-      # spring cloud 健康检查
-      - /info
-      - /actuator/**
-      - /doc
-      - /swagger-ui.html
-      - /csrf
-      - /webjars/**
-      - /swagger-resources/**
-      - /v2/api-docs
+    # spring cloud 健康检查
+    - /info
+    - /actuator/**
+    - /doc
+    - /swagger-ui.html
+    - /csrf
+    - /webjars/**
+    - /swagger-resources/**
+    - /v2/api-docs

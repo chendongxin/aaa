@@ -1,3 +1,8 @@
+info:
+  app:
+    name: transfer-sms
+    version: 1.0
+
 server:
   port: 8340
   context-path: /
@@ -9,10 +14,7 @@ spring:
   # 环境 dev|test|pro
   profiles:
     active: dev
-info:
-  app:
-    name: transfer-sms
-    version: 1.0
+
 eureka:
   client:
     serviceUrl:
@@ -36,6 +38,21 @@ eureka:
 feign:
   hystrix:
     enabled: true
+  httpclient:
+    connection-timeout: 5000
+
+# Mybatis配置
+mybatis:
+  mapperLocations: classpath*:com/hqjy/mustang/transfer/sms/dao/*Dao.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+pagehelper:
+  helperDialect: mysql
+  page-size-zero: true
+  reasonable: true
+  params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+  row-bounds-with-count: true
 
 # shiro 不拦截路径
 shiro:
@@ -63,17 +80,3 @@ sms:
     # 接口
     api:
       sendSms: ${sms.youxinyun.host}/Platform_Http_Service/servlet/SendSms
-
-# Mybatis配置
-mybatis:
-    mapperLocations: classpath*:com/hqjy/mustang/transfer/sms/dao/*Dao.xml
-    configuration:
-        map-underscore-to-camel-case: true
-
-
-pagehelper:
-    helperDialect: mysql
-    page-size-zero: true
-    reasonable: true
-    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
-    row-bounds-with-count: true
