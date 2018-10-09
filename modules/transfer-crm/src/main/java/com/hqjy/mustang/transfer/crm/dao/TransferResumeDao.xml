@@ -38,12 +38,18 @@
     <result column="create_gen_id" jdbcType="BIGINT" property="createGenId" />
     <result column="create_gen_name" jdbcType="VARCHAR" property="createGenName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+	<result column="email_body" jdbcType="LONGVARCHAR" property="emailBody" />
   </resultMap>
   
   <!-- 表基本列 -->
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hqjy.mustang.transfer.crm.model.entity.TransferResumeEntity">
-    <result column="email_body" jdbcType="LONGVARCHAR" property="emailBody" />
-  </resultMap>
+  <!--<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.hqjy.mustang.transfer.crm.model.entity.TransferResumeEntity">-->
+    <!---->
+  <!--</resultMap>-->
+	<sql id="Base_Column_List">
+		id,major,name,age,sex,address,phone,email,birthday,school,graduate_date,education_id,education_name,position_applied,
+		working_place,salary,work_experience,send_mail,send_time,email_title,status,dept_id,dept_name,create_email_id,create_email,
+		pro_id,pro_name,company_id,company_name,source_id,source_name,create_gen_id,create_gen_name,create_time,email_body
+	</sql>
   
   <!-- 通用查询sql -->
   <sql id="Base_Where_SQL">

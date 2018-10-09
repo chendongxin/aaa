@@ -16,9 +16,14 @@ public interface ConfigConstant {
     String WEBSOCKET_HOST = "WEBSOCKET_HOST";
 
     /**
+     * 分配算法类型，0 只根据权重 ；1 根据权重和排班
+     */
+    String TRANSFER_ALLOT_ALGORITHM = "TRANSFER_ALLOT_ALGORITHM";
+
+    /**
      * 没有指定商机归属，或则分配部门不存在，指定分配到此部门
      */
-    String ALLOT_DEFAULT_DEPTID = "ALLOT_DEFAULT_DEPTID";
+    String TRANSFER_ALLOT_DEFAULT_DEPTID = "TRANSFER_ALLOT_DEFAULT_DEPTID";
 
     /**
      * Transfer首次分配超时时间 单位天
@@ -29,5 +34,20 @@ public interface ConfigConstant {
      * Transfer二次分配超时间 单位天
      */
     String TRANSFER_ALLOT_REPEAT_TIMEOUT = "TRANSFER_ALLOT_REPEAT_TIMEOUT";
+
+    /**
+     * 导入客户上限
+     */
+    String BIZ_IMPORT_LIMIT = "BIZ_IMPORT_LIMIT";
+
+    /**
+     * 导出客户上限
+     */
+    String BIZ_EXPORT_LIMIT = "BIZ_EXPORT_LIMIT";
+
+    /**
+     * 公海领取商机上限
+     */
+    String BIZ_CUSTOMER_OPPORTUNITY = "BIZ_CUSTOMER_OPPORTUNITY";
 
 }

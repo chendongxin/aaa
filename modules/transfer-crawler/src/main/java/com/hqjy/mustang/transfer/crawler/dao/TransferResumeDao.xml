@@ -6,7 +6,7 @@
     <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="name" jdbcType="VARCHAR" property="name"/>
-        <result column="age" jdbcType="VARCHAR" property="age"/>
+        <result column="age" jdbcType="TINYINT" property="age"/>
         <result column="sex" jdbcType="TINYINT" property="sex"/>
         <result column="address" jdbcType="VARCHAR" property="address"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
@@ -262,7 +262,7 @@
         from transfer_resume
         <where>
             <if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
-            <if test="age != null and !&quot;&quot;.equals(age)">and age like concat('%',#{age},'%')</if>
+            <if test="age != null and !&quot;&quot;.equals(age)">and age = #{age}</if>
             <if test="sex != null and !&quot;&quot;.equals(sex)">and sex = #{sex}</if>
             <if test="address != null and !&quot;&quot;.equals(address)">and address like concat('%',#{address},'%')</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>

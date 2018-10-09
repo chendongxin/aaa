@@ -67,6 +67,7 @@ public enum StatusCode {
     BIZ_CUSTOMER_RECEIVE_REACH_MAX_LIMIT(4018, "客户领取已达上限!"),
     BIZ_CUSTOMER_TRANSFER_TO_NC_NOT_NC_ID(4019, "无法从NC平台获取NCId，该商机不能转移到NC"),
     BIZ_CUSTOMER_CONTACT_IS_NULL(4020, "客户无主联系手机号码，不能转移NC"),
+    BIZ_CUSTOMER_INVALID_TO_PRIVATE_EXCEPTION(4021, "客户无效转私海操作异常!"),
     IMPORT_EXCEL_EXCEPTION(5000, "导入文件格式不正确，请下载指定模板编写再导入"),
     EXPORT_EXCEL_EXCEPTION(5001, "导出报表数据处理异常"),
     BIZ_CUSTOMER_HAS_EXIT(5002, "商机已经存在");

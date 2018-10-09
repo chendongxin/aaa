@@ -1,20 +1,34 @@
 package com.hqjy.mustang.allot.service.impl;
 
 import com.hqjy.mustang.allot.dao.TransferAllotCustomerDao;
+import com.hqjy.mustang.allot.dao.TransferAllotCustomerDetailDao;
+import com.hqjy.mustang.allot.dao.TransferAllotCustomerRepeatDao;
 import com.hqjy.mustang.allot.dao.TransferAllotProcessDao;
+import com.hqjy.mustang.allot.exception.MqException;
 import com.hqjy.mustang.allot.feign.SysConfigApiService;
+import com.hqjy.mustang.allot.feign.SysDeptApiService;
+import com.hqjy.mustang.allot.feign.SysUserApiService;
 import com.hqjy.mustang.allot.model.dto.ContactSaveResultDTO;
 import com.hqjy.mustang.allot.model.dto.WeigthRoundDTO;
 import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerEntity;
+import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerRepeatEntity;
 import com.hqjy.mustang.allot.model.entity.TransferAllotProcessEntity;
 import com.hqjy.mustang.allot.service.AbstractAllotService;
 import com.hqjy.mustang.common.base.constant.ConfigConstant;
+import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
+import com.hqjy.mustang.common.base.utils.StringUtils;
+import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import com.hqjy.mustang.common.model.admin.SysUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
+import static com.hqjy.mustang.allot.constant.AllotCode.BIZ_INVALID;
 import static com.hqjy.mustang.common.base.utils.JsonUtil.toObject;
 
 /**
@@ -42,6 +56,17 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
     @Autowired
     private SysConfigApiService sysConfigApiService;
 
+    @Autowired
+    private TransferAllotCustomerRepeatDao allotCustRepeatDao;
+
+    @Autowired
+    private TransferAllotCustomerDetailDao transferAllotCustomerDetailDao;
+
+    @Autowired
+    private SysUserApiService sysUserApiService;
+    @Autowired
+    private SysDeptApiService sysDeptApiService;
+
     /*
      * 二次咨询本地检测是否二次咨询，
      * 1、本地二次咨询且有归属：提醒人员二次咨询；
@@ -56,31 +81,34 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
      * 暂时不做部门不存在，人员不存在的检测
      */
     @Override
-    public void allot(ContactSaveResultDTO saveResultDTO, TransferAllotCustomerEntity customer) {
+    public TransferAllotCustomerEntity allot(ContactSaveResultDTO saveResultDTO, TransferAllotCustomerEntity customer) {
         if (saveResultDTO.getContacStatus()) {
             log.debug("首次咨询流程分配");
             //首次咨询流程分配
-            firstAllot(customer);
+            return firstAllot(customer);
         }
         //二次咨询处理
         else {
             log.debug("二次咨询流程分配");
             //二次咨询流程分配
-            repeatAllot(saveResultDTO, customer);
+            return repeatAllot(saveResultDTO, customer);
         }
     }
 
     /**
      * 首次咨询流程分配
      */
-    private void firstAllot(TransferAllotCustomerEntity customer) {
-        bizAllot(customer);
+    private TransferAllotCustomerEntity firstAllot(TransferAllotCustomerEntity customer) {
+        // 保存简历详情
+        transferAllotCustomerDetailDao.saveCustomer(customer);
+        return bizAllot(true, customer);
     }
 
     /**
      * 二次咨询流程分配，招转需要更新失效时间，和创建时间
      */
-    private void repeatAllot(ContactSaveResultDTO saveResultDTO, TransferAllotCustomerEntity customer) {
+    private TransferAllotCustomerEntity repeatAllot(ContactSaveResultDTO saveResultDTO, TransferAllotCustomerEntity customer) {
+        TransferAllotCustomerEntity newCustomer = PojoConvertUtil.convert(customer, TransferAllotCustomerEntity.class);
         Long oldCustomerId = saveResultDTO.getOldCustomerId();
         //查询原客户信息
         TransferAllotCustomerEntity oldCustomer = allotCustomerDao.findOne(oldCustomerId);
@@ -90,9 +118,8 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
             log.debug("原客户信息不存在,异常数据导致,将新的客户id更新为原客户id");
             // 将新的客户id更新为原客户id
             allotCustomerDao.updateCustomerId(customer.getCustomerId(), oldCustomerId);
-            // 新客户成为老客户
-            oldCustomer = customer;
         } else {
+            newCustomer = oldCustomer;
             log.debug("删除刚才增加的客户信息");
             //删除刚才增加的客户信息
             allotCustomerDao.delete(customer.getCustomerId());
@@ -101,55 +128,94 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
             // allotCustomerDao.updateConsult(oldCustomerId);
         }
 
+        //无效商机处理，TODO 同个赛道。如果简历已经标记为失败状态为无效失败，而且时间在15天内（包括15天）则过滤掉这部分简历。
+        if (newCustomer.getStatus() == -2) {
+            // 判断无效失败时间长度
+            boolean isBefore = newCustomer.getAllotTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(LocalDate.now().plus(15, ChronoUnit.DAYS));
+            if (isBefore) {
+                // 抛出异常，不处理
+                throw new MqException(BIZ_INVALID);
+            }
+        }
+
         // 有效状态的商机进行分配处理
-        if (oldCustomer.getStatus() == 0) {
+        if (newCustomer.getStatus() == 0) {
             // 查询有效状态的流程，判断商机是否有分配人员
             TransferAllotProcessEntity curProcess = transferAllotProcessDao.findOneActiveByCustomerId(oldCustomerId);
 
             // 没有有效流程记录，问题数据，按照新商机的指定进行分配
             if (curProcess == null) {
                 log.debug("没有有效流程记录，问题数据，按照新商机的指定进行分配");
-                oldCustomer.setDeptId(customer.getDeptId());
-                oldCustomer.setUserId(customer.getUserId());
-                bizAllot(oldCustomer);
-                return;
+                newCustomer.setDeptId(customer.getDeptId());
+                newCustomer.setUserId(customer.getUserId());
+                bizAllot(false, newCustomer);
+            } else {
+                // 商机仍然存在电销的私海，此时重复导入同一条商机，此时导入不成功（因为仍在电销私海处在15天保护期，每次跟新会刷新保护期时间）
+                // 商机留回公海，此时重复导入同一条商机，更新商机的创建的时间，其他电销领取后当作新商机处理（外呼记录和历史记录隐藏
+                log.debug("商机仍然存在电销的私海，更新商机的创建时间，分配时间");
+                newCustomer.setDeptId(curProcess.getDeptId());
+                newCustomer.setUserId(curProcess.getUserId());
+                bizAllot(false, newCustomer);
             }
-
-            // 商机仍然存在电销的私海，此时重复导入同一条商机，此时导入不成功（因为仍在电销私海处在15天保护期，每次跟新会刷新保护期时间）
-            // 商机留回公海，此时重复导入同一条商机，更新商机的创建的时间，其他电销领取后当作新商机处理（外呼记录和历史记录隐藏
-            log.debug("商机仍然存在电销的私海，更新商机的创建时间，分配时间");
-            oldCustomer.setDeptId(curProcess.getDeptId());
-            oldCustomer.setUserId(curProcess.getUserId());
-            bizAllot(oldCustomer);
-            return;
         }
+        // 记录重单
+        repeatSave(saveResultDTO, customer, newCustomer);
+        return newCustomer;
+    }
 
-        //无效商机处理，
-        if (oldCustomer.getStatus() == 2) {
-            // TODO 这里可以处理长时间无效变有效的操作
+    private void repeatSave(ContactSaveResultDTO resultDTO, TransferAllotCustomerEntity newCustomer, TransferAllotCustomerEntity customer) {
+        // 二次咨询处理，保存重单商机
+        if (!resultDTO.getContacStatus()) {
+            log.debug("记录到客户二次咨询表");
+            //记录到客户二次咨询表
+            TransferAllotCustomerRepeatEntity custRepeatEntity = PojoConvertUtil.convert(newCustomer, TransferAllotCustomerRepeatEntity.class);
+            custRepeatEntity.setCustomerId(resultDTO.getOldCustomerId());
+            custRepeatEntity.setDeptId(customer.getDeptId());
+            custRepeatEntity.setDeptName(customer.getDeptName());
+            custRepeatEntity.setUserId(customer.getUserId());
+            custRepeatEntity.setUserName(customer.getUserName());
+            allotCustRepeatDao.save(custRepeatEntity);
         }
     }
 
     /**
      * 商机分配
      */
-    private void bizAllot(TransferAllotCustomerEntity customer) {
+    private TransferAllotCustomerEntity bizAllot(boolean isFirst, TransferAllotCustomerEntity customer) {
+
         // 递归获取子部门，如果部门不存在，设置为默认部门,所以部门一定会存在
-        customer.setDeptId(Optional.of(customer.getDeptId()).map(this::getDeptByDeptId).orElse(getDefaultDeptId()));
+        customer.setDeptId(getDeptByDeptId(Optional.ofNullable(customer.getDeptId()).orElseGet(this::getDefaultDeptId)));
+        customer.setDeptName(Optional.ofNullable(sysDeptApiService.findOne(customer.getDeptId())).map(SysDeptInfo::getDeptName).orElse("未知部门"));
 
         // 如果不分配,直接保存到部门，不指定人员
         if (customer.isNotAllot()) {
             customer.setUserId(null);
-            return;
+            return customer;
         }
 
-        // 指定了用户,不处理
-        if (customer.getUserId() != null) {
-            return;
+        // 未指定部门或者未指定人，使用分配算法
+        if (customer.getUserId() == null || customer.getDeptId() == null) {
+            customer.setUserId(Optional.ofNullable(customer.getDeptId()).map(this::getUserByDeptId).orElse(null));
         }
 
-        // 其他情况，未指定部门或者未指定人，使用分配算法
-        customer.setUserId(Optional.ofNullable(customer.getDeptId()).map(this::getUserByDeptId).orElse(null));
+        // 冗余分配人id和姓名
+        String userName = Optional.ofNullable(customer.getUserId())
+                .map(uid -> Optional.ofNullable(sysUserApiService.findOne(uid)).map(SysUserInfo::getUserName).orElse(null))
+                .orElse(null);
+        // 用户不存在
+        if (StringUtils.isEmpty(userName)) {
+            customer.setUserId(null);
+            return customer;
+        }
+        // 用户存在
+        customer.setUserName(userName);
+        customer.setLastUserId(customer.getUserId());
+        customer.setLastUserName(customer.getUserName());
+        if (isFirst) {
+            customer.setFirstUserId(customer.getUserId());
+            customer.setFirstUserName(customer.getUserName());
+        }
+        return customer;
     }
 
 
@@ -158,7 +224,9 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
      */
 
     private Long getDefaultDeptId() {
-        Long configDefaultDept = Optional.ofNullable(sysConfigApiService.getConfig(ConfigConstant.ALLOT_DEFAULT_DEPTID)).map(c -> toObject(c, Long.class)).orElse(null);
+        Long configDefaultDept = Optional.ofNullable(sysConfigApiService.getConfig(ConfigConstant.TRANSFER_ALLOT_DEFAULT_DEPTID))
+                .map(c -> toObject(c, Long.class))
+                .orElse(null);
         if (configDefaultDept != null) {
             return configDefaultDept;
         }
@@ -197,15 +265,17 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
         return null;
     }
 
-    /**
-     * 重置List
-     */
     @Override
-    public void listRest(boolean onlyDept, Long deptId) {
-        log.info("重置List deptId:{}", deptId);
+    public void restUserList(Long deptId) {
+        log.info("重置restUser deptId:{}", deptId);
         weightRoundDept.listReset(deptId);
-        if (!onlyDept) {
-            weightRoundUser.listReset(deptId);
-        }
+        weightRoundUser.listReset(deptId);
     }
+
+    @Override
+    public void restDeptList(Long deptId) {
+        log.info("重置restDept deptId:{}", deptId);
+        weightRoundDept.listReset(deptId);
+    }
+
 }

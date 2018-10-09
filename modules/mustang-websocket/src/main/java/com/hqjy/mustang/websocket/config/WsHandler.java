@@ -59,7 +59,6 @@ public class WsHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
             // 发送连接成功消息
             wsService.sendMessage(userId, JsonUtil.toJson(R.ok(WsCode.WS_CONNECTION)));
             log.debug("websocket当前连接数量：" + WebSocketServer.channelPool.size());
-            // TODO 连接成功用户写入Redis
         } else {
             super.userEventTriggered(ctx, evt);
         }
@@ -93,7 +92,6 @@ public class WsHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
                 WebSocketServer.channelPool.remove(userId);
                 WebSocketServer.CHANNEL_GROUP.remove(channel);
                 log.debug("用户：{} 离线", userId);
-                // TODO 断开用户从Redis中删除
             }
         }
         ctx.fireChannelInactive();

@@ -15,6 +15,27 @@
         <result column="stop_time" property="stopTime"/>
     </resultMap>
 
+    <!--  根据部门id 查询子部门列表 -->
+    <select id="getDeptList" resultMap="WeigthRoundResultMap">
+        select
+            dept_id id,
+            weights
+        from sys_dept
+        where parent_id = #{deptId} and sys_dept.status = 0 and weights > 0
+        order by weights desc, dept_id asc
+    </select>
+
+    <!--  根据部门id 查询用户列表 -->
+    <select id="getUserList" resultMap="WeigthRoundResultMap">
+        select
+            su.user_id id,
+            weights
+        from sys_user_dept sud
+            left join sys_user su on su.user_id = sud.user_id
+        where dept_id = #{deptId} and su.status = 0 and weights > 0
+        order by weights desc, su.user_id asc
+    </select>
+
     <!-- 获取指定时间的排版id列表，不指定时间，查询最早排班 -->
     <select id="getDeptClassList" resultMap="ClassResultMap">
         SELECT
@@ -72,18 +93,8 @@
         order by weights desc, sd.dept_id asc
     </select>
 
-    <!--  根据部门id 查询子部门列表 -->
-    <select id="getDeptList" resultMap="WeigthRoundResultMap">
-        select
-            dept_id id,
-            weights
-        from sys_dept
-        where parent_id = #{deptId} and sys_dept.status = 0 and weights > 0
-        order by weights desc, dept_id asc
-    </select>
-
     <!-- 根据部门id 和排班id查询排班人员列表 -->
-    <select id="getUserList" resultMap="WeigthRoundResultMap">
+    <select id="getUserListByClass" resultMap="WeigthRoundResultMap">
         select s.user_id id,weights
         from
         (select user_id

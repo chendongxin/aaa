@@ -1,166 +1,125 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hqjy.mustang.transfer.crm.dao.TransferCustomerDealDao">
-  
-  <!-- 实体映射 -->
-  <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDealEntity">
-    <id column="deal_id" jdbcType="BIGINT" property="dealId" />
-    <result column="customer_id" jdbcType="BIGINT" property="customerId" />
-    <result column="user_id" jdbcType="BIGINT" property="userId" />
-    <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
-    <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
-    <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
-  </resultMap>
-  
-  <!-- 表基本列 -->
-  <sql id="Base_Column_List">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDealEntity">
+        <id column="deal_id" jdbcType="BIGINT" property="dealId"/>
+        <result column="customer_id" jdbcType="BIGINT" property="customerId"/>
+        <result column="pro_id" jdbcType="BIGINT" property="proId"/>
+        <result column="dept_id" jdbcType="BIGINT" property="deptId"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="create_user_id" jdbcType="BIGINT" property="createUserId"/>
+        <result column="create_user_name" jdbcType="VARCHAR" property="createUserName"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="b_create_time" jdbcType="TIMESTAMP" property="bCreateTime"/>
+    </resultMap>
+
+    <!-- 表基本列 -->
+    <sql id="Base_Column_List">
     deal_id, customer_id, user_id, user_name, create_user_id, create_user_name, create_time, 
     update_user_id, update_user_name, update_time
   </sql>
-  
-  <!-- 通用查询sql -->
-  <sql id="Base_Where_SQL">
-    <where>
-		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
-		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name = #{userName}</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-	</where>
-  </sql>
-  
-  <!-- 插入一条记录 -->
-  <insert id="save" keyProperty="dealId" useGeneratedKeys="true">
-    insert into transfer_customer_deal
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != customerId">customer_id, </if>
-			<if test="null != userId">user_id, </if>
-			<if test="null != userName">user_name, </if>
-			<if test="null != createUserId">create_user_id, </if>
-			<if test="null != createUserName">create_user_name, </if>
-			<if test="null != createTime">create_time, </if>
-			<if test="null != updateUserId">update_user_id, </if>
-			<if test="null != updateUserName">update_user_name, </if>
-			<if test="null != updateTime">update_time, </if>
-		</trim>
-	values
-		<trim prefix="(" suffix=")" suffixOverrides=",">
-			<if test="null != customerId">#{customerId}, </if>
-			<if test="null != userId">#{userId}, </if>
-			<if test="null != userName">#{userName}, </if>
-			<if test="null != createUserId">#{createUserId}, </if>
-			<if test="null != createUserName">#{createUserName}, </if>
-			<if test="null != createTime">#{createTime}, </if>
-			<if test="null != updateUserId">#{updateUserId}, </if>
-			<if test="null != updateUserName">#{updateUserName}, </if>
-			<if test="null != updateTime">#{updateTime}, </if>
-		</trim>
-  </insert>
-  
-  <!-- 更新一条记录 -->
-  <update id="update">
-    update transfer_customer_deal 
-		<set>
-			<if test="null != customerId">customer_id = #{customerId}, </if>
-			<if test="null != userId">user_id = #{userId}, </if>
-			<if test="null != userName">user_name = #{userName}, </if>
-			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
-			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
-			<if test="null != createTime">create_time = #{createTime}, </if>
-			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
-			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
-			<if test="null != updateTime">update_time = #{updateTime}, </if>
-		</set>
-		where deal_id = #{dealId}
-  </update>
-  
-  <!-- 删除给定主键的记录 -->
-  <delete id="delete">
-    delete
-		from transfer_customer_deal
-	where
-		deal_id = #{dealId}
-  </delete>
-  
-  <!-- 多个主键批量删除记录 -->
-  <delete id="deleteBatch">
-    delete
-		from transfer_customer_deal
-	where
-		deal_id in 
-		<foreach collection="array" index="index" item="item" open="(" separator="," close=")">
-			#{item}
-		</foreach>
-  </delete>
-  
-  <!-- 多个实体批量删除记录 -->
-  <delete id="deleteList">
-    delete
-		from transfer_customer_deal
-	where
-		deal_id in 
-		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
-			#{item.dealId}
-		</foreach>
-  </delete>
-  
-  <!-- 主键查找一条记录 -->
-  <select id="findOne" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_deal
-	where deal_id = #{dealId}
-  </select>
-  
-  <!-- 查询多条 -->
-  <select id="findList" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_deal
-		<include refid="Base_Where_SQL" />
-  </select>
-  
-  <!-- 分页查询 -->
-  <select id="findPage" resultMap="BaseResultMap">
-    select
-		<include refid="Base_Column_List" />
-	from transfer_customer_deal
-		<where>
-		<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-		<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
-		<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
-		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
-	</where>
-  </select>
-  
-  <!-- 查询记录数量 -->
-  <select id="count" resultType="int">
-    select
-		count(*)
-	from transfer_customer_deal
-		<include refid="Base_Where_SQL" />
-  </select>
-  
-  <!-- 查询记录是否存在 -->
-  <select id="exsit" resultType="boolean">
-    select
-		count(*)
-	from transfer_customer_deal
-		<include refid="Base_Where_SQL" />
-  </select>
-  
+
+    <!-- 通用查询sql -->
+    <sql id="Base_Where_SQL">
+        <where>
+            <if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+            <if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
+            <if test="userName != null and !&quot;&quot;.equals(userName)">and user_name = #{userName}</if>
+            <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id =
+                #{createUserId}
+            </if>
+            <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name =
+                #{createUserName}
+            </if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{createTime},'%Y-%m-%d')
+            </if>
+            <if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id =
+                #{updateUserId}
+            </if>
+            <if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name =
+                #{updateUserName}
+            </if>
+            <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{updateTime},'%Y-%m-%d')
+            </if>
+        </where>
+    </sql>
+
+    <!-- 插入一条记录 -->
+    <insert id="save" keyProperty="dealId" useGeneratedKeys="true">
+        insert into transfer_customer_deal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != customerId">customer_id,</if>
+            <if test="null != proId">pro_id,</if>
+            <if test="null != deptId">dept_id,</if>
+            <if test="null != userId">user_id,</if>
+            <if test="null != userName">user_name,</if>
+            <if test="null != createUserId">create_user_id,</if>
+            <if test="null != createUserName">create_user_name,</if>
+            <if test="null != createTime">create_time,</if>
+            <if test="null != updateUserId">update_user_id,</if>
+            <if test="null != updateUserName">update_user_name,</if>
+            <if test="null != updateTime">update_time,</if>
+            <if test="null != isDeleted">is_deleted,</if>
+            <if test="null != deleteUserId">delete_user_id,</if>
+            <if test="null != deleteTime">delete_time,</if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="null != customerId">#{customerId},</if>
+            <if test="null != proId">#{proId},</if>
+            <if test="null != deptId">#{deptId},</if>
+            <if test="null != userId">#{userId},</if>
+            <if test="null != userName">#{userName},</if>
+            <if test="null != createUserId">#{createUserId},</if>
+            <if test="null != createUserName">#{createUserName},</if>
+            <if test="null != createTime">#{createTime},</if>
+            <if test="null != updateUserId">#{updateUserId},</if>
+            <if test="null != updateUserName">#{updateUserName},</if>
+            <if test="null != updateTime">#{updateTime},</if>
+            <if test="null != isDeleted">#{isDeleted},</if>
+            <if test="null != deleteUserId">#{deleteUserId},</if>
+            <if test="null != deleteTime">#{deleteTime},</if>
+        </trim>
+    </insert>
+
+
+    <update id="updateIsDelete">
+		update transfer_customer_deal
+		set is_deleted=#{isDeleted},delete_user_id=#{deleteUserId},delete_time=#{deleteTime},
+		update_user_id=#{updateUserId},update_user_name=#{updateUserName},update_time=#{updateTime}
+		where customer_id=#{customerId}
+	</update>
+
+    <!-- 分页查询 -->
+    <select id="findPage" resultMap="BaseResultMap">
+        select
+        tc.customer_id, tc.name, tcd.user_name, tcd.user_id, tc.phone, tc.create_time as b_create_time, tcd.create_time
+        from transfer_customer_deal tcd
+        inner join transfer_customer tc on tcd.customer_id=tc.customer_id
+        <where>
+            tc.status=4 and tc.user_id is not null
+            <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
+            <if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
+                and tc.dept_id in ${userAllDeptId}
+            </if>
+            <if test="userId !=null and !&quot;&quot;.equals(userId)">
+                and tc.user_id = #{userId}
+            </if>
+            <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
+            <if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+            <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+                and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+            </if>
+            <if test="beginDealTime != null and beginDealTime != '' and endDealTime != null and endDealTime != ''">
+                and tcd.create_time between #{beginDealTime} and #{endDealTime}
+            </if>
+        </where>
+    </select>
+
 
 </mapper>

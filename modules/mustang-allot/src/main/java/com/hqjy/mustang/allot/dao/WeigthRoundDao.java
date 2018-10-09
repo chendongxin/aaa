@@ -15,6 +15,15 @@ import java.util.List;
  */
 @Mapper
 public interface WeigthRoundDao {
+    /**
+     * 根据部门id 查询子部门列表
+     */
+    List<WeigthRoundDTO> getDeptList(Long deptId);
+
+    /**
+     * 根据部门id 查询人员列表
+     */
+    List<WeigthRoundDTO> getUserList(Long deptId);
 
     /**
      * 获取指定时间的排版id列表，不指定时间，查询最早排班
@@ -22,14 +31,9 @@ public interface WeigthRoundDao {
     List<AllotClassDTO> getDeptClassList(@Param("deptId") Long deptId);
 
     /**
-     * 根据部门id 查询子部门列表
-     */
-    List<WeigthRoundDTO> getDeptList(Long deptId);
-
-    /**
      * 根据部门id 和排班id查询排班人员列表
      */
-    List<WeigthRoundDTO> getUserList(@Param("date") String date, @Param("deptId") Long deptId, @Param("classList") List<AllotClassDTO> classList);
+    List<WeigthRoundDTO> getUserListByClass(@Param("date") String date, @Param("deptId") Long deptId, @Param("classList") List<AllotClassDTO> classList);
 
     /**
      * 根据区域编码查询处理此区域下商机的部门列表

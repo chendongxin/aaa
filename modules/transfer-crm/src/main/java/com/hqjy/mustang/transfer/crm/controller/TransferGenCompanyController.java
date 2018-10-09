@@ -6,6 +6,8 @@ import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
+import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferCompanySourceDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCompanyEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCompanySourceService;
@@ -37,6 +39,17 @@ public class TransferGenCompanyController {
     private TransferCompanySourceService transferCompanySourceService;
     @Autowired
     private TransferSourceService transferSourceService;
+    @Autowired
+    private SysDeptServiceFeign sysDeptServiceFeign;
+
+    /**
+     * 获取所有推广公司
+     */
+    @ApiOperation(value = "获取所有推广公司", notes = "获取所有推广公司，包含所有推广公司数据")
+    @GetMapping("/get/all")
+    public R getAllCompany() {
+        return R.ok(transferGenCompanyService.getAllGenCompanyList());
+    }
 
     /**
      * 推广公司目录管理树数据
@@ -53,7 +66,7 @@ public class TransferGenCompanyController {
     @ApiOperation(value = "分页查询-推广公司", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量], [sidx:排序字段],[treeKey:查询字段],[treeValue:查询字段值]\n" +
             "返回参数：【当前页:currPage】,【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
-            "【名称:name】,【根节点:parentId】【排序号:seq】,【备注:memo】,【状态(0 : 正常 1 : 禁用):status】\n" +
+            "【推广公司Id:companyId】【推广公司名称:name】,【根节点:parentId】【排序号:seq】,【备注:memo】,【状态(0 : 正常 1 : 禁用):status】\n" +
             "【创建人ID:createUserId】,【创建人名称:createUserName】,【创建时间:createTime】\n" +
             "【更新人ID:updateUserId】,【更新人名称:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
@@ -97,7 +110,7 @@ public class TransferGenCompanyController {
      */
     @ApiOperation(value = "新增推广公司", notes = "请求参数：\n" +
             "参数说明：\n" +
-            " 【推广公司名称:name】,【排序号:seq】,【状态(0:正常; 1:禁用):status】, 【备注:memo】\n" +
+            "【推广公司名称:name】,【排序号:seq】,【状态(0:正常; 1:禁用):status】, 【备注:memo】\n" +
             "示例：\n" +
             "{\n" +
             "  \"name\": \"广州百单网网络科技有限公司\",\n" +
@@ -181,14 +194,13 @@ public class TransferGenCompanyController {
 
     /**********************************************/
 
-
     /**
      * 分页查询推广公司下的推广平台
      */
     @ApiOperation(value = "分页查询-推广平台", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "返回参数：【当前页:currPage】,【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
-            "【名称:name】,【平台ID:sourceId】,【状态(0 : 正常 1 : 禁用):status】\n" +
+            "【平台名称:name】,【平台ID:sourceId】,【部门:deptId】,【部门名称:deptName】,【公司ID:companyId】【状态(0 : 正常 1 : 禁用):status】\n" +
             "【创建人ID:createUserId】,【创建人名称:createUserName】,【创建时间:createTime】\n" +
             "【更新人ID:updateUserId】,【更新人名称:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
@@ -201,6 +213,9 @@ public class TransferGenCompanyController {
             "      {\n" +
             "        \"sourceId\": 2,\n" +
             "        \"name\": \"智联\",\n" +
+            "        \"deptId\": 2,\n" +
+            "        \"deptName\": \"益阳小区\",\n" +
+            "        \"companyId\": 2,\n" +
             "        \"status\": 0,\n" +
             "        \"createUserId\": 1,\n" +
             "        \"createUserName\": \"灵儿\",\n" +
@@ -220,29 +235,42 @@ public class TransferGenCompanyController {
             "}")
     @RequestMapping(value = "/source/listPage",method = {RequestMethod.POST,RequestMethod.GET})
     public R sourceList(@RequestParam HashMap<String, Object> pageParam,
-                  @RequestBody(required = false) HashMap<String, Object> queryParam) {
+                        @RequestBody(required = false) HashMap<String, Object> queryParam) {
         //查询列表数据
-        PageInfo<TransferCompanySourceEntity> companySourceInfo = new PageInfo<>(transferGenCompanyService.findPageSource(PageQuery.build(pageParam, queryParam)));
+        PageInfo<TransferCompanySourceEntity> companySourceInfo = new PageInfo<>(transferCompanySourceService.findPageSource(PageQuery.build(pageParam, queryParam)));
         return R.ok(companySourceInfo);
     }
 
-
+    /**
+     * 获取不属于指定公司的推广平台
+     */
     @GetMapping("/source/get/{companyId}")
-    @ApiOperation(value = "获取推广平台接口", notes = "请求参数说明")
+    @ApiOperation(value = "获取不属于指定公司的推广平台", notes = "请求参数说明")
     public R listPage(@PathVariable("companyId") Long companyId) {
         return R.ok(transferSourceService.findNotByCompanyId(companyId));
     }
 
-    /**状态
+    /**
+     * 获取所有部门列表
+     */
+    @GetMapping(value = "/dept/all")
+    @ApiOperation(value = "获取所有部门接口", notes = "请求参数说明")
+    public R listPageDept() {
+        return R.ok(sysDeptServiceFeign.getAllDept());
+    }
+
+    /**
      * 新增推广公司下的推广平台
      */
     @ApiOperation(value = "新增推广公司下的推广平台", notes = "请求参数：\n" +
             "参数说明：\n" +
-            " 【推广公司:companyId】,【平台来源:sourceId】,【状态(0:正常; 1:禁用):status】\n" +
+            "【推广公司:companyId】,【平台来源:sourceId】,【部门:deptId】,【部门名称:deptName】,【状态(0:正常; 1:禁用):status】\n" +
             "示例：\n" +
             "{\n" +
             "  \"companyId\": 2,\n" +
             "  \"sourceId\": 3,\n" +
+            "  \"deptId\": 3,\n" +
+            "  \"deptName\": \"益阳小区\",\n" +
             "  \"status\": 1,\n" +
             "}\n" +
             "新增成功响应数据：\n" +
@@ -252,8 +280,8 @@ public class TransferGenCompanyController {
             "}")
     @SysLog("新增推广公司下的推广平台")
     @PostMapping("/source")
-    public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferCompanySourceEntity transferCompanySourceEntity) {
-        int count = transferGenCompanyService.saveCompanySource(transferCompanySourceEntity);
+    public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferCompanySourceDTO transferCompanySourceDTO) {
+        int count = transferGenCompanyService.saveCompanySource(transferCompanySourceDTO);
         if (count > 0) {
             return R.ok();
         }
@@ -266,9 +294,9 @@ public class TransferGenCompanyController {
     @ApiOperation(value = "删除推广平台", notes = "删除推广平台：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "sourceId", value = "推广平台ID", required = true, dataType = "Integer")
     @SysLog("删除推广公司")
-    @DeleteMapping("/source/{sourceIds}")
-    public R delete(@PathVariable("sourceIds") Integer[] sourceIds) {
-        int count = transferCompanySourceService.deleteBatch(sourceIds);
+    @DeleteMapping("/source/{ids}")
+    public R deleteSource(@PathVariable("ids") Long[] ids) {
+        int count = transferCompanySourceService.deleteBatch(ids);
         if (count > 0) {
             return R.ok();
         }
@@ -280,10 +308,13 @@ public class TransferGenCompanyController {
      */
     @ApiOperation(value = "修改推广平台", notes = "输入参数：\n" +
             "参数说明：\n" +
-            "【平台来源:sourceId】,【状态(0:正常; 1:禁用):status】\n" +
+            "【推广公司ID:companyId】,【平台来源:sourceId】,【部门:deptId】,【部门名称:deptName】,【状态(0:正常; 1:禁用):status】\n" +
             "示例：\n" +
             "{\n" +
+            "  \"companyId\": 1,\n" +
             "  \"sourceId\": 2,\n" +
+            "  \"deptId\": 2,\n" +
+            "  \"deptName\": \"益阳小区\",\n" +
             "  \"status\": 1,\n" +
             "}\n" +
             "新增成功响应数据：\n" +

@@ -34,7 +34,7 @@ public class TransferCustomerReservationEntity implements Serializable {
     private Byte status;
 
     /**
-	 *  上门状态(NC同步回传更新),见典VISIT_STATUS(0-未上门，1-以上门) visit_status
+	 *  上门状态(NC同步回传更新),见典VISIT_STATUS(0-未上门，1-已上门) visit_status
 	 **/
     private Byte visitStatus;
 
@@ -47,6 +47,16 @@ public class TransferCustomerReservationEntity implements Serializable {
 	 * NC校区老师名称 teacher_name
 	 **/
     private String teacherName;
+
+    /**
+     * 当前跟进人部门ID dept_id
+     **/
+    private Long deptId;
+
+    /**
+     * 部门名称 dept_name
+     **/
+    private String deptName;
 
     /**
 	 * 创建人编号 create_user_id

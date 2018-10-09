@@ -11,8 +11,8 @@ import com.hqjy.mustang.transfer.crawler.factory.ParseMailFactory;
 import com.hqjy.mustang.transfer.crawler.feign.TrasferSourceApiService;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferEmailEntity;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
-import com.hqjy.mustang.transfer.crawler.service.MqSendService;
 import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
+import com.hqjy.mustang.transfer.crawler.service.MqSendService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferEmailService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferResumeService;
 import com.hqjy.mustang.transfer.crawler.utils.MailUtils;
@@ -159,7 +159,7 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
                     resumeEntity.setGenUserName(emailConfig.getUserName());
 
                     // 来源信息 读取 transfer_source 表中配置
-                    TransferSourceInfo sourceInfo = trasferSourceApiService.findByEmailDomain(StringUtils.cutFrom(sendMali, "@"));
+                    TransferSourceInfo sourceInfo = trasferSourceApiService.findByEmailDomain(StringUtils.cutPrefix(StringUtils.cutFrom(sendMali, "@"), "@"));
                     resumeEntity.setSourceId(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getSourceId).orElse(null));
                     resumeEntity.setSourceName(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getName).orElse(null));
 
@@ -175,8 +175,10 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
                     // 同步开始时间
                     resumeEntity.setSyncTime(beforeDate);
 
-                    // 有手机号码才进行保存
-                    if (StringUtils.isNotEmpty(resumeEntity.getPhone())) {
+                    int age = Optional.ofNullable(resumeEntity.getAge()).orElse(0);
+
+                    // 有手机号码才进行保存 and 只爬取年龄段需要在18-30（包含18和30岁）之间的
+                    if (StringUtils.isNotEmpty(resumeEntity.getPhone()) && age >= 18 && age <= 30) {
                         int count = baseDao.save(resumeEntity);
                         if (count > 0) {
                             // 保存成功，发送mq
@@ -208,7 +210,6 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
 
     }
 
-
     /**
      * 连接邮箱，重试机制
      */
@@ -227,5 +228,4 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
         log.error("{},重试登录邮箱 3 次 失败", JsonUtil.toJson(emailConfig));
         return null;
     }
-
 }
