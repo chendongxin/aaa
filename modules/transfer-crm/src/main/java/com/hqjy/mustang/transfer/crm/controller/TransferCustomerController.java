@@ -50,8 +50,8 @@ public class TransferCustomerController extends AbstractMethodError {
             "【客户编号:customerId】,【NC客户编号:ncId】,【赛道编号:proId】,【赛道名称:proName】,【来源平台ID:sourceId】,【来源平台名称:sourceName】\n" +
             "【推广公司ID:companyId】,【推广公司名称:companyName】,【姓名:name】,【商机状态1-(失败)有效, 2-(失败)无效, 3-预约, 4-成交)):status】\n" +
             "【推广方式(1-主动获取，2-被动获取):getWay】,【当前跟进人ID:userId】,【当前跟进人姓名:userName】,【当前跟进人部门ID:deptId】\n" +
-            "【当前跟进人部门名称:deptName】,【首次跟进人ID:firstUserId】,【首次跟进人姓名:firstUserName】,【最后跟进人ID:lastUserId】\n" +
-            "【最后跟进人姓名:lastUserName】,【推广用户ID:genUserId】,【推广用户姓名:genUserName】,【手机号码:phone】,【微信:weChat】\n" +
+            "【当前跟进人部门名称:deptName】,【首次跟进人ID:firstUserId】,【首次跟进人姓名:firstUserName】,【首次跟进人所属部门:firstUserDeptId】,【最后跟进人ID:lastUserId】\n" +
+            "【最后跟进人姓名:lastUserName】,【最后跟进人所属部门:lastUserDeptId】,【推广用户ID:genUserId】,【推广用户姓名:genUserName】,【手机号码:phone】,【微信:weChat】\n" +
             "【QQ:qq】,【座机:landLine】,【创建人ID:createUserId】,【创建人姓名:createUserName】,【创建时间:createTime】\n" +
             "【更新人编号:updateUserId】,【更新人姓名:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
@@ -79,8 +79,10 @@ public class TransferCustomerController extends AbstractMethodError {
             "        \"deptName\": \"益阳校区\",\n" +
             "        \"firstUserId\": 1,\n" +
             "        \"firstUserName\": \"丫丫\",\n" +
+            "        \"firstUserDeptId\": 1,\n" +
             "        \"lastUserId\": 1,\n" +
             "        \"lastUserName\": \"美丽\",\n" +
+            "        \"lastUserDeptId\": 1,\n" +
             "        \"genUserId\": 1,\n" +
             "        \"genUserName\": \"翰林\",\n" +
             "        \"phone\": \"18578548523\",\n" +
