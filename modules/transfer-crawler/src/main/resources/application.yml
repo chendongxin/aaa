@@ -1,21 +1,19 @@
-server:
-    port: 8310
-    context-path: /
-
-spring:
-    application:
-    # 应用名称
-      name: transfer-crawler
-
-    # 环境 dev|test|pro
-    profiles:
-        active: dev
-
 info:
   app:
     name: transfer-crawler
     version: 1.0
 
+server:
+  port: 8310
+  context-path: /
+
+spring:
+  application:
+    # 应用名称
+    name: transfer-crawler
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
 
 eureka:
   client:
@@ -36,37 +34,38 @@ eureka:
     #状态页面和健康指标
     statusPageUrlPath: ${server.context-path}/swagger-ui.html
 
-
 # Feign 开启 Hystrix
 feign:
   hystrix:
     enabled: true
+  httpclient:
+    connection-timeout: 5000
 
 pagehelper:
-    helperDialect: mysql
-    page-size-zero: true
-    reasonable: true
-    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
-    row-bounds-with-count: true
+  helperDialect: mysql
+  page-size-zero: true
+  reasonable: true
+  params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+  row-bounds-with-count: true
 
 # Mybatis配置
 mybatis:
-    mapperLocations: classpath*:com/hqjy/mustang/transfer/crawler/dao/*Dao.xml
-    configuration:
-        map-underscore-to-camel-case: true
+  mapperLocations: classpath*:com/hqjy/mustang/transfer/crawler/dao/*Dao.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 # shiro 不拦截路径
 shiro:
   anon:
     path:
-      # spring cloud 健康检查
-      - /info
-      - /actuator/**
-      - /doc
-      - /swagger-ui.html
-      - /csrf
-      - /webjars/**
-      - /swagger-resources/**
-      - /v2/api-docs
-      - /test/**
-      - /resume/**
+    # spring cloud 健康检查
+    - /info
+    - /actuator/**
+    - /doc
+    - /swagger-ui.html
+    - /csrf
+    - /webjars/**
+    - /swagger-resources/**
+    - /v2/api-docs
+    - /test/**
+    - /resume/**

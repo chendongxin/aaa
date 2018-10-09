@@ -1,18 +1,20 @@
-server:
-    port: 8220
-    context-path: /
-
-spring:
-    application:
-    # 应用名称
-      name: mustang-quartz
-    # 环境 dev|test|pro
-    profiles:
-        active: dev
 info:
   app:
     name: mustang-quartz
     version: 1.0
+
+server:
+  port: 8220
+  context-path: /
+
+spring:
+  application:
+    # 应用名称
+    name: mustang-quartz
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
+
 eureka:
   client:
     serviceUrl:
@@ -36,19 +38,21 @@ eureka:
 feign:
   hystrix:
     enabled: true
+  httpclient:
+    connection-timeout: 5000
 
 # shiro 不拦截路径
 shiro:
   anon:
     path:
-      # spring cloud 健康检查
-      - /info
-      - /actuator/**
-      - /doc
-      - /swagger-ui.html
-      - /csrf
-      - /webjars/**
-      - /swagger-resources/**
-      - /v2/api-docs
-      - /login
-      - /
+    # spring cloud 健康检查
+    - /info
+    - /actuator/**
+    - /doc
+    - /swagger-ui.html
+    - /csrf
+    - /webjars/**
+    - /swagger-resources/**
+    - /v2/api-docs
+    - /login
+    - /

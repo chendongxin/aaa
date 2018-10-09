@@ -1,46 +1,45 @@
-server:
-    tomcat:
-        uri-encoding: UTF-8
-        max-threads: 1000
-        min-spare-threads: 30
-    port: 8200
-    connection-timeout: 5000
-    #context-path: /mustang
-    context-path: /
-
-spring:
-    application:
-    # 应用名称
-      name: mustang-admin
-    # 环境 dev|test|pro
-    profiles:
-        active: dev
-    http:
-        multipart:
-            max-file-size: 100MB
-            max-request-size: 100MB
-            enabled: true
-    thymeleaf:
-      mode: LEGACYHTML5
-    #邮箱配置
-    mail:
-        host: smtp.exmail.qq.com
-        protocol: smtp
-        username: xieyuqing@hengqijy.com
-        password: King199092
-        properties:
-            mail:
-                smtp:
-                    starttls:
-                        auth: true
-                        enable: true
-                        required: true
-
-
 info:
   app:
     name: mustang-admin
     version: 1.0
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+    max-threads: 1000
+    min-spare-threads: 30
+  port: 8200
+  connection-timeout: 5000
+  #context-path: /mustang
+  context-path: /
+
+spring:
+  application:
+    # 应用名称
+    name: mustang-admin
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
+  http:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+  thymeleaf:
+    mode: LEGACYHTML5
+  #邮箱配置
+  mail:
+    host: smtp.exmail.qq.com
+    protocol: smtp
+    username: xieyuqing@hengqijy.com
+    password: King199092
+    properties:
+      mail:
+        smtp:
+          starttls:
+            auth: true
+            enable: true
+            required: true
 
 eureka:
   client:
@@ -64,41 +63,42 @@ eureka:
 
 # Mybatis配置
 mybatis:
-    mapperLocations: classpath*:com/hqjy/mustang/admin/dao/*Dao.xml
-    configuration:
-        map-underscore-to-camel-case: true
+  mapperLocations: classpath*:com/hqjy/mustang/admin/dao/*Dao.xml
+  configuration:
+    map-underscore-to-camel-case: true
 
 jwt-token:
-    # token有效时长，单位秒 默认一天 86400s = 3600*24
-      expire: 86400
-    # 续命时长 默认 3600s
-      prolong: 7200
+  # token有效时长，单位秒 默认一天 86400s = 3600*24
+  expire: 86400
+  # 续命时长 默认 3600s
+  prolong: 7200
 
 pagehelper:
-    helperDialect: mysql
-    page-size-zero: true
-    reasonable: true
-    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
-    row-bounds-with-count: true
-
+  helperDialect: mysql
+  page-size-zero: true
+  reasonable: true
+  params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+  row-bounds-with-count: true
 
 # Feign 开启 Hystrix
 feign:
   hystrix:
     enabled: true
+  httpclient:
+    connection-timeout: 5000
 
 # shiro 不拦截路径
 shiro:
   anon:
     path:
-      # spring cloud 健康检查
-      - /info
-      - /actuator/**
-      - /doc
-      - /swagger-ui.html
-      - /csrf
-      - /webjars/**
-      - /swagger-resources/**
-      - /v2/api-docs
-      - /login
-      - /
+    # spring cloud 健康检查
+    - /info
+    - /actuator/**
+    - /doc
+    - /swagger-ui.html
+    - /csrf
+    - /webjars/**
+    - /swagger-resources/**
+    - /v2/api-docs
+    - /login
+    - /
