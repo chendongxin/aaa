@@ -236,13 +236,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         return list;
     }
 
-    private void sendNcSave(TransferCustomerEntity entity, TransferCustomerDTO dto) {
-        NcBizSaveParamDTO ncBizRequestDTO = new NcBizSaveParamDTO();
-        ncBizRequestDTO.setCustomerId(entity.getCustomerId()).setTrue_name("自考集训基地").setUserId(entity.getUserId())
-                .setTel(entity.getPhone()).setLxqq(dto.getQq()).setCreator(getUserName()).setNote(dto.getNote())
-                .setSaleType(0).setName(entity.getName());
-        listOperations.leftPush(RedisKeys.Nc.SAVE, JsonUtil.toJson(ncBizRequestDTO));
-    }
 
     /**
      * 导入客户

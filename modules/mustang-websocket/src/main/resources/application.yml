@@ -2,12 +2,12 @@ server:
   port: 8230
 
 spring:
-    application:
+  application:
     # 应用名称
-      name: mustang-websocket
-    # 环境 dev|test|pro
-    profiles:
-        active: dev
+    name: mustang-websocket
+  # 环境 dev|test|pro
+  profiles:
+    active: dev
 
 eureka:
   client:

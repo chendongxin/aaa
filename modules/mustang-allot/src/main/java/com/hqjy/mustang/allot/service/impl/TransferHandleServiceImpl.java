@@ -47,7 +47,6 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
     @Autowired
     private TransferAllotCustomerDao transferAllotCustomerDao;
 
-
     @Autowired
     private TransferAllotContactService transferAllotContactService;
 
