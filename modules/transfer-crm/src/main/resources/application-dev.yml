@@ -66,15 +66,9 @@ spring:
 #NC接口地址
 nc:
   #商机信息保存到NC
-  studentFromXN: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.StudentFromXNServlet
-  #NC新增跟进记录接口
-  followUpSaveUrl: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.StudentRecordContactServlet
-  #NC商机修改接口
-  updateStuRecordOrg: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.UpdateStuRecordOrgServlet
+  pushCustomerToNCUrl: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.StudentFromQYLServlet
   #NC根据校区获取招生老师
   getTeacherUrl: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.GetSchoolTeacherServlet
-  # 自考销售人员
-  getZKSaleManUrl: http://nc.hqbis.com/servlet/~hq/nc.impl.hq.webservice.student.GetZKSaleManServlet
   #获取省份或者校区接口
   getProvinceSchoolUrl: http://api.hqjy.com/hq-school/org/get
   #NC的rabbitmq

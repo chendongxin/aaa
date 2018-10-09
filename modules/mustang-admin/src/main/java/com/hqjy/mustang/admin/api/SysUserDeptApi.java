@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class SysUserDeptApi {
      */
     @ApiOperation(value = "返回用户所有部门id集合", notes = "返回用户所有部门id集合")
     @GetMapping(value = "/user/dept/all")
-    public List<Long> getUserDeptIdList(Long userId) {
+    public List<Long> getUserDeptIdList(@RequestParam("userId") Long userId) {
         return sysUserDeptService.getUserDeptIdList(userId);
     }
 

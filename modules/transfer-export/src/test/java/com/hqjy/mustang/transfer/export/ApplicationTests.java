@@ -1,10 +1,6 @@
 package com.hqjy.mustang.transfer.export;
 
-import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
-import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.transfer.export.model.query.PageParams;
-import com.hqjy.mustang.transfer.export.util.PageUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,8 +9,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationTests.class)
