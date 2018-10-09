@@ -6,12 +6,11 @@ import com.hqjy.mustang.common.base.utils.JsonUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.base.utils.Tools;
 import com.hqjy.mustang.common.model.crm.TransferSourceInfo;
+import com.hqjy.mustang.transfer.crawler.context.ParseMailContext;
 import com.hqjy.mustang.transfer.crawler.dao.TransferResumeDao;
-import com.hqjy.mustang.transfer.crawler.factory.ParseMailFactory;
 import com.hqjy.mustang.transfer.crawler.feign.TrasferSourceApiService;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferEmailEntity;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
-import com.hqjy.mustang.transfer.crawler.service.AbstractParseService;
 import com.hqjy.mustang.transfer.crawler.service.MqSendService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferEmailService;
 import com.hqjy.mustang.transfer.crawler.service.TrasferResumeService;
@@ -140,10 +139,7 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
 
                     // 解析邮件内容
                     if (StringUtils.isNotEmpty(sendMali)) {
-                        AbstractParseService praService = ParseMailFactory.build(sendMali);
-                        if (praService != null) {
-                            praService.parseMessage(resumeEntity);
-                        }
+                        new ParseMailContext(sendMali).parseMessage(resumeEntity);
                     }
 
                     // 设置邮件关联属性
