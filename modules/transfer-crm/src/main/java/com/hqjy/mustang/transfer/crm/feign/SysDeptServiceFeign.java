@@ -2,8 +2,7 @@ package com.hqjy.mustang.transfer.crm.feign;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.transfer.crm.model.entity.SysDeptEntity;
-import io.swagger.annotations.ApiOperation;
+import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,5 +35,5 @@ public interface SysDeptServiceFeign {
      * @date xyq 2018年10月8日16:22:32
      */
     @GetMapping(value = "/getUserDeptList")
-    List<SysDeptEntity> getUserDeptList(@RequestParam("userId") Long userId);
+    List<SysDeptInfo> getUserDeptList(@RequestParam("userId") Long userId);
 }

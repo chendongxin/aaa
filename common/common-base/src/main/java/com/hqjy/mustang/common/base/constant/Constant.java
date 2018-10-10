@@ -455,17 +455,17 @@ public class Constant {
      */
     public enum ValidType {
 
-        JOB_SEARCH(1, "找工作不学"),
-        LOAN_REJECTION(2, "拒绝贷款"),
-        GET_JOB(3, "找到工作"),
-        SUM_WIN_PART_TIME(4, "寒/暑假工"),
-        NO_INTEREST(5, "没投过简历/无兴趣"),
-        PASSIVE_MESSAGE(6, "负面信息"),
-        OTHER_JOB(7, "想从事其他岗位"),
-        INTERNAL_SCHOOL(8, "在校生不能离校"),
-        AGE_OVERSTEP(9, "年龄＜18岁或＞30岁"),
-        EXPERIENCE_ONE_YEAR(10, "已有同岗位经验1年以上"),
-        OTHER(11, "其他");
+        JOB_SEARCH(0, "找工作不学"),
+        LOAN_REJECTION(1, "拒绝贷款"),
+        GET_JOB(2, "找到工作"),
+        SUM_WIN_PART_TIME(3, "寒/暑假工"),
+        NO_INTEREST(4, "没投过简历/无兴趣"),
+        PASSIVE_MESSAGE(5, "负面信息"),
+        OTHER_JOB(6, "想从事其他岗位"),
+        INTERNAL_SCHOOL(7, "在校生不能离校"),
+        AGE_OVERSTEP(8, "年龄＜18岁或＞30岁"),
+        EXPERIENCE_ONE_YEAR(9, "已有同岗位经验1年以上"),
+        OTHER(10, "其他");
 
         private Integer value;
 
@@ -498,10 +498,10 @@ public class Constant {
      */
     public enum Valid {
 
-        SAME_TRAIN(1, "参加过同类培训"),
-        LOW_DEGREE(2, "小学初中学历"),
-        ADVERTISING_INFORMATION(3, "广告信息"),
-        PEER_SPY(4, "同行探子");
+        SAME_TRAIN(0, "参加过同类培训"),
+        LOW_DEGREE(1, "小学初中学历"),
+        ADVERTISING_INFORMATION(2, "广告信息"),
+        PEER_SPY(3, "同行探子");
 
         private Integer value;
 

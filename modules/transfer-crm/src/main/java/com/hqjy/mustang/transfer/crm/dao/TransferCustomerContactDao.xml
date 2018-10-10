@@ -41,7 +41,7 @@
   
   <!-- 插入一条记录 -->
   <insert id="save" keyProperty="contactId" useGeneratedKeys="true">
-    insert into transfer_customer_contact
+    insert IGNORE into transfer_customer_contact
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != customerId">customer_id, </if>
 			<if test="null != proId">pro_id, </if>

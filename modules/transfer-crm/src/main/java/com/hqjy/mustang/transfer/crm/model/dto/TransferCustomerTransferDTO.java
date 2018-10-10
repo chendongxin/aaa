@@ -31,4 +31,9 @@ public class TransferCustomerTransferDTO {
      * 业务员Id
      **/
     private Long userId;
+
+    /**
+     * 业务员名称
+     */
+    private String userName;
 }

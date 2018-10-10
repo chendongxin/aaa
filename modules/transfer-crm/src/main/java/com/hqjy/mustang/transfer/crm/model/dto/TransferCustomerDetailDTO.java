@@ -31,6 +31,7 @@ public class TransferCustomerDetailDTO {
     /**
      * 年龄 age
      **/
+    @ExcelAttribute(name = "年龄")
     private Byte age;
 
     /**
@@ -52,6 +53,7 @@ public class TransferCustomerDetailDTO {
     /**
      * 邮箱 email
      **/
+    @ExcelAttribute(name = "邮箱")
     private String email;
 
     /**
@@ -59,6 +61,24 @@ public class TransferCustomerDetailDTO {
      */
     @ExcelAttribute(name = "手机",prompt = "手机号码必填")
     private String phone;
+
+    /**
+     * 座机
+     **/
+    @ExcelAttribute(name = "座机")
+    private String landLine;
+
+    /**
+     * qq
+     */
+    @ExcelAttribute(name = "qq")
+    private String qq;
+
+    /**
+     * 微信
+     */
+    @ExcelAttribute(name = "微信")
+    private String weChat;
 
     /**
      * 部门ID
@@ -73,6 +93,7 @@ public class TransferCustomerDetailDTO {
     /**
      * 毕业学校 school
      **/
+    @ExcelAttribute(name = "毕业学校")
     private String school;
 
     /**
@@ -83,6 +104,7 @@ public class TransferCustomerDetailDTO {
     /**
      * 专业 major
      **/
+    @ExcelAttribute(name = "专业")
     private String major;
 
     /**
@@ -103,16 +125,19 @@ public class TransferCustomerDetailDTO {
     /**
      * 期望职位 position_applied
      **/
+    @ExcelAttribute(name = "期望职位")
     private String positionApplied;
 
     /**
      * 期望工作地点 working_place
      **/
+    @ExcelAttribute(name = "期望工作地点")
     private String workingPlace;
 
     /**
      * 工作经验 work_experience
      **/
+    @ExcelAttribute(name = "工作经验")
     private Byte workExperience;
 
     /**

@@ -231,7 +231,7 @@
 		select
 		<include refid="Base_Column_List"/>
 		from transfer_process
-		where customer_id = #{customerId} and user_id is not null and active=true
+		where customer_id = #{customerId} and user_id is not null and active=false
 	</select>
 
 	<!-- 查询当天用户拥有商机数量 -->
