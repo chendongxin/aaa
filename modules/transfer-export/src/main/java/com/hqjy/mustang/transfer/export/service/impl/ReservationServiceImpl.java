@@ -3,22 +3,25 @@ package com.hqjy.mustang.transfer.export.service.impl;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
+import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.transfer.export.dao.ReservationDao;
+import com.hqjy.mustang.transfer.export.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.entity.ReservationExportEntity;
 import com.hqjy.mustang.transfer.export.model.query.ReservationQueryParams;
 import com.hqjy.mustang.transfer.export.service.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.*;
 
 /**
  * @author xyq
@@ -30,13 +33,34 @@ public class ReservationServiceImpl implements ReservationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReservationServiceImpl.class);
 
-    @Autowired
     private ReservationDao reservationDao;
 
+    private SysUserDeptServiceFeign sysUserDeptServiceFeign;
 
+    @Autowired
+    public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
+        this.sysUserDeptServiceFeign = sysUserDeptServiceFeign;
+    }
+
+    @Autowired
+    public void setReservationDao(ReservationDao reservationDao) {
+        this.reservationDao = reservationDao;
+    }
 
     @Override
     public List<ReservationExportEntity> getExportData(ReservationQueryParams params) {
+        if (isGeneralSeat() ) {
+            params.setUserId(getUserId());
+        }
+        if (isSuperAdmin()) {
+            return reservationDao.getExportData(params);
+        }
+        List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
+        List<String> ids = new ArrayList<>();
+        userAllDeptId.forEach(x -> {
+            ids.add(String.valueOf(x));
+        });
+        params.setUserAllDeptId(StringUtils.listToString(ids));
         return reservationDao.getExportData(params);
     }
 
