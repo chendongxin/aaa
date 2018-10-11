@@ -39,6 +39,11 @@ public class SysProductEntity implements Serializable {
     private Long createUserId;
 
     /**
+     * 创建人名称
+     */
+    private String createUserName;
+
+    /**
 	 * 创建时间 create_time
 	 **/
     private Date createTime;
@@ -47,6 +52,11 @@ public class SysProductEntity implements Serializable {
 	 * 更新人编号 update_user_id
 	 **/
     private Long updateUserId;
+
+    /**
+     * 更新人名称
+     */
+    private String updateUserName;
 
     /**
 	 * 更新时间 update_time

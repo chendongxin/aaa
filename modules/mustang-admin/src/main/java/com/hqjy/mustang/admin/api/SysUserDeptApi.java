@@ -1,6 +1,5 @@
 package com.hqjy.mustang.admin.api;
 
-import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.base.constant.Constant;
 import io.swagger.annotations.ApiOperation;
@@ -28,20 +27,9 @@ public class SysUserDeptApi {
      * 返回用户所有部门id集合
      */
     @ApiOperation(value = "返回用户所有部门id集合", notes = "返回用户所有部门id集合")
-    @GetMapping(value = "/user/dept/all/{userId}")
+    @GetMapping(value = "/UserDeptAll/{userId}")
     public List<Long> getUserDeptIdList(@PathVariable("userId") Long userId) {
         return sysUserDeptService.getUserDeptIdList(userId);
-    }
-
-    /**
-     * @author : gmm
-     * @date : 2018/9/15 16:31
-     * 查询用户对应的部门列表
-     */
-    @ApiOperation(value="查询用户对应的部门", notes = "查询用户对应的部门")
-    @GetMapping(value = "/user/{userId}")
-    public List<SysUserDeptEntity> getDeptByCustomerId(@PathVariable("userId") Long userId) {
-        return sysUserDeptService.getUserDeptList(userId);
     }
 
 }

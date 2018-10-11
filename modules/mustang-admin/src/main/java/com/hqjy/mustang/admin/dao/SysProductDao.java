@@ -18,4 +18,9 @@ public interface SysProductDao extends BaseDao<SysProductEntity, Long> {
      * 所有部门赛道列表
      */
     List<SysProductEntity> findAllProductList();
+
+    /**
+     * 通过名称查询赛道
+     */
+    SysProductEntity findOneByName(String name);
 }

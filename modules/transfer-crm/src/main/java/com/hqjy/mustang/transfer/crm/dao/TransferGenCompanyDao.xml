@@ -189,6 +189,15 @@
 		from transfer_gen_company
 		where name = #{name}
 	</select>
+
+	<select id="findByParentId" resultMap="BaseResultMap">
+        select
+        name, company_id, parent_id
+        from transfer_gen_company
+        WHERE
+        parent_id = #{parentId}
+        order by seq asc, name asc
+    </select>
   
 
 </mapper>

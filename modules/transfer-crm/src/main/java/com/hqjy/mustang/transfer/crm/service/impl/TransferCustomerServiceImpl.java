@@ -526,7 +526,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (null != deptId) {
             //部门下所有子部门
             List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-
             allDeptUnderDeptId.forEach(x -> {
                 ids.add(String.valueOf(x));
             });
@@ -576,11 +575,11 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                                 "解锁：【" + unlock + "】,锁KEY=>" + RedisKeys.Business.receiveLock(String.valueOf(c)));
                     } else {
                         //设置流程过期
-                        int i = transferProcessService.disableProcessActive(process);
+                        int i = transferProcessService.disableProcessActive(process.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
                         if (i > 0) {
                             //新增激活状态，归属私人客户流程
                             TransferProcessEntity processEntity = new TransferProcessEntity().setMemo("公海领取商机").setCustomerId(c)
-                                    .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(getUserName())
+                                    .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(userName)
                                     .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE);
                             int save = transferProcessService.save(processEntity);
                             if (save > 0) {
@@ -681,7 +680,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                     return;
                 }
                 //设置流程过期
-                int i = transferProcessService.disableProcessActive(process);
+                int i = transferProcessService.disableProcessActive(process.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
                 if (i == 0) {
                     log.error(error + StatusCode.BIZ_PROCESS_UPDATE_INACTIVE.getMsg());
                     return;
