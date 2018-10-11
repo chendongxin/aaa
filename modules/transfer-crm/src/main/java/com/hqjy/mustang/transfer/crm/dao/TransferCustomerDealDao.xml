@@ -102,7 +102,7 @@
         from transfer_customer_deal tcd
         inner join transfer_customer tc on tcd.customer_id=tc.customer_id
         <where>
-            tcd.isDeleted=0 and tc.status=4 and tc.user_id is not null
+            tcd.is_deleted=0 and tc.status=4 and tc.user_id is not null
             <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
             <if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
                 and tc.dept_id in ${userAllDeptId}

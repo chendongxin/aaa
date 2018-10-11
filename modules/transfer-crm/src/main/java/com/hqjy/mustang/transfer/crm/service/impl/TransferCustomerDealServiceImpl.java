@@ -25,6 +25,8 @@ import java.util.Date;
 import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.isGeneralSeat;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.isSuperAdmin;
 
 /**
  * @author xyq
@@ -65,6 +67,12 @@ public class TransferCustomerDealServiceImpl extends BaseServiceImpl<TransferCus
         Long customerId = MapUtils.getLong(pageQuery, CUSTOMER_ID);
         if (customerId != null && MapUtils.getLong(pageQuery, CUSTOMER_ID).equals(-1L)) {
             return null;
+        }
+        if (isGeneralSeat()) {
+            pageQuery.put("userId", getUserId());
+        }
+        if (isSuperAdmin()) {
+            return super.findPage(pageQuery);
         }
         transferCustomerService.formatQueryTime(pageQuery);
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());

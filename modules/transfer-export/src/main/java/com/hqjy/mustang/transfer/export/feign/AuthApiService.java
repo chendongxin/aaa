@@ -9,14 +9,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 /**
  * 登陆逻辑查询用户信息
  *
- * @author : HejinYo   hejinyo@gmail.com
- * @date :  2018/8/29 21:55
+ * @author : xyq
+ * @date :  2018年10月11日09:17:18
  */
 @FeignClient(name = "mustang-admin", fallback = AuthApiServiceFallbackImpl.class)
 public interface AuthApiService {
 
     /**
      * 通过用户名查询用户、角色信息
+     *
+     * @param userId 用户ID
+     * @param jti    JTI
+     * @return 返回结果
      */
     @GetMapping(value = Constant.API_PATH + "/auth/check/{userId}/{jti}")
     AuthCheckResult checkToken(@PathVariable("userId") Long userId, @PathVariable("jti") String jti);
