@@ -1,6 +1,6 @@
 package com.hqjy.mustang.quartz.task;
 
-import com.hqjy.mustang.quartz.feign.TrasferResumeApiService;
+import com.hqjy.mustang.quartz.feign.impl.TransferResumeApiServiceFallbackImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,8 +12,13 @@ import org.springframework.stereotype.Service;
 @Service("trasferResumerTask")
 @Slf4j
 public class TrasferResumerTask {
+
+    private final TransferResumeApiServiceFallbackImpl trasferResumeApiService;
+
     @Autowired
-    private TrasferResumeApiService trasferResumeApiService;
+    public TrasferResumerTask(TransferResumeApiServiceFallbackImpl trasferResumeApiService) {
+        this.trasferResumeApiService = trasferResumeApiService;
+    }
 
     /**
      * 简历抓取任务，指定时间之前

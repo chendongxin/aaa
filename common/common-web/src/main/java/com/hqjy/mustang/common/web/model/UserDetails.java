@@ -13,6 +13,7 @@ public class UserDetails {
     private String userName;
     private Long userId;
     private String jwt;
+    private Set<Long> deptSet;
     private Set<String> roleSet;
     private Set<String> permSet;
 

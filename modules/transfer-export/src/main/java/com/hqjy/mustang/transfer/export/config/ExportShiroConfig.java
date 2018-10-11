@@ -33,7 +33,7 @@ import java.util.*;
  */
 @Configuration
 @Slf4j
-public class CrmShiroConfig extends AuthShiroConfig {
+public class ExportShiroConfig extends AuthShiroConfig {
 
     private static final String JELLY_AUTH_NAME = "jelly";
 
@@ -67,7 +67,6 @@ public class CrmShiroConfig extends AuthShiroConfig {
         // 拦截器链
         Map<String, String> filterMap = new LinkedHashMap<>();
         filterAnonConfig().getPath().forEach(path -> {
-            log.info("transfer-crm 不拦截路径 => {}", path);
             filterMap.put(path, "anon");
         });
         // 不拦截内部服务调用
