@@ -6,6 +6,7 @@ import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Shiro工具类
@@ -50,6 +51,13 @@ public class ShiroUtils {
      */
     public static Long getUserId() {
         return Optional.ofNullable(getUser()).map(UserDetails::getUserId).orElse(0L);
+    }
+
+    /**
+     * 获得用户部门id
+     */
+    public static Set<Long> getDeptIdSet() {
+        return Optional.ofNullable(getUser()).map(UserDetails::getDeptSet).orElse(null);
     }
 
     /**

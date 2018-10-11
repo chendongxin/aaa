@@ -1,7 +1,6 @@
 package com.hqjy.mustang.transfer.sms.controller;
 
 import com.hqjy.mustang.common.base.annotation.SysLog;
-import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
@@ -10,8 +9,6 @@ import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsEntity;
 import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsReplyEntity;
 import com.hqjy.mustang.transfer.sms.service.TransferSmsReplyService;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
