@@ -24,8 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
-import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.*;
 
 /**
  * @author xyq 2018年10月9日14:22:01
@@ -56,6 +55,12 @@ public class TransferCustomerReservationServiceImpl extends BaseServiceImpl<Tran
 
     @Override
     public List<TransferCustomerReservationEntity> findPage(PageQuery pageQuery) {
+        if (isGeneralSeat()) {
+            pageQuery.put("userId", getUserId());
+        }
+        if (isSuperAdmin()) {
+            return super.findPage(pageQuery);
+        }
         //获取当前用户的部门以及子部门
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         List<String> ids = new ArrayList<>();

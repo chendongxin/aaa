@@ -506,4 +506,40 @@ public class Constant {
         }
     }
 
+    /**
+     * 角色
+     */
+    public enum Role {
+
+        /**
+         * 电销销售员
+         */
+        SALE("SALE"),
+
+        /**
+         * 普通客服
+         */
+        SERVICE("SERVICE"),
+        /**
+         * 普通网销销售
+         */
+        NET_SALES_ORDINARY("NET_SALES_ORDINARY"),
+
+        /**
+         * 质检员
+         */
+        INSPECTION("INSPECTION");
+
+        private String code;
+
+        Role(String code) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+    }
+
 }

@@ -24,7 +24,7 @@ public class ReservationQueryParams {
      * 用户ID
      */
     @JSONField(serialize = false)
-    private String userId;
+    private Long userId;
 
     @ApiModelProperty(value = "开始创建时间")
     private String beginCreateTime;
