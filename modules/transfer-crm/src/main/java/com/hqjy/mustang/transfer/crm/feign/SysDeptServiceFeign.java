@@ -1,10 +1,10 @@
 package com.hqjy.mustang.transfer.crm.feign;
 
 import com.hqjy.mustang.common.base.constant.Constant;
-import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -17,14 +17,8 @@ import java.util.List;
 @FeignClient(name = "mustang-admin")
 public interface SysDeptServiceFeign {
 
-    @GetMapping(Constant.API_PATH + "/dept/all")
-    R getAllDept();
-
-    @GetMapping(Constant.API_PATH + "/dept/all/id")
-    List<Long> getAllDeptId(Long deptId);
-
-    @GetMapping(Constant.API_PATH + "/dept/customerId/userId")
-    List<Long> getUserDeptIdList(Long userId);
+    @GetMapping(Constant.API_PATH + "/dept/all/{deptId}")
+    List<Long> getAllDeptId(@PathVariable("deptId") Long deptId);
 
     /**
      * 查询用户对应的部门

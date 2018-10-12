@@ -19,10 +19,11 @@ public class AuthToken extends UserDetails implements AuthenticationToken {
         super.setJwt(jwt);
     }
 
-    public AuthToken(Long userId, String userName, String jwt, Set<String> roleSet, Set<String> permSet) {
+    public AuthToken(Long userId, String userName, String jwt, Set<Long> deptSet, Set<String> roleSet, Set<String> permSet) {
         super.setUserName(userName);
         super.setUserId(userId);
         super.setJwt(jwt);
+        super.setDeptSet(deptSet);
         super.setRoleSet(roleSet);
         super.setPermSet(permSet);
     }

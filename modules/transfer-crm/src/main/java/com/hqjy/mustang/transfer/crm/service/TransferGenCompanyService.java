@@ -19,8 +19,4 @@ public interface TransferGenCompanyService extends BaseService<TransferGenCompan
      */
     HashMap<String, List<TransferGenCompanyEntity>> getRecursionTree(boolean showRoot);
 
-    /**
-     * 保存推广公司下的推广平台
-     */
-    int saveCompanySource(TransferCompanySourceDTO transferCompanySourceDTO);
 }

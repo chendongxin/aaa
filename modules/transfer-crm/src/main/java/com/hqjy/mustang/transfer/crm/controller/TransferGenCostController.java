@@ -6,7 +6,6 @@ import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
-import com.hqjy.mustang.transfer.crm.feign.SysProductServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCostEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferGenCostService;
 import io.swagger.annotations.Api;
@@ -32,8 +31,6 @@ public class TransferGenCostController {
 
     @Autowired
     private TransferGenCostService transferGenCostService;
-    @Autowired
-    private SysProductServiceFeign sysProductServiceFeign;
 
     /**
      * 分页查询推广费用
@@ -41,8 +38,8 @@ public class TransferGenCostController {
     @ApiOperation(value = "分页查询-推广费用", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "返回参数：【当前页:currPage】，【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
-            "【编号:id】,【赛道ID:proId】,【推广公司ID:companyId】,【部门ID:deptId】,【部门名称:deptName】,【来源平台ID:sourceId】\n" +
-            "【推广方式ID:wayId】,【推广日期:genDay】,【人民币主动:initiativeMoney】,【人民币被动:passiveMoney】,【虚拟币主动:initiativeVirtual】\n" +
+            "【编号:id】,【赛道ID:proId】,【推广公司ID:companyId】,【推广公司名称:name】,【部门ID:deptId】,【部门名称:deptName】,【来源平台ID:sourceId】\n" +
+            "【推广方式ID:wayId】,【推广方式名称:genWay】,【推广日期:genDay】,【人民币主动:initiativeMoney】,【人民币被动:passiveMoney】,【虚拟币主动:initiativeVirtual】\n" +
             "【虚拟币被动:passiveVirtual】,【创建人ID:createUserId】,【创建人名称:createUserName】,【创建时间:createTime】\n" +
             "【更新人ID:updateUserId】,【更新人名称:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
@@ -56,10 +53,12 @@ public class TransferGenCostController {
             "        \"id\": 1,\n" +
             "        \"proId\": 1,\n" +
             "        \"companyId\": 1,\n" +
+            "        \"name\": \"广州百单网网络科技有限公司\",\n" +
             "        \"deptId\": 1,\n" +
             "        \"deptName\": \"广西校区\",\n" +
             "        \"sourceId\": 1,\n" +
             "        \"wayId\": 1,\n" +
+            "        \"genWay\": \"精品帮帮\",\n" +
             "        \"genDay\": \"2018-09-06 17:19:24\",\n" +
             "        \"initiativeMoney\": 1000,\n" +
             "        \"passiveMoney\": 800,\n" +
@@ -130,15 +129,6 @@ public class TransferGenCostController {
             return R.ok();
         }
         return R.error(StatusCode.DATABASE_SAVE_FAILURE);
-    }
-
-    /**
-     * 获取所有赛道
-     */
-    @GetMapping(value = "/product")
-    @ApiOperation(value = "获取所有赛道接口", notes = "请求参数说明")
-    public R listPageProduct() {
-        return R.ok(sysProductServiceFeign.getAllProduct());
     }
 
     /**

@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
 import com.hqjy.mustang.admin.service.AuthService;
 import com.hqjy.mustang.admin.service.ShiroService;
+import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.JsonUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
@@ -14,7 +15,9 @@ import com.hqjy.mustang.common.web.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * @author : heshuangshuang
@@ -27,6 +30,8 @@ public class AuthServiceImpl implements AuthService {
     private ShiroService shiroService;
     @Autowired
     private RedisUtils redisUtils;
+    @Autowired
+    private SysUserDeptService sysUserDeptService;
 
     @Override
     public AuthCheckResult checkToken(Long userId, String jti) {
@@ -42,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
                     authCheckResult.setCheck(Constant.CheckToken.SUCCESS);
                     authCheckResult.setRoleSet(roleSet(userId));
                     authCheckResult.setPermSet(permSet(userId));
+                    authCheckResult.setDeptSet(new HashSet<>(sysUserDeptService.getUserDeptId(userId)));
                     return authCheckResult;
                 }
                 authCheckResult.setCheck(Constant.CheckToken.TOKEN_OUT);
