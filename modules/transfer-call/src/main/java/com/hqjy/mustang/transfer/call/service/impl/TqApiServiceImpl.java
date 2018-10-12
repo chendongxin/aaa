@@ -10,6 +10,7 @@ import com.hqjy.mustang.transfer.call.constant.TqConstant;
 import com.hqjy.mustang.transfer.call.model.dto.*;
 import com.hqjy.mustang.transfer.call.service.TqApiService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;

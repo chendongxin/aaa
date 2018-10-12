@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-@Api(tags = "系统菜单-赛道管理", description = "SysProductController")
+@Api(tags = "赛道管理", description = "SysProductController")
 @RestController
 @RequestMapping("/product")
 public class SysProductController {
@@ -109,7 +109,7 @@ public class SysProductController {
             "  \"msg\": \"成功\",\n" +
             "  \"code\": 0\n" +
             "}")
-    @SysLog("修改推广公司")
+    @SysLog("修改赛道")
     @PutMapping
     public R update(@Validated(RestfulValid.PUT.class) @RequestBody SysProductEntity syaProductEntity) {
         int count = sysProductService.update(syaProductEntity);
@@ -132,6 +132,15 @@ public class SysProductController {
             return R.ok();
         }
         return R.error(StatusCode.DATABASE_DELETE_FAILURE);
+    }
+
+    /**
+     * 获取所有赛道
+     */
+    @ApiOperation(value = "获取所有赛道信息", notes = "获取所有赛道信息")
+    @GetMapping(value = "/all")
+    public R getAllProduct() {
+        return R.ok(sysProductService.getAllProductList());
     }
 
 }

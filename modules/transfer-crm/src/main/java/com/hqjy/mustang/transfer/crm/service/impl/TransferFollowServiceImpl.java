@@ -65,11 +65,9 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
         }
         TransferCustomerEntity transferCustomerEntity = transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId());
         if (process.getFollowCount() == 1) {
-            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName());
-//            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId();
+            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(transferCustomerEntity.getDeptId());
         }
-        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName());
-//        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId();
+        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId(transferCustomerEntity.getDeptId());
         transferCustomerService.update(transferCustomerEntity);
         return update;
     }

@@ -14,7 +14,6 @@ import java.util.List;
 @FeignClient(name = "mustang-admin")
 public interface SysUserDeptServiceFeign {
 
-
     /**
      * 获取用户所有的部门ID
      *
@@ -22,7 +21,7 @@ public interface SysUserDeptServiceFeign {
      * @return 返回用户所有部门id集合
      * @author by xyq 2018年10月9日17:01:10
      */
-    @GetMapping(Constant.API_PATH + "/user/dept/all/{userId}")
+    @GetMapping(Constant.API_PATH + "/UserDeptAll/{userId}")
     List<Long> getUserDeptIdList(@PathVariable("userId") Long userId);
 
 }

@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
-
 /**
  * 部门管理
  *
@@ -138,6 +137,17 @@ public class SysDeptController extends AbstractController {
             return R.ok();
         }
         return R.error(StatusCode.DATABASE_DELETE_FAILURE);
+    }
+
+    /**
+     * @author : gmm
+     * @date : 2018/10/10 16:31
+     * 获取所有部门
+     */
+    @ApiOperation(value = "获取所有部门信息", notes = "获取所有部门信息")
+    @GetMapping(value = "/all")
+    public R getAllDept() {
+        return R.ok(sysDeptService.getAllDeptList());
     }
 
 }

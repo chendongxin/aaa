@@ -26,6 +26,21 @@ public class TransferCustomerInvalidEntity implements Serializable {
     private Long customerId;
 
     /**
+     * 客户姓名
+     */
+    private String name;
+
+    /**
+     * 客户电话
+     */
+    private String phone;
+
+    /**
+     * 创建时间
+     */
+    private Date transferCreateTime;
+
+    /**
 	 * 失败状态（1-(失败)有效，2-（失败）无效 status
 	 **/
     private Integer status;
@@ -51,7 +66,7 @@ public class TransferCustomerInvalidEntity implements Serializable {
     private String createUserName;
 
     /**
-	 * 创建时间 create_time
+	 * 无效创建时间 create_time
 	 **/
     private Date createTime;
 

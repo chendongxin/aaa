@@ -125,7 +125,7 @@ public class TransferCallShiroConfig extends AuthShiroConfig {
                         switch (result.getCheck()) {
                             case SUCCESS:
                                 String userName = TokenUtils.tokenInfo(userToken, Constant.JWT_TOKEN_USERNAME, String.class);
-                                getSubject(request, response).login(new AuthToken(userId, userName, userToken, result.getRoleSet(), result.getPermSet()));
+                                getSubject(request, response).login(new AuthToken(userId, userName, userToken, result.getDeptSet(), result.getRoleSet(), result.getPermSet()));
                                 return true;
                             case TOKEN_OUT:
                                 ResponseUtils.response(response, HttpStatus.OK.value(), R.error(StatusCode.TOKEN_OUT));
