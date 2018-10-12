@@ -44,8 +44,6 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     private SysDeleteService sysDeleteService;
     @Autowired
     private SysUserDeptService sysUserDeptService;
-    /* @Autowired
-     private CustAreaDeptService custAreaDeptService;*/
     @Autowired
     private SysCacheService sysCacheService;
     @Autowired
@@ -255,6 +253,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         return baseDao.getListBydeptIdList(deptIdList);
     }
 
+    @Override
+    public List<SysDeptEntity> getDeptEntityByDeptIds(String deptIdList) {
+        return baseDao.getDeptEntityByDeptIds(deptIdList);
+    }
 
     @Override
     public List<Long> getAllDeptUnderDeptId(Long deptId) {
@@ -268,6 +270,16 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             redisUtils.set(RedisKeys.Dept.allDept(deptId), allDeptIdList);
         }
         return allDeptIdList;
+    }
+
+    @Override
+    public List<SysDeptEntity> getDeptEntityByDeptName(String deptName) {
+        Long deptId = this.getDeptByName(deptName);
+        if (deptId == null) {
+            return null;
+        }
+        List<Long> allDeptUnderDeptId = this.getAllDeptUnderDeptId(deptId);
+        return this.getDeptEntityByDeptIds(deptIdListToString(allDeptUnderDeptId));
     }
 
     @Override
@@ -290,5 +302,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     @Override
     public List<SysDeptEntity> getUserDeptList(Long userId) {
         return baseDao.findDeptListByUserId(userId);
+    }
+
+    @Override
+    public Long getDeptByName(String deptName) {
+        return baseDao.getDeptByName(deptName);
     }
 }

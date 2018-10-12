@@ -38,20 +38,20 @@ public class PromotionReportController {
 
     @ApiOperation(value = " 招转日常数据报表列表", notes = "请求参数格式：\n")
     @PostMapping("/promotionDailyList")
-    public R promotionDailyList(@ModelAttribute PageParams params,@RequestBody(required = false) DailyQueryParams query) {
-        return promotionDailyService.promotionDailyList(params, query);
+    public R promotionDailyList(@ModelAttribute PageParams params, @RequestBody(required = false) DailyQueryParams query) {
+        return R.result(promotionDailyService.promotionDailyList(params, query));
     }
 
     @SysLog("导出招转日常数据")
     @ApiOperation(value = "导出招转日常数据", notes = "请求参数格式:\n")
     @PostMapping("/exportPromotionDaily")
     public R exportPromotionDaily(@RequestBody DailyQueryParams query) {
-        return promotionDailyService.exportPromotionDaily(query);
+        return R.result(promotionDailyService.exportPromotionDaily(query));
     }
 
     @ApiOperation(value = "客服推广报表数据列表", notes = "请求参数格式：\n")
     @PostMapping("/promotionCustomerList")
-    public R promotionCustomerList(@ModelAttribute PageParams params,@RequestBody(required = false) CustomerQueryParams query) {
+    public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody(required = false) CustomerQueryParams query) {
         return promotionCustomerService.promotionCustomerList(params, query);
     }
 
