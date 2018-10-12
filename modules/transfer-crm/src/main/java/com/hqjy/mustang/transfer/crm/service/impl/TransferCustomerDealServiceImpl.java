@@ -7,10 +7,8 @@ import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDealDao;
-import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.dto.NcDealMsgDTO;
-import com.hqjy.mustang.transfer.crm.model.entity.SysDeptEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDealEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerContactService;
@@ -25,9 +23,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.isGeneralSeat;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.isSuperAdmin;
 
 /**
  * @author xyq
@@ -45,12 +44,7 @@ public class TransferCustomerDealServiceImpl extends BaseServiceImpl<TransferCus
     private TransferCustomerContactService transferCustomerContactService;
     private TransferCustomerService transferCustomerService;
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
-    private SysDeptServiceFeign sysDeptServiceFeign;
 
-    @Autowired
-    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
-        this.sysDeptServiceFeign = sysDeptServiceFeign;
-    }
 
     @Autowired
     public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
@@ -73,6 +67,12 @@ public class TransferCustomerDealServiceImpl extends BaseServiceImpl<TransferCus
         Long customerId = MapUtils.getLong(pageQuery, CUSTOMER_ID);
         if (customerId != null && MapUtils.getLong(pageQuery, CUSTOMER_ID).equals(-1L)) {
             return null;
+        }
+        if (isGeneralSeat()) {
+            pageQuery.put("userId", getUserId());
+        }
+        if (isSuperAdmin()) {
+            return super.findPage(pageQuery);
         }
         transferCustomerService.formatQueryTime(pageQuery);
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
