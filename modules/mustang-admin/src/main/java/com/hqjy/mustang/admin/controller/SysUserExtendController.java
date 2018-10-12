@@ -8,7 +8,6 @@ import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
