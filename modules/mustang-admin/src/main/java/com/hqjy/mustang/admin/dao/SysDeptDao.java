@@ -3,6 +3,7 @@ package com.hqjy.mustang.admin.dao;
 import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -46,7 +47,25 @@ public interface SysDeptDao extends BaseDao<SysDeptEntity, Long> {
     List<SysDeptEntity> getListBydeptIdList(List<Long> deptIdList);
 
     /**
+     * 根据部门id字符串获取部门信息
+     *
+     * @param deptIdList 部门ID集合字符串（'1','2','3'）
+     * @return 返回部门集合信息
+     * @author xyq 2018年10月12日09:44:08
+     */
+    List<SysDeptEntity> getDeptEntityByDeptIds(@Param("deptIdList") String deptIdList);
+
+    /**
      * 查询用户部门关系列表
      */
     List<SysDeptEntity> findDeptListByUserId(Long userId);
+
+    /**
+     * 根据部门名称获取部门Id
+     *
+     * @param deptName 部门名称
+     * @return 返回部门ID
+     * @author xyq 2018年10月12日09:12:52
+     */
+    Long getDeptByName(String deptName);
 }
