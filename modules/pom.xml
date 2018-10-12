@@ -28,9 +28,6 @@
         <!-- 定时任务 -->
         <module>mustang-quartz</module>
 
-        <!-- 校区服务 -->
-        <module>mustang-school</module>
-
         <!-- websocket -->
         <module>mustang-websocket</module>
 
