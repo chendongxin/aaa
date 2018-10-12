@@ -1,23 +1,28 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.R;
+import com.hqjy.mustang.common.base.utils.StringUtils;
+import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import com.hqjy.mustang.transfer.export.dao.PromotionDailyDao;
+import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.DailyReportData;
 import com.hqjy.mustang.transfer.export.model.dto.DailyReportTotal;
+import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.DailyQueryParams;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.service.PromotionDailyService;
 import com.hqjy.mustang.transfer.export.util.PageUtil;
-import org.apache.commons.collections.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -32,17 +37,119 @@ import java.util.List;
 public class PromotionDailyServiceImpl implements PromotionDailyService {
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
 
-    @Override
-    public R promotionDailyList(PageParams params, DailyQueryParams query) {
-        List<DailyReportData> list = new ArrayList<>();
+    private PromotionDailyDao promotionDailyDao;
+    private SysDeptServiceFeign deptServiceFeign;
 
-        //TODO 数据统计业务待完成
-        if (params != null) {
-            //需要分页
-            return R.result(new PageUtil<>(params, list));
+    @Autowired
+    public void setDeptServiceFeign(SysDeptServiceFeign deptServiceFeign) {
+        this.deptServiceFeign = deptServiceFeign;
+    }
+
+    @Autowired
+    public void setPromotionDailyDao(PromotionDailyDao promotionDailyDao) {
+        this.promotionDailyDao = promotionDailyDao;
+    }
+
+    @Override
+    public PageUtil<DailyReportData> promotionDailyList(PageParams params, DailyQueryParams query) {
+        List<DailyReportData> list = this.check(query);
+        this.setSaleNum(query, list);
+        this.setSaleRate(list);
+        return new PageUtil<>(params, list);
+    }
+
+    private void setSaleRate(List<DailyReportData> list) {
+        DecimalFormat df = new DecimalFormat("0.00%");
+        list.forEach(x -> {
+            //有效商机率:有效商机量/商机总量
+            x.setValidRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getValidNum() / x.getBusinessNum()));
+            //非失败率:非失败商机量/商机总量
+            x.setUnFailRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getUnFailNum() / x.getBusinessNum()));
+            //有效上门率:有效上门量/上门量
+            x.setVisitValidRate(df.format(x.getVisitNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getVisitNum()));
+            //上门意向率:意向量/上门量
+            x.setVisitIntentionRate(df.format(x.getVisitNum() == 0 ? 0 : (double) x.getIntentionNum() / x.getVisitNum()));
+            //上门成交率:成交量/有效上门量
+            x.setVisitDealRate(df.format(x.getVisitValidNum() == 0 ? 0 : (double) x.getDealNum() / x.getVisitValidNum()));
+        });
+    }
+
+    private void setSaleNum(DailyQueryParams query, List<DailyReportData> list) {
+        List<CustomerEntity> createBusiness = promotionDailyDao.countCreateBusiness(query);
+        List<CustomerEntity> followBusiness = promotionDailyDao.countFollowBusiness(query);
+        List<CustomerEntity> validBusiness = promotionDailyDao.countValidBusiness(query);
+        List<CustomerEntity> noInvalidBusiness = promotionDailyDao.countNoInvalidBusiness(query);
+        List<CustomerEntity> visitBusiness = promotionDailyDao.countVisitBusiness(query);
+        List<CustomerEntity> validVisitBusiness = promotionDailyDao.countValidVisitBusiness(query);
+        List<CustomerEntity> intentionBusiness = promotionDailyDao.countIntentionBusiness(query);
+        List<CustomerEntity> dealBusiness = promotionDailyDao.countDealBusiness(query);
+        list.forEach(x -> {
+            //商机总量
+            createBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setBusinessNum(y.getNum());
+                }
+            });
+            //已跟进商机量
+            followBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setFollowNum(y.getNum());
+                }
+            });
+            //有效商机量
+            validBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setValidNum(y.getNum());
+                }
+            });
+            //非失败商机量
+            noInvalidBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setUnFailNum(y.getNum());
+                }
+            });
+            //商机上门量
+            visitBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setVisitNum(y.getNum());
+                }
+            });
+            //有效上门量
+            validVisitBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setVisitValidNum(y.getNum());
+                }
+            });
+            //意向量
+            intentionBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setIntentionNum(y.getNum());
+                }
+            });
+            //成交量
+            dealBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setDealNum(y.getNum());
+                }
+            });
+        });
+    }
+
+    private List<DailyReportData> check(DailyQueryParams query) {
+        if (StringUtils.isEmpty(query.getBeginTime())) {
+            throw new RRException("请选择开始时间");
         }
-        //不需要分页
-        return R.result(list);
+        if (StringUtils.isEmpty(query.getEndTime())) {
+            throw new RRException("请选择结束时间");
+        }
+        List<DailyReportData> list = new ArrayList<>();
+        List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptName("电销中心");
+        //TODO 列表数据初始化问题
+        deptInfo.forEach(y -> {
+            LOG.info("初始化报表列表");
+            list.add(new DailyReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+        });
+        return list;
     }
 
 
@@ -55,39 +162,56 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
     private DailyReportTotal countTotal(List<DailyReportData> list) {
         DailyReportTotal total = new DailyReportTotal();
         list.forEach(x -> {
-            //TODO,导出报表统计待处理
+            total.setBusinessNum(total.getBusinessNum() + x.getBusinessNum());
+            total.setFollowNum(total.getFollowNum() + x.getFollowNum());
+            total.setValidNum(total.getValidNum() + x.getValidNum());
+            total.setUnFailNum(total.getUnFailNum() + x.getUnFailNum());
+            total.setVisitNum(total.getVisitNum() + x.getVisitNum());
+            total.setVisitValidNum(total.getVisitValidNum() + x.getVisitValidNum());
+            total.setIntentionNum(total.getIntentionNum() + x.getIntentionNum());
+            total.setDealNum(total.getDealNum() + x.getDealNum());
         });
+        DecimalFormat df = new DecimalFormat("0.00%");
+        //有效商机率:有效商机量/商机总量
+        total.setValidRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getValidNum() / total.getBusinessNum()));
+        //非失败率:非失败商机量/商机总量
+        total.setUnFailRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getUnFailNum() / total.getBusinessNum()));
+        //有效上门率:有效上门量/上门量
+        total.setVisitValidRate(df.format(total.getVisitNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getVisitNum()));
+        //上门意向率:意向量/上门量
+        total.setVisitIntentionRate(df.format(total.getVisitNum() == 0 ? 0 : (double) total.getIntentionNum() / total.getVisitNum()));
+        //上门成交率:成交量/有效上门量
+        total.setVisitDealRate(df.format(total.getVisitValidNum() == 0 ? 0 : (double) total.getDealNum() / total.getVisitValidNum()));
         return total;
     }
 
+    private List<DailyReportData> getDailyData(DailyQueryParams query) {
+        List<DailyReportData> list = this.check(query);
+        this.setSaleNum(query, list);
+        this.setSaleRate(list);
+        return list;
+    }
 
     @Override
-    public R exportPromotionDaily(DailyQueryParams query) {
+    public String exportPromotionDaily(DailyQueryParams query) {
         try {
-            R r = this.promotionDailyList(null, query);
-            if (MapUtils.getLong(r, Constant.CODE) == 0) {
-                String result = MapUtils.getString(r, Constant.RESULT);
-                List<DailyReportData> list = JSON.parseArray(result, DailyReportData.class);
-                DailyReportTotal total = this.countTotal(list);
-
-                ExcelUtil<DailyReportData, DailyReportTotal> util1 = new ExcelUtil<>(DailyReportData.class, DailyReportTotal.class);
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                util1.getListToExcel(list, "招转日常数据报表_", total, os);
-                //aliyun目录
-                String dir = "export";
-                //文件名称
-                String fileName = "招转日常数据报表_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS")) + ".xls";
-                //上传文件至阿里云
-                String recordFile = OssFileUtils.uploadFile(os.toByteArray(), dir, fileName);
-                //下载地址有效时间1个小时
-                URL visitUrl = OssFileUtils.getVisitUrl(recordFile, 3600);
-                return R.result(visitUrl.toString());
-            }
-            return R.error("导出日常报表数据：获取导出数据异常");
+            List<DailyReportData> list = this.getDailyData(query);
+            DailyReportTotal total = this.countTotal(list);
+            ExcelUtil<DailyReportData, DailyReportTotal> util1 = new ExcelUtil<>(DailyReportData.class, DailyReportTotal.class);
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            util1.getListToExcel(list, "招转日常数据报表_", total, os);
+            //aliyun目录
+            String dir = "export";
+            //文件名称
+            String fileName = "招转日常数据报表_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS")) + ".xls";
+            //上传文件至阿里云
+            String recordFile = OssFileUtils.uploadFile(os.toByteArray(), dir, fileName);
+            //下载地址有效时间1个小时
+            URL visitUrl = OssFileUtils.getVisitUrl(recordFile, 3600);
+            return visitUrl.toString();
         } catch (Exception e) {
-            LOG.error(e.getMessage());
-            e.printStackTrace();
-            return R.error(e.getMessage());
+            LOG.error("招转日常数据报表导出异常->{}", e.getMessage());
+            throw new RRException("招转日常数据报表导出异常");
         }
     }
 }
