@@ -93,7 +93,7 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
     public R returnToPrivate(Long customerId) {
         try {
             TransferCustomerEntity customerEntity = transferCustomerService.findOne(customerId);
-            //更新客户状态为无效状态
+            //更新客户状态为潜在状态
             customerEntity.setStatus(Constant.CustomerStatus.POTENTIAL.getValue())
                     .setUpdateUserId(getUserId()).setUpdateUserName(getUserName()).setUpdateTime(new Date());
             transferCustomerService.update(customerEntity);

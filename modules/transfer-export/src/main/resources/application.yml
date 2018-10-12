@@ -1,23 +1,18 @@
 server:
-    port: 8320
-
-spring:
-    application:
-    # 应用名称
-      name: transfer-export
-    # 环境 dev|test|pro
-    profiles:
-        active: dev
-
-# Feign 开启 Hystrix
-feign:
-  hystrix:
-    enabled: true
+    tomcat:
+        uri-encoding: UTF-8
+        max-threads: 1000
+        min-spare-threads: 30
+    port: 8400
+    connection-timeout: 5000
+    #context-path: /mustang
+    context-path: /
 
 info:
   app:
     name: transfer-export
     version: 1.0
+
 eureka:
   client:
     serviceUrl:
@@ -34,3 +29,55 @@ eureka:
     lease-renewal-interval-in-seconds: 5
     # 服务失效时间，默认90秒
     lease-expiration-duration-in-seconds: 20
+    #状态页面和健康指标
+    statusPageUrlPath: ${server.context-path}/swagger-ui.html
+
+spring:
+    application:
+    # 应用名称
+      name: transfer-export
+    # 环境 dev|test|pro
+    profiles:
+        active: dev
+    http:
+        multipart:
+            max-file-size: 100MB
+            max-request-size: 100MB
+            enabled: true
+
+
+# Mybatis配置
+mybatis:
+    mapperLocations: classpath*:com/hqjy/transfer/export/dao/*Dao.xml
+
+jwt-token:
+    # token有效时长，单位秒 默认一天 86400s = 3600*24
+      expire: 86400
+    # 续命时长 默认 3600s
+      prolong: 7200
+
+pagehelper:
+    helperDialect: mysql
+    page-size-zero: true
+    reasonable: true
+    params: pageNum=start;pageSize=limit;pageSizeZero=zero;reasonable=heli;count=contsql
+    row-bounds-with-count: true
+
+# Feign 开启 Hystrix
+feign:
+  hystrix:
+    enabled: true
+
+# shiro 不拦截路径
+shiro:
+  anon:
+    path:
+      # spring cloud 健康检查
+      - /info
+      - /actuator/**
+      - /doc
+      - /swagger-ui.html
+      - /csrf
+      - /webjars/**
+      - /swagger-resources/**
+      - /v2/api-docs

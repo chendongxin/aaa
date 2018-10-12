@@ -21,8 +21,10 @@
 	  <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
 	  <result column="first_user_id" jdbcType="BIGINT" property="firstUserId" />
 	  <result column="first_user_name" jdbcType="VARCHAR" property="firstUserName" />
+	  <result column="first_user_dept_id" jdbcType="BIGINT" property="firstUserDeptId" />
 	  <result column="last_user_id" jdbcType="BIGINT" property="lastUserId" />
 	  <result column="last_user_name" jdbcType="VARCHAR" property="lastUserName" />
+	  <result column="last_user_dept_id" jdbcType="BIGINT" property="lastUserDeptId" />
 	  <result column="gen_user_id" jdbcType="BIGINT" property="genUserId" />
 	  <result column="gen_user_name" jdbcType="VARCHAR" property="genUserName" />
 	  <result column="phone" jdbcType="VARCHAR" property="phone" />
@@ -46,8 +48,8 @@
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
     customer_id, nc_id, pro_id, pro_name, source_id, source_name, company_id, company_name,
-    name, status, get_way, user_id, user_name, dept_id, dept_name, first_user_id, first_user_name,
-    last_user_id, last_user_name, gen_user_id, gen_user_name, phone, we_chat, qq, land_line,
+    name, status, get_way, user_id, user_name, dept_id, dept_name, first_user_id, first_user_name, first_user_dept_id,
+    last_user_id, last_user_name, last_user_dept_id, gen_user_id, gen_user_name, phone, we_chat, qq, land_line,
     create_user_id, create_user_name, create_time, allot_time, update_user_id, update_user_name,
     update_time
   </sql>
@@ -71,8 +73,10 @@
 		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
 		<if test="firstUserId != null and !&quot;&quot;.equals(firstUserId)">and first_user_id = #{firstUserId}</if>
 		<if test="firstUserName != null and !&quot;&quot;.equals(firstUserName)">and first_user_name = #{firstUserName}</if>
+		<if test="firstUserDeptId != null and !&quot;&quot;.equals(firstUserDeptId)">and first_user_dept_id = #{firstUserDeptId}</if>
 		<if test="lastUserId != null and !&quot;&quot;.equals(lastUserId)">and last_user_id = #{lastUserId}</if>
 		<if test="lastUserName != null and !&quot;&quot;.equals(lastUserName)">and last_user_name = #{lastUserName}</if>
+		<if test="lastUserDeptId != null and !&quot;&quot;.equals(lastUserDeptId)">and last_user_dept_id = #{lastUserDeptId}</if>
 		<if test="genUserId != null and !&quot;&quot;.equals(genUserId)">and gen_user_id = #{genUserId}</if>
 		<if test="genUserName != null and !&quot;&quot;.equals(genUserName)">and gen_user_name = #{genUserName}</if>
 		<if test="phone != null and !&quot;&quot;.equals(phone)">and phone = #{phone}</if>
@@ -109,8 +113,10 @@
 		  <if test="null != deptName">dept_name, </if>
 		  <if test="null != firstUserId">first_user_id, </if>
 		  <if test="null != firstUserName">first_user_name, </if>
+		  <if test="null != firstUserDeptId">first_user_dept_id, </if>
 		  <if test="null != lastUserId">last_user_id, </if>
 		  <if test="null != lastUserName">last_user_name, </if>
+		  <if test="null != lastUserDeptId">last_user_dept_id, </if>
 		  <if test="null != genUserId">gen_user_id, </if>
 		  <if test="null != genUserName">gen_user_name, </if>
 		  <if test="null != phone">phone, </if>
@@ -143,8 +149,10 @@
 			<if test="null != deptName">#{deptName}, </if>
 			<if test="null != firstUserId">#{firstUserId}, </if>
 			<if test="null != firstUserName">#{firstUserName}, </if>
+			<if test="null != firstUserDeptId">#{firstUserDeptId}, </if>
 			<if test="null != lastUserId">#{lastUserId}, </if>
 			<if test="null != lastUserName">#{lastUserName}, </if>
+			<if test="null != lastUserDeptId">#{lastUserDeptId}, </if>
 			<if test="null != genUserId">#{genUserId}, </if>
 			<if test="null != genUserName">#{genUserName}, </if>
 			<if test="null != phone">#{phone}, </if>
@@ -181,8 +189,10 @@
 			<if test="null != deptName">dept_name = #{deptName}, </if>
 			<if test="null != firstUserId">first_user_id = #{firstUserId}, </if>
 			<if test="null != firstUserName">first_user_name = #{firstUserName}, </if>
+			<if test="null != firstUserDeptId">first_user_dept_id = #{firstUserDeptId}, </if>
 			<if test="null != lastUserId">last_user_id = #{lastUserId}, </if>
 			<if test="null != lastUserName">last_user_name = #{lastUserName}, </if>
+			<if test="null != lastUserDeptId">last_user_dept_id = #{lastUserDeptId}, </if>
 			<if test="null != genUserId">gen_user_id = #{genUserId}, </if>
 			<if test="null != genUserName">gen_user_name = #{genUserName}, </if>
 			<if test="null != phone">phone = #{phone}, </if>
@@ -240,8 +250,10 @@
 			<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
 			<if test="firstUserId != null and !&quot;&quot;.equals(firstUserId)">and first_user_id = #{firstUserId}</if>
 			<if test="firstUserName != null and !&quot;&quot;.equals(firstUserName)">and first_user_name like concat('%',#{firstUserName},'%')</if>
+			<if test="firstUserDeptId != null and !&quot;&quot;.equals(firstUserDeptId)">and first_user_dept_id = #{firstUserDeptId}</if>
 			<if test="lastUserId != null and !&quot;&quot;.equals(lastUserId)">and last_user_id = #{lastUserId}</if>
 			<if test="lastUserName != null and !&quot;&quot;.equals(lastUserName)">and last_user_name like concat('%',#{lastUserName},'%')</if>
+			<if test="lastUserDeptId != null and !&quot;&quot;.equals(lastUserDeptId)">and last_user_dept_id = #{lastUserDeptId}</if>
 			<if test="genUserId != null and !&quot;&quot;.equals(genUserId)">and gen_user_id = #{genUserId}</if>
 			<if test="genUserName != null and !&quot;&quot;.equals(genUserName)">and gen_user_name like concat('%',#{genUserName},'%')</if>
 			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
@@ -336,7 +348,7 @@
 		select
 		tc.customer_id, tc.nc_id, tc.pro_id, tc.pro_name, tc.source_id, tc.source_name, tc.company_id, tc.company_name,
 		tc.name, tc.status, tc.get_way, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.first_user_id,
-		tc.first_user_name, tc.last_user_id, tc.last_user_name, tc.gen_user_id, tc.gen_user_name, tc.phone, tc.we_chat,
+		tc.first_user_name, tc.last_user_id, tc.last_user_name, tc.last_user_dept_id, tc.gen_user_id, tc.gen_user_name, tc.phone, tc.we_chat,
 		tc.qq, tc.land_line, tc.create_user_id, tc.create_user_name, tc.create_time, tc.allot_time, tc.update_user_id,
 		tc.update_user_name, tc.update_time
 		from transfer_customer tc

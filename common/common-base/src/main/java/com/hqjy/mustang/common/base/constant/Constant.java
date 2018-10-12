@@ -334,82 +334,6 @@ public class Constant {
     }
 
     /**
-     * 应聘类别
-     */
-    public enum ApplyType {
-
-        DEVELOP(1, "开发类"),
-        DESIGN(2, "设计类"),
-        OPETATION(3, "运营类"),
-        PRODUCT(4, "产品类"),
-        TECHNICAL_SUPPORT(5, "技术支持类"),
-        OTHER(6, "其它");
-
-        private Integer value;
-
-        private String code;
-
-        ApplyType(Integer value, String code) {
-            this.value = value;
-            this.code = code;
-        }
-
-        public Integer getValue() {
-            return value;
-        }
-
-        public boolean equals(Integer value) {
-            return value.equals(this.value);
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-    }
-
-    /**
-     * 工作经验
-     */
-    public enum Experience {
-
-        NO_EXPERIENCE(0, "无经验"),
-        FRESH_GRADUATE(1, "应届生"),
-        WITHIN_A_YEAR(2, "1年以内"),
-        TWO_YEARS(3, "两年"),
-        THREE_YEARS(4, "三年"),
-        MORE_THREE_YEARS(5, "三年以上");
-        private Integer value;
-
-        private String code;
-
-        Experience(Integer value, String code) {
-            this.value = value;
-            this.code = code;
-        }
-
-        public Integer getValue() {
-            return value;
-        }
-
-        public boolean equals(Integer value) {
-            return value.equals(this.value);
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-
-    }
-
-    /**
      * 客户状态
      */
     public enum CustomerStatus {
@@ -455,17 +379,17 @@ public class Constant {
      */
     public enum ValidType {
 
-        JOB_SEARCH(1, "找工作不学"),
-        LOAN_REJECTION(2, "拒绝贷款"),
-        GET_JOB(3, "找到工作"),
-        SUM_WIN_PART_TIME(4, "寒/暑假工"),
-        NO_INTEREST(5, "没投过简历/无兴趣"),
-        PASSIVE_MESSAGE(6, "负面信息"),
-        OTHER_JOB(7, "想从事其他岗位"),
-        INTERNAL_SCHOOL(8, "在校生不能离校"),
-        AGE_OVERSTEP(9, "年龄＜18岁或＞30岁"),
-        EXPERIENCE_ONE_YEAR(10, "已有同岗位经验1年以上"),
-        OTHER(11, "其他");
+        JOB_SEARCH(0, "找工作不学"),
+        LOAN_REJECTION(1, "拒绝贷款"),
+        GET_JOB(2, "找到工作"),
+        SUM_WIN_PART_TIME(3, "寒/暑假工"),
+        NO_INTEREST(4, "没投过简历/无兴趣"),
+        PASSIVE_MESSAGE(5, "负面信息"),
+        OTHER_JOB(6, "想从事其他岗位"),
+        INTERNAL_SCHOOL(7, "在校生不能离校"),
+        AGE_OVERSTEP(8, "年龄＜18岁或＞30岁"),
+        EXPERIENCE_ONE_YEAR(9, "已有同岗位经验1年以上"),
+        OTHER(10, "其他");
 
         private Integer value;
 
@@ -498,10 +422,10 @@ public class Constant {
      */
     public enum Valid {
 
-        SAME_TRAIN(1, "参加过同类培训"),
-        LOW_DEGREE(2, "小学初中学历"),
-        ADVERTISING_INFORMATION(3, "广告信息"),
-        PEER_SPY(4, "同行探子");
+        SAME_TRAIN(0, "参加过同类培训"),
+        LOW_DEGREE(1, "小学初中学历"),
+        ADVERTISING_INFORMATION(2, "广告信息"),
+        PEER_SPY(3, "同行探子");
 
         private Integer value;
 
@@ -580,6 +504,42 @@ public class Constant {
         public String getCode() {
             return code;
         }
+    }
+
+    /**
+     * 角色
+     */
+    public enum Role {
+
+        /**
+         * 电销销售员
+         */
+        SALE("SALE"),
+
+        /**
+         * 普通客服
+         */
+        SERVICE("SERVICE"),
+        /**
+         * 普通网销销售
+         */
+        NET_SALES_ORDINARY("NET_SALES_ORDINARY"),
+
+        /**
+         * 质检员
+         */
+        INSPECTION("INSPECTION");
+
+        private String code;
+
+        Role(String code) {
+            this.code = code;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
     }
 
 }

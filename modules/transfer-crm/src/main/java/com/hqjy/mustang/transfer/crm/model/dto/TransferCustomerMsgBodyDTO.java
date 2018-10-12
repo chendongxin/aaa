@@ -13,14 +13,29 @@ public class TransferCustomerMsgBodyDTO {
     private Long proId;
 
     /**
+     * 赛道名称
+     */
+    private String proName;
+
+    /**
      * 推广公司ID
      */
     private Long companyId;
 
     /**
+     * 推广公司名称
+     */
+    private String companyName;
+
+    /**
      * 部门ID
      */
     private Long deptId;
+
+    /**
+     * 部门名称
+     */
+    private String deptName;
 
     /**
      * 分配ip
@@ -38,9 +53,19 @@ public class TransferCustomerMsgBodyDTO {
     private Long userId;
 
     /**
+     * 人员名称
+     */
+    private String userName;
+
+    /**
      * 来源平台ID
      */
     private Long sourceId;
+
+    /**
+     * 来源平台名称
+     */
+    private String sourceName;
 
     /**
      * 获取方式 (1-主动获取，2-被动获取)

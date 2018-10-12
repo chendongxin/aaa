@@ -18,6 +18,11 @@ public class TransferFollowEntity implements Serializable {
     private Long followId;
 
     /**
+     * 跟进人
+     */
+    private String followUserName;
+
+    /**
 	 * 客户编号 customer_id
 	 **/
     private Long customerId;

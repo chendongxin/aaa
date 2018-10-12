@@ -16,4 +16,5 @@ public class AuthCheckResult implements Serializable {
     private Constant.CheckToken check;
     private Set<String> roleSet;
     private Set<String> permSet;
+    private Set<Long> deptSet;
 }

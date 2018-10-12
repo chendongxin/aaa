@@ -9,8 +9,11 @@ import com.hqjy.mustang.transfer.crm.dao.TransferCustomerContactDao;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerContactDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerContactEntity;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerContactService;
+import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
 import org.apache.commons.collections.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +29,9 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 @Service
 public class TransferCustomerContactServiceImpl extends BaseServiceImpl<TransferCustomerContactDao, TransferCustomerContactEntity, Integer> implements TransferCustomerContactService {
 
+    @Autowired
+    private TransferCustomerService transferCustomerService;
+
     /**
      * 根据联系方式和详情，查询具体信息
      *
@@ -34,6 +40,31 @@ public class TransferCustomerContactServiceImpl extends BaseServiceImpl<Transfer
     @Override
     public TransferCustomerContactEntity getByDetail(Integer type, String detail) {
         return baseDao.findOneByDetail(type, detail);
+    }
+
+    @Override
+    public int save(TransferCustomerContactEntity entity) {
+        TransferCustomerEntity customerEntity = transferCustomerService.findOne(entity.getCustomerId());
+        if (entity.getType().equals(Constant.CustomerContactType.WE_CHAT.getValue()) && customerEntity.getWeChat() == null) {
+            transferCustomerService.update(new TransferCustomerEntity()
+                            .setCustomerId(entity.getCustomerId()).setWeChat(entity.getDetail())
+                            .setUpdateUserId(getUserId()).setUpdateUserName(getUserName())
+                            );
+        } else if (entity.getType().equals(Constant.CustomerContactType.LAND_LINE.getValue()) && customerEntity.getLandLine() == null) {
+            transferCustomerService.update(new TransferCustomerEntity()
+                    .setCustomerId(entity.getCustomerId()).setLandLine(entity.getDetail())
+                    .setUpdateUserId(getUserId()).setUpdateUserName(getUserName())
+            );
+        } else if (entity.getType().equals(Constant.CustomerContactType.QQ.getValue()) && customerEntity.getQq() == null) {
+            transferCustomerService.update(new TransferCustomerEntity()
+                    .setCustomerId(entity.getCustomerId()).setQq(entity.getDetail())
+                    .setUpdateUserId(getUserId()).setUpdateUserName(getUserName())
+            );
+        }
+        entity.setCreateUserId(getUserId());
+        entity.setCreateUserName(getUserName());
+        entity.setProId(customerEntity.getProId());
+        return super.save(entity);
     }
 
     @Override

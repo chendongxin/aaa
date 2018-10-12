@@ -32,6 +32,7 @@ import java.io.ByteArrayOutputStream;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.stream.Collectors;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -63,8 +64,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private SysDeptServiceFeign sysDeptServiceFeign;
     @Autowired
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
-    //    @Autowired
-//    private ThreadPoolExecutor receiveExecutor;
+    @Autowired
+    private ThreadPoolExecutor receiveExecutor;
     @Autowired
     private RedisLockUtils redisLockUtils;
 //    @Autowired
@@ -146,8 +147,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                         .setUserId(customerDto.getFirstUserId()).setCustomerId(entity.getCustomerId()).setDeptId(customerDto.getDeptId())
                         .setCreateTime(time).setExpireTime(time).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName());
                 transferProcessService.save(transferProcessEntity);
-                //发送客户到redis消息队列，异步回写NCId
-                this.sendNcSave(entity, customerDto);
                 return R.ok();
             }
         } catch (Exception e) {
@@ -181,14 +180,14 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 }
                 //新增流程记录
                 TransferProcessEntity newProcess = new TransferProcessEntity().setCreateTime(date).setMemo("客户转移操作").setActive(Boolean.FALSE)
-                        .setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName()).setUserId(dto.getUserId()).setUserName(getUserName()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName());
+                        .setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName()).setUserId(dto.getUserId()).setUserName(dto.getUserName()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName());
                 int save = transferProcessService.save(newProcess);
                 if (save == 0) {
                     return;
                 }
                 //更新客户主表(同步激活状态流程)
                 int update = baseDao.update(new TransferCustomerEntity().setAllotTime(date).setUpdateTime(date)
-                        .setCustomerId(c).setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName()).setUserId(dto.getUserId()).setUserName(getUserName()).setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
+                        .setCustomerId(c).setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName()).setUserId(dto.getUserId()).setUserName(dto.getUserName()).setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
                 if (update == 0) {
                     return;
                 }
@@ -237,19 +236,12 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         return list;
     }
 
-    private void sendNcSave(TransferCustomerEntity entity, TransferCustomerDTO dto) {
-        NcBizSaveParamDTO ncBizRequestDTO = new NcBizSaveParamDTO();
-        ncBizRequestDTO.setCustomerId(entity.getCustomerId()).setTrue_name("自考集训基地").setUserId(entity.getUserId())
-                .setTel(entity.getPhone()).setLxqq(dto.getQq()).setCreator(getUserName()).setNote(dto.getNote())
-                .setSaleType(0).setName(entity.getName());
-        listOperations.leftPush(RedisKeys.Nc.SAVE, JsonUtil.toJson(ncBizRequestDTO));
-    }
 
     /**
      * 导入客户
      *
-     * @param file  导入的文件
-     * @param upDTO 请求输入参数
+     * @param file 导入的文件
+     * @param upDTO  请求输入参数
      * @return 返回导入结果
      */
     @Override
@@ -274,14 +266,15 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                     if (StringUtils.isNotEmpty(c.getGender())) {
                         this.setSex(c, msgBody);
                     }
-                    msgBody.setProId(upDTO.getProId()).setCompanyId(upDTO.getCompanyId()).setDeptId(upDTO.getDeptId()).setSourceId(upDTO.getSourceId())
-                            .setUserId(upDTO.getUserId()).setGetWay(upDTO.getGetWay()).setNotAllot(upDTO.getNotAllot()).setCustomerId(c.getCustomerId())
-                            .setName(c.getName()).setSex(c.getSex()).setAge(c.getAge()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-                            .setPhone(c.getPhone()).setEmail(c.getEmail()).setPositionApplied(c.getPositionApplied()).setWorkingPlace(c.getWorkingPlace())
-                            .setSchool(c.getSchool()).setMajor(c.getMajor()).setWorkExperience(c.getWorkExperience())
+                    msgBody.setProId(upDTO.getProId()).setProName(upDTO.getProName()).setCompanyId(upDTO.getCompanyId()).setCompanyName(upDTO.getCompanyName())
+                            .setDeptId(upDTO.getDeptId()).setDeptName(upDTO.getDeptName()).setSourceId(upDTO.getSourceId()).setSourceName(upDTO.getSourceName())
+                            .setUserId(upDTO.getUserId()).setGetWay(upDTO.getGetWay()).setNotAllot(upDTO.getNotAllot())
+                            .setName(c.getName()).setAge(c.getAge()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+                            .setPhone(c.getPhone()).setEmail(c.getEmail()).setWeChat(c.getWeChat()).setQq(c.getQq()).setLandLine(c.getLandLine()).setPositionApplied(c.getPositionApplied())
+                            .setWorkingPlace(c.getWorkingPlace()).setSchool(c.getSchool()).setMajor(c.getMajor()).setWorkExperience(c.getWorkExperience())
                             .setNote(c.getNote());
 
-                    //发送客户数据到商机分配消息队列
+//                    发送客户数据到商机分配消息队列
 //                    customerSender.send(JSON.toJSONString(new TransferCustomerQueueDTO()
 //                            .setMsgType(2)
 //                            .setMsgBody(JSON.toJSON(msgBody))));
@@ -480,7 +473,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                     .setApplyKey(x.getApplyKey()).setPositionApplied(x.getPositionApplied()).setMajor(x.getMajor()).setSourceName(x.getSourceName())
                     .setCompanyName(x.getCompanyName());
             this.setGender(x, exportDTO);
-            this.setGetWay(x, exportDTO);
+            this.setGetWay(x,exportDTO);
             //设置归属人
             exportDTO.setUserName(x.getUserName());
             //设置备注
@@ -517,7 +510,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     /**
      * 公海客户数据
-     *
      * @param pageQuery 查询参数对象
      * @return
      */
@@ -534,14 +526,13 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (null != deptId) {
             //部门下所有子部门
             List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-
             allDeptUnderDeptId.forEach(x -> {
                 ids.add(String.valueOf(x));
             });
         } else {
             //如果没有刷选部门过滤条件
             //获取当前用户的部门以及子部门
-            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
+            List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
             userAllDeptId.forEach(x -> {
                 ids.add(String.valueOf(x));
             });
@@ -554,19 +545,18 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     @Override
     public R receiveTransferCustomer(List<Long> customerId) {
-//        Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY));
-//        Future<R> future = receiveExecutor.submit(() -> {
-//            List<Long> success = new ArrayList<>();
-//            this.doReceive(customerId, opportunity, success, getUserId(), getUserName());
-//            return success.isEmpty() ? R.error("很遗憾您没有抢到商机") : R.ok("成功领取商机【" + success.size() + "】条");
-//        });
-//        try {
-//            return future.get();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return R.error(e.getCause().getMessage());
-//        }
-        return null;
+        Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY));
+        Future<R> future = receiveExecutor.submit(() -> {
+            List<Long> success = new ArrayList<>();
+            this.doReceive(customerId, opportunity, success, getUserId(), getUserName());
+            return success.isEmpty() ? R.error("很遗憾您没有抢到商机") : R.ok("成功领取商机【" + success.size() + "】条");
+        });
+        try {
+            return future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return R.error(e.getCause().getMessage());
+        }
     }
 
     private void doReceive(List<Long> customerId, Integer opportunity, List<Long> success, Long userId, String userName) {
@@ -585,11 +575,11 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                                 "解锁：【" + unlock + "】,锁KEY=>" + RedisKeys.Business.receiveLock(String.valueOf(c)));
                     } else {
                         //设置流程过期
-                        int i = transferProcessService.disableProcessActive(process);
+                        int i = transferProcessService.disableProcessActive(process.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
                         if (i > 0) {
                             //新增激活状态，归属私人客户流程
                             TransferProcessEntity processEntity = new TransferProcessEntity().setMemo("公海领取商机").setCustomerId(c)
-                                    .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(getUserName())
+                                    .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(userName)
                                     .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE);
                             int save = transferProcessService.save(processEntity);
                             if (save > 0) {
@@ -661,7 +651,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         //如果没有刷选部门过滤条件
         if (null == deptId) {
             //获取当前用户的部门以及子部门
-            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
+            List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
             List<String> ids = new ArrayList<>();
             userAllDeptId.forEach(x -> {
                 ids.add(String.valueOf(x));
@@ -690,7 +680,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                     return;
                 }
                 //设置流程过期
-                int i = transferProcessService.disableProcessActive(process);
+                int i = transferProcessService.disableProcessActive(process.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
                 if (i == 0) {
                     log.error(error + StatusCode.BIZ_PROCESS_UPDATE_INACTIVE.getMsg());
                     return;

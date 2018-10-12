@@ -22,6 +22,8 @@
     <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
     <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	<result column="name" jdbcType="VARCHAR" property="name" />
+	<result column="gen_way" jdbcType="VARCHAR" property="genWay" />
   </resultMap>
   
   <!-- 表基本列 -->

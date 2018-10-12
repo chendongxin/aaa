@@ -2,20 +2,24 @@ package com.hqjy.mustang.transfer.crm.consumer;
 
 
 import com.alibaba.fastjson.JSON;
+import com.hqjy.mustang.common.base.constant.RabbitQueueConstant;
 import com.hqjy.mustang.common.base.utils.JsonUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.base.utils.Tools;
-import com.hqjy.mustang.transfer.crm.feign.LogMessageQueueFeign;
+import com.hqjy.mustang.common.model.admin.LogMessageQueue;
 import com.hqjy.mustang.transfer.crm.model.dto.NcDealMsgDTO;
-import com.hqjy.mustang.transfer.crm.model.entity.LogMessageQueueEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerDealService;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.ChannelAwareMessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 
 /**
@@ -43,14 +47,17 @@ public class NcDealConsumer implements ChannelAwareMessageListener {
      */
     private final static Integer STATUS_EXCEPTION = 2;
 
+
+    private AmqpTemplate rabbitTemplate;
+
+    @Lazy
+    @Autowired
+    public void setRabbitTemplate(AmqpTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
     private TransferCustomerDealService dealService;
 
-    private LogMessageQueueFeign queueFeign;
-
-    @Autowired
-    public void setQueueFeign(LogMessageQueueFeign queueFeign) {
-        this.queueFeign = queueFeign;
-    }
 
     @Autowired
     public void setDealService(TransferCustomerDealService dealService) {
@@ -62,7 +69,7 @@ public class NcDealConsumer implements ChannelAwareMessageListener {
 
         String json = new String(message.getBody());
         log.info("NC成交消息: {}", json);
-        LogMessageQueueEntity mqLog = new LogMessageQueueEntity("Nc_Deal:" + System.currentTimeMillis() + "-" + String.valueOf(message.hashCode()), JsonUtil.toJson(json), STATUS_PENDING);
+        LogMessageQueue mqLog = new LogMessageQueue(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE, UUID.randomUUID().toString(),JsonUtil.toJson(json), STATUS_PENDING);
         try {
             NcDealMsgDTO ncDeal = JSON.parseObject(json, NcDealMsgDTO.class);
             mqLog.setMsg(JsonUtil.toJson(ncDeal));
@@ -87,9 +94,9 @@ public class NcDealConsumer implements ChannelAwareMessageListener {
             mqLog.setMemo(JsonUtil.toJson(Tools.exceptionInfo(e)));
             log.info("NC成交消息处理异常: {}---{}", json, e.getMessage());
         }
+        // 发送mq日志消息记录
+        rabbitTemplate.convertAndSend(RabbitQueueConstant.LOG_MESSAGE_QUEUE, JsonUtil.toJson(mqLog));
         //确认消息
         channel.basicAck(message.getMessageProperties().getDeliveryTag(), true);
-        //写入mq消费日志
-        queueFeign.save(mqLog);
     }
 }

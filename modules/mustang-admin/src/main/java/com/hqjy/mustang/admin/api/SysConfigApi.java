@@ -39,8 +39,8 @@ public class SysConfigApi {
      * 根据code获取系统配置信息
      */
     @ApiOperation(value = "根据code获取系统配置信息", notes = "根据code获取系统配置信息")
-    @GetMapping(value = "/get/config")
-    public String getConfig(String code) {
+    @GetMapping(value = "/get/{code}")
+    public String getConfig(@PathVariable("code") String code) {
         return sysConfigService.getConfig(code);
     }
 

@@ -34,9 +34,19 @@ public class TransferGenCostEntity implements Serializable {
     private Integer companyId;
 
     /**
+     * 推广公司名称
+     */
+    private String name;
+
+    /**
      * 赛道id
      */
     private Long proId;
+
+    /**
+     * 赛道名称
+     */
+    private String genWay;
 
     /**
      * 推广来源id

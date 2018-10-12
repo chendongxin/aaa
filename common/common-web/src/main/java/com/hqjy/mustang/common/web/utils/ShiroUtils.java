@@ -1,11 +1,14 @@
 package com.hqjy.mustang.common.web.utils;
 
+import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.web.model.UserDetails;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.subject.Subject;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Shiro工具类
@@ -38,6 +41,25 @@ public class ShiroUtils {
         return (UserDetails) SecurityUtils.getSubject().getPrincipal();
     }
 
+    public  static Boolean isGeneralSeat() {
+        return SecurityUtils.getSubject().hasRole(Constant.Role.SALE.getCode());
+    }
+
+    public static Boolean isGeneralNetSales() {
+        return SecurityUtils.getSubject().hasRole(Constant.Role.NET_SALES_ORDINARY.getCode());
+    }
+
+    public static Boolean isSuperAdmin() {
+        return SystemId.SUPER_ADMIN.equals(getUserId());
+    }
+
+    public static Boolean isInspection() {
+        return SecurityUtils.getSubject().hasRole(Constant.Role.INSPECTION.getCode());
+    }
+
+    public static Boolean isService() {
+        return SecurityUtils.getSubject().hasRole(Constant.Role.SERVICE.getCode());
+    }
     /**
      * 获得用户名
      */
@@ -50,6 +72,13 @@ public class ShiroUtils {
      */
     public static Long getUserId() {
         return Optional.ofNullable(getUser()).map(UserDetails::getUserId).orElse(0L);
+    }
+
+    /**
+     * 获得用户部门id
+     */
+    public static Set<Long> getDeptIdSet() {
+        return Optional.ofNullable(getUser()).map(UserDetails::getDeptSet).orElse(null);
     }
 
     /**
