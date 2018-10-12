@@ -85,7 +85,7 @@ public class TqApiServiceImpl implements TqApiService {
     @Override
     public String getCallToken(SysUserExtendInfo userExtendInfo) {
         if (userExtendInfo == null || userExtendInfo.getTqId() == null || StringUtils.isEmpty(userExtendInfo.getTqPw())) {
-            throw new RRException("尚未对您设置TQ工号，所以您暂时不能进行呼出");
+            throw new RRException("尚未对您设置TQ工号，所以您暂时不能进行呼出 ");
         }
         // 请求token
         String result = restTemplate.getForEntity(getTokenUrl + "?uin={1}&pw={2}", String.class, userExtendInfo.getTqId(), userExtendInfo.getTqPw()).getBody();
