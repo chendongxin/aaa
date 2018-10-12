@@ -23,6 +23,11 @@ public class SysUserExtendEntity implements Serializable {
     private Long userId;
 
     /**
+     *用户名，对应sys_user表中user_name
+     */
+    private String userName;
+
+    /**
 	 * NC用户ID nc_user_id
 	 **/
     private String ncUserId;
