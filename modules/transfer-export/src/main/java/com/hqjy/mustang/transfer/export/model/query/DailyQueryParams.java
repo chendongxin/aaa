@@ -14,11 +14,14 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value = "推广日常数据报表高级查询参数")
 public class DailyQueryParams {
 
-    @ApiModelProperty(value = "日期（必选）")
-    private String date;
+    @ApiModelProperty(value = "开始日期（必选）")
+    private String beginTime;
+
+    @ApiModelProperty(value = "结束日期（必选）")
+    private String endTime;
 
     @ApiModelProperty(value = "赛道")
-    private Long productId;
+    private Long proId;
 
     @ApiModelProperty(value = "推广公司")
     private Long companyId;
