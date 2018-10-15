@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
  * @date : 2018/09/17 12:04
  */
 @Data
+@Accessors(chain = true)
 public class TransferWaySourceEntity implements Serializable {
     /**
 	 * 编号 id

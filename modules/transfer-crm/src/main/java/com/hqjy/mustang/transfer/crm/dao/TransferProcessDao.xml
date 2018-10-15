@@ -239,14 +239,14 @@
         SELECT COUNT(*)
         FROM transfer_process
         WHERE user_id = #{userId}
-              AND create_time BETWEEN #{beginTime} AND #{endTime} AND active = 0
+              AND create_time BETWEEN #{beginTime} AND #{endTime} AND active = false
     </select>
 
 	<select id="getProcessByPublicCustomerId" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List"/>
 		from transfer_process
-		where customer_id = #{customerId} and user_id is null and active = 0
+		where customer_id = #{customerId} and user_id is null and active = false
 	</select>
 
 </mapper>

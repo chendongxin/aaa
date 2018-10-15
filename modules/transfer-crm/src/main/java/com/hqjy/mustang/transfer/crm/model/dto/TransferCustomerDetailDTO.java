@@ -25,13 +25,11 @@ public class TransferCustomerDetailDTO {
     /**
      * 客户姓名 name
      **/
-    @ExcelAttribute(name = "客户姓名")
     private String name;
 
     /**
      * 年龄 age
      **/
-    @ExcelAttribute(name = "年龄")
     private Byte age;
 
     /**
@@ -40,45 +38,14 @@ public class TransferCustomerDetailDTO {
     private Integer sex;
 
     /**
-     * 性别
-     **/
-    @ExcelAttribute(name = "性别")
-    private String gender;
-
-    /**
      * 地址 address
      **/
     private String address;
 
     /**
-     * 邮箱 email
-     **/
-    @ExcelAttribute(name = "邮箱")
-    private String email;
-
-    /**
      * 手机
      */
-    @ExcelAttribute(name = "手机",prompt = "手机号码必填")
     private String phone;
-
-    /**
-     * 座机
-     **/
-    @ExcelAttribute(name = "座机")
-    private String landLine;
-
-    /**
-     * qq
-     */
-    @ExcelAttribute(name = "qq")
-    private String qq;
-
-    /**
-     * 微信
-     */
-    @ExcelAttribute(name = "微信")
-    private String weChat;
 
     /**
      * 部门ID
@@ -93,7 +60,6 @@ public class TransferCustomerDetailDTO {
     /**
      * 毕业学校 school
      **/
-    @ExcelAttribute(name = "毕业学校")
     private String school;
 
     /**
@@ -104,7 +70,6 @@ public class TransferCustomerDetailDTO {
     /**
      * 专业 major
      **/
-    @ExcelAttribute(name = "专业")
     private String major;
 
     /**
@@ -125,25 +90,31 @@ public class TransferCustomerDetailDTO {
     /**
      * 期望职位 position_applied
      **/
-    @ExcelAttribute(name = "期望职位")
     private String positionApplied;
 
     /**
      * 期望工作地点 working_place
      **/
-    @ExcelAttribute(name = "期望工作地点")
     private String workingPlace;
 
     /**
      * 工作经验 work_experience
      **/
-    @ExcelAttribute(name = "工作经验")
     private Byte workExperience;
+
+    /**
+     * 工作经验 experience
+     **/
+    private String experience;
+
+    /**
+     * 学历 education
+     **/
+    private String education;
 
     /**
      * 备注 note
      **/
-    @ExcelAttribute(name = "备注")
     private String note;
 
     /**
@@ -159,7 +130,6 @@ public class TransferCustomerDetailDTO {
     /**
      * 创建时间 create_time
      **/
-    @ExcelAttribute(name = "日期")
     private Date createTime;
 
     /**
@@ -181,7 +151,6 @@ public class TransferCustomerDetailDTO {
      * 简历详情 resume_detail
      **/
     private String resumeDetail;
-
 
     /**
      * 客户状态,BIZ_STATUS(0-潜在，1-(失败)有效，2-(失败)无效，3-预约，4-成交) status

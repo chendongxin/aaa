@@ -5,6 +5,8 @@
   <!-- 实体映射 -->
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerReservationEntity">
 	  <id column="id" jdbcType="BIGINT" property="id" />
+	  <result column="name" jdbcType="VARCHAR" property="name" />
+	  <result column="phone" jdbcType="VARCHAR" property="phone" />
 	  <result column="customer_id" jdbcType="BIGINT" property="customerId" />
 	  <result column="appointment_time" jdbcType="TIMESTAMP" property="appointmentTime" />
 	  <result column="status" jdbcType="TINYINT" property="status" />

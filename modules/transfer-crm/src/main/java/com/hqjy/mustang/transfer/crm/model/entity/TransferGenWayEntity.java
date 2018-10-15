@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * transfer_gen_way 推广方式实体类
@@ -13,6 +14,7 @@ import lombok.Data;
  * @date : 2018/09/07 10:16
  */
 @Data
+@Accessors(chain = true)
 public class TransferGenWayEntity implements Serializable {
     /**
 	 * 编号 way_id

@@ -9,7 +9,6 @@ import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferKeywordDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferKeywordEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferKeywordService;
-import com.sun.org.apache.regexp.internal.RE;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,5 +99,20 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
         }
         return null;
     }
+
+//    /**
+//     * 获取关键词类别(第三级)
+//     */
+//    @Override
+//    List<TransferKeywordEntity> getAllKeyList() {
+//        List<Integer> parentIdList = new ArrayList<>();
+//        List<Integer> keyWordlist = new ArrayList<>();
+//        parentIdList.add(0);
+//        for (int count = 0; count < 2; count++) {
+//             for(Integer parentId : parentIdList) {
+//                 keyWordlist.add(baseDao.findIdByParentId(parentId))
+//             }
+//        }
+//    }
 
 }

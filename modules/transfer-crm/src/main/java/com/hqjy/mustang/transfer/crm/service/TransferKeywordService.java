@@ -22,4 +22,9 @@ public interface TransferKeywordService extends BaseService<TransferKeywordEntit
      * 根据职位信息，遍历出关键字
      */
     String getKeyWork(String info);
+
+//    /**
+//     * 获取关键词类别(第三级)
+//     */
+//    List<TransferKeywordEntity> getAllKeyList();
 }

@@ -184,6 +184,14 @@
 			<if test="status != null and !&quot;&quot;.equals(status)">and tci.status = #{status}</if>
 		</where>
 	</select>
+
+	<select id="getCustomerByCustomerId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from transfer_customer_invalid
+		where
+		customer_id = #{customerId}
+	</select>
   
 
 </mapper>

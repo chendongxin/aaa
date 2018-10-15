@@ -46,7 +46,7 @@ public class TransferKeywordController {
     @ApiOperation(value = "分页查询-关键词配置", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "返回参数：【当前页:currPage】，【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
-            "【id:id】,【关联编号:parentId】,【名称:name】,【状态:status】,【属性级别(1：岗位级别 2：关键词):level】\n" +
+            "【id:id】,【关联编号:parentId】,【名称:name】,【状态( 0-正常 1-禁用):status】,【属性级别(1：岗位级别 2：关键词):level】\n" +
             "【创建人ID:createUserId】,【创建人名称:createUserName】,【创建时间:createTime】\n" +
             "【更新人ID:updateUserId】,【更新人名称:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
@@ -174,4 +174,13 @@ public class TransferKeywordController {
         }
         return R.error(StatusCode.DATABASE_SELECT_FAILURE);
     }
+
+//    /**
+//     * 获取关键词类别
+//     */
+//    @ApiOperation(value = "获取关键词类别", notes = "获取关键词类别")
+//    @GetMapping("/get/all/Key")
+//    public R getAllCompany() {
+//        return R.ok(transferKeywordService.getAllKeyList());
+//    }
 }
