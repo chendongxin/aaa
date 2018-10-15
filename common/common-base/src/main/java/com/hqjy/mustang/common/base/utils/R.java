@@ -70,7 +70,6 @@ public class R extends HashMap<String, Object> {
         return ok().put(MSG, status.getMsg()).put(CODE, status.getCode());
     }
 
-
     public static R error(int code, String msg) {
         R r = new R(INITIAL);
         r.put(CODE, code);
@@ -93,7 +92,6 @@ public class R extends HashMap<String, Object> {
     public static R error(String msg, Object data) {
         return error(msg).put(RESUTLT, data);
     }
-
 
     public static R error(StatusCode status) {
         return ok().put(MSG, status.getMsg()).put(CODE, status.getCode());
