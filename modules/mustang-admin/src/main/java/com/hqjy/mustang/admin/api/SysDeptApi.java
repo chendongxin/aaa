@@ -134,5 +134,17 @@ public class SysDeptApi {
     }
 
 
+    /**
+     * 根据部门Id取该部门旗下部门信息（包括所选部门）
+     *
+     * @param deptId 部门Id
+     * @return 返回部门集合信息
+     * @author xyq 2018年10月12日09:55:50
+     */
+    @GetMapping(value = "/getDeptEntityByDeptId")
+    public List<SysDeptEntity> getDeptEntityByDeptId(@RequestParam("deptId") Long deptId) {
+        return sysDeptService.getDeptEntityByDeptId(deptId);
+    }
+
 }
 

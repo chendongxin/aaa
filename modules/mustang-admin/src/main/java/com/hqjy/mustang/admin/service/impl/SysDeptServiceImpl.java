@@ -104,6 +104,17 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         return RecursionUtil.listTree(showRoot, SysDeptEntity.class, "getDeptId", getAllDeptList(), parentIdList);
     }
 
+    @Override
+    public Map<String, List<SysDeptEntity>> getSaleDeptTree(String deptName) {
+        Long deptId = baseDao.getDeptByName(deptName);
+        if (deptId == null) {
+            throw new RRException("不存在名字为：[" + deptName + "]的部门");
+        }
+        List<Long> parentIdList = new ArrayList<>();
+        parentIdList.add(deptId);
+        return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", getAllDeptList(), parentIdList);
+    }
+
     /**
      * 部门选择数据,排除状态为不为正常的组织
      */
@@ -279,6 +290,18 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             return null;
         }
         List<Long> allDeptUnderDeptId = this.getAllDeptUnderDeptId(deptId);
+        if (allDeptUnderDeptId.size() == 0) {
+            throw new RRException("部门编号：" + deptId + "不存在");
+        }
+        return this.getDeptEntityByDeptIds(deptIdListToString(allDeptUnderDeptId));
+    }
+
+    @Override
+    public List<SysDeptEntity> getDeptEntityByDeptId(Long deptId) {
+        List<Long> allDeptUnderDeptId = this.getAllDeptUnderDeptId(deptId);
+        if (allDeptUnderDeptId.size() == 0) {
+            throw new RRException("部门编号：" + deptId + "不存在");
+        }
         return this.getDeptEntityByDeptIds(deptIdListToString(allDeptUnderDeptId));
     }
 
