@@ -76,6 +76,6 @@ public class RRExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public R handleException(Exception e) {
         log.error(e.getMessage(), e);
-        return R.error("服务器异常，请将此信息发送管理员").add("exception", Tools.exceptionInfo(e));
+        return R.error("服务器异常，请将此信息发送管理员", Tools.exceptionInfo(e));
     }
 }
