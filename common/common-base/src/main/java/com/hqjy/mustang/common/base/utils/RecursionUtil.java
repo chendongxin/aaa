@@ -99,6 +99,15 @@ public class RecursionUtil {
     }
 
     /**
+     * 树数据
+     */
+    public static <T, K> HashMap<String, List<T>> getTree(boolean isRoot, Class<T> clazz, String getIdName, List<T> list, List<K> parentIdList) {
+        HashMap<String, List<T>> map = new HashMap<>(2);
+        map.put("tree", tree(isRoot, clazz, getIdName, DEF_PID_NAME, new CopyOnWriteArrayList<>(list), parentIdList));
+        return map;
+    }
+
+    /**
      * 递归获取节点下所有子节点
      *
      * @param isRoot       是否显示根节点
