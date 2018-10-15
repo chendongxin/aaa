@@ -31,7 +31,7 @@
 
     <springProfile name="pro">
         <!-- 日志文件记录 -->
-        <root level="INFO">
+        <root level="DEBUG">
             <appender-ref ref="fileInfoLog"/>
         </root>
     </springProfile>
