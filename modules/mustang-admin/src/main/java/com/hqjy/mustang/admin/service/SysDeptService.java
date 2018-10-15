@@ -36,6 +36,15 @@ public interface SysDeptService extends BaseService<SysDeptEntity, Long> {
     Map<String, List<SysDeptEntity>> getUserDeptTree(Boolean isRoot, Boolean showRoot);
 
     /**
+     * 电销中心的部门数
+     *
+     * @param deptName 部门名称
+     * @return 返回部门数
+     * @author xyq 2018年10月15日18:03:31
+     */
+    Map<String, List<SysDeptEntity>> getSaleDeptTree(String deptName);
+
+    /**
      * 部门选择数据,排除状态为不为正常的管理
      */
     HashMap<String, List<SysDeptEntity>> getSelectTree(boolean showRoot);
@@ -52,8 +61,35 @@ public interface SysDeptService extends BaseService<SysDeptEntity, Long> {
 
 
     /**
-     * ADD xyq 2018年7月13日11:17:22
+     * 根据部门id字符串获取部门信息
+     *
+     * @param deptIdList 部门ID集合字符串（'1','2','3'）
+     * @return 返回部门集合信息
+     * @author xyq 2018年10月12日09:44:08
+     */
+    List<SysDeptEntity> getDeptEntityByDeptIds(String deptIdList);
+
+    /**
+     * 根据部门名称取该部门旗下部门信息（包括所选部门）
+     *
+     * @param deptName 部门名称
+     * @return 返回部门集合信息
+     * @author xyq 2018年10月12日09:55:50
+     */
+    List<SysDeptEntity> getDeptEntityByDeptName(String deptName);
+
+    /**
+     * 根据部门Id取该部门旗下部门信息（包括所选部门）
+     *
+     * @param deptId 部门Id
+     * @return 返回部门集合信息
+     * @author xyq 2018年10月12日09:55:50
+     */
+    List<SysDeptEntity> getDeptEntityByDeptId(Long deptId);
+
+    /**
      * 获取所选部门的旗下部门（包括所选部门）
+     * ADD xyq 2018年7月13日11:17:22
      *
      * @param deptId 部门ID
      * @return 返回部门集合
@@ -79,4 +115,13 @@ public interface SysDeptService extends BaseService<SysDeptEntity, Long> {
      * 获取用户所在部门及子部门
      */
     List<SysDeptEntity> getUserDeptList(Long userId);
+
+    /**
+     * 根据部门名称获取部门Id
+     *
+     * @param deptName 部门名称
+     * @return 返回部门ID
+     * @author xyq 2018年10月12日09:12:52
+     */
+    Long getDeptByName(String deptName);
 }

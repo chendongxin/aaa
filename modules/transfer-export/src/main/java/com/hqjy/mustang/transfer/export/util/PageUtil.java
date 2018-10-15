@@ -40,7 +40,8 @@ public class PageUtil<T> {
 
 
     public PageUtil(PageParams pageParams, List<T> list) {
-        if (list != null) {
+        if (!list.isEmpty()) {
+            this.size=list.size();
             this.currPage = pageParams.getPageNum();
             this.pageSize = pageParams.getPageSize();
             this.totalCount = list.size();

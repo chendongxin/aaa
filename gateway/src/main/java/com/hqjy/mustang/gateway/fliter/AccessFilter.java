@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * 请求过滤器
@@ -45,7 +46,7 @@ public class AccessFilter extends ZuulFilter {
         if (request.getRequestURL().toString().contains(Constant.API_PATH)) {
             log.warn("不允许访问微服务内部接口");
             ctx.setSendZuulResponse(false);
-            ctx.setResponseStatusCode(400);
+            ctx.setResponseStatusCode(HttpServletResponse.SC_BAD_REQUEST);
             ctx.setResponseBody(JsonUtil.toJson(R.error(StatusCode.PRIVATE_UNAUTHORIZED)));
             ctx.getResponse().setContentType("application/json;charset=UTF-8");
             return null;

@@ -44,8 +44,6 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     private SysDeleteService sysDeleteService;
     @Autowired
     private SysUserDeptService sysUserDeptService;
-    /* @Autowired
-     private CustAreaDeptService custAreaDeptService;*/
     @Autowired
     private SysCacheService sysCacheService;
     @Autowired
@@ -104,6 +102,17 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             parentIdList = sysUserDeptService.getUserDeptId(getUserId());
         }
         return RecursionUtil.listTree(showRoot, SysDeptEntity.class, "getDeptId", getAllDeptList(), parentIdList);
+    }
+
+    @Override
+    public Map<String, List<SysDeptEntity>> getSaleDeptTree(String deptName) {
+        Long deptId = baseDao.getDeptByName(deptName);
+        if (deptId == null) {
+            throw new RRException("不存在名字为：[" + deptName + "]的部门");
+        }
+        List<Long> parentIdList = new ArrayList<>();
+        parentIdList.add(deptId);
+        return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", getAllDeptList(), parentIdList);
     }
 
     /**
@@ -255,6 +264,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         return baseDao.getListBydeptIdList(deptIdList);
     }
 
+    @Override
+    public List<SysDeptEntity> getDeptEntityByDeptIds(String deptIdList) {
+        return baseDao.getDeptEntityByDeptIds(deptIdList);
+    }
 
     @Override
     public List<Long> getAllDeptUnderDeptId(Long deptId) {
@@ -268,6 +281,28 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
             redisUtils.set(RedisKeys.Dept.allDept(deptId), allDeptIdList);
         }
         return allDeptIdList;
+    }
+
+    @Override
+    public List<SysDeptEntity> getDeptEntityByDeptName(String deptName) {
+        Long deptId = this.getDeptByName(deptName);
+        if (deptId == null) {
+            return null;
+        }
+        List<Long> allDeptUnderDeptId = this.getAllDeptUnderDeptId(deptId);
+        if (allDeptUnderDeptId.size() == 0) {
+            throw new RRException("部门编号：" + deptId + "不存在");
+        }
+        return this.getDeptEntityByDeptIds(deptIdListToString(allDeptUnderDeptId));
+    }
+
+    @Override
+    public List<SysDeptEntity> getDeptEntityByDeptId(Long deptId) {
+        List<Long> allDeptUnderDeptId = this.getAllDeptUnderDeptId(deptId);
+        if (allDeptUnderDeptId.size() == 0) {
+            throw new RRException("部门编号：" + deptId + "不存在");
+        }
+        return this.getDeptEntityByDeptIds(deptIdListToString(allDeptUnderDeptId));
     }
 
     @Override
@@ -290,5 +325,10 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
     @Override
     public List<SysDeptEntity> getUserDeptList(Long userId) {
         return baseDao.findDeptListByUserId(userId);
+    }
+
+    @Override
+    public Long getDeptByName(String deptName) {
+        return baseDao.getDeptByName(deptName);
     }
 }

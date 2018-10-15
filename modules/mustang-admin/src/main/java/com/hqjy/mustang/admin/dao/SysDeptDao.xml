@@ -93,6 +93,10 @@
         </foreach>
     </select>
 
+    <select id="getDeptEntityByDeptIds" resultMap="BaseResultMap">
+        select dept_id,dept_name  from sys_dept WHERE dept_id in ${deptIdList}
+    </select>
+
     <!-- 插入一条记录 -->
     <insert id="save" keyProperty="deptId" useGeneratedKeys="true">
         insert into sys_dept
@@ -242,5 +246,7 @@
           sud.user_id = #{userId}
     </select>
 
-
+    <select id="getDeptByName" resultType="java.lang.Long">
+        select dept_id from sys_dept  where  dept_name = #{deptName}
+    </select>
 </mapper>

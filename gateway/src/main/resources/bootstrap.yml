@@ -14,7 +14,7 @@ spring:
     active: dev
   cloud:
     config:
-      fail-fast: true
+      fail-fast: false
       discovery:
         service-id: transfer-config-server
         enabled: true
@@ -47,3 +47,14 @@ zuul:
     transfer-crm-routs: #该名字可随意取
       serviceId: transfer-crm
       path: /transfer/crm/**
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+ribbon:
+  ConnectTimeout: 10000
+  ReadTimeout: 60000
