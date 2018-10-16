@@ -29,11 +29,6 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     private static List<TransferKeywordEntity> dictionaryList;
 
     /**
-     * 操作字典缓存
-     */
-    volatile private boolean optionLockList;
-
-    /**
      * 获取所有关键词
      */
     @Override
@@ -119,11 +114,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
      * 清除缓存
      */
     private synchronized void cleanList() {
-        optionLockList = false;
-        if (!optionLockList) {
-            dictionaryList.clear();
-        }
-        optionLockList = true;
+        dictionaryList.clear();
     }
 
 }
