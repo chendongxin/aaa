@@ -160,8 +160,8 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
 
                     // 来源信息 读取 transfer_source 表中配置
                     TransferSourceInfo sourceInfo = trasferSourceApiService.findByEmailDomain(StringUtils.cutPrefix(StringUtils.cutFrom(sendMali, "@"), "@"));
-                    resumeEntity.setSourceId(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getSourceId).orElse(null));
-                    resumeEntity.setSourceName(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getName).orElse(null));
+                    resumeEntity.setSourceId(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getSourceId).orElse(0L));
+                    resumeEntity.setSourceName(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getName).orElse("未知来源"));
 
                     // 产品（赛道）
                     resumeEntity.setProId(emailConfig.getProId());

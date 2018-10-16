@@ -1,5 +1,6 @@
 package com.hqjy.mustang.common.model.crm;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -46,6 +47,7 @@ public class TransferSourceInfo implements Serializable {
     /**
      * 创建时间 create_time
      **/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
@@ -61,6 +63,7 @@ public class TransferSourceInfo implements Serializable {
     /**
      * 更新时间 update_time
      **/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
     private static final long serialVersionUID = 1L;

@@ -16,7 +16,7 @@ public class TransferKeywordApiServiceFallbackImpl implements TransferKeywordApi
      */
     @Override
     public String getKeyword(String info) {
-        log.error("调用{}异常:{},info：{}", "根据职位信息，遍历出关键字", info);
+        log.error("调用 {} 异常,info：{}", "根据职位信息，遍历出关键字", info);
         return null;
     }
 }
