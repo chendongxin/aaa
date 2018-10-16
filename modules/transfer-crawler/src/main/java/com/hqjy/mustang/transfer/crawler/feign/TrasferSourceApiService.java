@@ -15,7 +15,7 @@ import java.util.List;
  * @author : HejinYo   hejinyo@gmail.com
  * @date :  2018/8/29 21:55
  */
-@FeignClient(name = "trasfer-crm", fallback = TrasferSourceServiceFallbackImpl.class)
+@FeignClient(name = "transfer-crm", fallback = TrasferSourceServiceFallbackImpl.class)
 public interface TrasferSourceApiService {
 
     /**

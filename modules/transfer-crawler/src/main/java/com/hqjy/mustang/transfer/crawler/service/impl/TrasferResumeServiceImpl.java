@@ -104,14 +104,18 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
             // 邮箱连接失败
             return;
         }
-        Folder folder = null;
+        Folder folder;
+        try {
+            folder = store.getFolder("INBOX");
+        } catch (Exception e) {
+            log.error("邮箱连接成功,打开收件箱失败:{}", emailConfig);
+            return;
+        }
         // 获得收件箱的邮件列表
         Message[] messages;
         try {
-            folder = store.getFolder("INBOX");
             folder.open(Folder.READ_WRITE);
             messages = folder.getMessages();
-
             // 倒序遍历
             for (int i = messages.length - 1; i >= 0; i--) {
                 // 解析邮件
