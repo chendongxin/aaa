@@ -26,6 +26,16 @@ public class TransferCustomerDealEntity implements Serializable {
     private Long customerId;
 
     /**
+     * 客户名称
+     */
+    private String name;
+
+    /**
+     * 客户电话
+     */
+    private String phone;
+
+    /**
      * 赛道id pro_id
      **/
     private Long proId;

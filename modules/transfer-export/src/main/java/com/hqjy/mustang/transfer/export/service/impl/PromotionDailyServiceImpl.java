@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author xyq
@@ -142,13 +143,21 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
         if (StringUtils.isEmpty(query.getEndTime())) {
             throw new RRException("请选择结束时间");
         }
+        if (query.getDeptId() == null) {
+            throw new RRException("请选择部门");
+        }
         List<DailyReportData> list = new ArrayList<>();
-        List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptName("电销中心");
-        //TODO 列表数据初始化问题
-        deptInfo.forEach(y -> {
+        List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
+
+        List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
+        List<String> ids = new ArrayList<>();
+
+        deptList.forEach(y -> {
             LOG.info("初始化报表列表");
             list.add(new DailyReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            ids.add(String.valueOf(y.getDeptId()));
         });
+        query.setDeptIds(StringUtils.listToString(ids));
         return list;
     }
 

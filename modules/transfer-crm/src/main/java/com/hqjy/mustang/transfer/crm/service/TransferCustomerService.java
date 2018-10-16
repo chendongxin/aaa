@@ -6,9 +6,7 @@ import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDetailDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerTransferDTO;
-import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerUpDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -36,23 +34,6 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      * @return 返回转移结果
      */
     R transferCustomer(TransferCustomerTransferDTO dto);
-
-    /**
-     * 导入客户
-     *
-     * @param file 导入的文件
-     * @param dto  请求输入参数
-     * @return 返回导入结果
-     */
-    R importCustomer(MultipartFile file, TransferCustomerUpDTO dto);
-
-    /**
-     * 导出客户
-     *
-     * @param query 导出帅选条件
-     * @return 返回导出结果
-     */
-    R exportCustomer(PageQuery query);
 
     /**
      * 公海客户数据

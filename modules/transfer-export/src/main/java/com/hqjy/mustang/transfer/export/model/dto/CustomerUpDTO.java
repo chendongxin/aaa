@@ -1,9 +1,9 @@
-package com.hqjy.mustang.transfer.crm.model.dto;
+package com.hqjy.mustang.transfer.export.model.dto;
 
 import lombok.Data;
 
 @Data
-public class TransferCustomerUpDTO {
+public class CustomerUpDTO {
 
     /**
      * 赛道ID

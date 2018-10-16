@@ -96,7 +96,7 @@ public class TransferCustomerInvalidController {
     @PostMapping("/return/private")
 //    @RequiresPermissions("biz:invalid:inspect")
     @SysLog("退回私海操作")
-    public R quantityInspect(@RequestBody Long customerId) {
+    public R quantityInspect(@RequestParam Long customerId) {
         return transferCustomerInvalidService.returnToPrivate(customerId);
     }
 

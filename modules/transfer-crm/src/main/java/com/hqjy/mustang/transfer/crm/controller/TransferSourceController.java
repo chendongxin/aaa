@@ -48,7 +48,7 @@ public class TransferSourceController {
     @ApiOperation(value = "分页查询-来源管理", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "返回参数：【当前页:currPage】，【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
-            "【ID:sourceId】,【父编号:parentId】,【来源名称:name】,【电子邮件域名:email_domain】【状态:status】,【创建人ID:createUserId】,【创建人姓名:createUserName】【创建时间:createTime】\n" +
+            "【ID:sourceId】,【父编号:parentId】,【来源名称:name】,【电子邮件域名:email_domain】【状态( 0-正常 1-禁用):status】,【创建人ID:createUserId】,【创建人姓名:createUserName】【创建时间:createTime】\n" +
             "【更新人ID:updateUserId】,【更新人姓名:updateUserName】,【更新时间:updateTime】\n" +
             "示例：\n" +
             "{\n" +

@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.service;
 
 import com.hqjy.mustang.common.base.base.BaseService;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferGenWaySourceDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
 
 import java.util.List;
@@ -22,4 +23,9 @@ public interface TransferGenWayService extends BaseService<TransferGenWayEntity,
      * 获取所有推广方式
      */
     List<TransferGenWayEntity> getAllGenWayList();
+
+    /**
+     * 修改推广方式
+     */
+    int update(TransferGenWaySourceDTO genWaySourceDTO);
 }

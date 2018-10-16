@@ -26,6 +26,11 @@ public class TransferCustomerDetailEntity implements Serializable {
     private Long customerId;
 
     /**
+     * 客户姓名 name
+     **/
+    private String name;
+
+    /**
 	 * 年龄 age
 	 **/
     private Byte age;
@@ -134,6 +139,11 @@ public class TransferCustomerDetailEntity implements Serializable {
 	 * 更新时间 update_time
 	 **/
     private Date updateTime;
+
+    /**
+     * 推广方式：见数据字典GET_WAY枚举(1-主动获取，2-被动获取) get_way
+     **/
+    private Byte getWay;
 
     /**
 	 * 简历详情 resume_detail

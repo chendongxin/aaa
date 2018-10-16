@@ -14,6 +14,8 @@
         <result column="create_user_name" jdbcType="VARCHAR" property="createUserName"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="b_create_time" jdbcType="TIMESTAMP" property="bCreateTime"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="phone" jdbcType="VARCHAR" property="phone"/>
     </resultMap>
 
     <!-- 表基本列 -->

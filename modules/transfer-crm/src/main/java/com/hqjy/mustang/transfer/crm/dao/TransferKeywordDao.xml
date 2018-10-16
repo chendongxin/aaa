@@ -200,6 +200,15 @@
         order by seq asc
     </select>
 
+    <select id="findIdByParentId"  resultType="java.lang.Integer">
+        select
+          tk.id
+        from transfer_keyword tk
+        WHERE
+        parent_id = #{parentId}
+        order by seq asc
+    </select>
+
 
     <!-- 获取关键字字典列表 -->
     <select id="findDictionaryList" resultMap="BaseResultMap">

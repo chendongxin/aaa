@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.export.model.query;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -20,8 +21,11 @@ public class DailyQueryParams {
     @ApiModelProperty(value = "结束日期（必选）")
     private String endTime;
 
-    @ApiModelProperty(value = "赛道")
-    private Long proId;
+    @ApiModelProperty(value = "部门Id")
+    private Long deptId;
+
+    @JSONField(serialize = false)
+    private String deptIds;
 
     @ApiModelProperty(value = "推广公司")
     private Long companyId;

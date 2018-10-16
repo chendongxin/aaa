@@ -18,5 +18,5 @@ public interface TransferCustomerDetailService extends BaseService<TransferCusto
      * @param customerDetail
      * @return 修改结果
      */
-    int updateCustomerDetail(TransferCustomerDetailDTO customerDetail);
+    int updateCustomerDetail(TransferCustomerDetailEntity customerDetail);
 }
