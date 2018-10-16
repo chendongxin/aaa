@@ -54,8 +54,17 @@ public class SysDeptController extends AbstractController {
     @ApiOperation(value = "用户部门树", notes = "用户部门树")
     @ApiImplicitParam(name = "isRoot", paramType = "query", value = "true:返回系统所有部门树，false:返回当前用户部门树", dataType = "Boolean")
     @GetMapping("/deptTree")
-    public R deptTree(@RequestParam(value = "isRoot",required = false) Boolean isRoot) {
-        return R.ok(sysDeptService.getUserDeptTree(isRoot,Boolean.TRUE));
+    public R deptTree(@RequestParam(value = "isRoot", required = false) Boolean isRoot) {
+        return R.ok(sysDeptService.getUserDeptTree(isRoot, Boolean.TRUE));
+    }
+
+    /**
+     * add xyq 2018年7月6日15:56:30
+     */
+    @ApiOperation(value = "招转电销中心部门树", notes = "招转电销中心部门树")
+    @GetMapping("/saleDeptTree")
+    public R deptTree() {
+        return R.ok(sysDeptService.getSaleDeptTree("电销中心"));
     }
 
 

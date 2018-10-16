@@ -3,6 +3,7 @@ package com.hqjy.mustang.admin.controller;
 import com.hqjy.mustang.admin.model.entity.SysUserExtendEntity;
 import com.hqjy.mustang.admin.service.SysUserExtendService;
 import com.hqjy.mustang.common.base.annotation.SysLog;
+import com.hqjy.mustang.common.base.base.AbstractController;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
@@ -22,7 +23,7 @@ import java.util.HashMap;
 @Api(tags = "人员映射", description = "SysUserExtendController")
 @RestController
 @RequestMapping("/userExtend")
-public class SysUserExtendController {
+public class SysUserExtendController extends AbstractController {
     @Autowired
     private SysUserExtendService sysUserExtendService;
 
@@ -33,7 +34,7 @@ public class SysUserExtendController {
      */
     @ApiOperation(value = "人员映射分页查询", notes = "人员映射分页查询")
     @RequestMapping(value = "/listPage", method = {RequestMethod.GET, RequestMethod.POST})
-    @RequiresPermissions("sys:userExtend:listPage")
+    @RequiresPermissions("sys:userExtend:list")
     public R list(@RequestParam HashMap<String, Object> pageParam, @RequestBody(required = false) HashMap<String, Object> queryParam){
         return R.ok(new PageInfo<>(sysUserExtendService.findPage(PageQuery.build(pageParam, queryParam))));
     }
