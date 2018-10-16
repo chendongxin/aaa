@@ -225,7 +225,7 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         // 更新分配时间
         customerEntity.setAllotTime(process.getCreateTime());
         // 职位关键字获取
-        customerEntity.setApplyKey(transferKeywordApiService.getKeyword(customer.getPositionApplied()));
+        customerEntity.setApplyKey(Optional.ofNullable(customer.getPositionApplied()).map(s -> transferKeywordApiService.getKeyword(s)).orElse(null));
         transferAllotCustomerDao.updateProcessInfo(customerEntity);
     }
 }

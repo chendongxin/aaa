@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class TrasferSourceServiceFallbackImpl implements TrasferSourceApiService {
+public class TrasferSourceApiServiceFallbackImpl implements TrasferSourceApiService {
 
     /**
      * 根据邮箱域名查询来源配置
@@ -19,9 +19,6 @@ public class TrasferSourceServiceFallbackImpl implements TrasferSourceApiService
     @Override
     public TransferSourceInfo findByEmailDomain(String email) {
         log.error("调用 邮箱域名查询来源 失败 ，未知来源 {}", email);
-        TransferSourceInfo transferSourceInfo = new TransferSourceInfo();
-        transferSourceInfo.setSourceId(0L);
-        transferSourceInfo.setName("未知来源");
-        return transferSourceInfo;
+        return null;
     }
 }

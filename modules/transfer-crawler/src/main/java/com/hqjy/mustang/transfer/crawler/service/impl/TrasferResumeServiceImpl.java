@@ -104,14 +104,18 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
             // 邮箱连接失败
             return;
         }
-        Folder folder = null;
+        Folder folder;
+        try {
+            folder = store.getFolder("INBOX");
+        } catch (Exception e) {
+            log.error("邮箱连接成功,打开收件箱失败:{}", emailConfig);
+            return;
+        }
         // 获得收件箱的邮件列表
         Message[] messages;
         try {
-            folder = store.getFolder("INBOX");
             folder.open(Folder.READ_WRITE);
             messages = folder.getMessages();
-
             // 倒序遍历
             for (int i = messages.length - 1; i >= 0; i--) {
                 // 解析邮件
@@ -156,8 +160,8 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
 
                     // 来源信息 读取 transfer_source 表中配置
                     TransferSourceInfo sourceInfo = trasferSourceApiService.findByEmailDomain(StringUtils.cutPrefix(StringUtils.cutFrom(sendMali, "@"), "@"));
-                    resumeEntity.setSourceId(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getSourceId).orElse(null));
-                    resumeEntity.setSourceName(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getName).orElse(null));
+                    resumeEntity.setSourceId(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getSourceId).orElse(0L));
+                    resumeEntity.setSourceName(Optional.ofNullable(sourceInfo).map(TransferSourceInfo::getName).orElse("未知来源"));
 
                     // 产品（赛道）
                     resumeEntity.setProId(emailConfig.getProId());
