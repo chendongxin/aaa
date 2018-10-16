@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.export.model.query;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -15,11 +16,18 @@ import lombok.EqualsAndHashCode;
 @ApiModel(value = "客服推广报表高级查询参数")
 public class CustomerQueryParams {
 
-    @ApiModelProperty(value = "日期（必选）")
-    private String date;
 
-    @ApiModelProperty(value = "赛道")
-    private Long productId;
+    @ApiModelProperty(value = "开始日期（必选）")
+    private String beginTime;
+
+    @ApiModelProperty(value = "结束日期（必选）")
+    private String endTime;
+
+    @ApiModelProperty(value = "部门Id")
+    private Long deptId;
+
+    @JSONField(serialize = false)
+    private String deptIds;
 
     @ApiModelProperty(value = "推广公司")
     private Long companyId;
@@ -32,4 +40,8 @@ public class CustomerQueryParams {
 
     @ApiModelProperty(value = "客服人员")
     private int userId;
+
+
+
+
 }

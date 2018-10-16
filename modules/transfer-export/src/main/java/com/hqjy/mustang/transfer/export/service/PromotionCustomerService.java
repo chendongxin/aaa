@@ -1,8 +1,9 @@
 package com.hqjy.mustang.transfer.export.service;
 
-import com.hqjy.mustang.common.base.utils.R;
+import com.hqjy.mustang.transfer.export.model.dto.CustomerReportData;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.model.query.CustomerQueryParams;
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 
 /**
  * @author xyq
@@ -12,19 +13,20 @@ import com.hqjy.mustang.transfer.export.model.query.CustomerQueryParams;
 public interface PromotionCustomerService {
 
     /**
-     * 获取招转日常报表数据
+     * 获取推广报表数据
      *
      * @param params 分页请求参数
      * @param query  高级请求参数
      * @return 返回查询结果
      */
-    R promotionCustomerList(PageParams params, CustomerQueryParams query);
+    PageUtil<CustomerReportData> promotionCustomerList(PageParams params, CustomerQueryParams query);
+
 
     /**
-     * 导出招转日常报表数据
+     * 导出推广报表数据
      *
-     * @param query  高级请求参数
-     * @return 返回查询结果
+     * @param query 高级请求参数
+     * @return 返回导出结果
      */
-    R exportPromotionCustomer(CustomerQueryParams query);
+    String exportPromotionCustomer(CustomerQueryParams query);
 }

@@ -109,13 +109,13 @@ public class PromotionReportController {
     @ApiOperation(value = "客服推广报表数据列表", notes = "请求参数格式：\n")
     @PostMapping("/promotionCustomerList")
     public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody(required = false) CustomerQueryParams query) {
-        return promotionCustomerService.promotionCustomerList(params, query);
+        return R.result(promotionCustomerService.promotionCustomerList(params, query));
     }
 
     @SysLog("导出招转推广报表数据")
     @ApiOperation(value = "导出客服推广报表数据", notes = "请求参数格式:\n")
     @PostMapping("/exportPromotionCustomer")
     public R exportPromotionCustomer(@RequestBody CustomerQueryParams query) {
-        return promotionCustomerService.exportPromotionCustomer(query);
+        return R.result(promotionCustomerService.exportPromotionCustomer(query));
     }
 }
