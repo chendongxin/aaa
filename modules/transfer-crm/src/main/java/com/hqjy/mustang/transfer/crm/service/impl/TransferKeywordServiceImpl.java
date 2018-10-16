@@ -9,6 +9,7 @@ import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferKeywordDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferKeywordEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferKeywordService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +20,18 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
 @Service
+@Slf4j
 public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordDao, TransferKeywordEntity, Integer> implements TransferKeywordService {
 
     /**
      * 关键字字典缓存
      */
     private static List<TransferKeywordEntity> dictionaryList;
+
+    /**
+     * 操作字典缓存
+     */
+    volatile private boolean optionLockList;
 
     /**
      * 获取所有关键词
@@ -52,6 +59,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
         }
         transferKeywordEntity.setCreateUserId(getUserId());
         transferKeywordEntity.setCreateUserName(getUserName());
+        cleanList();
         return baseDao.save(transferKeywordEntity);
     }
 
@@ -62,6 +70,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     public int update(TransferKeywordEntity transferKeywordEntity) {
         transferKeywordEntity.setUpdateUserId(getUserId());
         transferKeywordEntity.setUpdateUserName(getUserName());
+        cleanList();
         return baseDao.update(transferKeywordEntity);
     }
 
@@ -88,31 +97,32 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
      */
     @Override
     public String getKeyWork(String info) {
+        log.info("开始遍历关键字：{}", info);
         dictionaryList = Optional.ofNullable(dictionaryList).orElseGet(() -> baseDao.findDictionaryList());
+        dictionaryList.forEach(transferKeywordEntity -> System.out.println(transferKeywordEntity.getName()));
         if (dictionaryList != null && dictionaryList.size() > 0) {
             Set<String> wordSet = dictionaryList.stream().map(TransferKeywordEntity::getName).collect(Collectors.toSet());
             KeyWordUtil keyWordUtil = new KeyWordUtil(wordSet);
             Set<String> words = keyWordUtil.getWords(info);
             if (words.size() > 0) {
-                return words.iterator().next();
+                String result = words.iterator().next();
+                log.info("匹配到关键字：{}", result);
+                return result;
             }
         }
+        log.info("没有遍历到任何关键字：{}", info);
         return null;
     }
 
-//    /**
-//     * 获取关键词类别(第三级)
-//     */
-//    @Override
-//    List<TransferKeywordEntity> getAllKeyList() {
-//        List<Integer> parentIdList = new ArrayList<>();
-//        List<Integer> keyWordlist = new ArrayList<>();
-//        parentIdList.add(0);
-//        for (int count = 0; count < 2; count++) {
-//             for(Integer parentId : parentIdList) {
-//                 keyWordlist.add(baseDao.findIdByParentId(parentId))
-//             }
-//        }
-//    }
+    /**
+     * 清除缓存
+     */
+    private synchronized void cleanList() {
+        optionLockList = false;
+        if (!optionLockList) {
+            dictionaryList.clear();
+        }
+        optionLockList = true;
+    }
 
 }

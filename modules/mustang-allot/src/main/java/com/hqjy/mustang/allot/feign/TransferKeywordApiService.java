@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author : HejinYo   hejinyo@gmail.com
  * @date :  2018/8/29 21:55
  */
-@FeignClient(name = "mustang-crm", fallback = TransferKeywordApiServiceFallbackImpl.class)
+@FeignClient(name = "transfer-crm", fallback = TransferKeywordApiServiceFallbackImpl.class)
 public interface TransferKeywordApiService {
 
     /**

@@ -99,7 +99,8 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
      * 首次咨询流程分配
      */
     private TransferAllotCustomerEntity firstAllot(TransferAllotCustomerEntity customer) {
-        // 保存简历详情
+        // 保存简历详情 TODO 学历详情待处理
+        customer.setEducation(null);
         transferAllotCustomerDetailDao.saveCustomer(customer);
         return bizAllot(true, customer);
     }
