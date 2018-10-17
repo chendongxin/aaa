@@ -56,6 +56,26 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
     }
 
     /**
+     * 短信保存并发送
+     *
+     * @param smsEntity
+     */
+    @Override
+    public int saveAndSend(TransferSmsEntity smsEntity) {
+        // 验证手机号合法
+        String phone = smsEntity.getPhone();
+        if (PATTERN_PHONE.matcher(phone).find()) {
+            TransferSmsEntity newSmsEntity = PojoConvertUtil.convert(smsEntity, TransferSmsEntity.class);
+            int count = save(newSmsEntity);
+            if (count > 0) {
+                Long[] ids = {newSmsEntity.getId()};
+                return smsSend(ids);
+            }
+        }
+        return 0;
+    }
+
+    /**
      * 短信保存
      */
     @Override
