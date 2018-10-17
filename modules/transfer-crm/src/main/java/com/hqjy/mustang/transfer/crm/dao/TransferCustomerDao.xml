@@ -38,6 +38,7 @@
 	  <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
 	  <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
 	  <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	  <result column="last_follow_time" jdbcType="TIMESTAMP" property="lastFollowTime" />
   </resultMap>
 
 	<resultMap id="answerCount" type="com.hqjy.mustang.transfer.crm.model.entity.TransferAnswerCountEntity">
@@ -51,7 +52,7 @@
     name, status, get_way, user_id, user_name, dept_id, dept_name, first_user_id, first_user_name, first_user_dept_id,
     last_user_id, last_user_name, last_user_dept_id, gen_user_id, gen_user_name, phone, we_chat, qq, land_line,
     create_user_id, create_user_name, create_time, allot_time, update_user_id, update_user_name,
-    update_time
+    update_time, last_follow_time
   </sql>
   
   <!-- 通用查询sql -->
@@ -90,6 +91,7 @@
 		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
 		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
 		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="lastFollowTime != null and !&quot;&quot;.equals(lastFollowTime)">and DATE_FORMAT(last_follow_time,'%Y-%m-%d') = STR_TO_DATE(#{lastFollowTime},'%Y-%m-%d')</if>
 	</where>
   </sql>
   
@@ -130,6 +132,7 @@
 		  <if test="null != updateUserId">update_user_id, </if>
 		  <if test="null != updateUserName">update_user_name, </if>
 		  <if test="null != updateTime">update_time, </if>
+			<if test="null != lastFollowTime">last_follow_time, </if>
 		</trim>
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -166,6 +169,7 @@
 			<if test="null != updateUserId">#{updateUserId}, </if>
 			<if test="null != updateUserName">#{updateUserName}, </if>
 			<if test="null != updateTime">#{updateTime}, </if>
+			<if test="null != lastFollowTime">#{lastFollowTime}, </if>
 		</trim>
   </insert>
   
@@ -206,6 +210,7 @@
 			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
 			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
 			<if test="null != updateTime">update_time = #{updateTime}, </if>
+			<if test="null != lastFollowTime">last_follow_time = #{lastFollowTime}, </if>
 		</set>
 		where customer_id = #{customerId}
   </update>
@@ -267,6 +272,7 @@
 			<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
 			<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
 			<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+			<if test="lastFollowTime != null and !&quot;&quot;.equals(lastFollowTime)">and DATE_FORMAT(last_follow_time,'%Y-%m-%d') = STR_TO_DATE(#{lastFollowTime},'%Y-%m-%d')</if>
 	</where>
   </select>
 
@@ -350,7 +356,7 @@
 		tc.name, tc.status, tc.get_way, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.first_user_id,
 		tc.first_user_name, tc.last_user_id, tc.last_user_name, tc.last_user_dept_id, tc.gen_user_id, tc.gen_user_name, tc.phone, tc.we_chat,
 		tc.qq, tc.land_line, tc.create_user_id, tc.create_user_name, tc.create_time, tc.allot_time, tc.update_user_id,
-		tc.update_user_name, tc.update_time
+		tc.update_user_name, tc.update_time, tc.last_follow_time
 		from transfer_customer tc
 		<where>
 			<!--该客户未分配人员-->
@@ -377,7 +383,7 @@
 	<select id="findPrivatePage" resultMap="BaseResultMap">
 		select
 		tc.customer_id, tc.name, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.phone,
-		tc.create_user_id, tc.create_user_name, tc.create_time, tc.status
+		tc.create_user_id, tc.create_user_name, tc.create_time, tc.status, tc.last_follow_time, tc.allot_time
 		from transfer_customer tc
 		<where>
 			tc.status in (0,3) and tc.user_id is not null

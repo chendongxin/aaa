@@ -177,11 +177,9 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                                 .setNote(customerDto.getNote()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                 );
                 transferCustomerContactService.save(customerDto);
-                Date time = new Date();
-                TransferProcessEntity transferProcessEntity = new TransferProcessEntity()
-                        .setCustomerId(entity.getCustomerId()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName())
-                        .setCreateTime(time).setExpireTime(time).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName());
-                transferProcessService.save(transferProcessEntity);
+                transferProcessService.save(new TransferProcessEntity()
+                        .setExpireTime(date).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName())
+                        .setCreateTime(date).setExpireTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()));
                 return R.ok();
             }
         } catch (Exception e) {
@@ -332,7 +330,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             //新增激活状态，归属私人客户流程
                             TransferProcessEntity processEntity = new TransferProcessEntity().setMemo("公海领取商机").setCustomerId(c)
                                     .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(userName)
-                                    .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE);
+                                    .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE).setExpireTime(DateUtils.addDays(new Date(), 15));
                             int save = transferProcessService.save(processEntity);
                             if (save > 0) {
                                 //更新客户主表(同步激活状态流程)
