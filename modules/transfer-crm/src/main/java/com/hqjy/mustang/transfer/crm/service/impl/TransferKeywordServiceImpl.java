@@ -52,6 +52,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
         if (baseDao.findOneByName(transferKeywordEntity.getName()) != null) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
+        transferKeywordEntity.setSign(0);
         transferKeywordEntity.setCreateUserId(getUserId());
         transferKeywordEntity.setCreateUserName(getUserName());
         cleanList();
@@ -79,6 +80,9 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     @Transactional(rollbackFor = Exception.class)
     public int deleteBatch(Integer[] ids) {
         for (Integer id : ids) {
+            if (baseDao.findOne(id).getSign() == 1) {
+                throw new RRException(StatusCode.DATABASE_SELECT_USE);
+            }
             List<TransferKeywordEntity> keywordList = baseDao.findByParentId(id);
             if (keywordList.size() > 0) {
                 throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
@@ -114,6 +118,36 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
      */
     private synchronized void cleanList() {
         dictionaryList.clear();
+    }
+    /**
+     * 获取关键词类别(第三级)
+     */
+    @Override
+    public List<TransferKeywordEntity> getAllKeyList() {
+        List<TransferKeywordEntity> parentIdList = new ArrayList<>();
+        List<TransferKeywordEntity> keywordList = new ArrayList<>();
+        parentIdList.add(baseDao.findIdByParentId(0).get(0));
+        for (int count = 0; count < 2; count++) {
+            keywordList = this.getAllKeywordByParentId(parentIdList);
+            parentIdList = keywordList;
+        }
+        return keywordList;
+    }
+
+    private List<TransferKeywordEntity> getAllKeywordByParentId(List<TransferKeywordEntity> parentIdList) {
+        List<TransferKeywordEntity> keyWordList = new ArrayList<>();
+        for (TransferKeywordEntity id : parentIdList) {
+            keyWordList.addAll(baseDao.findIdByParentId(id.getId()));
+        }
+        return keyWordList;
+    }
+
+    /**
+     * 获取某一类别下的关键词
+     */
+    @Override
+    public List<TransferKeywordEntity> getAllKeyword(Integer parentId) {
+        return baseDao.findIdByParentId(parentId);
     }
 
 }

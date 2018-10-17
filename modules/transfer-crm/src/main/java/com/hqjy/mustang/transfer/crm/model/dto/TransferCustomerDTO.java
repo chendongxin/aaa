@@ -123,7 +123,7 @@ public class TransferCustomerDTO {
     /**
      * 应聘类别 apply_type
      **/
-    private Long applyType;
+    private Integer applyType;
 
     /**
      * 期望职位 position_applied
@@ -138,7 +138,7 @@ public class TransferCustomerDTO {
     /**
      * 应聘关键词 apply_key
      **/
-    private String applyKey;
+    private Integer applyKey;
 
     /**
      * 工作经验 work_experience

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * transfer_gen_company 推广公司实体类
@@ -13,6 +14,7 @@ import lombok.Data;
  * @date : 2018/09/07 10:16
  */
 @Data
+@Accessors(chain = true)
 public class TransferGenCompanyEntity implements Serializable {
     /**
 	 * 编号 company_id
@@ -38,6 +40,11 @@ public class TransferGenCompanyEntity implements Serializable {
 	 * 状态 0启用 1禁用 status
 	 **/
     private Byte status;
+
+    /**
+     * 是否被用 0 未被用 1 被用
+     **/
+    private Integer sign;
 
     /**
      * 注释

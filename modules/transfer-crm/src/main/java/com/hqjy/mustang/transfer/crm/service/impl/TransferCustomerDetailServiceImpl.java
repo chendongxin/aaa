@@ -3,7 +3,6 @@ package com.hqjy.mustang.transfer.crm.service.impl;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDetailDao;
-import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDetailDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;

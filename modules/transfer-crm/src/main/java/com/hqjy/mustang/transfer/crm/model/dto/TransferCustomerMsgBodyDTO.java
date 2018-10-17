@@ -1,11 +1,11 @@
-package com.hqjy.mustang.transfer.export.model.dto;
+package com.hqjy.mustang.transfer.crm.model.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class CustomerMsgBodyDTO {
+public class TransferCustomerMsgBodyDTO {
 
     /**
      * 赛道ID

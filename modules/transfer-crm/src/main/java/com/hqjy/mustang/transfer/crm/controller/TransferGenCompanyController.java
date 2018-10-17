@@ -39,8 +39,6 @@ public class TransferGenCompanyController {
     private TransferCompanySourceService transferCompanySourceService;
     @Autowired
     private TransferSourceService transferSourceService;
-    @Autowired
-    private SysDeptServiceFeign sysDeptServiceFeign;
 
     /**
      * 获取所有推广公司

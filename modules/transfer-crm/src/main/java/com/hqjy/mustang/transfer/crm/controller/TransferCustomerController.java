@@ -7,15 +7,19 @@ import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDTO;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerTransferDTO;
+import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerUpDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerDetailService;
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
 
@@ -180,7 +184,7 @@ public class TransferCustomerController extends AbstractMethodError {
             "【手机:phone】,【座机：landLine】,【微信:weiXin】,【QQ:qq】,【赛道ID:proId】,【赛道名称:proName】,【来源平台ID:sourceId】,【来源平台名称:sourceName】,【部门ID:deptId】,【部门名称:deptName】\n" +
             "【推广公司ID:companyId】,【推广公司名称:companyName】,【首次跟进人ID:firstUserId】,【首次跟进人名称:firstUserName】,【姓名:name】,【性别(0-未知，1-男，2-女):sex】\n" +
             "【年龄:age】,【学历(0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士研究生，7-博士研究生):educationId】\n" +
-            "【学校:school】,【专业:major】,【期望职位:positionApplied】,【毕业年份:graduateDate】,【应聘类别(1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它):applyType】\n" +
+            "【学校:school】,【专业:major】,【期望职位:positionApplied】,【毕业年份:graduateDate】,【应聘类别:applyType】\n" +
             "【期望工作地点:workingPlace】,【应聘关键词:applyKey】,【获取方式(1-主动获取，2-被动获取):getWay】,【工作经验(0-无经验，1-应届生，2-一年以内，3-两年，4-三年，5-三年以上):workExperience】,【备注:note】\n" +
             "示例：\n" +
             "{\n" +
@@ -206,8 +210,8 @@ public class TransferCustomerController extends AbstractMethodError {
             "  \"major\": \"软件\",\n" +
             "  \"positionApplied\": \"测试\",\n" +
             "  \"graduateDate\": \"2018-06-11 17:19:24\",\n" +
-            "  \"applyType\": \"软件类\",\n" +
-            "  \"applyKey\": \"测试\",\n" +
+            "  \"applyType\": 26,\n" +
+            "  \"applyKey\": 27,\n" +
             "  \"workingPlace\": \"广州\",\n" +
             "  \"getWay\": 1,\n" +
             "  \"workExperience\": 5,\n" +
@@ -256,7 +260,7 @@ public class TransferCustomerController extends AbstractMethodError {
      */
     @ApiOperation(value = "保存修改客户基本资料", notes = "输入参数：\n" +
             "参数说明：" +
-            "【客户ID:customerId】,【姓名:name】,【性别(-1：女 0：未知 1：男):sex】,【创建时间:createTime】,【年龄:age】\n" +
+            "【客户ID:customerId】,【姓名:name】,【性别(0-未知，1-男，2-女):sex】,【创建时间:createTime】,【年龄:age】\n" +
             "【获取方式(1-主动获取; 2-被动获取):getWay】,【学历(0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士，7-博士):educationId】\n" +
             "【应聘职位:positionApplied】,【专业:major】,【学校:school】,【应聘类别(1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它):applyType】\n" +
             "【毕业时间:graduateDate】,【应聘关键词:applyKey】,【期望工作地点:workingPlace】,【工作经验:workExperience】,【备注:note】\n" +
@@ -288,6 +292,23 @@ public class TransferCustomerController extends AbstractMethodError {
         } catch (Exception e) {
             return R.error("客户资料修改异常：" + e.getMessage());
         }
+    }
+
+    @ApiOperation(value = "导入客户列表", notes = "请求参数方式：multipart/form-data,支持多参数类型请求")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "proId", paramType = "query", value = "赛道ID", dataType = "Long"),
+            @ApiImplicitParam(name = "companyId", paramType = "query", value = "推广公司ID", dataType = "Long"),
+            @ApiImplicitParam(name = "deptId", paramType = "query", value = "部门ID", dataType = "Long"),
+            @ApiImplicitParam(name = "firstUserId", paramType = "query", value = "首次跟进人ID", dataType = "Long"),
+            @ApiImplicitParam(name = "sourceId", paramType = "query", value = "来源平台ID", dataType = "Long"),
+            @ApiImplicitParam(name = "getWay", paramType = "query", value = "获取方式", dataType = "Byte"),
+            @ApiImplicitParam(name = "notAllot", paramType = "query", value = "是否不分配：true-不分配，false-自动分配", dataType = "boolean")
+    })
+    @PostMapping("/importCustomer")
+//    @RequiresPermissions("biz:customer:import")
+    @SysLog("客户列表导入")
+    public R importCustomer(@RequestParam("file") MultipartFile file, @ModelAttribute TransferCustomerUpDTO dto) {
+        return transferCustomerService.importCustomer(file, dto);
     }
 
 }

@@ -30,7 +30,7 @@ public class TransferCustomerPrivateController extends AbstractMethodError {
     @ApiOperation(value = "分页查询-私海客户列表", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "高级查询参数（RequestBody数据格式接收）：[beginCreateTime:开始创建时间],[endCreateTime:结束创建时间]\n" +
-            "[deptId:部门id],[name:姓名],[phone:手机],[userName:归属人]\n" +
+            "[deptId:部门id],[name:姓名],[phone:手机],[userId:归属人id]\n" +
             "返回参数：【当前页:currPage】,【当前页的数量:size】,【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】\n" +
             "【客户编号：customerId】,【姓名:name】,【归属人编号：userId】,【归属人姓名:userName】,【部门编号：deptId】,【部门名称:deptName】,【手机:phone】\n" +
             "【创建人编号:createUserId】,【创建人名称:createUserName】,【创建时间:createTime】,【商机状态(0-潜在，1-(失败)有效，2-(失败)无效，3-预约，4-成交)):status】\n" +

@@ -23,8 +23,13 @@ public interface TransferKeywordService extends BaseService<TransferKeywordEntit
      */
     String getKeyWork(String info);
 
-//    /**
-//     * 获取关键词类别(第三级)
-//     */
-//    List<TransferKeywordEntity> getAllKeyList();
+    /**
+     * 获取关键词类别(第三级)
+     */
+    List<TransferKeywordEntity> getAllKeyList();
+
+    /**
+     * 获取关键词(第四级)
+     */
+    List<TransferKeywordEntity> getAllKeyword(Integer parentId);
 }
