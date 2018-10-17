@@ -12,6 +12,11 @@ import java.util.List;
  */
 public interface TransferSmsService extends BaseService<TransferSmsEntity, Long> {
     /**
+     * 短信保存并发送
+     */
+    int saveAndSend(TransferSmsEntity smsEntity);
+
+    /**
      * 短信保存
      */
     int saveSms(TransferSmsEntity smsEntity);
