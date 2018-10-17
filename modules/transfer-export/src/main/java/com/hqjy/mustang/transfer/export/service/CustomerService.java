@@ -1,9 +1,6 @@
 package com.hqjy.mustang.transfer.export.service;
 
-import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.transfer.export.model.dto.CustomerUpDTO;
 import com.hqjy.mustang.transfer.export.model.query.CustomerExportQueryParams;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author gmm
@@ -11,15 +8,6 @@ import org.springframework.web.multipart.MultipartFile;
  * @apiNote
  */
 public interface CustomerService {
-
-    /**
-     * 导入客户
-     *
-     * @param file 导入的文件
-     * @param dto  请求输入参数
-     * @return 返回导入结果
-     */
-    R importCustomer(MultipartFile file, CustomerUpDTO dto);
 
     /**
      * 导出客户

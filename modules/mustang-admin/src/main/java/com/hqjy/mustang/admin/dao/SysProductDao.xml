@@ -7,6 +7,7 @@
     <id column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="status" jdbcType="TINYINT" property="status" />
+	<result column="sign" jdbcType="TINYINT" property="sign" />
     <result column="memo" jdbcType="VARCHAR" property="memo" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
 	<result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -18,7 +19,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    pro_id, name, status, memo, create_user_id, create_user_name, create_time, update_user_id, update_user_name, update_time
+    pro_id, name, status, sign, memo, create_user_id, create_user_name, create_time, update_user_id, update_user_name, update_time
   </sql>
   
   <!-- 通用查询sql -->
@@ -26,6 +27,7 @@
     <where>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name = #{name}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+		<if test="sign != null and !&quot;&quot;.equals(sign)">and sign = #{sign}</if>
         <if test="memo != null and !&quot;&quot;.equals(memo)">and memo = #{memo}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
@@ -42,6 +44,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != name">name, </if>
 			<if test="null != status">status, </if>
+			<if test="null != sign">sign, </if>
             <if test="null != memo">memo, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
@@ -54,6 +57,7 @@
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != name">#{name}, </if>
 			<if test="null != status">#{status}, </if>
+			<if test="null != sign">#{sign}, </if>
             <if test="null != memo">#{memo}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
@@ -70,6 +74,7 @@
 		<set>
 			<if test="null != name">name = #{name}, </if>
 			<if test="null != status">status = #{status}, </if>
+			<if test="null != sign">sign = #{sign}, </if>
             <if test="null != memo">memo = #{memo}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
@@ -135,6 +140,7 @@
 		<where>
 		<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+		<if test="sign != null and !&quot;&quot;.equals(sign)">and sign = #{sign}</if>
         <if test="memo != null and !&quot;&quot;.equals(memo)">and memo like concat('%',#{memo},'%')</if>
         <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>

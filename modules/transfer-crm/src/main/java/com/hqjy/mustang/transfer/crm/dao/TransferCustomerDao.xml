@@ -418,4 +418,28 @@
 		where nc_id = #{ncId}
 	</select>
 
+	<update id="updatePro">
+        update sys_product sp
+        set sp.sign = true
+        where pro_id = #{proId}
+    </update>
+
+	<update id="updateCom">
+        update transfer_gen_company tc
+        set tc.sign = true
+        where company_id = #{companyId}
+    </update>
+
+	<update id="updateSou">
+        update transfer_source ts
+        set ts.sign = true
+        where source_id = #{sourceId}
+    </update>
+
+	<update id="updateKey">
+        update transfer_keyword tk
+        set tk.sign = true
+        where id = #{id}
+    </update>
+
 </mapper>

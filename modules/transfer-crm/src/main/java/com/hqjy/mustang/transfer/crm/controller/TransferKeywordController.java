@@ -175,12 +175,21 @@ public class TransferKeywordController {
         return R.error(StatusCode.DATABASE_SELECT_FAILURE);
     }
 
-//    /**
-//     * 获取关键词类别
-//     */
-//    @ApiOperation(value = "获取关键词类别", notes = "获取关键词类别")
-//    @GetMapping("/get/all/Key")
-//    public R getAllCompany() {
-//        return R.ok(transferKeywordService.getAllKeyList());
-//    }
+    /**
+     * 获取关键词类别
+     */
+    @ApiOperation(value = "获取关键词类别", notes = "获取关键词类别")
+    @GetMapping("/get/all/Key")
+    public R getAllKey() {
+        return R.ok(transferKeywordService.getAllKeyList());
+    }
+
+    /**
+     * 获取关键词
+     */
+    @ApiOperation(value = "获取关键词", notes = "获取关键词")
+    @GetMapping("/get/all/Keyword/{id}")
+    public R getAllKeyword(@PathVariable("id") Integer id) {
+        return R.ok(transferKeywordService.getAllKeyword(id));
+    }
 }

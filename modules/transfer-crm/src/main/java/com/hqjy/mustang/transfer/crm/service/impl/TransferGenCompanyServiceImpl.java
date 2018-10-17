@@ -52,6 +52,7 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
         if (baseDao.findOneByName(transferGenCompanyEntity.getName()) != null) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
+        transferGenCompanyEntity.setSign(0);
         transferGenCompanyEntity.setParentId(1L);
         transferGenCompanyEntity.setCreateUserId(getUserId());
         transferGenCompanyEntity.setCreateUserName(getUserName());
@@ -80,6 +81,8 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
         for (Long companyId : list) {
             if (companyId == 1) {
                 throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
+            } else if (baseDao.findOne(companyId).getSign() == 1) {
+                throw new RRException(StatusCode.DATABASE_SELECT_USE);
             } else {
                 List<TransferCompanySourceEntity> companySourceList = transferCompanySourceDao.findByCompanyId(companyId);
                 if (companySourceList.size() > 0) {

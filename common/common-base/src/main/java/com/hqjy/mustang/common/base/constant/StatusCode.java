@@ -33,6 +33,7 @@ public enum StatusCode {
     DATABASE_DELETE_FAILURE(2004, "删除失败"),
     DATABASE_SELECT_FAILURE(2005, "资源不存在"),
     DATABASE_NOT_CHANGE(2006, "未作任何修改"),
+    DATABASE_SELECT_USE(2007, "该数据在被使用中，不允许删除"),
     DATABASE_UPDATE_ROOT(2101, "根节点，不允许修改"),
     DATABASE_DELETE_ROOT(2102, "根节点，不允许删除"),
     DATABASE_UPDATE_CHILD(2103, "存在子节点，不允许修改"),
