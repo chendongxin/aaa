@@ -5,6 +5,7 @@ import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferWaySourceEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -27,5 +28,10 @@ public interface TransferWaySourceDao extends BaseDao<TransferWaySourceEntity, L
      *
      */
     List<TransferWaySourceEntity> listPageSource(PageQuery pageQuery);
+
+    /**
+     * 根据wayId和sourceId查询是否存在重复数据
+     */
+    TransferWaySourceEntity findByWayIdAndSourceId(@Param("wayId") Long wayId, @Param("sourceId") Long sourceId);
 
 }

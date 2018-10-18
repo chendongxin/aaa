@@ -8,9 +8,9 @@ import lombok.experimental.Accessors;
 import java.util.Date;
 
 /**
- * @author xieyuqing
+ * @author gmm
  * @ description 客户列表导出实体
- * @ date create in 2018/6/8 10:28
+ * @ date create in 2018/10/11 11:36
  */
 @Data
 @Accessors(chain = true)

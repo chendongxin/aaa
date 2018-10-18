@@ -43,13 +43,8 @@ public class TransferWaySourceServiceImpl extends BaseServiceImpl<TransferWaySou
         TransferGenWayEntity transferGenWayEntity = transferGenWayDao.findOneByGenName(transferGenWaySourceDTO.getGenWay());
         TransferWaySourceEntity transferWaySourceEntity = new TransferWaySourceEntity();
         if (transferGenWayEntity == null) {
-            transferGenWayEntity = new TransferGenWayEntity();
-            transferGenWayEntity.setGenWay(transferGenWaySourceDTO.getGenWay());
-            transferGenWayEntity.setStatus(transferGenWaySourceDTO.getStatus());
-            transferGenWayEntity.setSeq(transferGenWaySourceDTO.getSeq());
-            transferGenWayEntity.setCreateUserId(getUserId());
-            transferGenWayEntity.setCreateUserName(getUserName());
-            System.out.println("transferGenWayEntity = " + transferGenWayEntity);
+            transferGenWayEntity = new TransferGenWayEntity().setGenWay(transferGenWaySourceDTO.getGenWay()).setStatus(transferGenWaySourceDTO.getStatus())
+                    .setSeq(transferGenWaySourceDTO.getSeq()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
             int count = transferGenWayDao.save(transferGenWayEntity);
             if (count > 0) {
                 transferWaySourceEntity.setWayId(transferGenWayEntity.getWayId());
@@ -57,24 +52,15 @@ public class TransferWaySourceServiceImpl extends BaseServiceImpl<TransferWaySou
                 throw new RRException(StatusCode.DATABASE_SAVE_FAILURE);
             }
         } else {
-            transferWaySourceEntity.setWayId(transferGenWayEntity.getWayId());
+            transferWaySourceEntity.setWayId(transferGenWayDao.findOneByGenName(transferGenWaySourceDTO.getGenWay()).getWayId());
+            if (baseDao.findByWayIdAndSourceId(transferWaySourceEntity.getWayId(), transferGenWaySourceDTO.getSourceId()) != null) {
+                throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
+            }
         }
-        transferWaySourceEntity.setSourceId(transferGenWaySourceDTO.getSourceId());
-        transferWaySourceEntity.setSeq(transferGenWaySourceDTO.getSeq());
-        transferWaySourceEntity.setStatus(transferGenWaySourceDTO.getStatus());
-        transferWaySourceEntity.setCreateUserId(getUserId());
-        transferWaySourceEntity.setCreateUserName(getUserName());
-        return transferWaySourceDao.save(transferWaySourceEntity);
-    }
-
-    /**
-     * 修改推广平台下的推广方式
-     */
-    @Override
-    public int update(TransferWaySourceEntity transferWaySourceEntity) {
-        transferWaySourceEntity.setUpdateUserId(getUserId());
-        transferWaySourceEntity.setUpdateUserName(getUserName());
-        return baseDao.update(transferWaySourceEntity);
+        return transferWaySourceDao.save(transferWaySourceEntity.setSourceId(transferGenWaySourceDTO.getSourceId())
+                .setSeq(transferGenWaySourceDTO.getSeq()).setStatus(transferGenWaySourceDTO.getStatus())
+                .setCreateUserId(getUserId()).setCreateUserName(getUserName())
+        );
     }
 
     /**

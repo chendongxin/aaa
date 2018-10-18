@@ -73,7 +73,7 @@ public class TransferCustomerInvalidController {
     }
 
     @ApiOperation(value = "无效操作", notes = "请求参数：\n" +
-            "参数说明：[customerId:客户ID], [type(见数据字典：失败(有效)类型（VALID_TYPE）和失败(无效)类型（INVALID）): 失败原因], [status:失败状态（1-(失败)有效，2-（失败）无效]\n" +
+            "参数说明：[customerId:客户ID], [type: 失败原因(见数据字典：失败(有效)类型（VALID_TYPE）和失败(无效)类型（INVALID）)], [status:失败状态（1-(失败)有效，2-（失败）无效]\n" +
             "示例：\n" +
             "{\n" +
             "    \"customerId\": 0,\n" +
@@ -89,14 +89,12 @@ public class TransferCustomerInvalidController {
 
     @ApiOperation(value = "退回私海操作", notes = "请求参数：\n" +
             "参数说明：[customerId:客户ID]\n" +
-            "示例：\n" +
-            "{\n" +
-            "    \"customerId\": 1,\n" +
+            "示例： url?customerId=2\n" +
             "}")
     @PostMapping("/return/private")
 //    @RequiresPermissions("biz:invalid:inspect")
     @SysLog("退回私海操作")
-    public R quantityInspect(@RequestBody Long customerId) {
+    public R quantityInspect(@RequestParam Long customerId) {
         return transferCustomerInvalidService.returnToPrivate(customerId);
     }
 

@@ -63,5 +63,10 @@ public class SysProductEntity implements Serializable {
 	 **/
     private Date updateTime;
 
+    /**
+     * 是否被用 0 未被用 1 被用
+     **/
+    private Integer sign;
+
     private static final long serialVersionUID = 1L;
 }

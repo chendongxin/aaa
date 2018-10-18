@@ -26,6 +26,16 @@ public class TransferCustomerReservationEntity implements Serializable {
     private Long customerId;
 
     /**
+     * 客户名称
+     */
+    private String name;
+
+    /**
+     * 客户电话
+     */
+    private String phone;
+
+    /**
      * 预约时间 appointment_time
      **/
     private Date appointmentTime;

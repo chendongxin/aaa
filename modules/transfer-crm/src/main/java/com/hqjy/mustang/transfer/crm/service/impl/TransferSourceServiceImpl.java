@@ -63,6 +63,7 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
         if (baseDao.findOneByName(transferSourceEntity.getName()) != null) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
+        transferSourceEntity.setSign(0);
         transferSourceEntity.setParentId(1L);
         transferSourceEntity.setCreateUserId(getUserId());
         transferSourceEntity.setCreateUserName(getUserName());
@@ -94,6 +95,9 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
     public int deleteBatch(Long[] sourceIds) {
         List<Long> list = Arrays.asList(sourceIds);
         for (Long sourceId : list) {
+            if (baseDao.findOne(sourceId).getSign() == 1) {
+                throw new RRException(StatusCode.DATABASE_SELECT_USE);
+            }
             List<TransferGenWayEntity> genWay = transferGenWayService.findBySourceId(sourceId);
             if (genWay.size() > 0) {
                 throw new RRException(StatusCode.DATABASE_DELETE_CHILD);

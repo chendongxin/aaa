@@ -38,23 +38,6 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
     R transferCustomer(TransferCustomerTransferDTO dto);
 
     /**
-     * 导入客户
-     *
-     * @param file 导入的文件
-     * @param dto  请求输入参数
-     * @return 返回导入结果
-     */
-    R importCustomer(MultipartFile file, TransferCustomerUpDTO dto);
-
-    /**
-     * 导出客户
-     *
-     * @param query 导出帅选条件
-     * @return 返回导出结果
-     */
-    R exportCustomer(PageQuery query);
-
-    /**
      * 公海客户数据
      *
      * @param pageQuery 查询参数对象
@@ -107,5 +90,14 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      * @date create 2018年10月8日10:20:06
      */
     TransferCustomerEntity getByNcId(String ncId);
+
+    /**
+     * 导入客户
+     *
+     * @param file 导入的文件
+     * @param dto  请求输入参数
+     * @return 返回导入结果
+     */
+    R importCustomer(MultipartFile file, TransferCustomerUpDTO dto);
 
 }

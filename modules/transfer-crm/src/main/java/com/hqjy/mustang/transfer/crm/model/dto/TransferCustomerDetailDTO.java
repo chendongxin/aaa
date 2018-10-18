@@ -25,19 +25,8 @@ public class TransferCustomerDetailDTO {
     /**
      * 客户姓名 name
      **/
-    @ExcelAttribute(name = "客户姓名")
+    @ExcelAttribute(name = "姓名")
     private String name;
-
-    /**
-     * 年龄 age
-     **/
-    @ExcelAttribute(name = "年龄")
-    private Byte age;
-
-    /**
-     * 性别:见数据字典SEX枚举(0-未知，1-男，2-女) sex
-     **/
-    private Integer sex;
 
     /**
      * 性别
@@ -46,39 +35,79 @@ public class TransferCustomerDetailDTO {
     private String gender;
 
     /**
-     * 地址 address
-     **/
-    private String address;
-
-    /**
-     * 邮箱 email
-     **/
-    @ExcelAttribute(name = "邮箱")
-    private String email;
+     * 年龄
+     */
+    @ExcelAttribute(name = "年龄")
+    private String year;
 
     /**
      * 手机
      */
-    @ExcelAttribute(name = "手机",prompt = "手机号码必填")
+    @ExcelAttribute(name = "电话",prompt = "手机号码必填")
     private String phone;
 
     /**
-     * 座机
+     * 邮箱 email
      **/
-    @ExcelAttribute(name = "座机")
-    private String landLine;
+    @ExcelAttribute(name = "电子邮箱")
+    private String email;
 
     /**
-     * qq
-     */
-    @ExcelAttribute(name = "qq")
-    private String qq;
+     * 期望职位 position_applied
+     **/
+    @ExcelAttribute(name = "应聘岗位")
+    private String positionApplied;
 
     /**
-     * 微信
-     */
-    @ExcelAttribute(name = "微信")
-    private String weChat;
+     * 期望工作地点 working_place
+     **/
+    @ExcelAttribute(name = "期望工作地点")
+    private String workingPlace;
+
+    /**
+     * 毕业学校 school
+     **/
+    @ExcelAttribute(name = "毕业院校")
+    private String school;
+
+    /**
+     * 学历 education
+     **/
+    @ExcelAttribute(name = "学历")
+    private String education;
+
+    /**
+     * 专业 major
+     **/
+    @ExcelAttribute(name = "专业")
+    private String major;
+
+    /**
+     * 工作经验 experience
+     **/
+    @ExcelAttribute(name = "经验")
+    private String experience;
+
+    /**
+     * 备注 note
+     **/
+    @ExcelAttribute(name = "备注")
+    private String note;
+
+    /**
+     * 性别:见数据字典SEX枚举(0-未知，1-男，2-女) sex
+     **/
+    private Integer sex;
+
+    /**
+     * 年龄 age
+     **/
+    private Byte age;
+
+    /**
+     * 地址 address
+     **/
+    private String address;
 
     /**
      * 部门ID
@@ -91,21 +120,9 @@ public class TransferCustomerDetailDTO {
     private String deptName;
 
     /**
-     * 毕业学校 school
-     **/
-    @ExcelAttribute(name = "毕业学校")
-    private String school;
-
-    /**
      * 毕业年份 graduate_date
      **/
     private Date graduateDate;
-
-    /**
-     * 专业 major
-     **/
-    @ExcelAttribute(name = "专业")
-    private String major;
 
     /**
      * 学历ID education_id (0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士，7-博士)
@@ -115,36 +132,17 @@ public class TransferCustomerDetailDTO {
     /**
      * 应聘类别 apply_type (1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它)
      **/
-    private Long applyType;
+    private Integer applyType;
 
     /**
      * 应聘关键词 apply_key
      **/
-    private String applyKey;
-
-    /**
-     * 期望职位 position_applied
-     **/
-    @ExcelAttribute(name = "期望职位")
-    private String positionApplied;
-
-    /**
-     * 期望工作地点 working_place
-     **/
-    @ExcelAttribute(name = "期望工作地点")
-    private String workingPlace;
+    private Integer applyKey;
 
     /**
      * 工作经验 work_experience
      **/
-    @ExcelAttribute(name = "工作经验")
     private Byte workExperience;
-
-    /**
-     * 备注 note
-     **/
-    @ExcelAttribute(name = "备注")
-    private String note;
 
     /**
      * 创建人编号 create_user_id
@@ -159,7 +157,6 @@ public class TransferCustomerDetailDTO {
     /**
      * 创建时间 create_time
      **/
-    @ExcelAttribute(name = "日期")
     private Date createTime;
 
     /**
@@ -181,7 +178,6 @@ public class TransferCustomerDetailDTO {
      * 简历详情 resume_detail
      **/
     private String resumeDetail;
-
 
     /**
      * 客户状态,BIZ_STATUS(0-潜在，1-(失败)有效，2-(失败)无效，3-预约，4-成交) status

@@ -26,6 +26,11 @@ public class TransferCustomerDetailEntity implements Serializable {
     private Long customerId;
 
     /**
+     * 客户姓名 name
+     **/
+    private String name;
+
+    /**
 	 * 年龄 age
 	 **/
     private Byte age;
@@ -78,12 +83,12 @@ public class TransferCustomerDetailEntity implements Serializable {
     /**
 	 * 应聘类别 apply_type (1-开发类，2-设计类，3-运营类，4-产品类，5-技术支持类，6-其它)
 	 **/
-    private Long applyType;
+    private Integer applyType;
 
     /**
 	 * 应聘关键词 apply_key
 	 **/
-    private String applyKey;
+    private Integer applyKey;
 
     /**
 	 * 期望职位 position_applied
@@ -134,6 +139,11 @@ public class TransferCustomerDetailEntity implements Serializable {
 	 * 更新时间 update_time
 	 **/
     private Date updateTime;
+
+    /**
+     * 推广方式：见数据字典GET_WAY枚举(1-主动获取，2-被动获取) get_way
+     **/
+    private Byte getWay;
 
     /**
 	 * 简历详情 resume_detail

@@ -14,8 +14,8 @@
         <result column="graduate_date" jdbcType="DATE" property="graduateDate" />
         <result column="major" jdbcType="VARCHAR" property="major" />
         <result column="education_id" jdbcType="BIGINT" property="educationId" />
-        <result column="apply_type" jdbcType="BIGINT" property="applyType" />
-        <result column="apply_key" jdbcType="VARCHAR" property="applyKey" />
+        <result column="apply_type" jdbcType="INTEGER" property="applyType" />
+        <result column="apply_key" jdbcType="INTEGER" property="applyKey" />
         <result column="position_applied" jdbcType="VARCHAR" property="positionApplied" />
         <result column="working_place" jdbcType="VARCHAR" property="workingPlace" />
         <result column="work_experience" jdbcType="TINYINT" property="workExperience" />

@@ -186,6 +186,15 @@
 		where
 			tws.source_id = #{sourceId}
 	</select>
+
+	<select id="findByWayIdAndSourceId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from transfer_way_source
+		where
+			source_id = #{sourceId}
+		and way_id = #{wayId}
+	</select>
   
 
 </mapper>
