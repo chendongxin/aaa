@@ -8,7 +8,6 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerReservationEnt
 import com.hqjy.mustang.transfer.crm.service.TransferCustomerReservationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -167,6 +166,5 @@ public class TransferCustomerReservationController {
     @GetMapping("/getReservationByCustomerId")
     public R getReservationByCustomerId(@RequestParam("customerId") Long customerId) {
         return R.result(transferCustomerReservationService.getReservationByCustomerId(customerId));
-
     }
 }

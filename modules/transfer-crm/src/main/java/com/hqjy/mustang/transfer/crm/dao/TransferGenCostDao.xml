@@ -28,7 +28,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    id, dept_id, dept_name, company_id, pro_id, source_id, way_id, gen_day, initiative_money, passive_money,
+    id, dept_id, company_id, pro_id, source_id, way_id, gen_day, initiative_money, passive_money,
     initiative_virtual, passive_virtual, create_user_id, create_user_name, create_time, 
     update_user_id, update_user_name, update_time
   </sql>
@@ -37,7 +37,6 @@
   <sql id="Base_Where_SQL">
     <where>
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
-		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name = #{deptName}</if>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
         <if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
         <if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
@@ -61,7 +60,6 @@
     insert into transfer_gen_cost
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != deptId">dept_id, </if>
-			<if test="null != deptName">dept_name, </if>
 			<if test="null != companyId">company_id, </if>
             <if test="null != proId">pro_id, </if>
             <if test="null != sourceId">source_id, </if>
@@ -81,7 +79,6 @@
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
 			<if test="null != deptId">#{deptId}, </if>
-			<if test="null != deptName">#{deptName}, </if>
 			<if test="null != companyId">#{companyId}, </if>
             <if test="null != proId">#{proId}, </if>
             <if test="null != sourceId">#{sourceId}, </if>
@@ -105,7 +102,6 @@
     update transfer_gen_cost 
 		<set>
 			<if test="null != deptId">dept_id = #{deptId}, </if>
-			<if test="null != deptName">dept_name = #{deptName}, </if>
 			<if test="null != companyId">company_id = #{companyId}, </if>
             <if test="null != proId">pro_id = #{proId}, </if>
             <if test="null != sourceId">source_id = #{sourceId}, </if>
@@ -174,15 +170,15 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-	  tgc.id, tgc.dept_id, tgc.dept_name, tgc.company_id, tgc.pro_id, tgc.source_id, tgc.way_id, tgc.gen_day, tgc.initiative_money,
+	  tgc.id, tgc.dept_id, tgc.company_id, tgc.pro_id, tgc.source_id, tgc.way_id, tgc.gen_day, tgc.initiative_money,
 	  tgc.passive_money, tgc.initiative_virtual, tgc.passive_virtual, tgc.create_user_id, tgc.create_user_name,
-	  tgc.create_time, tgc.update_user_id, tgc.update_user_name, tgc.update_time, tgc1.name, tgw.gen_way
+	  tgc.create_time, tgc.update_user_id, tgc.update_user_name, tgc.update_time, tgc1.name, tgw.gen_way, sd.dept_name
 	from transfer_gen_cost tgc
 	left join transfer_gen_company tgc1 on tgc.company_id = tgc1.company_id
 	left join transfer_gen_way tgw on tgc.way_id = tgw.way_id
+	left join sys_dept sd on tgc.dept_id = sd.dept_id
 		<where>
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and tgc.dept_id = #{deptId}</if>
-		<if test="deptName != null and !&quot;&quot;.equals(deptName)">and tgc.dept_name like concat('%',#{deptName},'%')</if>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and tgc.company_id = #{companyId}</if>
 		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and tgc.way_id = #{wayId}</if>
 		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and tgc.DATE_FORMAT(gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>

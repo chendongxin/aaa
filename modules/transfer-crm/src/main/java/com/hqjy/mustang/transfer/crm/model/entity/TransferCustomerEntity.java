@@ -187,6 +187,11 @@ public class TransferCustomerEntity implements Serializable {
     private Date updateTime;
 
     /**
+     * 最后一次跟进时间 last_follow_time
+     **/
+    private Date lastFollowTime;
+
+    /**
      * 客户详细资料
      */
     private TransferCustomerDetailEntity customerDetail;

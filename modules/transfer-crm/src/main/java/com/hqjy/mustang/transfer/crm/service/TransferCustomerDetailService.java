@@ -1,7 +1,6 @@
 package com.hqjy.mustang.transfer.crm.service;
 
 import com.hqjy.mustang.common.base.base.BaseService;
-import com.hqjy.mustang.transfer.crm.model.dto.TransferCustomerDetailDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
 
 public interface TransferCustomerDetailService extends BaseService<TransferCustomerDetailEntity, Long> {
@@ -18,5 +17,5 @@ public interface TransferCustomerDetailService extends BaseService<TransferCusto
      * @param customerDetail
      * @return 修改结果
      */
-    int updateCustomerDetail(TransferCustomerDetailDTO customerDetail);
+    int updateCustomerDetail(TransferCustomerDetailEntity customerDetail);
 }

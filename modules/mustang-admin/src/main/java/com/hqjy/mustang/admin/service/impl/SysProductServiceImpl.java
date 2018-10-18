@@ -7,7 +7,9 @@ import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -32,22 +34,25 @@ public class SysProductServiceImpl extends BaseServiceImpl<SysProductDao, SysPro
         if (baseDao.findOneByName(syaProductEntity.getName()) != null) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
+        syaProductEntity.setSign(0);
         syaProductEntity.setCreateUserId(getUserId());
         syaProductEntity.setCreateUserName(getUserName());
         return baseDao.save(syaProductEntity);
     }
 
-//    /**
-//     * 删除赛道
-//     */
-//    @Override
-//    @Transactional(rollbackFor = Exception.class)
-//    public int deleteBatch(Long[] proIds) {
-//        List<Long> list = Arrays.asList(proIds);
-//        for (Long proId : list) {
-//
-//        }
-//        return super.deleteBatch(proIds);
-//    }
+    /**
+     * 删除赛道
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int deleteBatch(Long[] proIds) {
+        List<Long> list = Arrays.asList(proIds);
+        for (Long proId : list) {
+            if (baseDao.findOne(proId).getSign() == 1) {
+                throw new RRException(StatusCode.DATABASE_SELECT_USE);
+            }
+        }
+        return super.deleteBatch(proIds);
+    }
 
 }

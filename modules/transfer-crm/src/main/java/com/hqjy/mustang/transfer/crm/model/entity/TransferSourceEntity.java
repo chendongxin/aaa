@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.model.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.List;
  * @date : 2018/09/14 11:19
  */
 @Data
+@Accessors(chain = true)
 public class TransferSourceEntity implements Serializable {
     /**
 	 * 主键 source_id
@@ -38,6 +40,11 @@ public class TransferSourceEntity implements Serializable {
 	 * 状态( 0-正常 1-禁用) status
 	 **/
     private Integer status;
+
+    /**
+     * 是否被用 0 未被用 1 被用
+     **/
+    private Integer sign;
 
     /**
 	 * 创建人编号 create_user_id
