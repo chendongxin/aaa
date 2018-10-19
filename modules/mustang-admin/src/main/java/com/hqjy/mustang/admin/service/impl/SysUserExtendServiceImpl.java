@@ -80,4 +80,7 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
         return baseDao.update(userExtend);
     }
 
+    public  List<SysUserExtendEntity> getExistTqId(){
+        return baseDao.getExistTqId();
+    }
 }

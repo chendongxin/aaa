@@ -178,5 +178,10 @@
         from sys_user_extend
         where user_id = #{userId}
     </select>
-
+    <!-- 所有已存在的TQ账号信息-->
+    <select id="getExistTqId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user_extend
+    </select>
 </mapper>
