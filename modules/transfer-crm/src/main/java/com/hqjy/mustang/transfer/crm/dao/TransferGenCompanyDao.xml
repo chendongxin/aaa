@@ -185,6 +185,13 @@
 		select
 			<include refid="Base_Column_List"/>
 		from transfer_gen_company
+		order by parent_id
+	</select>
+
+	<select id="getAllGenCompany" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List"/>
+		from transfer_gen_company
 		where parent_id = 1
 	</select>
 

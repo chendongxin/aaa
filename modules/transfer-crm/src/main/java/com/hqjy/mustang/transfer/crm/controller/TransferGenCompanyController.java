@@ -46,7 +46,7 @@ public class TransferGenCompanyController {
     @ApiOperation(value = "获取所有推广公司", notes = "获取所有推广公司，包含所有推广公司数据")
     @GetMapping("/get/all")
     public R getAllCompany() {
-        return R.ok(transferGenCompanyService.getAllGenCompanyList());
+        return R.ok(transferGenCompanyService.getAllGenCompany());
     }
 
     /**

@@ -3,6 +3,7 @@ package com.hqjy.mustang.admin.dao;
 import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
