@@ -28,7 +28,7 @@ public interface SysUserDeptServiceFeign {
      * @return 返回用户所有部门id集合
      * @author by xyq 2018年10月9日17:01:10
      */
-    @GetMapping(value = Constant.API_PATH + "/user/dept/all")
+    @GetMapping(value = Constant.API_PATH + "/getUserDeptIdList")
     List<Long> getUserDeptIdList(@RequestParam("userId") Long userId);
 
 
