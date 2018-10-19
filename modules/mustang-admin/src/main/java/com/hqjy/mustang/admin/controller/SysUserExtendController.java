@@ -101,4 +101,15 @@ public class SysUserExtendController extends AbstractController {
         }
         return R.error(StatusCode.DATABASE_DELETE_FAILURE);
     }
+
+    /**
+     * description: 获取已经存在的tqid,避免重复添加
+     * @author: hutao
+     * @date 2018/10/19 11:41
+     */
+    @ApiOperation(value = "获取所有已存在TQ账号信息", notes = "获取所有已存在TQ账号信息")
+    @GetMapping(value="/getExistTqId")
+    public R getExistTqId(){
+        return R.ok(sysUserExtendService.getExistTqId());
+    }
 }
