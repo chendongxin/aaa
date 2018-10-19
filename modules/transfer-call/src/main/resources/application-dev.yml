@@ -11,9 +11,10 @@ spring:
       max-idle: 10      # 连接池中的最大空闲连接
       min-idle: 5       # 连接池中的最小空闲连接
   rabbitmq:
-    addresses: 10.0.98.75:5672
+    host: 10.0.98.46
+    port: 5672
     username: admin
-    password: Rabbitmq@2018
+    password: mon4498
     listener:
       simple:
         acknowledge-mode: manual
