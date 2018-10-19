@@ -250,4 +250,12 @@
         <include refid="Base_Where_SQL"/>
     </select>
 
+
+    <select id="getUserListByRoleCode" resultMap="BaseResultMap">
+        SELECT u.user_id,u.user_name
+        FROM sys_user u
+        INNER JOIN sys_user_role ur ON u.user_id=ur.user_id
+        INNER JOIN sys_role r ON ur.role_id=r.role_id
+        WHERE r.role_code=#{roleCode}
+    </select>
 </mapper>
