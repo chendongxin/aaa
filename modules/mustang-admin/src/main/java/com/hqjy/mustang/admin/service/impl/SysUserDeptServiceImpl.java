@@ -26,6 +26,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @ date :2018/1/20 10:10
  */
 @Service("sysUserDeptService")
+@Slf4j
 public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysUserDeptEntity, Long> implements SysUserDeptService {
 
     /**
@@ -222,6 +223,23 @@ public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysU
     public int deleteByDeptId(Long deptId) {
         return baseDao.deleteByDeptId(deptId);
     }
+
+    @Override
+    public List<UserDeptInfo> getUserDeptInfo(String deptName) {
+        Long deptId = sysDeptService.getDeptByName(deptName);
+        if (deptId == null) {
+            log.error("部门：" + deptName + "不存在");
+            return new ArrayList<>();
+        }
+        List<Long> allDeptUnderDeptId = sysDeptService.getAllDeptUnderDeptId(deptId);
+        if (allDeptUnderDeptId.size() == 0) {
+            log.error("部门编号：" + deptId + "不存在");
+            return new ArrayList<>();
+        }
+        String deptIds = sysDeptService.deptIdListToString(allDeptUnderDeptId);
+        return baseDao.getUserDeptInfo(deptIds);
+    }
+
 
     /**
      * new  by gmm 2018年10月19日15:07:52

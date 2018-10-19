@@ -55,6 +55,16 @@ public interface SysUserDeptDao extends BaseDao<SysUserDeptEntity, Long> {
     int deleteByDeptId(Long deptId);
 
     /**
+     * 根据部门ID集合字符串获取用户和部门信息
+     *
+     * @param deptIds 部门Id
+     * @return 返回
+     * @author xyq 2018年10月19日11:55:51
+     */
+    List<UserDeptInfo> getUserDeptInfo(@Param("deptIds") String deptIds);
+
+
+    /**
      * 获取用户所属部门
      */
     SysDeptEntity getUserDept(Long userId);

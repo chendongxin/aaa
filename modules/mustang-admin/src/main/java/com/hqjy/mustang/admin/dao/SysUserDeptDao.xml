@@ -25,7 +25,9 @@
             <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
             <if test="weights != null and !&quot;&quot;.equals(weights)">and weights = #{weights}</if>
             <if test="createId != null and !&quot;&quot;.equals(createId)">and create_id = #{createId}</if>
-            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{createTime},'%Y-%m-%d')
+            </if>
         </where>
     </sql>
 
@@ -125,20 +127,6 @@
         </trim>
     </insert>
 
-    <!-- 插入一条记录 -->
-    <!--<insert id="save" keyProperty="id" useGeneratedKeys="true">
-        insert into sys_user_dept(user_id, dept_id,weights, create_id)
-        values
-        <foreach collection="deptIdList" item="item" index="index" separator=",">
-            (
-            #{userId},
-            #{item},
-            1,
-            #{createId}
-            )
-        </foreach>
-    </insert>-->
-
     <!-- 更新一条记录 -->
     <update id="update">
         update sys_user_dept
@@ -208,7 +196,9 @@
             <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
             <if test="weights != null and !&quot;&quot;.equals(weights)">and weights = #{weights}</if>
             <if test="createId != null and !&quot;&quot;.equals(createId)">and create_id = #{createId}</if>
-            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') =
+                STR_TO_DATE(#{createTime},'%Y-%m-%d')
+            </if>
         </where>
     </select>
 
@@ -228,6 +218,13 @@
         <include refid="Base_Where_SQL"/>
     </select>
 
+    <select id="getUserDeptInfo" resultType="com.hqjy.mustang.common.model.admin.UserDeptInfo">
+        SELECT u.user_id,u.user_name,d.dept_id,d.dept_name
+        FROM sys_user u
+        INNER JOIN sys_user_dept ud ON u.user_id=ud.user_id
+        INNER JOIN sys_dept d ON ud.dept_id =d.dept_id
+        WHERE ud.dept_id IN ${deptIds};
+    </select>
     <!-- 查询用户所属部门 -->
     <select id="getUserDept" resultType="com.hqjy.mustang.admin.model.entity.SysDeptEntity">
         SELECT

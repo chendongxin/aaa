@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.hqjy.mustang.common.base.annotation.ExcelAttribute;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -21,6 +22,7 @@ public class CustomerReportData {
     private Integer sequence;
 
     @ApiModelProperty(value = "客服用户Id", hidden = true)
+    @JSONField(serialize = false)
     private Long userId;
 
     @ApiModelProperty(value = "姓名")
@@ -28,6 +30,7 @@ public class CustomerReportData {
     private String name;
 
     @ApiModelProperty(value = "部门Id", hidden = true)
+    @JSONField(serialize = false)
     private Long deptId;
 
     @ApiModelProperty(value = "部门")
