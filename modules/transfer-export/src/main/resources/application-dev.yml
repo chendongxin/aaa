@@ -12,10 +12,10 @@ spring:
             min-idle: 5       # 连接池中的最小空闲连接
     # rabbitmq
     rabbitmq:
-      host: 10.0.98.75
+      host: 10.0.98.46
       port: 5672
       username: admin
-      password: Rabbitmq@2018
+      password: mon4498
       # 支持发布确认
       publisher-confirms: true
       # 支持发布返回
