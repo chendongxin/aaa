@@ -90,6 +90,8 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setCreateUserId(Optional.ofNullable(customerEntity.getCreateUserId()).orElse(NO_CREATE_ID.getValue()));
         // 如果没有姓名，设置为未知
         customerEntity.setName(StringUtils.isNotEmpty(customerEntity.getName()) ? customerEntity.getName() : "未知");
+        //创建部门不存在，设置默认部门
+        customerEntity.setCreateUserDeptId(Optional.ofNullable(customerEntity.getCreateUserDeptId()).orElse(NO_CREATE_ID.getValue()));
         // 状态默认潜在
         customerEntity.setStatus(0);
         // 推广方式，默认 1：主动
@@ -98,7 +100,6 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setAllotTime(new Date());
         customerEntity.setCreateUserId(Optional.ofNullable(customerEntity.getCreateUserId()).orElse(0L));
         customerEntity.setCreateUserName(Optional.ofNullable(customerEntity.getCreateUserName()).orElse("系统"));
-
         // 先直接保存用户信息，获取用户编号，不写入nc_id，phone，we_chat，qq， land_line
         transferAllotCustomerDao.save(customerEntity);
 

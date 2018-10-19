@@ -253,5 +253,9 @@ public class TransferAllotCustomerEntity implements Serializable {
      * 简历详情 resume_detail
      **/
     private String resumeDetail;
+    /**
+     * 创建人部门编号 create_user_dept_id
+     */
+    private  Long createUserDeptId;
 
 }
