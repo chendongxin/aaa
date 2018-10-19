@@ -36,10 +36,10 @@ public interface SysDeptService extends BaseService<SysDeptEntity, Long> {
     Map<String, List<SysDeptEntity>> getUserDeptTree(Boolean isRoot, Boolean showRoot);
 
     /**
-     * 电销中心的部门数
+     * 电销中心的部门树
      *
      * @param deptName 部门名称
-     * @return 返回部门数
+     * @return 返回部门树
      * @author xyq 2018年10月15日18:03:31
      */
     Map<String, List<SysDeptEntity>> getSaleDeptTree(String deptName);

@@ -23,25 +23,17 @@ public class CustomerQueryParams {
     @ApiModelProperty(value = "结束日期（必选）")
     private String endTime;
 
-    @ApiModelProperty(value = "部门Id")
-    private Long deptId;
+    @ApiModelProperty(value = "客服人员")
+    private Long userId;
 
     @JSONField(serialize = false)
-    private String deptIds;
+    private String userIds;
 
     @ApiModelProperty(value = "推广公司")
     private Long companyId;
 
     @ApiModelProperty(value = "来源平台")
     private Long sourceId;
-
-    @ApiModelProperty(value = "获取方式")
-    private Long getWay;
-
-    @ApiModelProperty(value = "客服人员")
-    private int userId;
-
-
 
 
 }

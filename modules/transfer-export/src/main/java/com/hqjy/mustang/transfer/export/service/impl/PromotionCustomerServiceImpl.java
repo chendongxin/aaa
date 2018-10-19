@@ -4,9 +4,9 @@ import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionCustomerDao;
-import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
+import com.hqjy.mustang.transfer.export.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.CustomerReportData;
 import com.hqjy.mustang.transfer.export.model.dto.CustomerReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
@@ -24,7 +24,10 @@ import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -37,11 +40,12 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
 
     private PromotionCustomerDao promotionCustomerDao;
-    private SysDeptServiceFeign deptServiceFeign;
+    private SysUserDeptServiceFeign userDeptServiceFeign;
+
 
     @Autowired
-    public void setDeptServiceFeign(SysDeptServiceFeign deptServiceFeign) {
-        this.deptServiceFeign = deptServiceFeign;
+    public void setUserDeptServiceFeign(SysUserDeptServiceFeign userDeptServiceFeign) {
+        this.userDeptServiceFeign = userDeptServiceFeign;
     }
 
     @Autowired
@@ -104,21 +108,29 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
         if (StringUtils.isEmpty(query.getEndTime())) {
             throw new RRException("请选择结束时间");
         }
-        if (query.getDeptId() == null) {
-            throw new RRException("请选择部门");
+
+        List<UserDeptInfo> userDeptInfo = userDeptServiceFeign.getUserDeptInfo("客服部");
+        if (userDeptInfo.isEmpty()) {
+            throw new RRException("客服数据不存在!");
         }
+        Long userId = query.getUserId();
+        if (userId != null) {
+            userDeptInfo = userDeptInfo.stream().filter(x -> x.getUserId().equals(userId)).collect(Collectors.toList());
+        }
+        List<UserDeptInfo> deptList = userDeptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
+
         List<CustomerReportData> list = new ArrayList<>();
-        List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
-
-        List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
-
+        AtomicInteger sequence = new AtomicInteger();
+        //部门ID降序排序
+        Collections.sort(deptList, Comparator.comparing(UserDeptInfo::getDeptId));
+        Collections.reverse(deptList);
         deptList.forEach(y -> {
             LOG.info("初始化报表列表");
-            list.add(new CustomerReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
-            ids.add(String.valueOf(y.getDeptId()));
+            list.add(new CustomerReportData().setSequence(sequence.incrementAndGet()).setUserId(y.getUserId()).setName(y.getUserName()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            ids.add(String.valueOf(y.getUserId()));
         });
-        query.setDeptIds(StringUtils.listToString(ids));
+        query.setUserIds(StringUtils.listToString(ids));
         return list;
     }
 
@@ -131,6 +143,8 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
      */
     private CustomerReportTotal countTotal(List<CustomerReportData> list) {
         CustomerReportTotal total = new CustomerReportTotal();
+        total.setName("/");
+        total.setDeptName("/");
         list.forEach(x -> {
             total.setBusinessNum(total.getBusinessNum() + x.getBusinessNum());
             total.setValidNum(total.getValidNum() + x.getValidNum());

@@ -3,7 +3,6 @@ package com.hqjy.mustang.transfer.export.service.impl;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
-import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionDailyDao;

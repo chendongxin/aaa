@@ -106,7 +106,41 @@ public class PromotionReportController {
         return R.result(promotionDailyService.exportPromotionDaily(query));
     }
 
-    @ApiOperation(value = "客服推广报表数据列表", notes = "请求参数格式：\n")
+    @ApiOperation(value = "客服推广报表数据列表", notes = "请求参数格式：\n" +
+            "分页参数：/report/promotion/promotionDailyList?pageNum=1&pageSize=10\n" +
+            "高级查询参数：\n" +
+            "{\n" +
+            "\"beginTime\": \"2018-09-10\",\n" +
+            "\"endTime\": \"2018-10-20\",\n" +
+            "\"userId\":1869\n" +
+            "\"companyId\":1869\n" +
+            "\"sourceId\":1869\n" +
+            "}" +
+            "请求成功：\n" +
+            "{\n" +
+            "  \"msg\": \"成功\",\n" +
+            "  \"result\": {\n" +
+            "    \"currPage\": 1,\n" +
+            "    \"list\": [\n" +
+            "      {\n" +
+            "        \"businessNum\": 0,\n" +
+            "        \"dealNum\": 0,\n" +
+            "        \"deptId\": 22,\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
+            "        \"name\": \"客服1\",\n" +
+            "        \"userId\": 4,\n" +
+            "        \"validNum\": 0,\n" +
+            "        \"visitNum\": 0,\n" +
+            "        \"visitValidNum\": 0\n" +
+            "      }\n" +
+            "    ],\n" +
+            "    \"pageSize\": 10,\n" +
+            "    \"size\": 1,\n" +
+            "    \"totalCount\": 1,\n" +
+            "    \"totalPage\": 1\n" +
+            "  },\n" +
+            "  \"code\": 0\n" +
+            "}")
     @PostMapping("/promotionCustomerList")
     public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody(required = false) CustomerQueryParams query) {
         return R.result(promotionCustomerService.promotionCustomerList(params, query));
