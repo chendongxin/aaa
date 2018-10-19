@@ -9,7 +9,7 @@ import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferKeywordDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferKeywordEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferKeywordService;
-import com.sun.org.apache.regexp.internal.RE;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +20,7 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
 @Service
+@Slf4j
 public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordDao, TransferKeywordEntity, Integer> implements TransferKeywordService {
 
     /**
@@ -51,8 +52,10 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
         if (baseDao.findOneByName(transferKeywordEntity.getName()) != null) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
+        transferKeywordEntity.setSign(0);
         transferKeywordEntity.setCreateUserId(getUserId());
         transferKeywordEntity.setCreateUserName(getUserName());
+        cleanList();
         return baseDao.save(transferKeywordEntity);
     }
 
@@ -63,6 +66,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     public int update(TransferKeywordEntity transferKeywordEntity) {
         transferKeywordEntity.setUpdateUserId(getUserId());
         transferKeywordEntity.setUpdateUserName(getUserName());
+        cleanList();
         return baseDao.update(transferKeywordEntity);
     }
 
@@ -76,6 +80,9 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     @Transactional(rollbackFor = Exception.class)
     public int deleteBatch(Integer[] ids) {
         for (Integer id : ids) {
+            if (baseDao.findOne(id).getSign() == 1) {
+                throw new RRException(StatusCode.DATABASE_SELECT_USE);
+            }
             List<TransferKeywordEntity> keywordList = baseDao.findByParentId(id);
             if (keywordList.size() > 0) {
                 throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
@@ -89,16 +96,58 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
      */
     @Override
     public String getKeyWork(String info) {
+        log.info("开始遍历关键字：{}", info);
         dictionaryList = Optional.ofNullable(dictionaryList).orElseGet(() -> baseDao.findDictionaryList());
+        dictionaryList.forEach(transferKeywordEntity -> System.out.println(transferKeywordEntity.getName()));
         if (dictionaryList != null && dictionaryList.size() > 0) {
             Set<String> wordSet = dictionaryList.stream().map(TransferKeywordEntity::getName).collect(Collectors.toSet());
             KeyWordUtil keyWordUtil = new KeyWordUtil(wordSet);
             Set<String> words = keyWordUtil.getWords(info);
             if (words.size() > 0) {
-                return words.iterator().next();
+                String result = words.iterator().next();
+                log.info("匹配到关键字：{}", result);
+                return result;
             }
         }
+        log.info("没有遍历到任何关键字：{}", info);
         return null;
+    }
+
+    /**
+     * 清除缓存
+     */
+    private synchronized void cleanList() {
+        dictionaryList.clear();
+    }
+    /**
+     * 获取关键词类别(第三级)
+     */
+    @Override
+    public List<TransferKeywordEntity> getAllKeyList() {
+        List<TransferKeywordEntity> parentIdList = new ArrayList<>();
+        List<TransferKeywordEntity> keywordList = new ArrayList<>();
+        parentIdList.add(baseDao.findIdByParentId(0).get(0));
+        for (int count = 0; count < 2; count++) {
+            keywordList = this.getAllKeywordByParentId(parentIdList);
+            parentIdList = keywordList;
+        }
+        return keywordList;
+    }
+
+    private List<TransferKeywordEntity> getAllKeywordByParentId(List<TransferKeywordEntity> parentIdList) {
+        List<TransferKeywordEntity> keyWordList = new ArrayList<>();
+        for (TransferKeywordEntity id : parentIdList) {
+            keyWordList.addAll(baseDao.findIdByParentId(id.getId()));
+        }
+        return keyWordList;
+    }
+
+    /**
+     * 获取某一类别下的关键词
+     */
+    @Override
+    public List<TransferKeywordEntity> getAllKeyword(Integer parentId) {
+        return baseDao.findIdByParentId(parentId);
     }
 
 }

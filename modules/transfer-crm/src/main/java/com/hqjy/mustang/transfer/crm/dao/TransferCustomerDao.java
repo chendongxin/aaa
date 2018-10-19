@@ -74,4 +74,23 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
      */
     TransferCustomerEntity getByNcId(String ncId);
 
+    /**
+     * 更新赛道的被用标志
+     */
+    int updatePro(Long proId);
+
+    /**
+     * 更新公司的被用标志
+     */
+    int updateCom(Long companyId);
+
+    /**
+     * 更新平台的被用标志
+     */
+    int updateSou(Long sourceId);
+
+    /**
+     * 更新关键词的被用标志
+     */
+    int updateKey(Integer id);
 }

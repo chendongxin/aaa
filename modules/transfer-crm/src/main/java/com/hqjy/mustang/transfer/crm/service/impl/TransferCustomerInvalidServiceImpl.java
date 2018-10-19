@@ -25,8 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
-import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.*;
 
 @Service
 @Slf4j
@@ -77,6 +76,12 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
         if (customerId != null && MapUtils.getLong(query, "customerId").equals(-1L)) {
             return null;
         }
+        if (isGeneralSeat()) {
+            query.put("userId", getUserId());
+        }
+        if (isSuperAdmin()) {
+            return super.findPage(query);
+        }
         //获取当前用户的部门以及子部门
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         List<String> ids = new ArrayList<>();
@@ -97,6 +102,7 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
             customerEntity.setStatus(Constant.CustomerStatus.POTENTIAL.getValue())
                     .setUpdateUserId(getUserId()).setUpdateUserName(getUserName()).setUpdateTime(new Date());
             transferCustomerService.update(customerEntity);
+            baseDao.delete(baseDao.getCustomerByCustomerId(customerId).getInvalidId());
             return R.ok();
         } catch (Exception e) {
             log.error("客户无效转私海处理异常" + e.getMessage());

@@ -25,9 +25,4 @@ public interface TransferWaySourceService extends BaseService<TransferWaySourceE
      */
     List<TransferWaySourceEntity> findPageSource(PageQuery pageQuery);
 
-
-//    /**
-//     * 修改推广平台下的推广方式
-//     */
-//    int updateWaySource(TransferGenWaySourceDTO transferGenWaySourceDTO);
 }

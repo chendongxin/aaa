@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
  * @author : HejinYo   hejinyo@gmail.com
  * @date :  2018/8/29 21:55
  */
-@FeignClient(name = "mustang-crm", fallback = TransferCustomerApiServiceFallbackImpl.class)
+@FeignClient(name = "transfer-crm", fallback = TransferCustomerApiServiceFallbackImpl.class)
 public interface TransferCustomerApiService {
 
     /**

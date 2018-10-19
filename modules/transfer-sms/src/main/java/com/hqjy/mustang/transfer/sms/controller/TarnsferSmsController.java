@@ -31,6 +31,28 @@ public class TarnsferSmsController {
     private TransferSmsService transferSmsService;
 
     /**
+     * 短信保存并发送
+     */
+    @ApiOperation(value = "短信保存并发送", notes = "短信保存并发送\n" +
+            "{\n" +
+            "    \"[部门ID] dept_id\":\"1\",\n" +
+            "    \"[部门名称] dept_name\":\"野马部门\",\n" +
+            "    \"[收件人] phone\":\"17600222250,13265115030\",\n" +
+            "    \"[短信内容] content\":\"【Lolipop】正式环境启用，HejinYo。2018-09-29 11:14\"\n" +
+            "}")
+    @ApiImplicitParam(paramType = "body", name = "user", value = "短信信息对象", required = true, dataType = "TransferSmsEntity")
+    @SysLog("保存短信")
+    @PostMapping("/saveAndSend")
+    public R saveAndSend(@Validated(RestfulValid.POST.class) @RequestBody TransferSmsEntity smsEntity) {
+        int count = transferSmsService.saveAndSend(smsEntity);
+        if (count > 0) {
+            return R.ok();
+        }
+        return R.error(StatusCode.DATABASE_SAVE_FAILURE);
+    }
+
+
+    /**
      * 短信执行发送
      */
     @ApiOperation(value = "短信执行发送", notes = "{ids}[短信编号]\n/send/1,2,3")

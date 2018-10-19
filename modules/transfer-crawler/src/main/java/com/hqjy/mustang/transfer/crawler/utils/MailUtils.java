@@ -38,7 +38,7 @@ public class MailUtils {
             // 连接邮件服务器
             store.connect(email, password);
         } catch (Exception e) {
-            log.error("email:{},password:{}, 此邮箱失败", email, password);
+            log.error("email:{},password:{}, 此邮箱连接失败", email, password);
         }
         return store;
     }

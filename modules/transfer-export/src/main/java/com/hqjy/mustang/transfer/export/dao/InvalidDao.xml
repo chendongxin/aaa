@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.transfer.export.dao.InvalidDao">
+
+    <!-- 实体映射 -->
+    <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.export.model.entity.InvalidExportEntity">
+        <result column="dept_name" property="deptName"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="age" property="age"/>
+        <result column="education_id" property="education"/>
+        <result column="work_experience" property="experience"/>
+        <result column="apply_key" property="jobKey"/>
+        <result column="user_name" property="userName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="status" property="status"/>
+        <result column="get_way" property="getWay"/>
+        <result column="source_name" property="source"/>
+        <result column="company_name" property="company"/>
+        <result column="major" property="profession"/>
+        <result column="position_applied" property="applyPosition"/>
+    </resultMap>
+
+    <select id="getExportData" resultMap="BaseResultMap">
+        SELECT
+        tc.dept_name,
+        tc.name,
+        tc.phone,
+        tc.user_name,
+        td.age,
+        ti.create_time,
+        ti.create_user_name,
+        tk.name as apply_key,
+        tc.source_name,
+        tc.company_name,
+        td.major,
+        td.position_applied,
+        (CASE td.education_id WHEN 0 THEN '无' WHEN 1 THEN '小学' WHEN 2 THEN '初中'WHEN 3 THEN '高中'WHEN 4 THEN '大专'WHEN 5
+        THEN '本科'WHEN 6 THEN '硕士'WHEN 7 THEN '博士'ELSE '/'END) AS education_id,
+        (CASE td.work_experience WHEN -1 THEN '应届生' WHEN 0 THEN '无经验' WHEN 1 THEN '一年' WHEN 2 THEN '两年' WHEN 3 THEN '三年'
+        WHEN td.work_experience &gt;3 THEN '三年以上'ELSE '/' END) AS work_experience,
+        (CASE tc.status WHEN 0 THEN '潜在' WHEN 1 THEN '失败有效' WHEN 2 THEN '失败无效' WHEN 3 THEN '预约' WHEN 4 THEN '成交' END) AS status,
+        (CASE tc.get_way WHEN 1 THEN '主动' WHEN 2 THEN '被动' END) AS get_way
+        FROM
+        transfer_customer tc
+        INNER JOIN transfer_customer_detail td ON tc.customer_id = td.customer_id
+        INNER JOIN transfer_customer_invalid ti ON ti.customer_id = tc.customer_id
+        LEFT JOIN transfer_keyword tk ON tk.id=td.apply_key
+
+        <where>
+            <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
+            <if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
+                and tc.dept_id in ${userAllDeptId}
+            </if>
+            <if test="userId !=null and !&quot;&quot;.equals(userId)">
+                and tc.user_id=#{userId}
+            </if>
+            <if test="userName !=null and !&quot;&quot;.equals(userName)">
+                and tc.user_name=#{userName}
+            </if>
+            <if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+            <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
+            <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+                and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+            </if>
+            <if test="beginInvalidTime != null and beginInvalidTime != '' and endInvalidTime != null and endInvalidTime != ''">
+                and ti.create_time between #{beginInvalidTime} and #{endInvalidTime}
+            </if>
+        </where>
+        GROUP BY tc.customer_id
+    </select>
+</mapper>

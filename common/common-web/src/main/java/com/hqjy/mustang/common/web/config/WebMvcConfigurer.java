@@ -27,7 +27,7 @@ public class WebMvcConfigurer extends WebMvcConfigurerAdapter {
         //fast参数配置
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.PrettyFormat);
-        // 自定义时间格式
+        // 自定义时间格式 TODO 微服务调用反序列化问题,记得加上 @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")，因为历史原因问题，其实可以不对时间进行统一格式化
         fastJsonConfig.setDateFormat("yyyy-MM-dd HH:mm:ss");
         //禁用循环引用检测
         fastJsonConfig.setSerializerFeatures(SerializerFeature.DisableCircularReferenceDetect);
