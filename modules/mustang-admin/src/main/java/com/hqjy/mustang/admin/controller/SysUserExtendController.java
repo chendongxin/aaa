@@ -8,10 +8,12 @@ import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
+import com.hqjy.mustang.common.base.validator.RestfulValid;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -48,7 +50,7 @@ public class SysUserExtendController extends AbstractController {
     @SysLog("新增人员映射配置")
     @PostMapping("/save")
     @RequiresPermissions("sys:userExtend:save")
-    public R save(@RequestBody SysUserExtendEntity userExtend){
+    public R save(@Validated(RestfulValid.POST.class) @RequestBody SysUserExtendEntity userExtend){
         int count = sysUserExtendService.save(userExtend);
         if(count > 0){
             return R.ok();
@@ -98,5 +100,16 @@ public class SysUserExtendController extends AbstractController {
             return R.ok();
         }
         return R.error(StatusCode.DATABASE_DELETE_FAILURE);
+    }
+
+    /**
+     * description: 获取已经存在的tqid,避免重复添加
+     * @author: hutao
+     * @date 2018/10/19 11:41
+     */
+    @ApiOperation(value = "获取所有已存在TQ账号信息", notes = "获取所有已存在TQ账号信息")
+    @GetMapping(value="/getExistTqId")
+    public R getExistTqId(){
+        return R.ok(sysUserExtendService.getExistTqId());
     }
 }
