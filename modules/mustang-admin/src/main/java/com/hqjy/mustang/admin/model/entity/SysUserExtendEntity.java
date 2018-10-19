@@ -83,5 +83,7 @@ public class SysUserExtendEntity implements Serializable {
     @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
 
+
+
     private static final long serialVersionUID = 1L;
 }
