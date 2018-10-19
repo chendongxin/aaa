@@ -3,6 +3,7 @@ package com.hqjy.mustang.admin.service;
 import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 
 import java.util.List;
 
@@ -82,4 +83,13 @@ public interface SysUserDeptService extends BaseService<SysUserDeptEntity, Long>
      * 删除人员与部门关系
      */
     int deleteByDeptId(Long deptId);
+
+
+    /**
+     * 根据部门名称集合字符串获取用户和部门信息
+     *
+     * @param deptName 部门名称
+     * @return 返回
+     */
+    List<UserDeptInfo> getUserDeptInfo(String deptName);
 }
