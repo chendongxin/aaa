@@ -22,7 +22,7 @@ public class TransferCustomerDTO {
     /**
      * 微信 we_chat
      **/
-    private String weChat;
+    private String weiXin;
 
     /**
      * qq qq

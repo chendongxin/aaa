@@ -185,7 +185,7 @@
 		select
 			<include refid="Base_Column_List"/>
 		from transfer_gen_company
-		order by parent_id
+		where parent_id = 1
 	</select>
 
 	<!-- 通过名称查找一条记录 -->

@@ -31,6 +31,7 @@
 	  <result column="we_chat" jdbcType="VARCHAR" property="weChat" />
 	  <result column="qq" jdbcType="VARCHAR" property="qq" />
 	  <result column="land_line" jdbcType="VARCHAR" property="landLine" />
+      <result column="create_user_dept_id" jdbcType="BIGINT" property="createUserDeptId" />
 	  <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
 	  <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
 	  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -51,7 +52,7 @@
     customer_id, nc_id, pro_id, pro_name, source_id, source_name, company_id, company_name,
     name, status, get_way, user_id, user_name, dept_id, dept_name, first_user_id, first_user_name, first_user_dept_id,
     last_user_id, last_user_name, last_user_dept_id, gen_user_id, gen_user_name, phone, we_chat, qq, land_line,
-    create_user_id, create_user_name, create_time, allot_time, update_user_id, update_user_name,
+    create_user_dept_id, create_user_id, create_user_name, create_time, allot_time, update_user_id, update_user_name,
     update_time, last_follow_time
   </sql>
   
@@ -84,6 +85,7 @@
 		<if test="weChat != null and !&quot;&quot;.equals(weChat)">and we_chat = #{weChat}</if>
 		<if test="qq != null and !&quot;&quot;.equals(qq)">and qq = #{qq}</if>
 		<if test="landLine != null and !&quot;&quot;.equals(landLine)">and land_line = #{landLine}</if>
+        <if test="createUserDeptId != null and !&quot;&quot;.equals(createUserDeptId)">and create_user_dept_id = #{createUserDeptId}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -125,6 +127,7 @@
 		  <if test="null != weChat">we_chat, </if>
 		  <if test="null != qq">qq, </if>
 		  <if test="null != landLine">land_line, </if>
+          <if test="null != createUserDeptId">create_user_dept_id, </if>
 		  <if test="null != createUserId">create_user_id, </if>
 		  <if test="null != createUserName">create_user_name, </if>
 		  <if test="null != createTime">create_time, </if>
@@ -162,6 +165,7 @@
 			<if test="null != weChat">#{weChat}, </if>
 			<if test="null != qq">#{qq}, </if>
 			<if test="null != landLine">#{landLine}, </if>
+            <if test="null != createUserDeptId">#{createUserDeptId}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -203,6 +207,7 @@
 			<if test="null != weChat">we_chat = #{weChat}, </if>
 			<if test="null != qq">qq = #{qq}, </if>
 			<if test="null != landLine">land_line = #{landLine}, </if>
+            <if test="null != createUserDeptId">create_user_dept_id = #{createUserDeptId}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
@@ -265,6 +270,7 @@
 			<if test="weChat != null and !&quot;&quot;.equals(weChat)">and we_chat like concat('%',#{weChat},'%')</if>
 			<if test="qq != null and !&quot;&quot;.equals(qq)">and qq like concat('%',#{qq},'%')</if>
 			<if test="landLine != null and !&quot;&quot;.equals(landLine)">and land_line like concat('%',#{landLine},'%')</if>
+            <if test="createUserDeptId != null and !&quot;&quot;.equals(createUserDeptId)">and create_user_dept_id = #{createUserDeptId}</if>
 			<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 			<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
 			<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -356,7 +362,7 @@
 		tc.name, tc.status, tc.get_way, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.first_user_id,
 		tc.first_user_name, tc.last_user_id, tc.last_user_name, tc.last_user_dept_id, tc.gen_user_id, tc.gen_user_name, tc.phone, tc.we_chat,
 		tc.qq, tc.land_line, tc.create_user_id, tc.create_user_name, tc.create_time, tc.allot_time, tc.update_user_id,
-		tc.update_user_name, tc.update_time, tc.last_follow_time
+		tc.update_user_name, tc.update_time, tc.last_follow_time, tc.create_user_dept_id
 		from transfer_customer tc
 		<where>
 			<!--该客户未分配人员-->
@@ -382,7 +388,7 @@
 	<!-- 私海客户分页查询 -->
 	<select id="findPrivatePage" resultMap="BaseResultMap">
 		select
-		tc.customer_id, tc.name, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.phone,
+		tc.customer_id, tc.name, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.phone, tc.create_user_dept_id,
 		tc.create_user_id, tc.create_user_name, tc.create_time, tc.status, tc.last_follow_time, tc.allot_time
 		from transfer_customer tc
 		<where>

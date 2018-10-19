@@ -244,7 +244,9 @@ public class TransferCustomerController extends AbstractMethodError {
             "{\n" +
             "  \"customerId\": [1,8],\n" +
             "  \"deptId\": 3,\n" +
-            "  \"userId\": 10\n" +
+            "  \"deptName\": \"广州天河校区\",\n" +
+            "  \"userId\": 11791\n" +
+            "  \"userName\": \"郭喵喵\",\n" +
             "}")
     @PostMapping("/transferCustomer")
 //    @RequiresPermissions("biz:customer:transfer")

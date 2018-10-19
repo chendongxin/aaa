@@ -222,4 +222,13 @@ public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysU
     public int deleteByDeptId(Long deptId) {
         return baseDao.deleteByDeptId(deptId);
     }
+
+    /**
+     * new  by gmm 2018年10月19日15:07:52
+     * 获取用户所属部门
+     */
+    @Override
+    public SysDeptEntity getUserDept(Long userId) {
+        return baseDao.getUserDept(userId);
+    }
 }

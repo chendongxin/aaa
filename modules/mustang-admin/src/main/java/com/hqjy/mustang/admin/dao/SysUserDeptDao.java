@@ -53,4 +53,9 @@ public interface SysUserDeptDao extends BaseDao<SysUserDeptEntity, Long> {
      * 根据部门编号删除用户部门关系
      */
     int deleteByDeptId(Long deptId);
+
+    /**
+     * 获取用户所属部门
+     */
+    SysDeptEntity getUserDept(Long userId);
 }

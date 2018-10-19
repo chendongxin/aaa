@@ -30,4 +30,11 @@ public interface SysDeptServiceFeign {
      */
     @GetMapping(value = "/getUserDeptList")
     List<SysDeptInfo> getUserDeptList(@RequestParam("userId") Long userId);
+
+
+    /**
+     * 获取用户所属部门
+     */
+    @GetMapping(Constant.API_PATH + "/dept/userDept/{userId}")
+    SysDeptInfo getUserDept(@PathVariable("userId") Long userId);
 }
