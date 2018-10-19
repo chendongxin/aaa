@@ -23,10 +23,14 @@ public class SysUserDeptApi {
 
     /**
      * 返回用户所有部门id集合
+     *
+     * @param userId 用户Id
+     * @return 返回
+     * @author xyq 2018年10月19日17:32:37
      */
     @ApiOperation(value = "返回用户所有部门id集合", notes = "返回用户所有部门id集合")
-    @GetMapping(value = "/UserDeptAll/{userId}")
-    public List<Long> getUserDeptIdList(@PathVariable("userId") Long userId) {
+    @GetMapping(value = "/getUserDeptIdList")
+    public List<Long> getUserDeptIdList(@RequestParam("userId") Long userId) {
         return sysUserDeptService.getUserDeptIdList(userId);
     }
 
@@ -36,6 +40,7 @@ public class SysUserDeptApi {
      *
      * @param deptName 部门名称
      * @return 返回
+     * @author xyq 2018年10月19日17:32:37
      */
     @ApiOperation(value = "根据部门名称集合字符串获取用户和部门信息")
     @GetMapping(value = "/getUserDeptInfo")
