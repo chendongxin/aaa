@@ -40,12 +40,12 @@ public class PromotionReportController {
             "分页参数：/report/promotion/promotionDailyList?pageNum=1&pageSize=10\n" +
             "高级查询参数：\n" +
             "{\n" +
-            "  \"beginTime\": \"2018-09-10\",\n" +
-            "  \"endTime\": \"2018-10-20\",\n" +
-            "  \"deptId\":1869\n" +
-            "  \"companyId\":1869\n" +
-            "  \"getWay\":1869\n" +
-            "  \"sourceId\":1869\n" +
+                "  \"beginTime\": \"2018-09-10\",\n" +
+                "  \"endTime\": \"2018-10-20\",\n" +
+                "  \"deptId\":1869\n" +
+                "  \"companyId\":1869\n" +
+                "  \"getWay\":1869\n" +
+                "  \"sourceId\":1869\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
@@ -85,20 +85,19 @@ public class PromotionReportController {
 
     @SysLog("导出招转日常数据")
     @ApiOperation(value = "导出招转日常数据", notes = "请求参数格式:\n" +
-            "高级查询参数：\n" +
             "{\n" +
-            "  \"beginTime\": \"2018-09-10\",\n" +
-            "  \"endTime\": \"2018-10-20\",\n" +
-            "  \"deptId\":1869\n" +
-            "  \"companyId\":1869\n" +
-            "  \"getWay\":1869\n" +
-            "  \"sourceId\":1869\n" +
+                "  \"beginTime\": \"2018-09-10\",\n" +
+                "  \"endTime\": \"2018-10-20\",\n" +
+                "  \"deptId\":1869\n" +
+                "  \"companyId\":1869\n" +
+                "  \"getWay\":1869\n" +
+                "  \"sourceId\":1869\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
-            "  \"code\": 0\n" +
+                "  \"msg\": \"成功\",\n" +
+                "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
+                "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/exportPromotionDaily")
@@ -110,11 +109,11 @@ public class PromotionReportController {
             "分页参数：/report/promotion/promotionDailyList?pageNum=1&pageSize=10\n" +
             "高级查询参数：\n" +
             "{\n" +
-            "\"beginTime\": \"2018-09-10\",\n" +
-            "\"endTime\": \"2018-10-20\",\n" +
-            "\"userId\":1869\n" +
-            "\"companyId\":1869\n" +
-            "\"sourceId\":1869\n" +
+                "\"beginTime\": \"2018-09-10\",\n" +
+                "\"endTime\": \"2018-10-20\",\n" +
+                "\"userId\":1869\n" +
+                "\"companyId\":1869\n" +
+                "\"sourceId\":1869\n" +
             "}" +
             "请求成功：\n" +
             "{\n" +
@@ -146,8 +145,21 @@ public class PromotionReportController {
         return R.result(promotionCustomerService.promotionCustomerList(params, query));
     }
 
-    @SysLog("导出招转推广报表数据")
-    @ApiOperation(value = "导出客服推广报表数据", notes = "请求参数格式:\n")
+    @SysLog("导出客服推广报表数据")
+    @ApiOperation(value = "导出客服推广报表数据", notes = "请求参数格式:\n" +
+            "{\n" +
+                "\"beginTime\": \"2018-09-10\",\n" +
+                "\"endTime\": \"2018-10-20\",\n" +
+                "\"userId\":1869\n" +
+                "\"companyId\":1869\n" +
+                "\"sourceId\":1869\n" +
+            "}" +
+            "请求成功：\n" +
+            "{\n" +
+                "  \"msg\": \"成功\",\n" +
+                "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
+                "  \"code\": 0\n" +
+            "}")
     @PostMapping("/exportPromotionCustomer")
     public R exportPromotionCustomer(@RequestBody CustomerQueryParams query) {
         return R.result(promotionCustomerService.exportPromotionCustomer(query));
