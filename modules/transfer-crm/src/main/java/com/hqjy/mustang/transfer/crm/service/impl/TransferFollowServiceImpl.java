@@ -4,8 +4,10 @@ import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.DateUtils;
+import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferFollowDao;
+import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferFollowEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
@@ -31,6 +33,8 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
     private TransferCustomerService transferCustomerService;
     @Autowired
     private TransferCustomerDao transferCustomerDao;
+    @Autowired
+    private SysDeptServiceFeign sysDeptServiceFeign;
     /**
      * (批量)跟进客户ID获取最新的跟进记录
      *
@@ -67,10 +71,11 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
             throw new RRException(StatusCode.BIZ_FOLLOW_UPDATE_PROCESS_FAULT);
         }
         TransferCustomerEntity transferCustomerEntity = transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId());
+        SysDeptInfo sysDeptInfo = sysDeptServiceFeign.getUserDept(getUserId());
         if (process.getFollowCount() == 1) {
-            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(transferCustomerEntity.getDeptId());
+            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(sysDeptInfo.getDeptId());
         }
-        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId(transferCustomerEntity.getDeptId())
+        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId(sysDeptInfo.getDeptId())
                 .setUpdateUserId(getUserId()).setUpdateUserName(getUserName()).setUpdateTime(time).setLastFollowTime(time);
         update = transferCustomerService.update(transferCustomerEntity);
         if (update < 0) {

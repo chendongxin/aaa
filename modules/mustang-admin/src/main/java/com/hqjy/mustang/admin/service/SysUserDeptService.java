@@ -51,6 +51,11 @@ public interface SysUserDeptService extends BaseService<SysUserDeptEntity, Long>
     List<Long> getUserDeptIdList(Long userId);
 
     /**
+     * 获取用户所属部门
+     */
+    SysDeptEntity getUserDept(Long userId);
+
+    /**
      * 递归获取用户部门和子部门
      *
      * @param isRoot       是否显示根节点

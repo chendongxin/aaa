@@ -7,6 +7,7 @@ import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.admin.service.SysDeptService;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -84,6 +85,17 @@ public class SysDeptApi {
     @GetMapping(value = "/getUserDeptList")
     public List<SysDeptEntity> getUserDeptList(@RequestParam("userId") Long userId) {
         return sysDeptService.getUserDeptList(userId);
+    }
+
+    /**
+     * @author : gmm
+     * @date : 2018/10/15
+     * 获取用户所属部门
+     */
+    @ApiOperation(value = "返回用户所属部门", notes = "返回用户所属部门")
+    @GetMapping(value = "/userDept/{userId}")
+    public SysDeptEntity getUserDept(@PathVariable("userId") Long userId) {
+        return sysUserDeptService.getUserDept(userId);
     }
 
     /**

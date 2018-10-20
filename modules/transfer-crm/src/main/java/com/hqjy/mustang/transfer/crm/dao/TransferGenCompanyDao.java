@@ -21,6 +21,11 @@ public interface TransferGenCompanyDao extends BaseDao<TransferGenCompanyEntity,
     List<TransferGenCompanyEntity> getAllGenCompanyList();
 
     /**
+     * 获取除根节点外的所有推广公司
+     */
+    List<TransferGenCompanyEntity> getAllGenCompany();
+
+    /**
      * 通过名称查询推广公司
      */
     TransferGenCompanyEntity findOneByName(String name);

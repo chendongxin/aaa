@@ -225,5 +225,14 @@
         INNER JOIN sys_dept d ON ud.dept_id =d.dept_id
         WHERE ud.dept_id IN ${deptIds};
     </select>
+    <!-- 查询用户所属部门 -->
+    <select id="getUserDept" resultType="com.hqjy.mustang.admin.model.entity.SysDeptEntity">
+        SELECT
+            sd.dept_id,
+            sd.dept_name
+        FROM sys_user_dept sud
+            LEFT JOIN sys_dept sd ON sd.dept_id = sud.dept_id
+        WHERE sud.user_id = #{userId}
+    </select>
 
 </mapper>

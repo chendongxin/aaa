@@ -64,4 +64,9 @@ public interface SysUserDeptDao extends BaseDao<SysUserDeptEntity, Long> {
      */
     List<UserDeptInfo> getUserDeptInfo(@Param("deptIds") String deptIds);
 
+
+    /**
+     * 获取用户所属部门
+     */
+    SysDeptEntity getUserDept(Long userId);
 }

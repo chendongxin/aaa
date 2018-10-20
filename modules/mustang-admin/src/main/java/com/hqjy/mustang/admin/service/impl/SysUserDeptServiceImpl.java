@@ -3,7 +3,6 @@ package com.hqjy.mustang.admin.service.impl;
 import com.google.gson.reflect.TypeToken;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.SystemId;
-import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
@@ -14,7 +13,6 @@ import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.service.SysDeptService;
 import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -244,4 +242,13 @@ public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysU
         return baseDao.getUserDeptInfo(deptIds);
     }
 
+
+    /**
+     * new  by gmm 2018年10月19日15:07:52
+     * 获取用户所属部门
+     */
+    @Override
+    public SysDeptEntity getUserDept(Long userId) {
+        return baseDao.getUserDept(userId);
+    }
 }
