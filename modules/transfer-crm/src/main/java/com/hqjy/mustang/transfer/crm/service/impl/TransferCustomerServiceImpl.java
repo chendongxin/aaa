@@ -154,7 +154,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                                 .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
                                 .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
                                 .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
-                                .setMemo(customerDto.getNote()).setUserId(customerDto.getFirstUserId()).setUserName(customerDto.getFirstUserName()).setCreateUserId(getUserId()).
+                                .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId()).
                                 setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
                 );
                 return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
@@ -165,7 +165,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                         .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq()).setLandLine(customerDto.getLandLine())
                         .setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId()).setCompanyName(customerDto.getCompanyName())
                         .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
-                        .setFirstUserId(customerDto.getFirstUserId()).setFirstUserName(customerDto.getFirstUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+                        .setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                         .setCreateUserDeptId(sysDeptInfo.getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
                 super.save(entity);
                 customerDto.setCustomerId(entity.getCustomerId());
@@ -180,7 +180,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 transferCustomerContactService.save(customerDto);
                 transferProcessService.save(new TransferProcessEntity()
                         .setExpireTime(DateUtils.addDays(date, 15)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfo.getDeptId()).setDeptName(sysDeptInfo.getDeptName())
-                        .setCreateTime(date).setExpireTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()));
+                        .setCreateTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()));
                 return R.ok();
             }
         } catch (Exception e) {
