@@ -3,7 +3,7 @@ package com.hqjy.mustang.transfer.crm.feign;
 import com.hqjy.mustang.common.base.constant.Constant;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public interface SysUserDeptServiceFeign {
      * @return 返回用户所有部门id集合
      * @author by xyq 2018年10月9日17:01:10
      */
-    @GetMapping(Constant.API_PATH + "/UserDeptAll/{userId}")
-    List<Long> getUserDeptIdList(@PathVariable("userId") Long userId);
+    @GetMapping(Constant.API_PATH + "/getUserDeptIdList")
+    List<Long> getUserDeptIdList(@RequestParam("userId") Long userId);
 
 }

@@ -3,6 +3,7 @@ package com.hqjy.mustang.admin.dao;
 import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -53,4 +54,19 @@ public interface SysUserDeptDao extends BaseDao<SysUserDeptEntity, Long> {
      * 根据部门编号删除用户部门关系
      */
     int deleteByDeptId(Long deptId);
+
+    /**
+     * 根据部门ID集合字符串获取用户和部门信息
+     *
+     * @param deptIds 部门Id
+     * @return 返回
+     * @author xyq 2018年10月19日11:55:51
+     */
+    List<UserDeptInfo> getUserDeptInfo(@Param("deptIds") String deptIds);
+
+
+    /**
+     * 获取用户所属部门
+     */
+    SysDeptEntity getUserDept(Long userId);
 }

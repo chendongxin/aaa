@@ -22,7 +22,7 @@ public class TransferCustomerDTO {
     /**
      * 微信 we_chat
      **/
-    private String weChat;
+    private String weiXin;
 
     /**
      * qq qq
@@ -75,14 +75,14 @@ public class TransferCustomerDTO {
     private String proName;
 
     /**
-     * 首次跟进人 first_user_id
+     * 归属人 user_id
      **/
-    private Long firstUserId;
+    private Long userId;
 
     /**
-     * 首次跟进人 first_user_name
+     * 归属人名称 user_name
      **/
-    private String firstUserName;
+    private String userName;
 
 
     /**

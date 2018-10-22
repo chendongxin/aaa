@@ -14,7 +14,10 @@ public class CustomerEntity {
      * 部门ID
      */
     private Long deptId;
-
+    /**
+     * 用户Id
+     */
+    private Long userId;
     /**
      * 数量
      */

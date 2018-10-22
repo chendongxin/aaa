@@ -33,4 +33,14 @@ public interface SysUserDao extends BaseDao<SysUserEntity, Long> {
      * @return 返回部门下的所有用户
      */
     List<SysUserEntity> getUserByDeptId(Long deptId);
+
+
+    /**
+     * 根据角色编号获取用户
+     *
+     * @param roleCode 角色编号
+     * @return 返回用户集合
+     * @author xyq 2018年10月19日17:05:29
+     */
+    List<SysUserEntity> getUserListByRoleCode(String roleCode);
 }

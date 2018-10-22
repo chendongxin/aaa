@@ -35,9 +35,9 @@ spring:
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
-            url: jdbc:mysql://10.0.98.75:8066/mustang_transfer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            url: jdbc:mysql://10.0.98.6:3306/mustang_transfer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
             username: root
-            password: MyNewPass4!
+            password: root
             driverClassName: com.mysql.jdbc.Driver
             initial-size: 10
             max-active: 100

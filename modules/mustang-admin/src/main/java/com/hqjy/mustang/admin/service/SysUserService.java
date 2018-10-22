@@ -74,4 +74,12 @@ public interface SysUserService extends BaseService<SysUserEntity, Long> {
      * @return 返回字符串
      */
     String userIdListToIdString(List<Long> userEntityList);
+
+    /**
+     * 根据角色编号获取用户
+     *
+     * @param roleCode 角色编号
+     * @return 返回用户集合
+     */
+    List<SysUserEntity> getUserListByRoleCode(String roleCode);
 }

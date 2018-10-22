@@ -211,4 +211,10 @@ public class SysUserController extends AbstractController {
         return list != null && list.size() > 0 ? R.ok(list) : R.error("当前选择部门不存在人员！");
     }
 
+
+    @ApiOperation(value = "根据角色编号获取所有用户", notes = "根据角色编号获取所有用户")
+    @GetMapping(value = "/getUserListByRoleCode")
+    public R getUserListByRoleCode(@RequestParam("roleCode") String roleCode) {
+        return R.result(userService.getUserListByRoleCode(roleCode));
+    }
 }

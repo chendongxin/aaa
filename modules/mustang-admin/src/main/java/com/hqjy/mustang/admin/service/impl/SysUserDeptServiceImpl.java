@@ -4,6 +4,7 @@ import com.google.gson.reflect.TypeToken;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.utils.RecursionUtil;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisUtils;
 import com.hqjy.mustang.admin.dao.SysUserDeptDao;
@@ -12,6 +13,7 @@ import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
 import com.hqjy.mustang.admin.service.SysDeptService;
 import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +28,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @ date :2018/1/20 10:10
  */
 @Service("sysUserDeptService")
+@Slf4j
 public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysUserDeptEntity, Long> implements SysUserDeptService {
 
     /**
@@ -221,5 +224,31 @@ public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysU
     @Override
     public int deleteByDeptId(Long deptId) {
         return baseDao.deleteByDeptId(deptId);
+    }
+
+    @Override
+    public List<UserDeptInfo> getUserDeptInfo(String deptName) {
+        Long deptId = sysDeptService.getDeptByName(deptName);
+        if (deptId == null) {
+            log.error("部门：" + deptName + "不存在");
+            return new ArrayList<>();
+        }
+        List<Long> allDeptUnderDeptId = sysDeptService.getAllDeptUnderDeptId(deptId);
+        if (allDeptUnderDeptId.size() == 0) {
+            log.error("部门编号：" + deptId + "不存在");
+            return new ArrayList<>();
+        }
+        String deptIds = sysDeptService.deptIdListToString(allDeptUnderDeptId);
+        return baseDao.getUserDeptInfo(deptIds);
+    }
+
+
+    /**
+     * new  by gmm 2018年10月19日15:07:52
+     * 获取用户所属部门
+     */
+    @Override
+    public SysDeptEntity getUserDept(Long userId) {
+        return baseDao.getUserDept(userId);
     }
 }

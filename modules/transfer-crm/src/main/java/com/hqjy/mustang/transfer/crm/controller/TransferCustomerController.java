@@ -182,7 +182,7 @@ public class TransferCustomerController extends AbstractMethodError {
     @ApiOperation(value = "新增客户", notes = "请求参数：\n" +
             "参数说明：\n" +
             "【手机:phone】,【座机：landLine】,【微信:weiXin】,【QQ:qq】,【赛道ID:proId】,【赛道名称:proName】,【来源平台ID:sourceId】,【来源平台名称:sourceName】,【部门ID:deptId】,【部门名称:deptName】\n" +
-            "【推广公司ID:companyId】,【推广公司名称:companyName】,【首次跟进人ID:firstUserId】,【首次跟进人名称:firstUserName】,【姓名:name】,【性别(0-未知，1-男，2-女):sex】\n" +
+            "【推广公司ID:companyId】,【推广公司名称:companyName】,【归属人ID:userId】,【归属人名称:userName】,【姓名:name】,【性别(0-未知，1-男，2-女):sex】\n" +
             "【年龄:age】,【学历(0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士研究生，7-博士研究生):educationId】\n" +
             "【学校:school】,【专业:major】,【期望职位:positionApplied】,【毕业年份:graduateDate】,【应聘类别:applyType】\n" +
             "【期望工作地点:workingPlace】,【应聘关键词:applyKey】,【获取方式(1-主动获取，2-被动获取):getWay】,【工作经验(0-无经验，1-应届生，2-一年以内，3-两年，4-三年，5-三年以上):workExperience】,【备注:note】\n" +
@@ -200,8 +200,8 @@ public class TransferCustomerController extends AbstractMethodError {
             "  \"deptName\": \"飞虎自考网销\",\n" +
             "  \"companyId\": 2,\n" +
             "  \"companyName\": \"广州百单网网络科技有限公司\",\n" +
-            "  \"firstUserId\": 10143,\n" +
-            "  \"firstUserName\": \"李倩\",\n" +
+            "  \"userId\": 10143,\n" +
+            "  \"userName\": \"李倩\",\n" +
             "  \"name\": \"丫丫\",\n" +
             "  \"sex\": 1,\n" +
             "  \"age\": 24,\n" +
@@ -244,7 +244,9 @@ public class TransferCustomerController extends AbstractMethodError {
             "{\n" +
             "  \"customerId\": [1,8],\n" +
             "  \"deptId\": 3,\n" +
-            "  \"userId\": 10\n" +
+            "  \"deptName\": \"广州天河校区\",\n" +
+            "  \"userId\": 11791\n" +
+            "  \"userName\": \"郭喵喵\",\n" +
             "}")
     @PostMapping("/transferCustomer")
 //    @RequiresPermissions("biz:customer:transfer")
