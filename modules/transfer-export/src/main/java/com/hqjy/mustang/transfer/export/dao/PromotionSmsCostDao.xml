@@ -2,5 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hqjy.mustang.transfer.export.dao.PromotionSmsCostDao">
 
+    <resultMap id="resultMap" type="com.hqjy.mustang.transfer.export.model.entity.SmsCostEntity">
+        <id column="id" property="id"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="dept_name" property="deptName"/>
+        <result column="content" property="content"/>
+        <result column="status" property="status"/>
+    </resultMap>
 
+    <select id="getData" resultMap="resultMap">
+        SELECT id,dept_id,dept_name,content,`status`
+        FROM transfer_sms
+        WHERE create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds}
+    </select>
 </mapper>

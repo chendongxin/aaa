@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
 import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
@@ -130,6 +131,8 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
             list.add(new CustomerReportData().setSequence(sequence.incrementAndGet()).setUserId(y.getUserId()).setName(y.getUserName()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getUserId()));
         });
+        query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
+        query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
         query.setUserIds(StringUtils.listToString(ids));
         return list;
     }
