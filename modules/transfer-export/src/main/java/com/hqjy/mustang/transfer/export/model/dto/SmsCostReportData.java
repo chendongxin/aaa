@@ -7,6 +7,8 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
+
 /**
  * @author xyq
  * @date create on 2018年10月20日16:16:14
@@ -40,7 +42,7 @@ public class SmsCostReportData {
 
     @ApiModelProperty(value = "总费用")
     @ExcelAttribute(name = "总费用", column = "E")
-    private int cost;
+    private String cost;
 
 
 

@@ -13,6 +13,6 @@
     <select id="getData" resultMap="resultMap">
         SELECT id,dept_id,dept_name,content,`status`
         FROM transfer_sms
-        WHERE create_time  #{beginTime} AND #{endTime} AND dept_id IN ${deptIds}
+        WHERE create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds}
     </select>
 </mapper>
