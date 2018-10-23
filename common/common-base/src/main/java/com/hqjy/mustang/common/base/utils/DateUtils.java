@@ -3,18 +3,17 @@ package com.hqjy.mustang.common.base.utils;
 import com.hqjy.mustang.common.base.exception.RRException;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import java.util.*;
 
 /**
  * 日期处理
+ *
+ * @author xieyuqing
  */
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
@@ -150,6 +149,30 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
         return days + 1;
     }
 
+    /**
+     * 获取两个日期之间的所有日期（yyyy-MM-dd）
+     *
+     * @param begin 最小日期
+     * @param end   最大日期
+     * @return 返回结果
+     * @author xyq
+     * @date 2018年10月23日14:26:36
+     */
+    public static List<String> getBetweenDates(String begin, String end) {
+        Date beginDate = parse(begin, DATE_PATTERN);
+        Date endDate = parse(end, DATE_PATTERN);
+        List<String> result = new ArrayList<>();
+        Calendar tempStart = Calendar.getInstance();
+        tempStart.setTime(beginDate);
+
+        while (beginDate.getTime() <= endDate.getTime()) {
+            result.add(format(tempStart.getTime()));
+            tempStart.add(Calendar.DAY_OF_YEAR, 1);
+            beginDate = tempStart.getTime();
+        }
+        return result;
+    }
+
 
     /**
      * 将秒数转换为日时分秒，
@@ -172,7 +195,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @param time "48:13:35"
      * @return 返回秒数
      */
-    public static int timeToSecond(String time) {
+    private static int timeToSecond(String time) {
         if (StringUtils.isNotEmpty(time)) {
             String[] split = time.split(":");
             Integer hour = Integer.valueOf(split[0]);
@@ -193,19 +216,11 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
     /**
      * 时间戳转时间，10位，精确只到秒
      */
-    public static LocalDateTime timestampToLocalDateTime(long timestamp) {
+    private static LocalDateTime timestampToLocalDateTime(long timestamp) {
         return LocalDateTime.ofEpochSecond(timestamp, 0, ZoneOffset.ofHours(8));
     }
 
     public static void main(String[] args) {
-        int addDays = 3;
-        System.out.println(addDay(new Date(), addDays));
-        System.out.println(formatDate(new Date(), DATE_TIME_PATTERN));
-        System.out.println(secondToTime(0));
-        System.out.println(timeToSecond(""));
-        System.out.println(countDays("2018-07-01", "2018-08-06"));
-        String s = DateUtils.secondToTime(Long.valueOf(new DecimalFormat("0").format(3.99)));
-        System.out.println(s);
 
 
     }

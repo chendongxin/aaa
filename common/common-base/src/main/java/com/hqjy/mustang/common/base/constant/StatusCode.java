@@ -58,7 +58,7 @@ public enum StatusCode {
     BIZ_CUSTOMER_INSPECT_EXCEPTION(4008, "客户质检操作异常!"),
     BIZ_FOLLOW_SAVE_FAULT(4009, "保存跟进记录：新增失败!"),
     BIZ_FOLLOW_NOT_ALLOW_SAVE(4010, "当前该客户流程处于公海中，不允许跟进!"),
-    BIZ_FOLLOW_UPDATE_PROCESS_FAULT(4011, "保存跟进记录:跟新流程信息失败!"),
+    BIZ_FOLLOW_UPDATE_PROCESS_FAULT(4011, "保存跟进记录:更新流程信息失败!"),
     BIZ_PROCESS_ACTIVE_NOT_EXIT(4012, "客户不存在激活状态的流程"),
     BIZ_PROCESS_UPDATE_INACTIVE(4013, "设置客户流程失效失败"),
     BIZ_PROCESS_SAVE_FAULT(4014, "新增客户流程失败"),

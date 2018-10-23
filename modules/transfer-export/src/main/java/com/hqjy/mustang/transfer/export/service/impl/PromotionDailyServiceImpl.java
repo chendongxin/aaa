@@ -1,9 +1,9 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
 import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
-import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionDailyDao;
@@ -157,6 +157,8 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
             list.add(new DailyReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
+        query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
+        query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
         query.setDeptIds(StringUtils.listToString(ids));
         return list;
     }

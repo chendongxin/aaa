@@ -162,6 +162,11 @@ public class TransferCustomerEntity implements Serializable {
     private String createUserName;
 
     /**
+     * 创建人所属部门
+     */
+    private Long createUserDeptId;
+
+    /**
      * 创建时间 create_time
      **/
     private Date createTime;
@@ -185,6 +190,11 @@ public class TransferCustomerEntity implements Serializable {
      * 更新时间 update_time
      **/
     private Date updateTime;
+
+    /**
+     * 最后一次跟进时间 last_follow_time
+     **/
+    private Date lastFollowTime;
 
     /**
      * 客户详细资料

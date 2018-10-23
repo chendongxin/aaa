@@ -92,13 +92,13 @@ public class TransferCustomerContactServiceImpl extends BaseServiceImpl<Transfer
                             .setCreateUserName(getUserName())
             );
         }
-        if (StringUtils.isNotEmpty(dto.getWeChat())) {
+        if (StringUtils.isNotEmpty(dto.getWeiXin())) {
             i = baseDao.save(
                     new TransferCustomerContactEntity()
                             .setCustomerId(dto.getCustomerId())
                             .setProId(dto.getProId())
                             .setType(Constant.CustomerContactType.WE_CHAT.getValue())
-                            .setDetail(dto.getWeChat())
+                            .setDetail(dto.getWeiXin())
                             .setCreateUserId(getUserId())
                             .setCreateUserName(getUserName())
             );

@@ -31,6 +31,7 @@
 	  <result column="we_chat" jdbcType="VARCHAR" property="weChat" />
 	  <result column="qq" jdbcType="VARCHAR" property="qq" />
 	  <result column="land_line" jdbcType="VARCHAR" property="landLine" />
+      <result column="create_user_dept_id" jdbcType="BIGINT" property="createUserDeptId" />
 	  <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
 	  <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
 	  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -38,6 +39,7 @@
 	  <result column="update_user_id" jdbcType="BIGINT" property="updateUserId" />
 	  <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName" />
 	  <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+	  <result column="last_follow_time" jdbcType="TIMESTAMP" property="lastFollowTime" />
   </resultMap>
 
 	<resultMap id="answerCount" type="com.hqjy.mustang.transfer.crm.model.entity.TransferAnswerCountEntity">
@@ -50,8 +52,8 @@
     customer_id, nc_id, pro_id, pro_name, source_id, source_name, company_id, company_name,
     name, status, get_way, user_id, user_name, dept_id, dept_name, first_user_id, first_user_name, first_user_dept_id,
     last_user_id, last_user_name, last_user_dept_id, gen_user_id, gen_user_name, phone, we_chat, qq, land_line,
-    create_user_id, create_user_name, create_time, allot_time, update_user_id, update_user_name,
-    update_time
+    create_user_dept_id, create_user_id, create_user_name, create_time, allot_time, update_user_id, update_user_name,
+    update_time, last_follow_time
   </sql>
   
   <!-- 通用查询sql -->
@@ -83,6 +85,7 @@
 		<if test="weChat != null and !&quot;&quot;.equals(weChat)">and we_chat = #{weChat}</if>
 		<if test="qq != null and !&quot;&quot;.equals(qq)">and qq = #{qq}</if>
 		<if test="landLine != null and !&quot;&quot;.equals(landLine)">and land_line = #{landLine}</if>
+        <if test="createUserDeptId != null and !&quot;&quot;.equals(createUserDeptId)">and create_user_dept_id = #{createUserDeptId}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -90,6 +93,7 @@
 		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
 		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name = #{updateUserName}</if>
 		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="lastFollowTime != null and !&quot;&quot;.equals(lastFollowTime)">and DATE_FORMAT(last_follow_time,'%Y-%m-%d') = STR_TO_DATE(#{lastFollowTime},'%Y-%m-%d')</if>
 	</where>
   </sql>
   
@@ -123,6 +127,7 @@
 		  <if test="null != weChat">we_chat, </if>
 		  <if test="null != qq">qq, </if>
 		  <if test="null != landLine">land_line, </if>
+          <if test="null != createUserDeptId">create_user_dept_id, </if>
 		  <if test="null != createUserId">create_user_id, </if>
 		  <if test="null != createUserName">create_user_name, </if>
 		  <if test="null != createTime">create_time, </if>
@@ -130,6 +135,7 @@
 		  <if test="null != updateUserId">update_user_id, </if>
 		  <if test="null != updateUserName">update_user_name, </if>
 		  <if test="null != updateTime">update_time, </if>
+			<if test="null != lastFollowTime">last_follow_time, </if>
 		</trim>
 	values
 		<trim prefix="(" suffix=")" suffixOverrides=",">
@@ -159,6 +165,7 @@
 			<if test="null != weChat">#{weChat}, </if>
 			<if test="null != qq">#{qq}, </if>
 			<if test="null != landLine">#{landLine}, </if>
+            <if test="null != createUserDeptId">#{createUserDeptId}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -166,6 +173,7 @@
 			<if test="null != updateUserId">#{updateUserId}, </if>
 			<if test="null != updateUserName">#{updateUserName}, </if>
 			<if test="null != updateTime">#{updateTime}, </if>
+			<if test="null != lastFollowTime">#{lastFollowTime}, </if>
 		</trim>
   </insert>
   
@@ -199,6 +207,7 @@
 			<if test="null != weChat">we_chat = #{weChat}, </if>
 			<if test="null != qq">qq = #{qq}, </if>
 			<if test="null != landLine">land_line = #{landLine}, </if>
+            <if test="null != createUserDeptId">create_user_dept_id = #{createUserDeptId}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
@@ -206,6 +215,7 @@
 			<if test="null != updateUserId">update_user_id = #{updateUserId}, </if>
 			<if test="null != updateUserName">update_user_name = #{updateUserName}, </if>
 			<if test="null != updateTime">update_time = #{updateTime}, </if>
+			<if test="null != lastFollowTime">last_follow_time = #{lastFollowTime}, </if>
 		</set>
 		where customer_id = #{customerId}
   </update>
@@ -230,43 +240,41 @@
   <!-- 分页查询 -->
   <select id="findPage" resultMap="BaseResultMap">
     select
-		<include refid="Base_Column_List" />
+		customer_id, name, user_id, user_name, dept_id, dept_name, create_time, status, nc_id,
+	    pro_id, pro_name, phone, create_user_id, create_user_name, get_way, qq, we_chat, land_line
 	from transfer_customer
 		<where>
-			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
-			<if test="ncId != null and !&quot;&quot;.equals(ncId)">and nc_id like concat('%',#{ncId},'%')</if>
+			<!-- 高级查询筛选部门-->
+			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+				and dept_id in ${deptIds}
+			</if>
+			<if test="userId !=null and !&quot;&quot;.equals(userId)">
+				and user_id=#{userId}
+			</if>
+			<if test="createName != null and !&quot;&quot;.equals(createName)">and create_user_name like
+				concat('%',#{createUserName},'%')
+			</if>
+			<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like
+				concat('%',#{userName},'%')
+			</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 			<if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
-			<if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name like concat('%',#{proName},'%')</if>
+			<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
+			<if test="ncId != null and !&quot;&quot;.equals(ncId)">and nc_id like concat('%',#{ncId},'%')</if>
 			<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
 			<if test="sourceName != null and !&quot;&quot;.equals(sourceName)">and source_name like concat('%',#{sourceName},'%')</if>
 			<if test="companyId != null and !&quot;&quot;.equals(companyId)">and company_id = #{companyId}</if>
 			<if test="companyName != null and !&quot;&quot;.equals(companyName)">and company_name like concat('%',#{companyName},'%')</if>
-			<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
-			<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
 			<if test="getWay != null and !&quot;&quot;.equals(getWay)">and get_way = #{getWay}</if>
-			<if test="userId != null and !&quot;&quot;.equals(userId)">and user_id = #{userId}</if>
-			<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
-			<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
-			<if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
-			<if test="firstUserId != null and !&quot;&quot;.equals(firstUserId)">and first_user_id = #{firstUserId}</if>
-			<if test="firstUserName != null and !&quot;&quot;.equals(firstUserName)">and first_user_name like concat('%',#{firstUserName},'%')</if>
-			<if test="firstUserDeptId != null and !&quot;&quot;.equals(firstUserDeptId)">and first_user_dept_id = #{firstUserDeptId}</if>
-			<if test="lastUserId != null and !&quot;&quot;.equals(lastUserId)">and last_user_id = #{lastUserId}</if>
-			<if test="lastUserName != null and !&quot;&quot;.equals(lastUserName)">and last_user_name like concat('%',#{lastUserName},'%')</if>
-			<if test="lastUserDeptId != null and !&quot;&quot;.equals(lastUserDeptId)">and last_user_dept_id = #{lastUserDeptId}</if>
 			<if test="genUserId != null and !&quot;&quot;.equals(genUserId)">and gen_user_id = #{genUserId}</if>
 			<if test="genUserName != null and !&quot;&quot;.equals(genUserName)">and gen_user_name like concat('%',#{genUserName},'%')</if>
-			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
 			<if test="weChat != null and !&quot;&quot;.equals(weChat)">and we_chat like concat('%',#{weChat},'%')</if>
 			<if test="qq != null and !&quot;&quot;.equals(qq)">and qq like concat('%',#{qq},'%')</if>
 			<if test="landLine != null and !&quot;&quot;.equals(landLine)">and land_line like concat('%',#{landLine},'%')</if>
-			<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
-			<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-			<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
-			<if test="allotTime != null and !&quot;&quot;.equals(allotTime)">and DATE_FORMAT(allot_time,'%Y-%m-%d') = STR_TO_DATE(#{allotTime},'%Y-%m-%d')</if>
-			<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
-			<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
-			<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+				and create_time between #{beginCreateTime} and #{endCreateTime}
+			</if>
 	</where>
   </select>
 
@@ -346,29 +354,24 @@
 	<!-- 公海客户分页查询 -->
 	<select id="findCommonPage" resultMap="BaseResultMap">
 		select
-		tc.customer_id, tc.nc_id, tc.pro_id, tc.pro_name, tc.source_id, tc.source_name, tc.company_id, tc.company_name,
-		tc.name, tc.status, tc.get_way, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.first_user_id,
-		tc.first_user_name, tc.last_user_id, tc.last_user_name, tc.last_user_dept_id, tc.gen_user_id, tc.gen_user_name, tc.phone, tc.we_chat,
-		tc.qq, tc.land_line, tc.create_user_id, tc.create_user_name, tc.create_time, tc.allot_time, tc.update_user_id,
-		tc.update_user_name, tc.update_time
-		from transfer_customer tc
+		customer_id, name, dept_id, dept_name, phone, create_time, create_user_id, create_user_name, user_id, user_name
+		from transfer_customer
 		<where>
 			<!--该客户未分配人员-->
-			tc.status=0 and tc.user_id is null
+			status=0 and user_id is null
 			<!-- 高级查询筛选部门-->
 			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
-				and tc.dept_id in ${deptIds}
+				and dept_id in ${deptIds}
 			</if>
-			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
-			<if test="status != null and !&quot;&quot;.equals(status)">and tc.status = #{status}</if>
-			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
-			<if test="source != null and !&quot;&quot;.equals(source)">and tc.source = #{source}</if>
-			<if test="createName != null and !&quot;&quot;.equals(createName)">and tc.create_user_name like
+			<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+			<if test="createName != null and !&quot;&quot;.equals(createName)">and create_user_name like
 				concat('%',#{createName},'%')
 			</if>
 			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-				and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+				and create_time between #{beginCreateTime} and #{endCreateTime}
 			</if>
 		</where>
 	</select>
@@ -376,30 +379,33 @@
 	<!-- 私海客户分页查询 -->
 	<select id="findPrivatePage" resultMap="BaseResultMap">
 		select
-		tc.customer_id, tc.name, tc.user_id, tc.user_name, tc.dept_id, tc.dept_name, tc.phone,
-		tc.create_user_id, tc.create_user_name, tc.create_time, tc.status
-		from transfer_customer tc
+		customer_id, name, user_id, user_name, dept_id, dept_name, phone, create_user_dept_id,
+		create_user_id, create_user_name, create_time, status, last_follow_time, allot_time
+		from transfer_customer
 		<where>
-			tc.status in (0,3) and tc.user_id is not null
+			status in (0,3) and user_id is not null
 			<!-- 高级查询筛选部门-->
 			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
-				and tc.dept_id in ${deptIds}
+				and dept_id in ${deptIds}
 			</if>
 			<!--该客户已分配人员-->
 			<if test="userId !=null and !&quot;&quot;.equals(userId)">
-				and tc.user_id=#{userId}
+				and user_id=#{userId}
 			</if>
-			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and tc.customer_id = #{customerId}</if>
-			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
-			<if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
-			<if test="status != null and !&quot;&quot;.equals(status)">and tc.status = #{status}</if>
-			<if test="userName != null and !&quot;&quot;.equals(userName)">and tc.user_name like
+			<if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+			<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
+			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
+			<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+			<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like
 				concat('%',#{userName},'%')
 			</if>
-			<if test="deptId != null and !&quot;&quot;.equals(deptId)">and tc.dept_id = #{deptId}</if>
-			<if test="deptName != null and !&quot;&quot;.equals(deptName)">and tc.deptName like concat('%',#{deptName},'%')</if>
-			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-				and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+			<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+			<if test="deptName != null and !&quot;&quot;.equals(deptName)">and deptName like concat('%',#{deptName},'%')</if>
+			<if test="beginAllotTime != null and beginAllotTime != '' and endAllotTime != null and endAllotTime != ''">
+				and allot_time between #{beginAllotTime} and #{endAllotTime}
+			</if>
+			<if test="beginLastFollowTime != null and beginLastFollowTime != '' and endLastFollowTime != null and endLastFollowTime != ''">
+				and last_follow_time between #{beginLastFollowTime} and #{endLastFollowTime}
 			</if>
 		</where>
 	</select>

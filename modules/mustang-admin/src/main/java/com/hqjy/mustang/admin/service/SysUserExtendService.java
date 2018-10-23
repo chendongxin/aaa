@@ -3,6 +3,8 @@ package com.hqjy.mustang.admin.service;
 import com.hqjy.mustang.admin.model.entity.SysUserExtendEntity;
 import com.hqjy.mustang.common.base.base.BaseService;
 
+import java.util.List;
+
 /**
  * 用户扩展信息
  *
@@ -15,4 +17,6 @@ public interface SysUserExtendService extends BaseService<SysUserExtendEntity, L
      * 根据用户Id查询,HSS 2018-07-05
      */
     SysUserExtendEntity findByUserId(Long userId);
+
+    List<SysUserExtendEntity> getExistTqId();
 }

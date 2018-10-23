@@ -3,4 +3,43 @@
 <mapper namespace="com.hqjy.mustang.transfer.export.dao.PromotionCompanyCostDao">
 
 
+    <resultMap id="resultMap" type="com.hqjy.mustang.transfer.export.model.entity.CompanyCostEntity">
+        <result column="gen_way" property="wayName"/>
+        <result column="initiative_money" property="initiativeMoney"/>
+        <result column="passive_money" property="passiveMoney"/>
+        <result column="initiative_virtual" property="initiativeVirtual"/>
+        <result column="passive_virtual" property="passiveVirtual"/>
+        <result column="date" property="date"/>
+    </resultMap>
+
+    <resultMap id="baseMap" type="com.hqjy.mustang.transfer.export.model.entity.CompanyCustomerEntity">
+        <result property="date" column="date"/>
+        <result property="num" column="num"/>
+    </resultMap>
+
+    <select id="getCompanyCost" resultMap="resultMap">
+        SELECT w.gen_way, c.initiative_money,c.passive_money, c.initiative_virtual, c.passive_virtual,
+               DATE_FORMAT(c.create_time,'%Y-%m-%d') AS date
+        FROM transfer_gen_cost c
+        INNER JOIN transfer_gen_way  w ON c.way_id=w.way_id
+        WHERE c.create_time BETWEEN #{beginTime} AND #{endTime}
+        AND c.dept_id IN ${deptIds}
+        AND c.source_id=#{sourceId}
+        AND c.company_id=#{companyId}
+    </select>
+
+
+    <!-- 商机总量	该部门的商机总量-->
+    <select id="countCustomer" resultMap="baseMap">
+        SELECT COUNT(distinct customer_id) AS num ,DATE_FORMAT(create_time,'%Y-%m-%d') AS date
+        FROM transfer_customer
+        WHERE create_time BETWEEN #{beginTime} AND #{endTime}
+        AND dept_id IN ${deptIds}
+        AND source_id=#{sourceId}
+        AND company_id=#{companyId}
+        <if test="getWay!=null">
+            AND get_way=#{getWay}
+        </if>
+        GROUP BY date
+    </select>
 </mapper>

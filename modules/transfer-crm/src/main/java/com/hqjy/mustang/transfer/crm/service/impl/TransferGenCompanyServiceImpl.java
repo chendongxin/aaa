@@ -45,6 +45,14 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
     }
 
     /**
+     * 获取除根节点外的推广公司
+     */
+    @Override
+    public List<TransferGenCompanyEntity> getAllGenCompany() {
+        return baseDao.getAllGenCompany();
+    }
+
+    /**
      * 增加一个推广公司
      */
     @Override

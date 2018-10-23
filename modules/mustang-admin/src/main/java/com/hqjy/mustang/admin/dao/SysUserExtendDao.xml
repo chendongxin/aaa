@@ -11,6 +11,7 @@
         <result column="xn_id" jdbcType="VARCHAR" property="xnId"/>
         <result column="cno" jdbcType="INTEGER" property="cno"/>
         <result column="tq_id" jdbcType="INTEGER" property="tqId"/>
+        <result column="salt" jdbcType="VARCHAR" property="salt"/>
         <result column="tq_pw" jdbcType="VARCHAR" property="tqPw"/>
         <result column="create_id" jdbcType="BIGINT" property="createId"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
@@ -20,7 +21,7 @@
 
     <!-- 表基本列 -->
     <sql id="Base_Column_List">
-        id, user_id, nc_user_id, xn_id, cno, tq_id, tq_pw, create_id, create_time, update_id,
+        id, user_id, nc_user_id, xn_id, cno, tq_id, salt, tq_pw, create_id, create_time, update_id,
         update_time
     </sql>
 
@@ -49,6 +50,7 @@
             <if test="null != xnId">xn_id,</if>
             <if test="null != cno">cno,</if>
             <if test="null != tqId">tq_id,</if>
+            <if test="null != salt">salt,</if>
             <if test="null != tqPw">tq_pw,</if>
             <if test="null != createId">create_id,</if>
             <if test="null != createTime">create_time,</if>
@@ -62,6 +64,7 @@
             <if test="null != xnId">#{xnId},</if>
             <if test="null != cno">#{cno},</if>
             <if test="null != tqId">#{tqId},</if>
+            <if test="null != salt">#{salt},</if>
             <if test="null != tqPw">#{tqPw},</if>
             <if test="null != createId">#{createId},</if>
             <if test="null != createTime">#{createTime},</if>
@@ -79,6 +82,7 @@
             <if test="null != xnId">xn_id = #{xnId},</if>
             <if test="null != cno">cno = #{cno},</if>
             <if test="null != tqId">tq_id = #{tqId},</if>
+            <if test="null != salt">salt = #{salt},</if>
             <if test="null != tqPw">tq_pw = #{tqPw},</if>
             <if test="null != createId">create_id = #{createId},</if>
             <if test="null != createTime">create_time = #{createTime},</if>
@@ -136,7 +140,7 @@
 
     <!-- 分页查询 -->
     <select id="findPage" resultMap="BaseResultMap">
-        select sue.id, sue.user_id, su.user_name, sue.nc_user_id, sue.xn_id, sue.cno, sue.tq_id, sue.tq_pw, sue.create_id, sue.create_time, sue.update_id,
+        select sue.id, sue.user_id, su.user_name, sue.nc_user_id, sue.xn_id, sue.cno, sue.tq_id, sue.salt, sue.tq_pw, sue.create_id, sue.create_time, sue.update_id,
         sue.update_time
         from sys_user_extend sue
         inner join sys_user su on sue.user_id=su.user_id
@@ -178,5 +182,10 @@
         from sys_user_extend
         where user_id = #{userId}
     </select>
-
+    <!-- 所有已存在的TQ账号信息-->
+    <select id="getExistTqId" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_user_extend
+    </select>
 </mapper>

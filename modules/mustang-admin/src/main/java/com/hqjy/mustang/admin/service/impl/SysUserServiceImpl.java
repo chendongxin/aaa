@@ -545,4 +545,9 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         });
         return StringUtils.listToString(userIdList);
     }
+
+    @Override
+    public List<SysUserEntity> getUserListByRoleCode(String roleCode) {
+        return baseDao.getUserListByRoleCode(roleCode);
+    }
 }

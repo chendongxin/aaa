@@ -3,8 +3,11 @@ package com.hqjy.mustang.transfer.crm.service.impl;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
+import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferFollowDao;
+import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferFollowEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -29,6 +33,8 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
     private TransferCustomerService transferCustomerService;
     @Autowired
     private TransferCustomerDao transferCustomerDao;
+    @Autowired
+    private SysDeptServiceFeign sysDeptServiceFeign;
     /**
      * (批量)跟进客户ID获取最新的跟进记录
      *
@@ -44,6 +50,7 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
     @Override
     @Transactional(rollbackFor = RRException.class)
     public int save(TransferFollowEntity entity) {
+        Date time = new Date();
         TransferProcessEntity process = transferProcessService.getProcessByCustIdAndUserId(entity.getCustomerId());
         if (null == process) {
             throw new RRException(StatusCode.BIZ_FOLLOW_NOT_ALLOW_SAVE);
@@ -58,17 +65,22 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
         //更新流程的跟进部门信息
         process.setFollowCount(process.getFollowCount()+1);
         process.setLastFollowId(entity.getFollowId());
-//        process.setExpireTime(DateUtils.addDays(new Date(), 3));
+        process.setExpireTime(DateUtils.addDays(time, 15));
         int update = transferProcessService.update(process);
         if( update < 0) {
             throw new RRException(StatusCode.BIZ_FOLLOW_UPDATE_PROCESS_FAULT);
         }
         TransferCustomerEntity transferCustomerEntity = transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId());
+        SysDeptInfo sysDeptInfo = sysDeptServiceFeign.getUserDept(getUserId());
         if (process.getFollowCount() == 1) {
-            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(transferCustomerEntity.getDeptId());
+            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(sysDeptInfo.getDeptId());
         }
-        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId(transferCustomerEntity.getDeptId());
-        transferCustomerService.update(transferCustomerEntity);
+        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId(sysDeptInfo.getDeptId())
+                .setUpdateUserId(getUserId()).setUpdateUserName(getUserName()).setUpdateTime(time).setLastFollowTime(time);
+        update = transferCustomerService.update(transferCustomerEntity);
+        if (update < 0) {
+            throw new RRException(StatusCode.BIZ_CUSTOMER_UPDATE_FAULT);
+        }
         return update;
     }
 }

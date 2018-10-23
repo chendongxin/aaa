@@ -9,6 +9,7 @@ import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.*;
 import com.hqjy.mustang.common.base.validator.ValidatorUtils;
+import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.common.model.crm.MessageSendVO;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisLockUtils;
@@ -147,25 +148,25 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             List<TransferCustomerEntity> transferCustomerList = baseDao.findList(customerHashMap);
             if (transferCustomerList.size() > 0) {
                 //如果存在，将客户添加到重单客户表中
-                System.out.println("list.get(0) = " + transferCustomerList.get(0));
                 TransferCustomerEntity customer = baseDao.findOne(transferCustomerList.get(0).getCustomerId());
                 transferCustomerRepeatService.save(
                         new TransferCustomerRepeatEntity()
-                                .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeChat()).setQq(customerDto.getWeChat())
+                                .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
                                 .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
                                 .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
-                                .setMemo(customerDto.getNote()).setUserId(customerDto.getFirstUserId()).setUserName(customerDto.getFirstUserName()).setCreateUserId(getUserId()).
+                                .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId()).
                                 setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
                 );
                 return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
             } else {
                 Date date = new Date();
+                SysDeptInfo sysDeptInfo = sysDeptServiceFeign.getUserDept(getUserId());
                 TransferCustomerEntity entity = new TransferCustomerEntity()
-                        .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeChat()).setQq(customerDto.getQq()).setLandLine(customerDto.getLandLine())
+                        .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq()).setLandLine(customerDto.getLandLine())
                         .setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId()).setCompanyName(customerDto.getCompanyName())
                         .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
-                        .setFirstUserId(customerDto.getFirstUserId()).setFirstUserName(customerDto.getFirstUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-                        .setAllotTime(date).setGetWay(customerDto.getGetWay());
+                        .setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+                        .setCreateUserDeptId(sysDeptInfo.getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
                 super.save(entity);
                 customerDto.setCustomerId(entity.getCustomerId());
                 transferCustomerDetailService.save(
@@ -177,11 +178,9 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                                 .setNote(customerDto.getNote()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                 );
                 transferCustomerContactService.save(customerDto);
-                Date time = new Date();
-                TransferProcessEntity transferProcessEntity = new TransferProcessEntity()
-                        .setCustomerId(entity.getCustomerId()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName())
-                        .setCreateTime(time).setExpireTime(time).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName());
-                transferProcessService.save(transferProcessEntity);
+                transferProcessService.save(new TransferProcessEntity()
+                        .setExpireTime(DateUtils.addDays(date, 15)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfo.getDeptId()).setDeptName(sysDeptInfo.getDeptName())
+                        .setCreateTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()));
                 return R.ok();
             }
         } catch (Exception e) {
@@ -332,7 +331,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             //新增激活状态，归属私人客户流程
                             TransferProcessEntity processEntity = new TransferProcessEntity().setMemo("公海领取商机").setCustomerId(c)
                                     .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(userName)
-                                    .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE);
+                                    .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE).setExpireTime(DateUtils.addDays(new Date(), 15));
                             int save = transferProcessService.save(processEntity);
                             if (save > 0) {
                                 //更新客户主表(同步激活状态流程)

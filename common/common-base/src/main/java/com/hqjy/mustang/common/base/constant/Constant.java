@@ -45,10 +45,6 @@ public class Constant {
     public static final String API_OPEN_PATH = "/api/public/";
     public static final String API_OPEN_PATH_ANON = API_OPEN_PATH + "**";
 
-    public static final String CODE = "code";
-    public static final String MSG = "msg";
-    public static final String RESULT = "result";
-
 
     /**
      * 通用状态
@@ -493,6 +489,32 @@ public class Constant {
         private String code;
 
         GetWayStatus(String code, int value) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public String getCode() {
+            return code;
+        }
+    }
+
+    /**
+     * 费用类型
+     *
+     * @author xieyuqing
+     */
+    public enum CostType {
+
+        RMB("人民币", 1),
+        VIRTUAL_RMB("虚拟币", 2);
+        private int value;
+        private String code;
+
+        CostType(String code, int value) {
             this.value = value;
             this.code = code;
         }

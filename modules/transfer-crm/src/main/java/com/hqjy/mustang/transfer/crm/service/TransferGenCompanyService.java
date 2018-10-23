@@ -19,4 +19,9 @@ public interface TransferGenCompanyService extends BaseService<TransferGenCompan
      */
     HashMap<String, List<TransferGenCompanyEntity>> getRecursionTree(boolean showRoot);
 
+    /**
+     * 获取除根节点外的推广公司
+     */
+    List<TransferGenCompanyEntity> getAllGenCompany();
+
 }

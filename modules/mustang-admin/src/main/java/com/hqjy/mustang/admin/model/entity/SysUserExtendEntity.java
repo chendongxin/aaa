@@ -2,7 +2,13 @@ package com.hqjy.mustang.admin.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+
+import com.alibaba.fastjson.annotation.JSONField;
+import com.hqjy.mustang.common.base.validator.RestfulValid;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.Pattern;
 
 /**
  * sys_user_extend 实体类
@@ -48,8 +54,17 @@ public class SysUserExtendEntity implements Serializable {
     private Integer tqId;
 
     /**
+     * 用户盐 salt
+     **/
+    @JSONField(serialize = false)
+    private String salt;
+
+    /**
 	 * TQ密码 tq_pw
 	 **/
+    @JSONField(serialize = false)
+    @Length(min = 4, max = 8, message = "密码长度4-8位", groups = {RestfulValid.POST.class})
+    @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,8}$", message = "密码必须包含数字和字母", groups = {RestfulValid.POST.class})
     private String tqPw;
 
     /**
@@ -60,6 +75,7 @@ public class SysUserExtendEntity implements Serializable {
     /**
 	 * 创建时间 create_time
 	 **/
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
@@ -70,7 +86,10 @@ public class SysUserExtendEntity implements Serializable {
     /**
 	 * 更新时间 update_time
 	 **/
+    @JSONField(format = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
+
+
 
     private static final long serialVersionUID = 1L;
 }
