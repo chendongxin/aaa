@@ -4,7 +4,7 @@
 
 
     <resultMap id="resultMap" type="com.hqjy.mustang.transfer.export.model.entity.CompanyCostEntity">
-        <id column="id" property="id"/>
+        <result column="gen_way" property="wayName"/>
         <result column="initiative_money" property="initiativeMoney"/>
         <result column="passive_money" property="passiveMoney"/>
         <result column="initiative_virtual" property="initiativeVirtual"/>
@@ -18,12 +18,14 @@
     </resultMap>
 
     <select id="getCompanyCost" resultMap="resultMap">
-        SELECT id,initiative_money,passive_money,initiative_virtual,passive_virtual,DATE_FORMAT(create_time,'%Y-%m-%d') AS date
-        FROM transfer_gen_cost
-        WHERE create_time BETWEEN #{beginTime} AND #{endTime}
-        AND dept_id IN ${deptIds}
-        AND source_id=#{sourceId}
-        AND company_id=#{companyId}
+        SELECT w.gen_way, c.initiative_money,c.passive_money, c.initiative_virtual, c.passive_virtual,
+               DATE_FORMAT(c.create_time,'%Y-%m-%d') AS date
+        FROM transfer_gen_cost c
+        INNER JOIN transfer_gen_way  w ON c.way_id=w.way_id
+        WHERE c.create_time BETWEEN #{beginTime} AND #{endTime}
+        AND c.dept_id IN ${deptIds}
+        AND c.source_id=#{sourceId}
+        AND c.company_id=#{companyId}
     </select>
 
 

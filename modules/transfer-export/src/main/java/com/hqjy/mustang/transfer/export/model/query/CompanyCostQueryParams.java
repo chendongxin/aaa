@@ -37,11 +37,11 @@ public class CompanyCostQueryParams {
 
     @ApiModelProperty(value = "获取方式")
     @NotBlank(message = "获取方式（必选）")
-    private Long getWay;
+    private int getWay;
 
     @ApiModelProperty(value = "费用类型")
     @NotBlank(message = "费用类型（必选）")
-    private Long costType;
+    private int costType;
 
     @ApiModelProperty(value = "来源平台")
     @NotBlank(message = "来源平台（必选）")
