@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
 import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
@@ -49,7 +50,19 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationExportEntity> getExportData(ReservationQueryParams params) {
-        if (isGeneralSeat() ) {
+        if (StringUtils.isNotBlank(params.getBeginCreateTime())) {
+            params.setBeginCreateTime(DateUtils.getBeginTime(params.getBeginCreateTime()));
+        }
+        if (StringUtils.isNotBlank(params.getEndCreateTime())) {
+            params.setEndCreateTime(DateUtils.getBeginTime(params.getEndCreateTime()));
+        }
+        if (StringUtils.isNotBlank(params.getBeginAppointTime())) {
+            params.setBeginAppointTime(DateUtils.getBeginTime(params.getBeginAppointTime()));
+        }
+        if (StringUtils.isNotBlank(params.getEndAppointTime())) {
+            params.setEndAppointTime(DateUtils.getBeginTime(params.getEndAppointTime()));
+        }
+        if (isGeneralSeat()) {
             params.setUserId(getUserId());
         }
         if (isSuperAdmin()) {
