@@ -19,21 +19,6 @@ public class CompanyCostEntity {
     private Long id;
 
     /**
-     * 部门id
-     **/
-    private Integer deptId;
-
-    /**
-     * 推广公司id
-     **/
-    private Integer companyId;
-
-    /**
-     * 推广来源id
-     */
-    private Long sourceId;
-
-    /**
      * 推广方式id
      **/
     private Integer wayId;
@@ -59,8 +44,8 @@ public class CompanyCostEntity {
     private BigDecimal passiveVirtual;
 
     /**
-     * 创建时间
+     * 创建日期
      **/
-    private Date createTime;
+    private String date;
 
 }

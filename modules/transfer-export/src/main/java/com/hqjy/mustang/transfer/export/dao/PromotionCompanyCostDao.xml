@@ -3,4 +3,41 @@
 <mapper namespace="com.hqjy.mustang.transfer.export.dao.PromotionCompanyCostDao">
 
 
+    <resultMap id="resultMap" type="com.hqjy.mustang.transfer.export.model.entity.CompanyCostEntity">
+        <id column="id" property="id"/>
+        <result column="initiative_money" property="initiativeMoney"/>
+        <result column="passive_money" property="passiveMoney"/>
+        <result column="initiative_virtual" property="initiativeVirtual"/>
+        <result column="passive_virtual" property="passiveVirtual"/>
+        <result column="date" property="date"/>
+    </resultMap>
+
+    <resultMap id="baseMap" type="com.hqjy.mustang.transfer.export.model.entity.CompanyCustomerEntity">
+        <result property="date" column="date"/>
+        <result property="num" column="num"/>
+    </resultMap>
+
+    <select id="getCompanyCost" resultMap="resultMap">
+        SELECT id,initiative_money,passive_money,initiative_virtual,passive_virtual,DATE_FORMAT(create_time,'%Y-%m-%d') AS date
+        FROM transfer_gen_cost
+        WHERE create_time BETWEEN #{beginTime} AND #{endTime}
+        AND dept_id IN ${deptIds}
+        AND source_id=#{sourceId}
+        AND company_id=#{companyId}
+    </select>
+
+
+    <!-- 商机总量	该部门的商机总量-->
+    <select id="countCustomer" resultMap="baseMap">
+        SELECT COUNT(distinct customer_id) AS num ,DATE_FORMAT(create_time,'%Y-%m-%d') AS date
+        FROM transfer_customer
+        WHERE create_time BETWEEN #{beginTime} AND #{endTime}
+        AND dept_id IN ${deptIds}
+        AND source_id=#{sourceId}
+        AND company_id=#{companyId}
+        <if test="getWay!=null">
+            AND get_way=#{getWay}
+        </if>
+        GROUP BY date
+    </select>
 </mapper>
