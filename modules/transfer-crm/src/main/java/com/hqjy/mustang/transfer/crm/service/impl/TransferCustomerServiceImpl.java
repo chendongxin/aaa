@@ -35,6 +35,12 @@ import java.util.stream.Collectors;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.*;
 
+/**
+ * @author gmm
+ * @ description
+ * @ date create in 2018年9月20日14:21:03
+ */
+
 @Service
 @Slf4j
 public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustomerDao, TransferCustomerEntity, Long> implements TransferCustomerService {
@@ -213,8 +219,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                     return;
                 }
                 //新增流程记录
-                TransferProcessEntity newProcess = new TransferProcessEntity().setCreateTime(date).setMemo("客户转移操作").setActive(Boolean.FALSE)
-                        .setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName()).setUserId(dto.getUserId()).setUserName(dto.getUserName()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName());
+                TransferProcessEntity newProcess = new TransferProcessEntity().setCreateTime(date).setMemo("客户转移操作").setActive(Boolean.FALSE).setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName())
+                        .setUserId(dto.getUserId()).setUserName(dto.getUserName()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName()).setExpireTime(DateUtils.addDays(date, 15));
                 int save = transferProcessService.save(newProcess);
                 if (save == 0) {
                     return;
@@ -251,6 +257,12 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endAllotTime"))) {
             pageQuery.put("endAllotTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endAllotTime")));
         }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginLastFollowTime"))) {
+            pageQuery.put("beginLastFollowTime", DateUtils.getBeginTime(MapUtils.getString(pageQuery, "beginLastFollowTime")));
+        }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endLastFollowTime"))) {
+            pageQuery.put("endLastFollowTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endLastFollowTime")));
+        }
     }
 
     /**
@@ -276,6 +288,9 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             });
         }
         this.formatQueryTime(pageQuery);
+        if (isGeneralSeat()) {
+            pageQuery.put("userId", getUserId());
+        }
         if (isSuperAdmin()) {
             PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
             return baseDao.findCommonPage(pageQuery);
@@ -289,7 +304,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             });
         }
         pageQuery.put("deptIds", StringUtils.listToString(ids));
-
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
         return baseDao.findCommonPage(pageQuery);
     }
@@ -387,18 +401,12 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
             return null;
         }
-        if (isGeneralSeat()) {
-            pageQuery.put("userId", getUserId());
-        }
-        if (isSuperAdmin()) {
-            return super.findPage(pageQuery);
-        }
         Long deptId = MapUtils.getLong(pageQuery, "deptId");
+        List<String> ids = new ArrayList<>();
         //高级查询部门刷选
         if (null != deptId) {
             //部门下所有子部门
             List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-            List<String> ids = new ArrayList<>();
             allDeptUnderDeptId.forEach(x -> {
                 ids.add(String.valueOf(x));
             });
@@ -415,7 +423,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (null == deptId) {
             //获取当前用户的部门以及子部门
             List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
-            List<String> ids = new ArrayList<>();
             userAllDeptId.forEach(x -> {
                 ids.add(String.valueOf(x));
             });

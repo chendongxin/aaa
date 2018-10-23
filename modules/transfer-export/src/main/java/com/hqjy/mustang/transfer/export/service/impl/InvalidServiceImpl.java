@@ -52,8 +52,8 @@ public class InvalidServiceImpl implements InvalidService {
             URL visitUrl = OssFileUtils.getVisitUrl(recordFile, 3600);
             return visitUrl.toString();
         } catch (Exception e) {
-            LOG.error("客户报表导出异常->{}", e.getMessage());
-            throw new RRException("客户报表导出异常:" + e.getMessage());
+            LOG.error("无效客户报表导出异常->{}", e.getMessage());
+            throw new RRException("无效客户报表导出异常:" + e.getMessage());
         }
     }
 
@@ -64,8 +64,8 @@ public class InvalidServiceImpl implements InvalidService {
         if (isSuperAdmin()) {
             return invalidDao.getExportData(query);
         }
-        List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         List<String> ids = new ArrayList<>();
+        List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         userAllDeptId.forEach(x -> {
             ids.add(String.valueOf(x));
         });
