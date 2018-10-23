@@ -12,7 +12,7 @@ import com.hqjy.mustang.transfer.export.util.PageUtil;
  */
 public interface PromotionCompanyCostService {
     /**
-     * 获取推广报表数据
+     * 获取推广公司费用报表数据
      *
      * @param params 分页请求参数
      * @param query  高级请求参数
@@ -22,7 +22,7 @@ public interface PromotionCompanyCostService {
 
 
     /**
-     * 导出推广报表数据
+     * 导出推广公司费用报表数据
      *
      * @param query 高级请求参数
      * @return 返回导出结果

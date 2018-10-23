@@ -2,10 +2,8 @@ package com.hqjy.mustang.transfer.export.controller;
 
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.transfer.export.model.query.DailyQueryParams;
-import com.hqjy.mustang.transfer.export.model.query.PageParams;
-import com.hqjy.mustang.transfer.export.model.query.CustomerQueryParams;
-import com.hqjy.mustang.transfer.export.model.query.SmsCostQueryParams;
+import com.hqjy.mustang.transfer.export.model.query.*;
+import com.hqjy.mustang.transfer.export.service.PromotionCompanyCostService;
 import com.hqjy.mustang.transfer.export.service.PromotionCustomerService;
 import com.hqjy.mustang.transfer.export.service.PromotionDailyService;
 import com.hqjy.mustang.transfer.export.service.PromotionSmsCostService;
@@ -28,6 +26,12 @@ public class PromotionReportController {
     private PromotionDailyService promotionDailyService;
     private PromotionCustomerService promotionCustomerService;
     private PromotionSmsCostService promotionSmsCostService;
+    private PromotionCompanyCostService promotionCompanyCostService;
+
+    @Autowired
+    public void setPromotionCompanyCostService(PromotionCompanyCostService promotionCompanyCostService) {
+        this.promotionCompanyCostService = promotionCompanyCostService;
+    }
 
     @Autowired
     public void setPromotionSmsCostService(PromotionSmsCostService promotionSmsCostService) {
@@ -182,7 +186,7 @@ public class PromotionReportController {
             "\"deptId\":20\n" +
             "}" +
             "请求成功：\n"
-           )
+    )
     @PostMapping("/promotionSmsCostList")
     public R promotionSmsCostList(@ModelAttribute PageParams params, @RequestBody(required = false) SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.promotionSmsCostList(params, query));
@@ -204,5 +208,39 @@ public class PromotionReportController {
     @PostMapping("/exportPromotionSmsCost")
     public R exportPromotionSmsCost(@RequestBody SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.exportPromotionSmsCost(query));
+    }
+
+
+    @ApiOperation(value = "推广公司费用报表数据列表", notes = "请求参数格式：\n" +
+            "分页参数：/report/promotion/promotionDailyList?pageNum=1&pageSize=10\n" +
+            "高级查询参数：\n" +
+            "{\n" +
+            "\"beginTime\": \"2018-09-10\",\n" +
+            "\"endTime\": \"2018-10-20\",\n" +
+            "\"deptId\":20\n" +
+            "}" +
+            "请求成功：\n"
+    )
+    @PostMapping("/promotionCompanyCostList")
+    public R promotionCompanyCostList(@ModelAttribute PageParams params, @RequestBody(required = false) CompanyCostQueryParams query) {
+        return R.result(promotionCompanyCostService.promotionCompanyCostList(params, query));
+    }
+
+    @SysLog("导出推广公司费用报表数据")
+    @ApiOperation(value = "导出推广公司费用报表数据", notes = "请求参数格式:\n" +
+            "{\n" +
+            "\"beginTime\": \"2018-09-10\",\n" +
+            "\"endTime\": \"2018-10-20\",\n" +
+            "\"deptId\":20\n" +
+            "}" +
+            "请求成功：\n" +
+            "{\n" +
+            "  \"msg\": \"成功\",\n" +
+            "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
+            "  \"code\": 0\n" +
+            "}")
+    @PostMapping("/exportPromotionCompanyCost")
+    public R exportPromotionCompanyCost(@RequestBody CompanyCostQueryParams query) {
+        return R.result(promotionCompanyCostService.exportPromotionCompanyCost(query));
     }
 }

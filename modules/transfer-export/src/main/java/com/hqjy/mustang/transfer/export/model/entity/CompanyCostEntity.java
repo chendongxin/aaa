@@ -3,7 +3,6 @@ package com.hqjy.mustang.transfer.export.model.entity;
 import lombok.Data;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 /**
  * @author xyq
@@ -14,29 +13,9 @@ import java.util.Date;
 public class CompanyCostEntity {
 
     /**
-     * 编号 id
-     **/
-    private Long id;
-
-    /**
-     * 部门id
-     **/
-    private Integer deptId;
-
-    /**
-     * 推广公司id
-     **/
-    private Integer companyId;
-
-    /**
-     * 推广来源id
+     * 推广方式
      */
-    private Long sourceId;
-
-    /**
-     * 推广方式id
-     **/
-    private Integer wayId;
+    private String wayName;
 
     /**
      * 人民币主动
@@ -59,8 +38,8 @@ public class CompanyCostEntity {
     private BigDecimal passiveVirtual;
 
     /**
-     * 创建时间
+     * 创建日期
      **/
-    private Date createTime;
+    private String date;
 
 }
