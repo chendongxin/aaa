@@ -90,7 +90,7 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
         });
         query.put("userAllDeptId", StringUtils.listToString(ids));
         transferCustomerService.formatQueryTime(query);
-        return super.findPage(query);
+        return baseDao.findPage(query);
     }
 
     @Override
