@@ -155,7 +155,7 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             SellAttacheReportTotal total = this.countTotal(list);
             ExcelUtil<SellAttacheReportData, SellAttacheReportTotal> util1 = new ExcelUtil<>(SellAttacheReportData.class, SellAttacheReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "招转日常数据报表_", total, os);
+            util1.getListToExcel(list, null, total, os);
             //aliyun目录
             String dir = "export";
             //文件名称

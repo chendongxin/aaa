@@ -69,6 +69,9 @@ public class ReservationServiceImpl implements ReservationService {
             return reservationDao.getExportData(params);
         }
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
+        if (userAllDeptId.isEmpty()) {
+            throw new RRException("用户不存在");
+        }
         List<String> ids = new ArrayList<>();
         userAllDeptId.forEach(x -> {
             ids.add(String.valueOf(x));
@@ -83,7 +86,7 @@ public class ReservationServiceImpl implements ReservationService {
             List<ReservationExportEntity> list = this.getExportData(params);
             ExcelUtil<ReservationExportEntity, Object> util1 = new ExcelUtil<>(ReservationExportEntity.class, Object.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "预约报表", null, os);
+            util1.getListToExcel(list, null, null, os);
             //aliyun目录
             String dir = "export";
             //文件名称

@@ -38,7 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
             List<CustomerExportEntity> customerEntityList = this.getExportData(query);
             ExcelUtil<CustomerExportEntity, Object> util1 = new ExcelUtil<>(CustomerExportEntity.class, Object.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(customerEntityList, "客户报表", null, os);
+            util1.getListToExcel(customerEntityList, null, null, os);
             //aliyun目录
             String dir = "export";
             //文件名称
