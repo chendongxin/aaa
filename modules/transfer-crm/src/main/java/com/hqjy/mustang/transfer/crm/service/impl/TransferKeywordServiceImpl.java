@@ -49,7 +49,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
      */
     @Override
     public int save(TransferKeywordEntity transferKeywordEntity) {
-        if (baseDao.findOneByName(transferKeywordEntity.getName()) != null) {
+        if (null != baseDao.findOneByName(transferKeywordEntity.getName())) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
         transferKeywordEntity.setSign(0);

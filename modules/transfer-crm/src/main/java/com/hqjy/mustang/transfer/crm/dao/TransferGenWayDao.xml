@@ -187,14 +187,11 @@
 
 	<select id="findBySourceId" resultMap="BaseResultMap">
 		select
-		<include refid="Base_Column_List" />
+		tgw.way_id, tgw.gen_way
 		from transfer_gen_way tgw
+		inner join transfer_way_source tws on tws.way_id = tgw.way_id
 		WHERE
-			(select tgw.way_id
-			from transfer_way_source tws
-			where
-			tws.way_id = tgw.way_id
-			and tws.source_id = #{sourceId})
+			tws.source_id = #{sourceId} and tgw.status = false
 	</select>
 
     <select id="findNotBySourceId" resultMap="BaseResultMap">

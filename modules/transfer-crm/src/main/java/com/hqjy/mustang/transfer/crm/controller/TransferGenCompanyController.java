@@ -249,6 +249,15 @@ public class TransferGenCompanyController {
     }
 
     /**
+     * 获取属于指定公司的推广平台
+     */
+    @GetMapping("/source/get/all/{companyId}")
+    @ApiOperation(value = "获取属于指定公司的推广平台", notes = "请求参数说明")
+    public R getSourceByCompanyId(@PathVariable("companyId") Long companyId) {
+        return R.ok(transferSourceService.findByCompanyId(companyId));
+    }
+
+    /**
      * 新增推广公司下的推广平台
      */
     @ApiOperation(value = "新增推广公司下的推广平台", notes = "请求参数：\n" +

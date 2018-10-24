@@ -89,6 +89,14 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
     }
 
     /**
+     * 获取属于指定公司的推广平台
+     */
+    @Override
+    public List<TransferSourceEntity> findByCompanyId(Long companyId) {
+        return baseDao.findByCompanyId(companyId);
+    }
+
+    /**
      * 删除所选来源平台
      */
     @Override
@@ -105,6 +113,8 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
         }
         return super.deleteBatch(sourceIds);
     }
+
+
 
 
     /**
