@@ -41,7 +41,7 @@ public class InvalidServiceImpl implements InvalidService {
             List<InvalidExportEntity> invalidCustomerList = this.getExportData(query);
             ExcelUtil<InvalidExportEntity, Object> util1 = new ExcelUtil<>(InvalidExportEntity.class, Object.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(invalidCustomerList, "无效客户报表", null, os);
+            util1.getListToExcel(invalidCustomerList, null, null, os);
             //aliyun目录
             String dir = "export";
             //文件名称
@@ -52,8 +52,8 @@ public class InvalidServiceImpl implements InvalidService {
             URL visitUrl = OssFileUtils.getVisitUrl(recordFile, 3600);
             return visitUrl.toString();
         } catch (Exception e) {
-            LOG.error("客户报表导出异常->{}", e.getMessage());
-            throw new RRException("客户报表导出异常:" + e.getMessage());
+            LOG.error("无效客户报表导出异常->{}", e.getMessage());
+            throw new RRException("无效客户报表导出异常:" + e.getMessage());
         }
     }
 
@@ -64,8 +64,8 @@ public class InvalidServiceImpl implements InvalidService {
         if (isSuperAdmin()) {
             return invalidDao.getExportData(query);
         }
-        List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         List<String> ids = new ArrayList<>();
+        List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         userAllDeptId.forEach(x -> {
             ids.add(String.valueOf(x));
         });
