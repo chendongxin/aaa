@@ -147,7 +147,9 @@
             <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
             <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
             <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+                and DATE_FORMAT(create_time,'%Y-%m-%d') between STR_TO_DATE(#{beginCreateTime} ,'%Y-%m-%d') and STR_TO_DATE(#{endCreateTime},'%Y-%m-%d')
+            </if>
         </where>
     </select>
 

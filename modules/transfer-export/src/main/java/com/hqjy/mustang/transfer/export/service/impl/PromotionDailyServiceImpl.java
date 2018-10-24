@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
 import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
@@ -147,15 +148,21 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
         }
         List<DailyReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
-
+        if (deptInfo.isEmpty()) {
+            throw new RRException("部门不存在");
+        }
         List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
-
+        if (deptList.isEmpty()) {
+            throw new RRException("部门(校区)不存在");
+        }
         deptList.forEach(y -> {
             LOG.info("初始化报表列表");
             list.add(new DailyReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
+        query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
+        query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
         query.setDeptIds(StringUtils.listToString(ids));
         return list;
     }
@@ -207,7 +214,7 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
             DailyReportTotal total = this.countTotal(list);
             ExcelUtil<DailyReportData, DailyReportTotal> util1 = new ExcelUtil<>(DailyReportData.class, DailyReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "招转日常数据报表_", total, os);
+            util1.getListToExcel(list, null, total, os);
             //aliyun目录
             String dir = "export";
             //文件名称

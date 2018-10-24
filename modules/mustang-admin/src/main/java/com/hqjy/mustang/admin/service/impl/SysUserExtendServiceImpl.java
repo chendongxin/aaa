@@ -10,6 +10,7 @@ import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.shiro.crypto.hash.Sha256Hash;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
@@ -25,6 +26,8 @@ import java.util.regex.Pattern;
 @Service
 public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, SysUserExtendEntity, Long> implements SysUserExtendService {
 
+    @Autowired
+    private SysUserExtendDao sysUserExtendDao;
     /**
      * 根据用户Id查询,HSS 2018-07-05
      */
@@ -51,6 +54,7 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
         userExtend.setCreateId(ShiroUtils.getUserId());
         //sha256加密
         String salt = RandomStringUtils.randomAlphanumeric(20);
+        userExtend.setSalt(salt);
         userExtend.setTqPw(new Sha256Hash(userExtend.getTqPw(),salt).toHex());
         int count = baseDao.save(userExtend);
         return count;
@@ -75,12 +79,18 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
                 }
             }
             String salt =  RandomStringUtils.randomAlphanumeric(20);
+            userExtend.setSalt(salt);
             userExtend.setTqPw(new Sha256Hash(userExtend.getTqPw(),salt).toHex());
         }
         return baseDao.update(userExtend);
     }
 
+    /**
+     * 获取所有已存在的TQ账号信息
+     * @return
+     */
+    @Override
     public  List<SysUserExtendEntity> getExistTqId(){
-        return baseDao.getExistTqId();
+        return sysUserExtendDao.getExistTqId();
     }
 }

@@ -167,9 +167,9 @@ public class TarnsferSmsController {
     @ApiOperation(value = "删除短信", notes = "删除短信：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "id", value = "短信ID", required = true, dataType = "String")
     @SysLog("删除短信")
-    @DeleteMapping("/{id}")
-    public R delete(@PathVariable("id") Long id) {
-        int count = transferSmsService.delete(id);
+    @DeleteMapping("/{ids}")
+    public R delete(@PathVariable("ids") Long[] ids) {
+        int count = transferSmsService.deleteBatch(ids);
         if (count > 0) {
             return R.ok();
         }

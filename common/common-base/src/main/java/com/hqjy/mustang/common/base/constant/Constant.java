@@ -45,10 +45,6 @@ public class Constant {
     public static final String API_OPEN_PATH = "/api/public/";
     public static final String API_OPEN_PATH_ANON = API_OPEN_PATH + "**";
 
-    public static final String CODE = "code";
-    public static final String MSG = "msg";
-    public static final String RESULT = "result";
-
 
     /**
      * 通用状态
@@ -503,6 +499,33 @@ public class Constant {
 
         public String getCode() {
             return code;
+        }
+    }
+
+    /**
+     * 费用类型
+     *
+     * @author xieyuqing
+     */
+    public enum CostType {
+
+        /**
+         * 人民币
+         */
+        RMB(1),
+        /**
+         * 虚拟币
+         */
+        VIRTUAL_RMB(2);
+
+        private int value;
+
+        CostType(int value) {
+            this.value = value;
+        }
+
+        public int getValue() {
+            return value;
         }
     }
 

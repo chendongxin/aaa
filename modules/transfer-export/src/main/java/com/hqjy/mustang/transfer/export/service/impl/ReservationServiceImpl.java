@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
 import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
@@ -49,13 +50,28 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public List<ReservationExportEntity> getExportData(ReservationQueryParams params) {
-        if (isGeneralSeat() ) {
+        if (StringUtils.isNotBlank(params.getBeginCreateTime())) {
+            params.setBeginCreateTime(DateUtils.getBeginTime(params.getBeginCreateTime()));
+        }
+        if (StringUtils.isNotBlank(params.getEndCreateTime())) {
+            params.setEndCreateTime(DateUtils.getBeginTime(params.getEndCreateTime()));
+        }
+        if (StringUtils.isNotBlank(params.getBeginAppointTime())) {
+            params.setBeginAppointTime(DateUtils.getBeginTime(params.getBeginAppointTime()));
+        }
+        if (StringUtils.isNotBlank(params.getEndAppointTime())) {
+            params.setEndAppointTime(DateUtils.getBeginTime(params.getEndAppointTime()));
+        }
+        if (isGeneralSeat()) {
             params.setUserId(getUserId());
         }
         if (isSuperAdmin()) {
             return reservationDao.getExportData(params);
         }
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
+        if (userAllDeptId.isEmpty()) {
+            throw new RRException("用户不存在");
+        }
         List<String> ids = new ArrayList<>();
         userAllDeptId.forEach(x -> {
             ids.add(String.valueOf(x));
@@ -70,7 +86,7 @@ public class ReservationServiceImpl implements ReservationService {
             List<ReservationExportEntity> list = this.getExportData(params);
             ExcelUtil<ReservationExportEntity, Object> util1 = new ExcelUtil<>(ReservationExportEntity.class, Object.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "预约报表", null, os);
+            util1.getListToExcel(list, null, null, os);
             //aliyun目录
             String dir = "export";
             //文件名称

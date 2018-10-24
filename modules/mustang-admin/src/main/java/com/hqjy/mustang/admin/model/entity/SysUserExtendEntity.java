@@ -54,6 +54,12 @@ public class SysUserExtendEntity implements Serializable {
     private Integer tqId;
 
     /**
+     * 用户盐 salt
+     **/
+    @JSONField(serialize = false)
+    private String salt;
+
+    /**
 	 * TQ密码 tq_pw
 	 **/
     @JSONField(serialize = false)
