@@ -138,7 +138,10 @@
         <include refid="Base_Column_List"/>
         from transfer_sms_reply
         <where>
-            <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+            <!-- 高级查询筛选部门-->
+            <if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+                and dept_id in ${deptIds}
+            </if>
             <if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
             <if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
@@ -147,7 +150,9 @@
             <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
             <if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
             <if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name like concat('%',#{createUserName},'%')</if>
-            <if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+            <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+                and DATE_FORMAT(create_time,'%Y-%m-%d') between STR_TO_DATE(#{beginCreateTime} ,'%Y-%m-%d') and STR_TO_DATE(#{endCreateTime},'%Y-%m-%d')
+            </if>
         </where>
     </select>
 
