@@ -41,7 +41,7 @@ public class InvalidServiceImpl implements InvalidService {
             List<InvalidExportEntity> invalidCustomerList = this.getExportData(query);
             ExcelUtil<InvalidExportEntity, Object> util1 = new ExcelUtil<>(InvalidExportEntity.class, Object.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(invalidCustomerList, "无效客户报表", null, os);
+            util1.getListToExcel(invalidCustomerList, null, null, os);
             //aliyun目录
             String dir = "export";
             //文件名称
