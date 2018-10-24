@@ -119,7 +119,9 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
             userDeptInfo = userDeptInfo.stream().filter(x -> x.getUserId().equals(userId)).collect(Collectors.toList());
         }
         List<UserDeptInfo> deptList = userDeptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
-
+        if (deptList.isEmpty()) {
+            throw new RRException("部门(校区)不存在");
+        }
         List<CustomerReportData> list = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         AtomicInteger sequence = new AtomicInteger();
@@ -171,7 +173,7 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
             CustomerReportTotal total = this.countTotal(list);
             ExcelUtil<CustomerReportData, CustomerReportTotal> util1 = new ExcelUtil<>(CustomerReportData.class, CustomerReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "招转客服推广报表_", total, os);
+            util1.getListToExcel(list, null, total, os);
             //aliyun目录
             String dir = "export";
             //文件名称

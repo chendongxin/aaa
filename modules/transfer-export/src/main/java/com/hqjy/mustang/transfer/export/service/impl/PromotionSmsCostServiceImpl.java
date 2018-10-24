@@ -113,7 +113,7 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
             SmsCostReportTotal total = this.countTotal(list);
             ExcelUtil<SmsCostReportData, SmsCostReportTotal> util1 = new ExcelUtil<>(SmsCostReportData.class, SmsCostReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "招转推广短信费用报表_", total, os);
+            util1.getListToExcel(list, null, total, os);
             //aliyun目录
             String dir = "export";
             //文件名称
@@ -141,10 +141,14 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
         }
         List<SmsCostReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
-
+        if (deptInfo.isEmpty()) {
+            throw new RRException("部门不存在");
+        }
         List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
-
+        if (deptList.isEmpty()) {
+            throw new RRException("部门(校区)不存在");
+        }
         deptList.forEach(y -> {
             list.add(new SmsCostReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));

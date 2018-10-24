@@ -174,23 +174,26 @@ public class ExcelUtil<T1, T2> implements Serializable {
             }
             double sheetNo = Math.ceil(listSize / sheetSize);
             for (int index = 0; index <= sheetNo; index++) {
+                int startRow = 0;
                 // 产生工作表对象
                 HSSFSheet sheet = workbook.createSheet();
-                // 设置工作表的名称.
-                workbook.setSheetName(index, sheetName + index);
                 HSSFRow row;
                 HSSFCell cell;// 产生单元格
-                row = sheet.createRow(0);// 产生一行
+                if (StringUtils.isNotBlank(sheetName)) {
+                    sheet.createRow(0).createCell(fields.size() / 2).setCellValue(sheetName);
+                    startRow = 1;
+                }
+                row = sheet.createRow(startRow);
                 /* *********普通列样式********* */
                 HSSFFont font = workbook.createFont();
                 HSSFCellStyle cellStyle = workbook.createCellStyle();
-                font.setFontName("Arail narrow"); // 字体
-                font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); // 字体宽度
+                font.setFontName("Arail narrow");
+                font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
                 /* *********标红列样式********* */
                 HSSFFont newFont = workbook.createFont();
                 HSSFCellStyle newCellStyle = workbook.createCellStyle();
-                newFont.setFontName("Arail narrow"); // 字体
-                newFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD); // 字体宽度
+                newFont.setFontName("Arail narrow");
+                newFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
                 /* *************创建列头名称*************** */
                 for (int i = 0; i < fields.size(); i++) {
                     Field field = fields.get(i);
@@ -227,8 +230,8 @@ public class ExcelUtil<T1, T2> implements Serializable {
                 int endNo = Math.min(startNo + sheetSize, listSize);
                 // 写入各条记录,每条记录对应excel表中的一行
                 for (int i = startNo; i < endNo; i++) {
-                    row = sheet.createRow(i + 1 - startNo);
-                    T1 vo = (T1) list.get(i); // 得到导出对象.
+                    row = sheet.createRow(i + 1 + startRow - startNo);
+                    T1 vo = (T1) list.get(i);
                     for (int j = 0; j < fields.size(); j++) {
                         // 获得field
                         Field field = fields.get(j);

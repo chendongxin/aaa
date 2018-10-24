@@ -303,7 +303,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
             ExcelUtil<TransferCustomerExportDTO, Object> util1 = new ExcelUtil<>(TransferCustomerExportDTO.class, Object.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(exportList, "客户列表", null, os);
+            util1.getListToExcel(exportList, null, null, os);
             //aliyun目录
             String dir = "export";
             //文件名称

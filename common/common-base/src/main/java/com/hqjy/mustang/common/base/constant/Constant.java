@@ -509,22 +509,23 @@ public class Constant {
      */
     public enum CostType {
 
-        RMB("人民币", 1),
-        VIRTUAL_RMB("虚拟币", 2);
-        private int value;
-        private String code;
+        /**
+         * 人民币
+         */
+        RMB(1),
+        /**
+         * 虚拟币
+         */
+        VIRTUAL_RMB(2);
 
-        CostType(String code, int value) {
+        private int value;
+
+        CostType(int value) {
             this.value = value;
-            this.code = code;
         }
 
         public int getValue() {
             return value;
-        }
-
-        public String getCode() {
-            return code;
         }
     }
 
