@@ -2,27 +2,28 @@ package com.hqjy.mustang.transfer.export.service.impl;
 
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.exception.RRException;
-import com.hqjy.mustang.common.base.utils.DateUtils;
-import com.hqjy.mustang.common.base.utils.ExcelUtil;
-import com.hqjy.mustang.common.base.utils.OssFileUtils;
-import com.hqjy.mustang.common.base.utils.StringUtils;
+import com.hqjy.mustang.common.base.utils.*;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import com.hqjy.mustang.common.model.crm.TransferGenWayInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionCompanyCostDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
-import com.hqjy.mustang.transfer.export.model.dto.CompanyCostReportData;
-import com.hqjy.mustang.transfer.export.model.dto.CompanyCostReportTotal;
+import com.hqjy.mustang.transfer.export.feign.TransferGenWayFeign;
+import com.hqjy.mustang.transfer.export.model.dto.CompanyCostReport;
+import com.hqjy.mustang.transfer.export.model.dto.TransferGenWayCost;
 import com.hqjy.mustang.transfer.export.model.entity.CompanyCostEntity;
 import com.hqjy.mustang.transfer.export.model.entity.CompanyCustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.CompanyCostQueryParams;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.service.PromotionCompanyCostService;
 import com.hqjy.mustang.transfer.export.util.PageUtil;
+import org.apache.poi.hssf.usermodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -38,14 +39,7 @@ import java.util.List;
 @Service
 public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostService {
     private final static Logger LOG = LoggerFactory.getLogger(PromotionCompanyCostServiceImpl.class);
-    private final static String BOUTIQUE = "精品(帮帮)";
-    private final static String PRECISION = "精准(黄金展位)";
-    private final static String FLUSH = "刷新";
-    private final static String JOB_POSTING = "职位发布";
-    private final static String TOPPING = "置顶";
-    private final static String LOAD = "下载";
-    private final static String AD = "广告";
-    private final static String PUSH = "优先推送";
+
     private final static String INITIATIVE_RMB = "人民币主动";
     private final static String INITIATIVE_VIRTUAL = "虚拟币主动";
     private final static String PASSIVE_RMB = "人民币被动";
@@ -53,6 +47,12 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
 
     private PromotionCompanyCostDao promotionCompanyCostDao;
     private SysDeptServiceFeign deptServiceFeign;
+    private TransferGenWayFeign transferGenWayFeign;
+
+    @Autowired
+    public void setTransferGenWayFeign(TransferGenWayFeign transferGenWayFeign) {
+        this.transferGenWayFeign = transferGenWayFeign;
+    }
 
     @Autowired
     public void setDeptServiceFeign(SysDeptServiceFeign deptServiceFeign) {
@@ -72,22 +72,28 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
      * @return 返回查询结果
      */
     @Override
-    public PageUtil<CompanyCostReportData> promotionCompanyCostList(PageParams params, CompanyCostQueryParams query) {
-        List<CompanyCostReportData> list = this.initData(query);
-        this.setCompanyCostData(query, list);
+    public PageUtil<CompanyCostReport> promotionCompanyCostList(PageParams params, CompanyCostQueryParams query) {
+        List<CompanyCostReport> list = this.initReport(query);
+        this.setReportValue(query, list);
         return new PageUtil<>(params, list);
     }
 
     /**
-     * 赋值公司费用报表具体的数据
+     * 初始化报表（列出所选日期间的所有日期）
      *
      * @param query 前端请求参数
      * @param list  初始化后的推广公司费用报表对象
      */
-    private void setCompanyCostData(CompanyCostQueryParams query, List<CompanyCostReportData> list) {
+    private void setReportValue(CompanyCostQueryParams query, List<CompanyCostReport> list) {
         List<String> costType = this.checkCostType(query);
         List<CompanyCostEntity> companyCost = promotionCompanyCostDao.getCompanyCost(query);
         List<CompanyCustomerEntity> customerEntities = promotionCompanyCostDao.countCustomer(query);
+
+        List<TransferGenWayInfo> allGenWayList = transferGenWayFeign.getAllGenWayList();
+        List<TransferGenWayCost> wayCosts = new ArrayList<>();
+        allGenWayList.forEach(w -> {
+            wayCosts.add(new TransferGenWayCost().setWayId(w.getWayId()).setGenWay(w.getGenWay()));
+        });
 
         list.forEach(x -> {
             customerEntities.forEach(y -> {
@@ -98,19 +104,46 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
             companyCost.forEach(y -> {
                 BigDecimal money = this.getCostTypeMoney(costType, y);
                 if (x.getDate().equals(y.getDate())) {
-                    this.setCost(x, y, money);
+                    wayCosts.forEach(w -> {
+                        if (w.getWayId().equals(y.getWayId())) {
+                            w.setCost(money.toString());
+                        }
+                    });
                 }
             });
-            x.setTotalCost(x.getBoutiqueCost()
-                    .add(x.getPrecisionCost()
-                            .add(x.getJobPostingCost()
-                                    .add(x.getAdCost()
-                                            .add(x.getFlushCost()
-                                                    .add(x.getLoadCost()
-                                                            .add(x.getToppingCost()
-                                                                    .add(x.getPushCost()))))))));
+            x.setGenWayCosts(wayCosts);
+            wayCosts.forEach(w -> {
+                x.setTotalCost(new BigDecimal(w.getCost()).add(new BigDecimal(x.getTotalCost())).toString());
+            });
         });
     }
+
+    /**
+     * 初始化 推广公司费用报表对象（列出所选日期间的所有日期）
+     *
+     * @param query 前端请求查询条件
+     * @return 返回初始化对象
+     */
+    private List<CompanyCostReport> initReport(CompanyCostQueryParams query) {
+        List<CompanyCostReport> list = new ArrayList<>();
+        List<String> dates = DateUtils.getBetweenDates(query.getBeginTime(), query.getEndTime());
+        dates.forEach(x -> {
+            list.add(new CompanyCostReport().setDate(x));
+        });
+        List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
+        List<String> ids = new ArrayList<>();
+        if (deptInfo.isEmpty()) {
+            throw new RRException("部门不存在");
+        }
+        deptInfo.forEach(y -> {
+            ids.add(String.valueOf(y.getDeptId()));
+        });
+        query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
+        query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
+        query.setDeptIds(StringUtils.listToString(ids));
+        return list;
+    }
+
 
     /**
      * 判断费用类型
@@ -120,7 +153,7 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
      */
     private List<String> checkCostType(CompanyCostQueryParams query) {
         List<String> costType = new ArrayList<>();
-        if (query.getGetWay() == Constant.GetWayStatus.ACTIVE_GET.getValue()) {
+        if (query.getGetWay().equals(Constant.GetWayStatus.ACTIVE_GET.getValue())) {
             if (query.getCostType() == Constant.CostType.RMB.getValue()) {
                 costType.add(INITIATIVE_RMB);
             } else {
@@ -134,43 +167,6 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
             }
         }
         return costType;
-    }
-
-    /**
-     * 设置各推广方式的费用
-     *
-     * @param x     报表数据对象
-     * @param y     推广公司费用对象
-     * @param money 费用
-     */
-    private void setCost(CompanyCostReportData x, CompanyCostEntity y, BigDecimal money) {
-        switch (y.getWayName()) {
-            case BOUTIQUE:
-                x.setBoutiqueCost(money);
-                break;
-            case PRECISION:
-                x.setPrecisionCost(money);
-                break;
-            case FLUSH:
-                x.setFlushCost(money);
-                break;
-            case JOB_POSTING:
-                x.setJobPostingCost(money);
-                break;
-            case TOPPING:
-                x.setToppingCost(money);
-                break;
-            case LOAD:
-                x.setLoadCost(money);
-                break;
-            case AD:
-                x.setBoutiqueCost(money);
-                break;
-            case PUSH:
-                x.setPushCost(money);
-                break;
-            default:
-        }
     }
 
     /**
@@ -211,12 +207,30 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
     @Override
     public String exportPromotionCompanyCost(CompanyCostQueryParams query) {
         try {
-            List<CompanyCostReportData> list = this.getCompanyCostData(query);
-            CompanyCostReportTotal total = this.countTotal(list);
-            ExcelUtil<CompanyCostReportData, CompanyCostReportTotal> util1 = new ExcelUtil<>(CompanyCostReportData.class, CompanyCostReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            String sheetHead = query.getDeptName() + "_" + query.getCompanyName() + "_" + query.getSourceName();
-            util1.getListToExcel(list, sheetHead, total, os);
+            HSSFWorkbook wb = new HSSFWorkbook();
+            HSSFSheet sheet = wb.createSheet("招转推广公司费用报表");
+
+            List<String> headerValue = new ArrayList<>();
+            headerValue.add("日期");
+            headerValue.add("总费用");
+            headerValue.add("商机量");
+            List<TransferGenWayInfo> allGenWayList = transferGenWayFeign.getAllGenWayList();
+            for (TransferGenWayInfo w : allGenWayList) {
+                headerValue.add(w.getGenWay());
+            }
+
+            //获取报表数据
+            List<CompanyCostReport> list = this.initReport(query);
+            this.setReportValue(query, list);
+            //设置表头标题
+            this.setSheetHead(query, wb, sheet, allGenWayList);
+            //设置报表表头列
+            this.createWorkBookColumn(wb, sheet, headerValue);
+            //写入数据
+            this.setSheetData(sheet, list);
+
+            wb.write(os);
             //aliyun目录
             String dir = "export";
             //文件名称
@@ -226,65 +240,104 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
             //下载地址有效时间1个小时
             URL visitUrl = OssFileUtils.getVisitUrl(recordFile, 3600);
             return visitUrl.toString();
-        } catch (Exception e) {
-            LOG.error("招转推广公司费用导出异常->{}", e.getMessage());
-            throw new RRException("招转推广公司费用导出异常");
+        } catch (IOException e) {
+            LOG.error("招转推广公司费用报表导出异常->{}", e.getMessage());
+            throw new RRException("招转日常数据报表导出异常");
         }
     }
 
-    private CompanyCostReportTotal countTotal(List<CompanyCostReportData> list) {
-        CompanyCostReportTotal total = new CompanyCostReportTotal();
-        list.forEach(x -> {
-            total.setNum(x.getNum() + total.getNum());
-            total.setTotalCost(x.getTotalCost().add(total.getTotalCost()));
-            total.setBoutiqueCost(x.getBoutiqueCost().add(total.getBoutiqueCost()));
-            total.setPrecisionCost(x.getPrecisionCost().add(total.getPrecisionCost()));
-            total.setJobPostingCost(x.getJobPostingCost().add(total.getJobPostingCost()));
-            total.setAdCost(x.getAdCost().add(total.getAdCost()));
-            total.setFlushCost(x.getFlushCost().add(total.getFlushCost()));
-            total.setLoadCost(x.getLoadCost().add(total.getLoadCost()));
-            total.setToppingCost(x.getToppingCost().add(total.getToppingCost()));
-        });
-        return total;
+    /**
+     * 设置表头标题
+     *
+     * @param query         请求参数
+     * @param wb            工作簿对象
+     * @param sheet         工作表 对象
+     * @param allGenWayList 推广方式集合对象
+     */
+    private void setSheetHead(CompanyCostQueryParams query, HSSFWorkbook wb, HSSFSheet sheet, List<TransferGenWayInfo> allGenWayList) {
+        HSSFFont font = wb.createFont();
+        HSSFCellStyle cellStyle = wb.createCellStyle();
+        cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+        cellStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
+        cellStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+        font.setFontName("宋体");
+        font.setFontHeightInPoints((short) 28);
+
+        //设置表头标题
+        HSSFCell cell = sheet.createRow(0).createCell((allGenWayList.size() + 3) / 2);
+        String sheetHead = query.getDeptName() + "_" + query.getCompanyName() + "_" + query.getSourceName();
+        cellStyle.setFont(font);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue(sheetHead);
     }
 
     /**
-     * 获取推广公司费用报表数据集合
+     * 设置报表表头列
      *
-     * @param query 前端请求参数
-     * @return 报表数据
+     * @param wb          工作簿对象
+     * @param sheet       工作表 对象
+     * @param headerValue 报表表头列集合
      */
-    private List<CompanyCostReportData> getCompanyCostData(CompanyCostQueryParams query) {
-        List<CompanyCostReportData> list = this.initData(query);
-        this.setCompanyCostData(query, list);
-        return list;
-    }
+    private void createWorkBookColumn(HSSFWorkbook wb, HSSFSheet sheet, List<String> headerValue) {
+        HSSFFont font = wb.createFont();
+        HSSFCellStyle cellStyle = wb.createCellStyle();
+        font.setFontName("Arail narrow");
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
 
-
-    /**
-     * 初始化 推广公司费用报表对象
-     *
-     * @param query 前端请求查询条件
-     * @return 返回初始化对象
-     */
-    private List<CompanyCostReportData> initData(CompanyCostQueryParams query) {
-
-        List<CompanyCostReportData> list = new ArrayList<>();
-        List<String> dates = DateUtils.getBetweenDates(query.getBeginTime(), query.getEndTime());
-        dates.forEach(x -> {
-            list.add(new CompanyCostReportData().setDate(x));
-        });
-        List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId().longValue());
-        List<String> ids = new ArrayList<>();
-        if (deptInfo.isEmpty()) {
-            throw new RRException("部门不存在");
+        HSSFRow header = sheet.createRow(1);
+        header.setHeightInPoints(20);
+        for (int i = 0; i < headerValue.size(); i++) {
+            String value = headerValue.get(i);
+            HSSFCell cell = header.createCell(i);
+            cellStyle.setFont(font);
+            cell.setCellStyle(cellStyle);
+            sheet.setColumnWidth(i, 8 * 200);
+            // 设置列中写入内容为String类型
+            cell.setCellType(HSSFCell.CELL_TYPE_STRING);
+            //设置值
+            cell.setCellValue(value);
         }
-        deptInfo.forEach(y -> {
-            ids.add(String.valueOf(y.getDeptId()));
-        });
-        query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
-        query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
-        query.setDeptIds(StringUtils.listToString(ids));
-        return list;
+        sheet.createFreezePane(0, 1);
+    }
+
+    /**
+     * 写入数据
+     *
+     * @param sheet 工作表 对象
+     * @param list  报表整体数据集合
+     */
+    private void setSheetData(HSSFSheet sheet, List<CompanyCostReport> list) {
+        int size = list.size();
+        //标签页最大65535条记录
+        int sheetSize = 65535;
+        if (size > sheetSize) {
+            throw new RRException("本次导出记录:" + size + ",大于65535条，请分段进行导出");
+        }
+        for (int i = 0; i < size; i++) {
+            CompanyCostReport r = list.get(i);
+            HSSFRow row = sheet.createRow(i + 2);
+            //行高
+            row.setHeightInPoints(16);
+            this.buildCell(row, 0, r.getDate());
+            this.buildCell(row, 1, r.getTotalCost());
+            this.buildCell(row, 2, String.valueOf(r.getNum()));
+            List<TransferGenWayCost> genWayCosts = r.getGenWayCosts();
+            for (int j = 0; j < genWayCosts.size(); j++) {
+                this.buildCell(row, j + 3, genWayCosts.get(j).getCost());
+            }
+        }
+    }
+
+    /**
+     * 设置单元值
+     *
+     * @param row    行
+     * @param column 列
+     * @param value  单元格值
+     */
+    private void buildCell(HSSFRow row, int column, String value) {
+        row.createCell(column).setCellValue(value);
     }
 }

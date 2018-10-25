@@ -2,6 +2,7 @@ package com.hqjy.mustang.admin.controller;
 
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.base.AbstractController;
+import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
@@ -9,7 +10,6 @@ import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.admin.model.entity.SysUserEntity;
 import com.hqjy.mustang.admin.service.SysUserService;
-import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -212,9 +212,9 @@ public class SysUserController extends AbstractController {
     }
 
 
-    @ApiOperation(value = "根据角色编号获取所有用户", notes = "根据角色编号获取所有用户")
-    @GetMapping(value = "/getUserListByRoleCode")
-    public R getUserListByRoleCode(@RequestParam("roleCode") String roleCode) {
-        return R.result(userService.getUserListByRoleCode(roleCode));
+    @ApiOperation(value = "获取所有角色为客服的用户", notes = "获取所有角色为客服的用户")
+    @GetMapping(value = "/getServiceUserList")
+    public R getServiceUserList() {
+        return R.result(userService.getUserListByRoleCode(Constant.Role.SERVICE_COMMISSIONER.getCode()));
     }
 }
