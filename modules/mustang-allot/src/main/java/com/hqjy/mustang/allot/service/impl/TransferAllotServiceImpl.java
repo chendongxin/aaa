@@ -102,7 +102,7 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
     private TransferAllotCustomerEntity firstAllot(TransferAllotCustomerEntity customer) {
         // 保存简历详情 TODO 学历详情待处理
 //       customer.setEducation(null);
-        customer.setEducationId(Constant.Education.NONE.getValueByEducationName(customer.getEducation()).longValue());
+        customer.setEducationId(Optional.ofNullable(Constant.Education.NONE.getValueByEducationName(customer.getEducation()).longValue()).orElse(0L));
         transferAllotCustomerDetailDao.saveCustomer(customer);
         return bizAllot(true, customer);
     }
