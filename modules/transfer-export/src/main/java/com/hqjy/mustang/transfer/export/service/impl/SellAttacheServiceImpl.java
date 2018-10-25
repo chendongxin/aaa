@@ -6,8 +6,10 @@ import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.SellAttacheDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
+import com.hqjy.mustang.transfer.export.model.dto.CustomerReportData;
 import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportData;
 import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
@@ -70,10 +72,8 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         }
         List<SellAttacheReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = sysDeptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
-
         List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
-
         deptList.forEach(y -> {
             LOG.info("初始化报表列表");
             list.add(new SellAttacheReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
@@ -158,7 +158,7 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             SellAttacheReportTotal total = this.countTotal(list);
             ExcelUtil<SellAttacheReportData, SellAttacheReportTotal> util1 = new ExcelUtil<>(SellAttacheReportData.class, SellAttacheReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "电销专员排行数据报表_", total, os);
+            util1.getListToExcel(list, null, total, os);
             //aliyun目录
             String dir = "export";
             //文件名称
