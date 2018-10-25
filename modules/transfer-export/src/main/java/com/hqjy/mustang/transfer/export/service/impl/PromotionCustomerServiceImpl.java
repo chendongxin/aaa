@@ -103,13 +103,6 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
     }
 
     private List<CustomerReportData> check(CustomerQueryParams query) {
-        if (StringUtils.isEmpty(query.getBeginTime())) {
-            throw new RRException("请选择开始时间");
-        }
-        if (StringUtils.isEmpty(query.getEndTime())) {
-            throw new RRException("请选择结束时间");
-        }
-
         List<UserDeptInfo> userDeptInfo = userDeptServiceFeign.getUserDeptInfo("客服部");
         if (userDeptInfo.isEmpty()) {
             throw new RRException("客服数据不存在!");
@@ -129,7 +122,6 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
         Collections.sort(deptList, Comparator.comparing(UserDeptInfo::getDeptId));
         Collections.reverse(deptList);
         deptList.forEach(y -> {
-            LOG.info("初始化报表列表");
             list.add(new CustomerReportData().setSequence(sequence.incrementAndGet()).setUserId(y.getUserId()).setName(y.getUserName()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getUserId()));
         });

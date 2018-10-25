@@ -3,7 +3,6 @@ package com.hqjy.mustang.transfer.export.controller;
 import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.transfer.export.model.dto.*;
 import com.hqjy.mustang.transfer.export.model.query.*;
 import com.hqjy.mustang.transfer.export.service.PromotionCompanyCostService;
@@ -15,8 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author xyq
@@ -97,7 +97,7 @@ public class PromotionReportController {
             "  \"code\": 0\n" +
             "}")
     @PostMapping("/promotionDailyList")
-    public R promotionDailyList(@ModelAttribute PageParams params, @RequestBody(required = false) DailyQueryParams query) {
+    public R promotionDailyList(@ModelAttribute PageParams params, @RequestBody @Valid DailyQueryParams query) {
         return R.result(promotionDailyService.promotionDailyList(params, query));
     }
 
@@ -119,7 +119,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/exportPromotionDaily")
-    public R exportPromotionDaily(@RequestBody DailyQueryParams query) {
+    public R exportPromotionDaily(@RequestBody @Valid DailyQueryParams query) {
         return R.result(promotionDailyService.exportPromotionDaily(query));
     }
 
@@ -159,7 +159,7 @@ public class PromotionReportController {
             "  \"code\": 0\n" +
             "}")
     @PostMapping("/promotionCustomerList")
-    public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody(required = false) CustomerQueryParams query) {
+    public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.promotionCustomerList(params, query));
     }
 
@@ -179,7 +179,7 @@ public class PromotionReportController {
             "  \"code\": 0\n" +
             "}")
     @PostMapping("/exportPromotionCustomer")
-    public R exportPromotionCustomer(@RequestBody CustomerQueryParams query) {
+    public R exportPromotionCustomer(@RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.exportPromotionCustomer(query));
     }
 
@@ -213,7 +213,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/promotionSmsCostList")
-    public R promotionSmsCostList(@ModelAttribute PageParams params, @RequestBody(required = false) SmsCostQueryParams query) {
+    public R promotionSmsCostList(@ModelAttribute PageParams params, @RequestBody @Valid SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.promotionSmsCostList(params, query));
     }
 
@@ -231,7 +231,7 @@ public class PromotionReportController {
             "  \"code\": 0\n" +
             "}")
     @PostMapping("/exportPromotionSmsCost")
-    public R exportPromotionSmsCost(@RequestBody SmsCostQueryParams query) {
+    public R exportPromotionSmsCost(@RequestBody @Valid SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.exportPromotionSmsCost(query));
     }
 
@@ -246,59 +246,54 @@ public class PromotionReportController {
             "    \"costType\": 1,\n" +
             "    \"deptId\": 3,\n" +
             "    \"deptName\": \"XXX校区\",\n" +
-            "    \"endTime\": \"2018-10-01\",\n" +
+            "    \"endTime\": \"2018-10-20\",\n" +
             "    \"getWay\": 1,\n" +
             "    \"sourceId\": 1,\n" +
             "    \"sourceName\": \"智联\"\n" +
             "}\n" +
-            "请求成功：\n" +
+            "响应数据：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"adCost\": 0,\n" +
-            "        \"boutiqueCost\": 0,\n" +
-            "        \"date\": \"2018-09-30\",\n" +
-            "        \"flushCost\": 0,\n" +
-            "        \"jobPostingCost\": 0,\n" +
-            "        \"loadCost\": 0,\n" +
-            "        \"num\": 0,\n" +
-            "        \"precisionCost\": 0,\n" +
-            "        \"pushCost\": 0,\n" +
-            "        \"toppingCost\": 0,\n" +
-            "        \"totalCost\": 0\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"adCost\": 0,\n" +
-            "        \"boutiqueCost\": 0,\n" +
-            "        \"date\": \"2018-10-01\",\n" +
-            "        \"flushCost\": 0,\n" +
-            "        \"jobPostingCost\": 0,\n" +
-            "        \"loadCost\": 0,\n" +
-            "        \"num\": 0,\n" +
-            "        \"precisionCost\": 0,\n" +
-            "        \"pushCost\": 0,\n" +
-            "        \"toppingCost\": 0,\n" +
-            "        \"totalCost\": 0\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 2,\n" +
-            "    \"totalCount\": 2,\n" +
-            "    \"totalPage\": 1\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
-            "}"
-    )
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"currPage\": 1,\n" +
+            "        \"list\": [\n" +
+            "            {\n" +
+            "                \"date\": \"2018-10-01\",\n" +
+            "                \"genWayCosts\": [\n" +
+            "                    {\n" +
+            "                        \"cost\": \"0.0000\",\n" +
+            "                        \"genWay\": \"精品（帮帮）\",\n" +
+            "                        \"wayId\": 1\n" +
+            "                    },\n" +
+            "                    {\n" +
+            "                        \"cost\": \"0.0000\",\n" +
+            "                        \"genWay\": \"精准（黄金展位）\",\n" +
+            "                        \"wayId\": 2\n" +
+            "                    },\n" +
+            "                    {\n" +
+            "                        \"cost\": \"0.0000\",\n" +
+            "                        \"genWay\": \"刷新\",\n" +
+            "                        \"wayId\": 3\n" +
+            "                    }\n" +
+            "                ],\n" +
+            "                \"num\": 0,\n" +
+            "                \"totalCost\": \"0.0000\"\n" +
+            "            }\n" +
+            "        ],\n" +
+            "        \"pageSize\": 10,\n" +
+            "        \"size\": 10,\n" +
+            "        \"totalCount\": 21,\n" +
+            "        \"totalPage\": 3\n" +
+            "    }\n" +
+            "}")
     @PostMapping("/promotionCompanyCostList")
-    public R promotionCompanyCostList(@ModelAttribute PageParams params, @RequestBody CompanyCostQueryParams query) {
+    public R promotionCompanyCostList(@ModelAttribute PageParams params, @RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.promotionCompanyCostList(params, query));
     }
 
     @SysLog("导出推广公司费用报表数据")
-    @ApiOperation(value = "导出推广公司费用报表数据", notes = "请求参数格式:\n" +
+    @ApiOperation(value = "导出推广公司费用报表数据2", notes = "请求参数格式:\n" +
             "{\n" +
             "    \"beginTime\": \"2018-09-30\",\n" +
             "    \"companyId\": 2,\n" +
@@ -318,18 +313,18 @@ public class PromotionReportController {
             "  \"code\": 0\n" +
             "}")
     @PostMapping("/exportPromotionCompanyCost")
-    public R exportPromotionCompanyCost(@RequestBody CompanyCostQueryParams query) {
+    public R exportPromotionCompanyCost(@RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.exportPromotionCompanyCost(query));
     }
 
     @ApiOperation(value = "推广报表模块模型参数Models")
     @GetMapping("hello")
-    public void modelAPI(@RequestBody CompanyCostReportData companyCostReportData, @RequestBody CompanyCostReportTotal companyCostReportTotal,
+    public void modelAPI(@RequestBody CompanyCostReport companyCostReport,
                          @RequestBody CustomerReportData customerReportData, @RequestBody CustomerReportTotal customerReportTotal,
                          @RequestBody DailyReportData dailyReportData, @RequestBody DailyReportTotal dailyReportTotal,
                          @RequestBody SmsCostReportData smsCostReportData, @RequestBody SmsCostReportTotal smsCostReportTotal
     ) {
-        LOG.info("报表输出参数说明：" + JSON.toJSONString(companyCostReportData) + JSON.toJSONString(companyCostReportTotal) +
+        LOG.info("报表输出参数说明：" + JSON.toJSONString(companyCostReport) +
                 JSON.toJSONString(customerReportData) + JSON.toJSONString(customerReportTotal) + JSON.toJSONString(dailyReportData)
                 + JSON.toJSONString(dailyReportTotal) + JSON.toJSONString(smsCostReportData) + JSON.toJSONString(smsCostReportTotal));
     }
