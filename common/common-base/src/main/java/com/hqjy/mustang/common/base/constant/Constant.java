@@ -326,7 +326,19 @@ public class Constant {
             }
             return Constant.Education.NONE.getCode();
         }
-
+        /**
+         * 根据学历获取对应学历编码
+         */
+        public Integer getValueByEducationName(String code) {
+            if (StringUtils.isNotEmpty(code)) {
+                for (Constant.Education e : Constant.Education.values()) {
+                    if (code.contains(e.getCode())) {
+                        return e.getValue();
+                    }
+                }
+            }
+            return Constant.Education.NONE.getValue();
+        }
     }
 
     /**

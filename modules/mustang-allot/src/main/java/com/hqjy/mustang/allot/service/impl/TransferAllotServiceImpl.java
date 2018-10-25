@@ -15,6 +15,7 @@ import com.hqjy.mustang.allot.model.entity.TransferAllotCustomerRepeatEntity;
 import com.hqjy.mustang.allot.model.entity.TransferAllotProcessEntity;
 import com.hqjy.mustang.allot.service.AbstractAllotService;
 import com.hqjy.mustang.common.base.constant.ConfigConstant;
+import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
@@ -100,7 +101,8 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
      */
     private TransferAllotCustomerEntity firstAllot(TransferAllotCustomerEntity customer) {
         // 保存简历详情 TODO 学历详情待处理
-        customer.setEducation(null);
+//       customer.setEducation(null);
+        customer.setEducationId(Constant.Education.NONE.getValueByEducationName(customer.getEducation()).longValue());
         transferAllotCustomerDetailDao.saveCustomer(customer);
         return bizAllot(true, customer);
     }
