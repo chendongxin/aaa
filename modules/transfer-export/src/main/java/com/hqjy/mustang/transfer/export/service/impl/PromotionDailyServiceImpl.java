@@ -137,15 +137,7 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
     }
 
     private List<DailyReportData> check(DailyQueryParams query) {
-        if (StringUtils.isEmpty(query.getBeginTime())) {
-            throw new RRException("请选择开始时间");
-        }
-        if (StringUtils.isEmpty(query.getEndTime())) {
-            throw new RRException("请选择结束时间");
-        }
-        if (query.getDeptId() == null) {
-            throw new RRException("请选择部门");
-        }
+
         List<DailyReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
         if (deptInfo.isEmpty()) {

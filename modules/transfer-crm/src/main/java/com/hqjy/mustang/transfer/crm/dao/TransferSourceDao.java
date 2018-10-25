@@ -25,16 +25,29 @@ public interface TransferSourceDao extends BaseDao<TransferSourceEntity, Long> {
 
     /**
      * 查询不在该公司下的推广平台
+     * @param companyId 推广公司名称
+     * @return 返回结果
      */
     List<TransferSourceEntity> findNotByCompanyId(Long companyId);
 
     /**
-     * 获取所有推广方式列表
+     * 查询在该公司下的推广平台
+     * @param companyId 推广公司名称
+     * @return 返回结果
+     */
+    List<TransferSourceEntity> findByCompanyId(Long companyId);
+
+    /**
+     * 获取所有来源平台列表
+     * @param
+     * @return 返回结果
      */
     List<TransferSourceEntity> getAllSourceList();
 
     /**
      * 根据邮箱后缀查询来源
+     * @param emailDomain 邮件详情
+     * @return 返回结果
      */
     TransferSourceEntity findByEmailDomain(String emailDomain);
 }

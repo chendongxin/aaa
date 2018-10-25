@@ -181,6 +181,7 @@ public class TarnsferSmsController {
      */
     @ApiOperation(value = "更新短信信息", notes = "更新短信详细信息\n" +
             "{\n" +
+            "    \"[ID] id\":\"3\",\n" +
             "    \"[部门ID] dept_id\":\"1\",\n" +
             "    \"[部门名称] dept_name\":\"野马部门\",\n" +
             "    \"[收件人] phone\":\"17600222250,13265115030\",\n" +

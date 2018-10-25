@@ -192,7 +192,7 @@
 		select
 		<include refid="Base_Column_List"/>
 		from transfer_gen_company
-		where parent_id = 1
+		where parent_id = 1 and status = false
 	</select>
 
 	<!-- 通过名称查找一条记录 -->

@@ -8,7 +8,7 @@ import com.hqjy.mustang.common.model.crm.TransferCustomerInfo;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.transfer.sms.constant.SmsConstant;
 import com.hqjy.mustang.transfer.sms.dao.TransferSmsDao;
-import com.hqjy.mustang.transfer.sms.fegin.TransferCustomerApiService;
+import com.hqjy.mustang.transfer.sms.dao.TransferSmsReplyDao;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsReplyDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsResultDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsStatusDTO;
@@ -45,14 +45,14 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
 
     private final SmsApiService smsApiService;
     private final TransferSmsReplyService transferSmsReplyService;
-    private final TransferCustomerApiService transferCustomerApiService;
+    private final TransferSmsReplyDao transferSmsReplyDao;
 
     @Autowired
     @Lazy
-    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService, TransferCustomerApiService transferCustomerApiService) {
+    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService, TransferSmsReplyDao transferSmsReplyDao) {
         this.smsApiService = smsApiService;
         this.transferSmsReplyService = transferSmsReplyService;
-        this.transferCustomerApiService = transferCustomerApiService;
+        this.transferSmsReplyDao = transferSmsReplyDao;
     }
 
     /**
@@ -102,9 +102,7 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
         smsEntity.setStatus(SmsConstant.SendStatus.AWAIT.getCode());
         smsEntity.setStatusValue(SmsConstant.SendStatus.AWAIT.getValue());
         // 根据部门和手机号查询客户名称
-        smsEntity.setName(Optional.ofNullable(transferCustomerApiService.findByPhoneAndDeptId(smsEntity.getDeptId(), smsEntity.getPhone()))
-                .map(TransferCustomerInfo::getName)
-                .orElse(null));
+        smsEntity.setName(findByPhoneAndDeptId(smsEntity.getDeptId(), smsEntity.getPhone()));
         return super.save(smsEntity);
     }
 
@@ -198,5 +196,19 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
 
     private Date dateFormat(String dateStr) {
         return Date.from(LocalDateTime.parse(dateStr, df).atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    private String findByPhoneAndDeptId(Long deptId, String phone){
+        TransferCustomerInfo customerInfo = new TransferCustomerInfo();
+        customerInfo.setPhone(phone);
+        customerInfo.setDeptId(deptId);
+        List<TransferSmsReplyEntity> list = transferSmsReplyDao.findCustomerList(customerInfo);
+        for (TransferSmsReplyEntity contact : list) {
+            TransferSmsReplyEntity customerEntity = transferSmsReplyDao.findCustomerOne(contact.getCustomerId());
+            if (deptId.equals(customerEntity.getDeptId())) {
+                return customerEntity.getName();
+            }
+        }
+        return null;
     }
 }

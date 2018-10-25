@@ -54,7 +54,7 @@
       FROM
         transfer_customer tc
       INNER JOIN transfer_customer_detail td ON tc.customer_id = td.customer_id
-      INNER JOIN transfer_customer_reservation tr ON tr.customer_id = tc.customer_id
+      LEFT JOIN transfer_customer_reservation tr ON tr.customer_id = tc.customer_id
       LEFT JOIN transfer_follow tf ON tf.customer_id = tc.customer_id
       LEFT JOIN transfer_keyword k1 ON k1.id=td.apply_type
       LEFT JOIN transfer_keyword k2 ON k1.id=td.apply_key

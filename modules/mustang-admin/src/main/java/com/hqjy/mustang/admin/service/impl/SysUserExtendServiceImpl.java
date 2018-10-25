@@ -69,15 +69,6 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
         if(StringUtils.isBlank(userExtend.getTqPw())){
             userExtend.setTqPw(null);
         }else{
-            //验证密码字段；由于该密码为4-8位，因此我们单独写校验方法；
-            if (StringUtils.isNotBlank(userExtend.getTqPw())) {
-                String regEx = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,8}$";
-                Pattern pattern = Pattern.compile(regEx);
-                Matcher matcher = pattern.matcher(userExtend.getTqPw());
-                if (!matcher.find()) {
-                    throw new RRException("密码4-8位，必须包含数字和字母");
-                }
-            }
             String salt =  RandomStringUtils.randomAlphanumeric(20);
             userExtend.setSalt(salt);
             userExtend.setTqPw(new Sha256Hash(userExtend.getTqPw(),salt).toHex());
