@@ -212,14 +212,22 @@
         where ts.source_id not in
         (select tcs.source_id
         from transfer_company_source tcs
-        where tcs.company_id = #{companyId})
+        where tcs.company_id = #{companyId} and ts.status = false)
+    </select>
+
+    <select id="findByCompanyId" resultMap="BaseResultMap">
+        select
+        ts.source_id, ts.name
+        from transfer_source ts
+        inner join transfer_company_source tcs on tcs.source_id = ts.source_id
+        where tcs.company_id = #{companyId} and ts.status = false
     </select>
 
     <select id="getAllSourceList" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from transfer_source
-        order by parent_id
+        where status = false
     </select>
 
     <!-- 根据邮箱后缀查询来源 -->

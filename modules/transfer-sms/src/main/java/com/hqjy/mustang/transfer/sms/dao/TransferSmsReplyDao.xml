@@ -7,6 +7,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="dept_id" jdbcType="BIGINT" property="deptId"/>
         <result column="dept_name" jdbcType="VARCHAR" property="deptName"/>
+        <result column="customer_id" jdbcType="BIGINT" property="customerId" />
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="content" jdbcType="VARCHAR" property="content"/>
@@ -170,6 +171,25 @@
         count(*)
         from transfer_sms_reply
         <include refid="Base_Where_SQL"/>
+    </select>
+
+    <!--查询customer信息 -->
+    <select id="findCustomerList" resultMap="BaseResultMap">
+        select customer_id
+        from transfer_customer
+        <where>
+        <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+        <if test="phone != null and !&quot;&quot;.equals(phone)">and phone = #{phone}</if>
+        </where>
+    </select>
+
+    <!--查询customer中name的信息 -->
+    <select id="findCustomerOne" resultMap="BaseResultMap">
+        select name, dept_id
+        from transfer_customer
+        <where>
+            <if test="customerId != null and !&quot;&quot;.equals(customerId)">and customer_id = #{customerId}</if>
+        </where>
     </select>
 
 

@@ -26,7 +26,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     /**
      * 关键字字典缓存
      */
-    private static List<TransferKeywordEntity> dictionaryList;
+    private static List<TransferKeywordEntity> dictionaryList = new ArrayList<>();
 
     /**
      * 获取所有关键词
@@ -49,7 +49,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
      */
     @Override
     public int save(TransferKeywordEntity transferKeywordEntity) {
-        if (baseDao.findOneByName(transferKeywordEntity.getName()) != null) {
+        if (null != baseDao.findOneByName(transferKeywordEntity.getName())) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
         transferKeywordEntity.setSign(0);
@@ -88,6 +88,7 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
                 throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
             }
         }
+        cleanList();
         return super.deleteBatch(ids);
     }
 
