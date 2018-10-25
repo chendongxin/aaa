@@ -16,48 +16,52 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "电销专员排行报表数据合计对象")
 public class SellAttacheReportTotal {
 
+    @ApiModelProperty(value = "序号")
+    @ExcelAttribute(name = "序号", column = "A")
+    private Integer sequence;
+
     @ApiModelProperty(value = "电销专员")
-    @ExcelAttribute(name = "电销专员", column = "A")
-    private String sellName;
+    @ExcelAttribute(name = "电销专员", column = "B")
+    private String name;
 
     @ApiModelProperty(value = "部门")
-    @ExcelAttribute(name = "部门", column = "B")
+    @ExcelAttribute(name = "部门", column = "C")
     private String deptName;
 
     @ApiModelProperty(value = "有效商机上门率")
-    @ExcelAttribute(name = "有效商机上门率", column = "C")
+    @ExcelAttribute(name = "有效商机上门率", column = "D")
     private String visitValidRate;
 
     @ApiModelProperty(value = "上门量")
-    @ExcelAttribute(name = "上门量", column = "D")
+    @ExcelAttribute(name = "上门量", column = "E")
     private int visitNum;
 
     @ApiModelProperty(value = "今日预约上门量")
-    @ExcelAttribute(name = "今日预约上门量", column = "E")
+    @ExcelAttribute(name = "今日预约上门量", column = "F")
     private int visitTodayAppointNum;
 
     @ApiModelProperty(value = "明日预约上门量")
-    @ExcelAttribute(name = "名日预约上门量", column = "F")
+    @ExcelAttribute(name = "名日预约上门量", column = "G")
     private int visitTomorrowAppointNum;
 
     @ApiModelProperty(value = "分配商机量")
-    @ExcelAttribute(name = "分配商机量", column = "G")
+    @ExcelAttribute(name = "分配商机量", column = "H")
     private int AllotNum;
 
     @ApiModelProperty(value = "商机有效量")
-    @ExcelAttribute(name = "商机有效量", column = "H")
+    @ExcelAttribute(name = "商机有效量", column = "I")
     private int validNum;
 
     @ApiModelProperty(value = "商机有效率")
-    @ExcelAttribute(name = "商机有效率", column = "I")
+    @ExcelAttribute(name = "商机有效率", column = "J")
     private String validRate;
 
     @ApiModelProperty(value = "实际上门率")
-    @ExcelAttribute(name = "实际上门率", column = "J")
+    @ExcelAttribute(name = "实际上门率", column = "K")
     private String visitRate;
 
     @ApiModelProperty(value = "成交量")
-    @ExcelAttribute(name = "成交量", column = "K")
+    @ExcelAttribute(name = "成交量", column = "L")
     private int dealNum;
 
     @ApiModelProperty(value = "有效上门量")
