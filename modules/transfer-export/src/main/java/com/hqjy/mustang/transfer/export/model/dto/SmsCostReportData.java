@@ -42,7 +42,7 @@ public class SmsCostReportData {
 
     @ApiModelProperty(value = "总费用")
     @ExcelAttribute(name = "总费用", column = "E")
-    private String cost;
+    private String cost="0.0000";
 
 
 

@@ -1,10 +1,8 @@
 package com.hqjy.mustang.transfer.export.service;
 
-import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.transfer.export.model.dto.DailyReportData;
+import com.hqjy.mustang.transfer.export.model.dto.DailyReportResult;
 import com.hqjy.mustang.transfer.export.model.query.DailyQueryParams;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
-import com.hqjy.mustang.transfer.export.util.PageUtil;
 
 /**
  * @author xyq
@@ -20,7 +18,7 @@ public interface PromotionDailyService {
      * @param query  高级请求参数
      * @return 返回查询结果
      */
-    PageUtil<DailyReportData> promotionDailyList(PageParams params, DailyQueryParams query);
+    DailyReportResult promotionDailyList(PageParams params, DailyQueryParams query);
 
 
     /**
