@@ -9,6 +9,7 @@ import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionDailyDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.DailyReportData;
+import com.hqjy.mustang.transfer.export.model.dto.DailyReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.DailyReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.DailyQueryParams;
@@ -52,11 +53,16 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
     }
 
     @Override
-    public PageUtil<DailyReportData> promotionDailyList(PageParams params, DailyQueryParams query) {
+    public DailyReportResult promotionDailyList(PageParams params, DailyQueryParams query) {
+
         List<DailyReportData> list = this.check(query);
         this.setSaleNum(query, list);
         this.setSaleRate(list);
-        return new PageUtil<>(params, list);
+        //合计（不分页）
+        DailyReportTotal total = this.countTotal(list);
+        //分页
+        PageUtil<DailyReportData> page = new PageUtil<>(params, list);
+        return new DailyReportResult().setList(page.getList()).setTotal(total);
     }
 
     private void setSaleRate(List<DailyReportData> list) {
