@@ -57,16 +57,17 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
     }
 
     @Override
-    public PageUtil<SmsCostReportData> promotionSmsCostList(PageParams params, SmsCostQueryParams query) {
+    public SmsCostReportResult promotionSmsCostList(PageParams params, SmsCostQueryParams query) {
         List<SmsCostReportData> list = this.check(query);
         this.setData(query, list);
-        return new PageUtil<>(params, list);
+        SmsCostReportTotal total = this.countTotal(list);
+        PageUtil<SmsCostReportData> page = new PageUtil<>(params, list);
+        return new SmsCostReportResult().setList(page.getList()).setTotal(total);
     }
 
     private void setData(SmsCostQueryParams query, List<SmsCostReportData> list) {
         List<SmsCostEntity> entityList = promotionSmsCostDao.getData(query);
         List<SmsCostEntity> collect = entityList.stream().filter(x -> x.getStatus() == 2).collect(Collectors.toList());
-        DecimalFormat df = new DecimalFormat("0.00%");
         list.forEach(l -> {
             collect.forEach(x -> {
                 if (l.getDeptId().equals(x.getDeptId())) {
@@ -79,7 +80,7 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
                     l.setSendSuccessNum(l.getSendSuccessNum() + 1);
                 }
             });
-            l.setCost(df.format(l.getSendNum() * PRICE));
+            l.setCost(String.valueOf(l.getSendNum() * PRICE));
         });
     }
 

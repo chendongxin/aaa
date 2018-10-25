@@ -1,0 +1,22 @@
+package com.hqjy.mustang.transfer.export.model.dto;
+
+import io.swagger.annotations.ApiModel;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import java.util.List;
+
+/**
+ * @author xieyuqing
+ * @ description
+ * @ date create in 2018/7/14 11:11
+ */
+@Data
+@Accessors(chain = true)
+@ApiModel(value = "招转短信费用报表输出对象")
+public class SmsCostReportResult {
+
+    private List<SmsCostReportData> list;
+
+    private SmsCostReportTotal total;
+}
