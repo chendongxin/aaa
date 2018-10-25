@@ -5,6 +5,11 @@ import com.hqjy.mustang.common.base.base.BaseService;
 
 import java.util.List;
 
+/**
+ * @author gmm
+ * @date create on 2018/09/20
+ * @apiNote 赛道管理
+ */
 public interface SysProductService extends BaseService<SysProductEntity, Long> {
 
     /**

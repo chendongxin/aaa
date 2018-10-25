@@ -49,6 +49,7 @@
         LEFT JOIN transfer_keyword tk ON tk.id=td.apply_key
 
         <where>
+            tc.status in (1,2)
             <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
             <if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
                 and tc.dept_id in ${userAllDeptId}

@@ -160,7 +160,7 @@
 		from transfer_customer_invalid tci
 		inner join transfer_customer tc on tc.customer_id = tci.customer_id
 		<where>
-			tc.status in (1,2) and tc.user_id is not null
+			tc.status in (1,2)
 			<!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
 			<if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
 				and tc.dept_id in ${userAllDeptId}

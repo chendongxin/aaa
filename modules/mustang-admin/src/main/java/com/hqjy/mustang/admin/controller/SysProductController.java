@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 
+/**
+ * @author gmm
+ * @date create on 2018/09/20
+ * @apiNote 赛道管理
+ */
 @Api(tags = "赛道管理", description = "SysProductController")
 @RestController
 @RequestMapping("/product")

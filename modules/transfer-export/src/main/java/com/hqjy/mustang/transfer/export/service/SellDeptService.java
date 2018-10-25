@@ -1,31 +1,32 @@
 package com.hqjy.mustang.transfer.export.service;
 
-import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportData;
+import com.hqjy.mustang.transfer.export.model.dto.SellDeptReportData;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.model.query.SellQueryParams;
 import com.hqjy.mustang.transfer.export.util.PageUtil;
 
 /**
  * @author gmm
- * @date:2018/10/18 11:44
- * @apiNote 电销专员排行报表数据服务层
+ * @date:2018/10/22
+ * @apiNote 部门电销排行报表数据服务层
  */
-public interface SellAttacheService {
+public interface SellDeptService {
 
     /**
-     * 获取电销专员排行报表数据
+     * 获取部门电销排行报表数据
      *
      * @param params 分页请求参数
      * @param query  高级请求参数
      * @return 返回查询结果
      */
-    PageUtil<SellAttacheReportData> sellAttacheList(PageParams params, SellQueryParams query);
+    PageUtil<SellDeptReportData> sellDeptList(PageParams params, SellQueryParams query);
 
     /**
-     * 导出电销专员排行报表数据
+     * 导出部门电销排行报表数据
      *
      * @param query 高级请求参数
      * @return 返回导出结果
      */
-    String exportSellAttache(SellQueryParams query);
+    String exportSellDept(SellQueryParams query);
+
 }

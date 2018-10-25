@@ -22,4 +22,9 @@ public class CustomerEntity {
      * 数量
      */
     private int num;
+
+    /**
+     * 通话时长
+     */
+    private String duration;
 }

@@ -172,6 +172,7 @@
 		select
 			<include refid="Base_Column_List"/>
 		from sys_product
+		where status = false
 	</select>
 
 	<!-- 通过名称查找一条记录 -->
