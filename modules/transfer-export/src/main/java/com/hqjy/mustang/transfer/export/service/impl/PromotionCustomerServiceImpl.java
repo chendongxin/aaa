@@ -9,6 +9,7 @@ import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionCustomerDao;
 import com.hqjy.mustang.transfer.export.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.CustomerReportData;
+import com.hqjy.mustang.transfer.export.model.dto.CustomerReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.CustomerReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
@@ -55,10 +56,12 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
     }
 
     @Override
-    public PageUtil<CustomerReportData> promotionCustomerList(PageParams params, CustomerQueryParams query) {
+    public CustomerReportResult promotionCustomerList(PageParams params, CustomerQueryParams query) {
         List<CustomerReportData> list = this.check(query);
         this.setSaleNum(query, list);
-        return new PageUtil<>(params, list);
+        CustomerReportTotal total = this.countTotal(list);
+        PageUtil<CustomerReportData> pageList = new PageUtil<>(params, list);
+        return new CustomerReportResult().setList(pageList.getList()).setTotal(total);
     }
 
 

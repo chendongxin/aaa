@@ -8,8 +8,7 @@ import com.hqjy.mustang.common.model.crm.TransferGenWayInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionCompanyCostDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.feign.TransferGenWayFeign;
-import com.hqjy.mustang.transfer.export.model.dto.CompanyCostReport;
-import com.hqjy.mustang.transfer.export.model.dto.TransferGenWayCost;
+import com.hqjy.mustang.transfer.export.model.dto.*;
 import com.hqjy.mustang.transfer.export.model.entity.CompanyCostEntity;
 import com.hqjy.mustang.transfer.export.model.entity.CompanyCustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.CompanyCostQueryParams;
@@ -17,6 +16,7 @@ import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.service.PromotionCompanyCostService;
 import com.hqjy.mustang.transfer.export.util.PageUtil;
 import org.apache.poi.hssf.usermodel.*;
+import org.aspectj.weaver.patterns.HasMemberTypePatternForPerThisMatching;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,19 +72,56 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
      * @return 返回查询结果
      */
     @Override
-    public PageUtil<CompanyCostReport> promotionCompanyCostList(PageParams params, CompanyCostQueryParams query) {
-        List<CompanyCostReport> list = this.initReport(query);
+    public CompanyCostReportResult promotionCompanyCostList(PageParams params, CompanyCostQueryParams query) {
+        List<CompanyCostReportData> list = this.initReport(query);
         this.setReportValue(query, list);
-        return new PageUtil<>(params, list);
+        CompanyCostReportTotal total = this.countTotal(list);
+        PageUtil<CompanyCostReportData> page = new PageUtil<>(params, list);
+
+        return new CompanyCostReportResult().setList(page.getList()).setTotal(total);
     }
 
     /**
-     * 初始化报表（列出所选日期间的所有日期）
+     * 合计报表数据
+     *
+     * @param list 报表数据集合
+     * @return 返回合计对象
+     */
+    private CompanyCostReportTotal countTotal(List<CompanyCostReportData> list) {
+        CompanyCostReportTotal total = new CompanyCostReportTotal();
+        //确定推广方式合计对象
+        List<TransferGenWayCost> totalGenWayCosts = new ArrayList<>();
+        List<TransferGenWayCost> genWayCosts = list.get(0).getGenWayCosts();
+        genWayCosts.forEach(w -> {
+            TransferGenWayCost genWay = new TransferGenWayCost().setWayId(w.getWayId()).setGenWay(w.getGenWay());
+            totalGenWayCosts.add(genWay);
+        });
+        total.setGenWayCosts(totalGenWayCosts);
+        //数据合计处理
+        total.setDate("合计");
+        list.forEach(x -> {
+            total.setTotalCost(new BigDecimal(total.getTotalCost()).add(new BigDecimal(x.getTotalCost())).toString());
+            total.setNum(total.getNum() + x.getNum());
+            List<TransferGenWayCost> genWayCosts1 = x.getGenWayCosts();
+            genWayCosts1.forEach(w -> {
+                totalGenWayCosts.forEach(tw -> {
+                    if (w.getWayId().equals(tw.getWayId())) {
+                        tw.setCost(new BigDecimal(tw.getCost()).add(new BigDecimal(w.getCost())).toString());
+                    }
+                });
+            });
+        });
+
+        return total;
+    }
+
+    /**
+     * 设置报表数据
      *
      * @param query 前端请求参数
      * @param list  初始化后的推广公司费用报表对象
      */
-    private void setReportValue(CompanyCostQueryParams query, List<CompanyCostReport> list) {
+    private void setReportValue(CompanyCostQueryParams query, List<CompanyCostReportData> list) {
         List<String> costType = this.checkCostType(query);
         List<CompanyCostEntity> companyCost = promotionCompanyCostDao.getCompanyCost(query);
         List<CompanyCustomerEntity> customerEntities = promotionCompanyCostDao.countCustomer(query);
@@ -124,11 +161,11 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
      * @param query 前端请求查询条件
      * @return 返回初始化对象
      */
-    private List<CompanyCostReport> initReport(CompanyCostQueryParams query) {
-        List<CompanyCostReport> list = new ArrayList<>();
+    private List<CompanyCostReportData> initReport(CompanyCostQueryParams query) {
+        List<CompanyCostReportData> list = new ArrayList<>();
         List<String> dates = DateUtils.getBetweenDates(query.getBeginTime(), query.getEndTime());
         dates.forEach(x -> {
-            list.add(new CompanyCostReport().setDate(x));
+            list.add(new CompanyCostReportData().setDate(x));
         });
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
         List<String> ids = new ArrayList<>();
@@ -221,7 +258,7 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
             }
 
             //获取报表数据
-            List<CompanyCostReport> list = this.initReport(query);
+            List<CompanyCostReportData> list = this.initReport(query);
             this.setReportValue(query, list);
             //设置表头标题
             this.setSheetHead(query, wb, sheet, allGenWayList);
@@ -308,7 +345,7 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
      * @param sheet 工作表 对象
      * @param list  报表整体数据集合
      */
-    private void setSheetData(HSSFSheet sheet, List<CompanyCostReport> list) {
+    private void setSheetData(HSSFSheet sheet, List<CompanyCostReportData> list) {
         int size = list.size();
         //标签页最大65535条记录
         int sheetSize = 65535;
@@ -316,7 +353,7 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
             throw new RRException("本次导出记录:" + size + ",大于65535条，请分段进行导出");
         }
         for (int i = 0; i < size; i++) {
-            CompanyCostReport r = list.get(i);
+            CompanyCostReportData r = list.get(i);
             HSSFRow row = sheet.createRow(i + 2);
             //行高
             row.setHeightInPoints(16);

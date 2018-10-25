@@ -69,13 +69,29 @@ public class PromotionReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
             "        \"businessNum\": 0,\n" +
             "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 1873,\n" +
+            "        \"deptId\": 20,\n" +
             "        \"deptName\": \"广州天河校区\",\n" +
+            "        \"followNum\": 0,\n" +
+            "        \"intentionNum\": 0,\n" +
+            "        \"unFailNum\": 0,\n" +
+            "        \"unFailRate\": \"0.00%\",\n" +
+            "        \"validNum\": 0,\n" +
+            "        \"validRate\": \"0.00%\",\n" +
+            "        \"visitDealRate\": \"0.00%\",\n" +
+            "        \"visitIntentionRate\": \"0.00%\",\n" +
+            "        \"visitNum\": 0,\n" +
+            "        \"visitValidNum\": 0,\n" +
+            "        \"visitValidRate\": \"0.00%\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"businessNum\": 0,\n" +
+            "        \"dealNum\": 0,\n" +
+            "        \"deptId\": 22,\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
             "        \"followNum\": 0,\n" +
             "        \"intentionNum\": 0,\n" +
             "        \"unFailNum\": 0,\n" +
@@ -89,13 +105,25 @@ public class PromotionReportController {
             "        \"visitValidRate\": \"0.00%\"\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"businessNum\": 0,\n" +
+            "      \"dealNum\": 0,\n" +
+            "      \"followNum\": 0,\n" +
+            "      \"intentionNum\": 0,\n" +
+            "      \"unFailNum\": 0,\n" +
+            "      \"unFailRate\": \"0.00%\",\n" +
+            "      \"validNum\": 0,\n" +
+            "      \"validRate\": \"0.00%\",\n" +
+            "      \"visitDealRate\": \"0.00%\",\n" +
+            "      \"visitIntentionRate\": \"0.00%\",\n" +
+            "      \"visitNum\": 0,\n" +
+            "      \"visitValidNum\": 0,\n" +
+            "      \"visitValidRate\": \"0.00%\"\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/promotionDailyList")
     public R promotionDailyList(@ModelAttribute PageParams params, @RequestBody @Valid DailyQueryParams query) {
         return R.result(promotionDailyService.promotionDailyList(params, query));
@@ -137,27 +165,31 @@ public class PromotionReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
             "        \"businessNum\": 0,\n" +
             "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 22,\n" +
             "        \"deptName\": \"广州白云校区\",\n" +
             "        \"name\": \"客服1\",\n" +
-            "        \"userId\": 4,\n" +
+            "        \"sequence\": 1,\n" +
             "        \"validNum\": 0,\n" +
             "        \"visitNum\": 0,\n" +
             "        \"visitValidNum\": 0\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"businessNum\": 0,\n" +
+            "      \"dealNum\": 0,\n" +
+            "      \"deptName\": \"/\",\n" +
+            "      \"name\": \"/\",\n" +
+            "      \"validNum\": 0,\n" +
+            "      \"visitNum\": 0,\n" +
+            "      \"visitValidNum\": 0\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/promotionCustomerList")
     public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.promotionCustomerList(params, query));
@@ -177,7 +209,8 @@ public class PromotionReportController {
             "  \"msg\": \"成功\",\n" +
             "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/exportPromotionCustomer")
     public R exportPromotionCustomer(@RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.exportPromotionCustomer(query));
@@ -195,19 +228,26 @@ public class PromotionReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
-            "        \"cost\": \"3.50%\",\n" +
+            "        \"cost\": \"0.035\",\n" +
             "        \"deptName\": \"广州天河校区\",\n" +
             "        \"sendNum\": 1,\n" +
             "        \"sendSuccessNum\": 1\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"cost\": \"0.0\",\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
+            "        \"sendNum\": 0,\n" +
+            "        \"sendSuccessNum\": 0\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"cost\": \"0.0350\",\n" +
+            "      \"deptName\": \"/\",\n" +
+            "      \"sendNum\": 1,\n" +
+            "      \"sendSuccessNum\": 1\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
             "}"
@@ -229,7 +269,8 @@ public class PromotionReportController {
             "  \"msg\": \"成功\",\n" +
             "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/exportPromotionSmsCost")
     public R exportPromotionSmsCost(@RequestBody @Valid SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.exportPromotionSmsCost(query));
@@ -256,10 +297,9 @@ public class PromotionReportController {
             "    \"code\": 0,\n" +
             "    \"msg\": \"成功\",\n" +
             "    \"result\": {\n" +
-            "        \"currPage\": 1,\n" +
             "        \"list\": [\n" +
             "            {\n" +
-            "                \"date\": \"2018-10-01\",\n" +
+            "                \"date\": \"2018-09-30\",\n" +
             "                \"genWayCosts\": [\n" +
             "                    {\n" +
             "                        \"cost\": \"0.0000\",\n" +
@@ -270,30 +310,39 @@ public class PromotionReportController {
             "                        \"cost\": \"0.0000\",\n" +
             "                        \"genWay\": \"精准（黄金展位）\",\n" +
             "                        \"wayId\": 2\n" +
-            "                    },\n" +
-            "                    {\n" +
-            "                        \"cost\": \"0.0000\",\n" +
-            "                        \"genWay\": \"刷新\",\n" +
-            "                        \"wayId\": 3\n" +
             "                    }\n" +
             "                ],\n" +
             "                \"num\": 0,\n" +
             "                \"totalCost\": \"0.0000\"\n" +
             "            }\n" +
             "        ],\n" +
-            "        \"pageSize\": 10,\n" +
-            "        \"size\": 10,\n" +
-            "        \"totalCount\": 21,\n" +
-            "        \"totalPage\": 3\n" +
+            "        \"total\": {\n" +
+            "            \"date\": \"合计\",\n" +
+            "            \"genWayCosts\": [\n" +
+            "                {\n" +
+            "                    \"cost\": \"0.0000\",\n" +
+            "                    \"genWay\": \"精品（帮帮）\",\n" +
+            "                    \"wayId\": 1\n" +
+            "                },\n" +
+            "                {\n" +
+            "                    \"cost\": \"0.0000\",\n" +
+            "                    \"genWay\": \"精准（黄金展位）\",\n" +
+            "                    \"wayId\": 2\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"num\": 0,\n" +
+            "            \"totalCost\": \"0.0000\"\n" +
+            "        }\n" +
             "    }\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/promotionCompanyCostList")
     public R promotionCompanyCostList(@ModelAttribute PageParams params, @RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.promotionCompanyCostList(params, query));
     }
 
     @SysLog("导出推广公司费用报表数据")
-    @ApiOperation(value = "导出推广公司费用报表数据2", notes = "请求参数格式:\n" +
+    @ApiOperation(value = "导出推广公司费用报表数据", notes = "请求参数格式:\n" +
             "{\n" +
             "    \"beginTime\": \"2018-09-30\",\n" +
             "    \"companyId\": 2,\n" +
@@ -311,7 +360,8 @@ public class PromotionReportController {
             "  \"msg\": \"成功\",\n" +
             "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%8E%A8%E5%B9%BF%E5%85%AC%E5%8F%B8%E8%B4%B9%E7%94%A8%E6%8A%A5%E8%A1%A8_20181024_102408_453.xls?Expires=1540351448&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=fKHUTZSh9Az5%2FXHz4lxPQrEEEqk%3D\",\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/exportPromotionCompanyCost")
     public R exportPromotionCompanyCost(@RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.exportPromotionCompanyCost(query));
@@ -319,13 +369,15 @@ public class PromotionReportController {
 
     @ApiOperation(value = "推广报表模块模型参数Models")
     @GetMapping("hello")
-    public void modelAPI(@RequestBody CompanyCostReport companyCostReport,
-                         @RequestBody CustomerReportData customerReportData, @RequestBody CustomerReportTotal customerReportTotal,
-                         @RequestBody DailyReportData dailyReportData, @RequestBody DailyReportTotal dailyReportTotal,
-                         @RequestBody SmsCostReportData smsCostReportData, @RequestBody SmsCostReportTotal smsCostReportTotal
+    public void modelAPI(@RequestBody CompanyCostReportResult companyCostReportResult,
+                         @RequestBody CustomerReportResult customerReportResult,
+                         @RequestBody DailyReportResult dailyReportResult,
+                         @RequestBody SmsCostReportResult smsCostReportResult
     ) {
-        LOG.info("报表输出参数说明：" + JSON.toJSONString(companyCostReport) +
-                JSON.toJSONString(customerReportData) + JSON.toJSONString(customerReportTotal) + JSON.toJSONString(dailyReportData)
-                + JSON.toJSONString(dailyReportTotal) + JSON.toJSONString(smsCostReportData) + JSON.toJSONString(smsCostReportTotal));
+        LOG.info("报表输出参数说明："
+                + JSON.toJSONString(companyCostReportResult)
+                + JSON.toJSONString(customerReportResult)
+                + JSON.toJSONString(dailyReportResult)
+                + JSON.toJSONString(smsCostReportResult));
     }
 }
