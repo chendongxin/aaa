@@ -45,18 +45,6 @@ public class InvalidExportEntity implements Serializable {
     @ExcelAttribute(name = "应聘职位关键词")
     private String jobKey;
 
-//    @ApiModelProperty(value = "首次预约时间")
-//    @ExcelAttribute(name = "首次预约时间")
-//    private String firstReservationTime;
-//
-//    @ApiModelProperty(value = "末次预约时间")
-//    @ExcelAttribute(name = "末次预约时间")
-//    private String lastReservationTime;
-//
-//    @ApiModelProperty(value = "预约次数")
-//    @ExcelAttribute(name = "预约次数")
-//    private String reservationCount;
-
     @ApiModelProperty(value = "失败类型")
     @ExcelAttribute(name = "失败类型")
     private String status;
@@ -82,7 +70,7 @@ public class InvalidExportEntity implements Serializable {
     private String source;
 
     @ApiModelProperty(value = "推广公司")
-    @ExcelAttribute(name = "来源平台")
+    @ExcelAttribute(name = "推广公司")
     private String company;
 
     @ApiModelProperty(value = "专业")

@@ -13,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @ApiModel(value = "电销专员排行报表查询参数")
-public class SellAttacheQueryParams {
+public class SellQueryParams {
 
     @ApiModelProperty(value = "开始日期（必选）")
     private String beginTime;
@@ -29,4 +29,7 @@ public class SellAttacheQueryParams {
 
     @ApiModelProperty(value = "获取方式")
     private Long getWay;
+
+    @ApiModelProperty(value = "电销人员")
+    private Long userId;
 }
