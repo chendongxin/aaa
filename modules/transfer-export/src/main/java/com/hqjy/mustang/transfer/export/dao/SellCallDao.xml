@@ -10,6 +10,7 @@
     <select id="countConnect" resultMap="baseMap">
 		SELECT COUNT(DISTINCT customer_id) AS num, create_user_dept_id AS deptId
 		FROM transfer_call_record
+		inner join transfer_customer tc on tc.customer_id = transfer_call_record.customer_id
 		WHERE status = false
 		AND create_time BETWEEN #{beginTime} AND #{endTime} AND create_user_id = userId AND dept_id IN ${deptIds}
 		GROUP BY create_user_id
@@ -18,6 +19,7 @@
     <select id="countCall" resultMap="baseMap">
 		SELECT COUNT(DISTINCT customer_id) AS num, create_user_dept_id AS deptId
 		FROM transfer_call_record
+		inner join transfer_customer tc on tc.customer_id = transfer_call_record.customer_id
 		WHERE create_time BETWEEN #{beginTime} AND #{endTime} AND create_user_id = userId AND dept_id IN ${deptIds}
 		GROUP BY create_user_id
 	</select>
@@ -25,6 +27,7 @@
     <select id="countCallTimeConnect" resultMap="baseMap">
 		SELECT SUM(TIME_TO_SEC(total_duration)) AS duration, create_user_dept_id AS deptId
 		FROM transfer_call_record
+		inner join transfer_customer tc on tc.customer_id = transfer_call_record.customer_id
         WHERE create_time BETWEEN #{beginTime} AND #{endTime} AND create_user_id = userId AND dept_id IN ${deptIds}
         GROUP BY create_user_id
 	</select>
