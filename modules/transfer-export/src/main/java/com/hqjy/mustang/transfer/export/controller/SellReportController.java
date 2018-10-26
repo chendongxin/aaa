@@ -12,6 +12,8 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author gmm
  * @date create on 2018/10/20
@@ -30,10 +32,12 @@ public class SellReportController {
     public void setSellAttacheService(SellAttacheService sellAttacheService) {
         this.sellAttacheService = sellAttacheService;
     }
+
     @Autowired
     public void setSellDeptService(SellDeptService sellDeptService) {
         this.sellDeptService = sellDeptService;
     }
+
     @Autowired
     public void setSellCallService(SellCallService sellCallService) {
         this.sellCallService = sellCallService;
@@ -45,38 +49,58 @@ public class SellReportController {
             "{\n" +
             "  \"beginTime\": \"2018-09-10\",\n" +
             "  \"endTime\": \"2018-10-20\",\n" +
-            "  \"deptId\":1869\n" +
+            "  \"deptId\":1869,\n" +
             "  \"getWay\":1869\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
-            "        \"sellName\": \"丫丫\",\n" +
+            "        \"allotNum\": 0,\n" +
+            "        \"dealNum\": 0,\n" +
+            "        \"deptId\": 20,\n" +
             "        \"deptName\": \"广州天河校区\",\n" +
-            "        \"visitValidRate\": \"0.00%\",\n" +
-            "        \"visitValidNum\": 0,\n" +
-            "        \"visitTodayAppointNum\": 0,\n" +
-            "        \"visitTomorrowAppointNum\": 0,\n" +
-            "        \"AllotNum\": 0,\n" +
             "        \"validNum\": 0,\n" +
             "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitRate\": \"0.00%\",\n" +
+            "        \"visitNum\": 0,\n" +
+            "        \"visitTodayAppointNum\": 0,\n" +
+            "        \"visitTomorrowAppointNum\": 0,\n" +
+            "        \"visitValidNum\": 0,\n" +
+            "        \"visitValidRate\": \"0.00%\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"allotNum\": 0,\n" +
             "        \"dealNum\": 0,\n" +
+            "        \"deptId\": 22,\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
+            "        \"validNum\": 0,\n" +
+            "        \"validRate\": \"0.00%\",\n" +
+            "        \"visitNum\": 0,\n" +
+            "        \"visitTodayAppointNum\": 0,\n" +
+            "        \"visitTomorrowAppointNum\": 0,\n" +
+            "        \"visitValidNum\": 0,\n" +
+            "        \"visitValidRate\": \"0.00%\"\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"allotNum\": 0,\n" +
+            "      \"dealNum\": 0,\n" +
+            "      \"validNum\": 0,\n" +
+            "      \"validRate\": \"0.00%\",\n" +
+            "      \"visitNum\": 0,\n" +
+            "      \"visitTodayAppointNum\": 0,\n" +
+            "      \"visitTomorrowAppointNum\": 0,\n" +
+            "      \"visitValidNum\": 0,\n" +
+            "      \"visitValidRate\": \"0.00%\"\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/sellAttacheList")
-    public R sellAttacheList(@ModelAttribute PageParams params, @RequestBody(required = false) SellQueryParams query) {
+    public R sellAttacheList(@ModelAttribute PageParams params, @RequestBody @Valid SellQueryParams query) {
         return R.result(sellAttacheService.sellAttacheList(params, query));
     }
 
@@ -97,7 +121,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/exportSellAttache")
-    public R exportSellAttache(@RequestBody SellQueryParams query) {
+    public R exportSellAttache(@RequestBody @Valid SellQueryParams query) {
         return R.result(sellAttacheService.exportSellAttache(query));
     }
 
@@ -114,30 +138,51 @@ public class SellReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
+            "        \"businessNum\": 0,\n" +
+            "        \"dealNum\": 0,\n" +
+            "        \"deptId\": 20,\n" +
             "        \"deptName\": \"广州天河校区\",\n" +
-            "        \"visitValidRate\": \"0.00%\",\n" +
+            "        \"validNum\": 0,\n" +
+            "        \"validRate\": \"0.00%\",\n" +
             "        \"visitNum\": 0,\n" +
             "        \"visitTodayAppointNum\": 0,\n" +
             "        \"visitTomorrowAppointNum\": 0,\n" +
+            "        \"visitValidNum\": 0,\n" +
+            "        \"visitValidRate\": \"0.00%\"\n" +
+            "      },\n" +
+            "      {\n" +
             "        \"businessNum\": 0,\n" +
+            "        \"dealNum\": 0,\n" +
+            "        \"deptId\": 22,\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
             "        \"validNum\": 0,\n" +
             "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitRate\": \"0.00%\",\n" +
-            "        \"dealNum\": 0,\n" +
+            "        \"visitNum\": 0,\n" +
+            "        \"visitTodayAppointNum\": 0,\n" +
+            "        \"visitTomorrowAppointNum\": 0,\n" +
+            "        \"visitValidNum\": 0,\n" +
+            "        \"visitValidRate\": \"0.00%\"\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"businessNum\": 0,\n" +
+            "      \"dealNum\": 0,\n" +
+            "      \"validNum\": 0,\n" +
+            "      \"validRate\": \"0.00%\",\n" +
+            "      \"visitNum\": 0,\n" +
+            "      \"visitTodayAppointNum\": 0,\n" +
+            "      \"visitTomorrowAppointNum\": 0,\n" +
+            "      \"visitValidNum\": 0,\n" +
+            "      \"visitValidRate\": \"0.00%\"\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/sellDeptList")
-    public R sellDeptList(@ModelAttribute PageParams params, @RequestBody(required = false) SellQueryParams query) {
+    public R sellDeptList(@ModelAttribute PageParams params, @RequestBody @Valid SellQueryParams query) {
         return R.result(sellDeptService.sellDeptList(params, query));
     }
 
@@ -158,7 +203,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/exportSellDept")
-    public R exportSellDept(@RequestBody SellQueryParams query) {
+    public R exportSellDept(@RequestBody @Valid SellQueryParams query) {
         return R.result(sellDeptService.exportSellDept(query));
     }
 
@@ -175,26 +220,36 @@ public class SellReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
-            "        \"sellName\": \"丫丫\",\n" +
-            "        \"deptName\": \"广州天河校区\",\n" +
             "        \"callNum\": 0,\n" +
             "        \"connectNum\": 0,\n" +
             "        \"connectRate\": \"0.00%\",\n" +
-            "        \"duration\": 00:00:00,\n" +
+            "        \"deptId\": 20,\n" +
+            "        \"deptName\": \"广州天河校区\",\n" +
+            "        \"duration\": \"00:00:00\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"callNum\": 0,\n" +
+            "        \"connectNum\": 0,\n" +
+            "        \"connectRate\": \"0.00%\",\n" +
+            "        \"deptId\": 22,\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
+            "        \"duration\": \"00:00:00\"\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"callNum\": 0,\n" +
+            "      \"connectNum\": 0,\n" +
+            "      \"connectRate\": \"0.00%\",\n" +
+            "      \"duration\": \"00:00:00\"\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/sellCallList")
-    public R sellCallList(@ModelAttribute PageParams params, @RequestBody(required = false) SellQueryParams query) {
+    public R sellCallList(@ModelAttribute PageParams params, @RequestBody @Valid SellQueryParams query) {
         return R.result(sellCallService.sellCallList(params, query));
     }
 
@@ -215,7 +270,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/exportSellCall")
-    public R exportSellCall(@RequestBody SellQueryParams query) {
+    public R exportSellCall(@RequestBody @Valid SellQueryParams query) {
         return R.result(sellCallService.exportSellCall(query));
     }
 
