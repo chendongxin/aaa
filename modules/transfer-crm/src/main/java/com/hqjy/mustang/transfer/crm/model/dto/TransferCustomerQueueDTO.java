@@ -17,7 +17,7 @@ public class TransferCustomerQueueDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 消息类型 2-自考客户
+     * 消息类型 3-招转商机类型
      */
     public int msgType;
 

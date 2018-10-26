@@ -5,6 +5,7 @@ import com.github.pagehelper.PageHelper;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.ConfigConstant;
 import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.base.constant.RabbitQueueConstant;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.*;
@@ -549,7 +550,9 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             .setNote(c.getNote());
 
 //                    发送客户数据到商机分配消息队列
-                    rabbitTemplate.convertAndSend(JSON.toJSONString(JSON.toJSON(msgBody)));
+                    rabbitTemplate.convertAndSend(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE,JSON.toJSONString(new TransferCustomerQueueDTO()
+                            .setMsgType(3)
+                            .setMsgBody(JSON.toJSON(msgBody))));
                 });
                 Thread.sleep(1000L);
                 return R.ok("导入数据已提交到队列中");

@@ -28,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -154,9 +155,10 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
         if (deptList.isEmpty()) {
             throw new RRException("部门(校区)不存在");
         }
+        AtomicInteger sequence = new AtomicInteger();
         deptList.forEach(y -> {
             LOG.info("初始化报表列表");
-            list.add(new DailyReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            list.add(new DailyReportData().setSequence(sequence.incrementAndGet()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
