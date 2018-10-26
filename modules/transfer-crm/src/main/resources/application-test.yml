@@ -1,8 +1,8 @@
 spring:
     redis:
         database: 10
-        host: 10.0.98.9
-        port: 6385
+        host: 10.0.98.75
+        port: 6379
         password:       # 密码（默认为空）
         timeout: 15000  # 连接超时时长（毫秒）
         pool:
@@ -10,34 +10,26 @@ spring:
             max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
             max-idle: 10      # 连接池中的最大空闲连接
             min-idle: 5       # 连接池中的最小空闲连接
-        ws-topic-name: mustang_websocket_dev #websocket推送redis主题的名称
-    # rabbitmq
+        ws-topic-name: mustang_transfer_websocket_test #websocket推送redis主题的名称
     rabbitmq:
-      host: 10.0.98.46
-      port: 5672
-      username: admin
-      password: mon4498
-      # 支持发布确认
-      publisher-confirms: true
-      # 支持发布返回
-      publisher-returns: true
-      listener:
-        simple:
-          acknowledge-mode: manual
-          # 指定最小的消费者数量
-          concurrency: 1
-          # 指定最大的消费者数量
-          max-concurrency: 1
-          # 是否支持重试
-          retry:
-            enabled: true
+        host: 10.0.98.75
+        port: 5672
+        username: admin
+        password: Rabbitmq@2018
+        # 支持发布确认
+        publisher-confirms: true
+        # 支持发布返回
+        publisher-returns: true
+        listener:
+            simple:
+               acknowledge-mode: manual
 
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
-            url: jdbc:mysql://10.0.98.6:3306/mustang_transfer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            url: jdbc:mysql://10.0.98.75:8066/mustang_transfer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
             username: root
-            password: root
+            password: MyNewPass4!
             driverClassName: com.mysql.jdbc.Driver
             initial-size: 10
             max-active: 100
@@ -64,3 +56,19 @@ spring:
                 wall:
                     config:
                         multi-statement-allow: true
+
+#NC接口地址
+nc:
+  #商机信息保存到NC
+  pushCustomerToNCUrl: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.StudentFromQYLServlet
+  #NC根据校区获取招生老师
+  getTeacherUrl: http://10.0.96.247:8899/servlet/~hq/nc.impl.hq.webservice.student.GetSchoolTeacherServlet
+  #获取省份或者校区接口
+  getProvinceSchoolUrl: http://api.hqjy.com/hq-school/org/get
+  #NC的rabbitmq
+  rabbitmq:
+    addresses: 10.0.98.46:5672
+    username: admin
+    password: mon4498
+    queuename:
+      deal: nc.success.reg.stu.cjym.dev

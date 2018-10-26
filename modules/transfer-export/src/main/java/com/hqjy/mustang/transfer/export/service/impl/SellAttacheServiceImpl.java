@@ -9,6 +9,7 @@ import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.SellAttacheDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportData;
+import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
@@ -38,10 +39,18 @@ import java.util.stream.Collectors;
 public class SellAttacheServiceImpl implements SellAttacheService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
-    @Autowired
     private SysDeptServiceFeign sysDeptServiceFeign;
-    @Autowired
     private SellAttacheDao sellAttacheDao;
+
+    @Autowired
+    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    }
+
+    @Autowired
+    public void setSellAttacheDao(SellAttacheDao sellAttacheDao) {
+        this.sellAttacheDao = sellAttacheDao;
+    }
 
     /**
      * 获取电销专员排行报表数据
@@ -51,29 +60,21 @@ public class SellAttacheServiceImpl implements SellAttacheService {
      * @return 返回查询结果
      */
     @Override
-    public PageUtil<SellAttacheReportData> sellAttacheList(PageParams params, SellQueryParams query) {
+    public SellAttacheReportResult sellAttacheList(PageParams params, SellQueryParams query) {
         List<SellAttacheReportData> list = this.check(query);
         this.setSaleNum(query, list);
         this.setSaleRate(list);
-        return new PageUtil<>(params, list);
+        SellAttacheReportTotal total = this.countTotal(list);
+        PageUtil<SellAttacheReportData> page = new PageUtil<>(params, list);
+
+        return new SellAttacheReportResult().setList(page.getList()).setTotal(total);
     }
 
     private List<SellAttacheReportData> check(SellQueryParams query) {
-        if (StringUtils.isEmpty(query.getBeginTime())) {
-            throw new RRException("请选择开始时间");
-        }
-        if (StringUtils.isEmpty(query.getEndTime())) {
-            throw new RRException("请选择结束时间");
-        }
-        if (query.getDeptId() == null) {
-            throw new RRException("请选择部门");
-        }
         List<SellAttacheReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = sysDeptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
-
         List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
-
         deptList.forEach(y -> {
             LOG.info("初始化报表列表");
             list.add(new SellAttacheReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
@@ -158,7 +159,7 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             SellAttacheReportTotal total = this.countTotal(list);
             ExcelUtil<SellAttacheReportData, SellAttacheReportTotal> util1 = new ExcelUtil<>(SellAttacheReportData.class, SellAttacheReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, "电销专员排行数据报表_", total, os);
+            util1.getListToExcel(list, null, total, os);
             //aliyun目录
             String dir = "export";
             //文件名称

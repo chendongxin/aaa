@@ -9,6 +9,7 @@ import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.PromotionDailyDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.DailyReportData;
+import com.hqjy.mustang.transfer.export.model.dto.DailyReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.DailyReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.DailyQueryParams;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -52,11 +54,16 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
     }
 
     @Override
-    public PageUtil<DailyReportData> promotionDailyList(PageParams params, DailyQueryParams query) {
+    public DailyReportResult promotionDailyList(PageParams params, DailyQueryParams query) {
+
         List<DailyReportData> list = this.check(query);
         this.setSaleNum(query, list);
         this.setSaleRate(list);
-        return new PageUtil<>(params, list);
+        //合计（不分页）
+        DailyReportTotal total = this.countTotal(list);
+        //分页
+        PageUtil<DailyReportData> page = new PageUtil<>(params, list);
+        return new DailyReportResult().setList(page.getList()).setTotal(total);
     }
 
     private void setSaleRate(List<DailyReportData> list) {
@@ -137,15 +144,7 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
     }
 
     private List<DailyReportData> check(DailyQueryParams query) {
-        if (StringUtils.isEmpty(query.getBeginTime())) {
-            throw new RRException("请选择开始时间");
-        }
-        if (StringUtils.isEmpty(query.getEndTime())) {
-            throw new RRException("请选择结束时间");
-        }
-        if (query.getDeptId() == null) {
-            throw new RRException("请选择部门");
-        }
+
         List<DailyReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
         if (deptInfo.isEmpty()) {
@@ -156,9 +155,10 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
         if (deptList.isEmpty()) {
             throw new RRException("部门(校区)不存在");
         }
+        AtomicInteger sequence = new AtomicInteger();
         deptList.forEach(y -> {
             LOG.info("初始化报表列表");
-            list.add(new DailyReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            list.add(new DailyReportData().setSequence(sequence.incrementAndGet()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));

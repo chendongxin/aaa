@@ -1,9 +1,8 @@
 package com.hqjy.mustang.transfer.export.service;
 
-import com.hqjy.mustang.transfer.export.model.dto.SmsCostReportData;
+import com.hqjy.mustang.transfer.export.model.dto.SmsCostReportResult;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.model.query.SmsCostQueryParams;
-import com.hqjy.mustang.transfer.export.util.PageUtil;
 
 /**
  * @author xyq
@@ -19,7 +18,7 @@ public interface PromotionSmsCostService {
      * @param query  高级请求参数
      * @return 返回查询结果
      */
-    PageUtil<SmsCostReportData> promotionSmsCostList(PageParams params, SmsCostQueryParams query);
+    SmsCostReportResult promotionSmsCostList(PageParams params, SmsCostQueryParams query);
 
 
     /**

@@ -5,6 +5,9 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author xyq
@@ -16,12 +19,15 @@ import lombok.EqualsAndHashCode;
 public class DailyQueryParams {
 
     @ApiModelProperty(value = "开始日期（必选）")
+    @NotEmpty(message = "日期不能为空")
     private String beginTime;
 
     @ApiModelProperty(value = "结束日期（必选）")
+    @NotEmpty(message = "日期不能为空")
     private String endTime;
 
     @ApiModelProperty(value = "部门Id")
+    @NotNull(message = "日期不能为空")
     private Long deptId;
 
     @JSONField(serialize = false)

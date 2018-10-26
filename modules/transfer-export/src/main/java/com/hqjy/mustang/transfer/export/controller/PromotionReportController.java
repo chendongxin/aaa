@@ -3,7 +3,6 @@ package com.hqjy.mustang.transfer.export.controller;
 import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.utils.R;
-import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.transfer.export.model.dto.*;
 import com.hqjy.mustang.transfer.export.model.query.*;
 import com.hqjy.mustang.transfer.export.service.PromotionCompanyCostService;
@@ -15,8 +14,9 @@ import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * @author xyq
@@ -69,13 +69,29 @@ public class PromotionReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
             "        \"businessNum\": 0,\n" +
             "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 1873,\n" +
+            "        \"deptId\": 20,\n" +
             "        \"deptName\": \"广州天河校区\",\n" +
+            "        \"followNum\": 0,\n" +
+            "        \"intentionNum\": 0,\n" +
+            "        \"unFailNum\": 0,\n" +
+            "        \"unFailRate\": \"0.00%\",\n" +
+            "        \"validNum\": 0,\n" +
+            "        \"validRate\": \"0.00%\",\n" +
+            "        \"visitDealRate\": \"0.00%\",\n" +
+            "        \"visitIntentionRate\": \"0.00%\",\n" +
+            "        \"visitNum\": 0,\n" +
+            "        \"visitValidNum\": 0,\n" +
+            "        \"visitValidRate\": \"0.00%\"\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"businessNum\": 0,\n" +
+            "        \"dealNum\": 0,\n" +
+            "        \"deptId\": 22,\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
             "        \"followNum\": 0,\n" +
             "        \"intentionNum\": 0,\n" +
             "        \"unFailNum\": 0,\n" +
@@ -89,15 +105,27 @@ public class PromotionReportController {
             "        \"visitValidRate\": \"0.00%\"\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"businessNum\": 0,\n" +
+            "      \"dealNum\": 0,\n" +
+            "      \"followNum\": 0,\n" +
+            "      \"intentionNum\": 0,\n" +
+            "      \"unFailNum\": 0,\n" +
+            "      \"unFailRate\": \"0.00%\",\n" +
+            "      \"validNum\": 0,\n" +
+            "      \"validRate\": \"0.00%\",\n" +
+            "      \"visitDealRate\": \"0.00%\",\n" +
+            "      \"visitIntentionRate\": \"0.00%\",\n" +
+            "      \"visitNum\": 0,\n" +
+            "      \"visitValidNum\": 0,\n" +
+            "      \"visitValidRate\": \"0.00%\"\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/promotionDailyList")
-    public R promotionDailyList(@ModelAttribute PageParams params, @RequestBody(required = false) DailyQueryParams query) {
+    public R promotionDailyList(@ModelAttribute PageParams params, @RequestBody @Valid DailyQueryParams query) {
         return R.result(promotionDailyService.promotionDailyList(params, query));
     }
 
@@ -119,7 +147,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/exportPromotionDaily")
-    public R exportPromotionDaily(@RequestBody DailyQueryParams query) {
+    public R exportPromotionDaily(@RequestBody @Valid DailyQueryParams query) {
         return R.result(promotionDailyService.exportPromotionDaily(query));
     }
 
@@ -137,29 +165,33 @@ public class PromotionReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
             "        \"businessNum\": 0,\n" +
             "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 22,\n" +
             "        \"deptName\": \"广州白云校区\",\n" +
             "        \"name\": \"客服1\",\n" +
-            "        \"userId\": 4,\n" +
+            "        \"sequence\": 1,\n" +
             "        \"validNum\": 0,\n" +
             "        \"visitNum\": 0,\n" +
             "        \"visitValidNum\": 0\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"businessNum\": 0,\n" +
+            "      \"dealNum\": 0,\n" +
+            "      \"deptName\": \"/\",\n" +
+            "      \"name\": \"/\",\n" +
+            "      \"validNum\": 0,\n" +
+            "      \"visitNum\": 0,\n" +
+            "      \"visitValidNum\": 0\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/promotionCustomerList")
-    public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody(required = false) CustomerQueryParams query) {
+    public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.promotionCustomerList(params, query));
     }
 
@@ -177,9 +209,10 @@ public class PromotionReportController {
             "  \"msg\": \"成功\",\n" +
             "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/exportPromotionCustomer")
-    public R exportPromotionCustomer(@RequestBody CustomerQueryParams query) {
+    public R exportPromotionCustomer(@RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.exportPromotionCustomer(query));
     }
 
@@ -195,25 +228,32 @@ public class PromotionReportController {
             "{\n" +
             "  \"msg\": \"成功\",\n" +
             "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
             "    \"list\": [\n" +
             "      {\n" +
-            "        \"cost\": \"3.50%\",\n" +
+            "        \"cost\": \"0.035\",\n" +
             "        \"deptName\": \"广州天河校区\",\n" +
             "        \"sendNum\": 1,\n" +
             "        \"sendSuccessNum\": 1\n" +
+            "      },\n" +
+            "      {\n" +
+            "        \"cost\": \"0.0\",\n" +
+            "        \"deptName\": \"广州白云校区\",\n" +
+            "        \"sendNum\": 0,\n" +
+            "        \"sendSuccessNum\": 0\n" +
             "      }\n" +
             "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 1,\n" +
-            "    \"totalCount\": 1,\n" +
-            "    \"totalPage\": 1\n" +
+            "    \"total\": {\n" +
+            "      \"cost\": \"0.0350\",\n" +
+            "      \"deptName\": \"/\",\n" +
+            "      \"sendNum\": 1,\n" +
+            "      \"sendSuccessNum\": 1\n" +
+            "    }\n" +
             "  },\n" +
             "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/promotionSmsCostList")
-    public R promotionSmsCostList(@ModelAttribute PageParams params, @RequestBody(required = false) SmsCostQueryParams query) {
+    public R promotionSmsCostList(@ModelAttribute PageParams params, @RequestBody @Valid SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.promotionSmsCostList(params, query));
     }
 
@@ -229,9 +269,10 @@ public class PromotionReportController {
             "  \"msg\": \"成功\",\n" +
             "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%97%A5%E5%B8%B8%E6%95%B0%E6%8D%AE%E6%8A%A5%E8%A1%A8_20181015_174951_502.xls?Expires=1539600591&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=9IQDmE6TT2gi9P0tnrjbntHn7m0%3D\",\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/exportPromotionSmsCost")
-    public R exportPromotionSmsCost(@RequestBody SmsCostQueryParams query) {
+    public R exportPromotionSmsCost(@RequestBody @Valid SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.exportPromotionSmsCost(query));
     }
 
@@ -246,54 +287,57 @@ public class PromotionReportController {
             "    \"costType\": 1,\n" +
             "    \"deptId\": 3,\n" +
             "    \"deptName\": \"XXX校区\",\n" +
-            "    \"endTime\": \"2018-10-01\",\n" +
+            "    \"endTime\": \"2018-10-20\",\n" +
             "    \"getWay\": 1,\n" +
             "    \"sourceId\": 1,\n" +
             "    \"sourceName\": \"智联\"\n" +
             "}\n" +
-            "请求成功：\n" +
+            "响应数据：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"currPage\": 1,\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"adCost\": 0,\n" +
-            "        \"boutiqueCost\": 0,\n" +
-            "        \"date\": \"2018-09-30\",\n" +
-            "        \"flushCost\": 0,\n" +
-            "        \"jobPostingCost\": 0,\n" +
-            "        \"loadCost\": 0,\n" +
-            "        \"num\": 0,\n" +
-            "        \"precisionCost\": 0,\n" +
-            "        \"pushCost\": 0,\n" +
-            "        \"toppingCost\": 0,\n" +
-            "        \"totalCost\": 0\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"adCost\": 0,\n" +
-            "        \"boutiqueCost\": 0,\n" +
-            "        \"date\": \"2018-10-01\",\n" +
-            "        \"flushCost\": 0,\n" +
-            "        \"jobPostingCost\": 0,\n" +
-            "        \"loadCost\": 0,\n" +
-            "        \"num\": 0,\n" +
-            "        \"precisionCost\": 0,\n" +
-            "        \"pushCost\": 0,\n" +
-            "        \"toppingCost\": 0,\n" +
-            "        \"totalCost\": 0\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"pageSize\": 10,\n" +
-            "    \"size\": 2,\n" +
-            "    \"totalCount\": 2,\n" +
-            "    \"totalPage\": 1\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"list\": [\n" +
+            "            {\n" +
+            "                \"date\": \"2018-09-30\",\n" +
+            "                \"genWayCosts\": [\n" +
+            "                    {\n" +
+            "                        \"cost\": \"0.0000\",\n" +
+            "                        \"genWay\": \"精品（帮帮）\",\n" +
+            "                        \"wayId\": 1\n" +
+            "                    },\n" +
+            "                    {\n" +
+            "                        \"cost\": \"0.0000\",\n" +
+            "                        \"genWay\": \"精准（黄金展位）\",\n" +
+            "                        \"wayId\": 2\n" +
+            "                    }\n" +
+            "                ],\n" +
+            "                \"num\": 0,\n" +
+            "                \"totalCost\": \"0.0000\"\n" +
+            "            }\n" +
+            "        ],\n" +
+            "        \"total\": {\n" +
+            "            \"date\": \"合计\",\n" +
+            "            \"genWayCosts\": [\n" +
+            "                {\n" +
+            "                    \"cost\": \"0.0000\",\n" +
+            "                    \"genWay\": \"精品（帮帮）\",\n" +
+            "                    \"wayId\": 1\n" +
+            "                },\n" +
+            "                {\n" +
+            "                    \"cost\": \"0.0000\",\n" +
+            "                    \"genWay\": \"精准（黄金展位）\",\n" +
+            "                    \"wayId\": 2\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"num\": 0,\n" +
+            "            \"totalCost\": \"0.0000\"\n" +
+            "        }\n" +
+            "    }\n" +
             "}"
     )
     @PostMapping("/promotionCompanyCostList")
-    public R promotionCompanyCostList(@ModelAttribute PageParams params, @RequestBody CompanyCostQueryParams query) {
+    public R promotionCompanyCostList(@ModelAttribute PageParams params, @RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.promotionCompanyCostList(params, query));
     }
 
@@ -316,21 +360,24 @@ public class PromotionReportController {
             "  \"msg\": \"成功\",\n" +
             "  \"result\": \"http://hqcrm.oss-cn-shenzhen.aliyuncs.com/export/%E6%8B%9B%E8%BD%AC%E6%8E%A8%E5%B9%BF%E5%85%AC%E5%8F%B8%E8%B4%B9%E7%94%A8%E6%8A%A5%E8%A1%A8_20181024_102408_453.xls?Expires=1540351448&OSSAccessKeyId=LTAIAO3rjtbLdTNb&Signature=fKHUTZSh9Az5%2FXHz4lxPQrEEEqk%3D\",\n" +
             "  \"code\": 0\n" +
-            "}")
+            "}"
+    )
     @PostMapping("/exportPromotionCompanyCost")
-    public R exportPromotionCompanyCost(@RequestBody CompanyCostQueryParams query) {
+    public R exportPromotionCompanyCost(@RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.exportPromotionCompanyCost(query));
     }
 
     @ApiOperation(value = "推广报表模块模型参数Models")
     @GetMapping("hello")
-    public void modelAPI(@RequestBody CompanyCostReportData companyCostReportData, @RequestBody CompanyCostReportTotal companyCostReportTotal,
-                         @RequestBody CustomerReportData customerReportData, @RequestBody CustomerReportTotal customerReportTotal,
-                         @RequestBody DailyReportData dailyReportData, @RequestBody DailyReportTotal dailyReportTotal,
-                         @RequestBody SmsCostReportData smsCostReportData, @RequestBody SmsCostReportTotal smsCostReportTotal
+    public void modelAPI(@RequestBody CompanyCostReportResult companyCostReportResult,
+                         @RequestBody CustomerReportResult customerReportResult,
+                         @RequestBody DailyReportResult dailyReportResult,
+                         @RequestBody SmsCostReportResult smsCostReportResult
     ) {
-        LOG.info("报表输出参数说明：" + JSON.toJSONString(companyCostReportData) + JSON.toJSONString(companyCostReportTotal) +
-                JSON.toJSONString(customerReportData) + JSON.toJSONString(customerReportTotal) + JSON.toJSONString(dailyReportData)
-                + JSON.toJSONString(dailyReportTotal) + JSON.toJSONString(smsCostReportData) + JSON.toJSONString(smsCostReportTotal));
+        LOG.info("报表输出参数说明："
+                + JSON.toJSONString(companyCostReportResult)
+                + JSON.toJSONString(customerReportResult)
+                + JSON.toJSONString(dailyReportResult)
+                + JSON.toJSONString(smsCostReportResult));
     }
 }
