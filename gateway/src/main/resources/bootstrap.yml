@@ -10,16 +10,16 @@ spring:
   application:
     # 应用名称
     name: transfer-gateway-server
-  profiles:
-    active: dev
-  cloud:
-    config:
-      fail-fast: false
-      discovery:
-        service-id: transfer-config-server
-        enabled: true
-      profile: ${spring.profiles.active}
-      label: master
+#  profiles:
+ #   active: dev
+#  cloud:
+ #   config:
+  #    fail-fast: false
+   #   discovery:
+    #    service-id: transfer-config-server
+     #   enabled: false
+      #profile: ${spring.profiles.active}
+      #label: master
 
 eureka:
   client:
