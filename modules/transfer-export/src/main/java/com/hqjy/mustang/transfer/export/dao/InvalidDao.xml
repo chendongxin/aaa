@@ -47,7 +47,6 @@
         INNER JOIN transfer_customer_detail td ON tc.customer_id = td.customer_id
         INNER JOIN transfer_customer_invalid ti ON ti.customer_id = tc.customer_id
         LEFT JOIN transfer_keyword tk ON tk.id=td.apply_key
-
         <where>
             tc.status in (1,2)
             <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
@@ -63,10 +62,10 @@
             <if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
             <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-                and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+                and DATE_FORMAT(tc.create_time,'%Y-%m-%d') between #{beginCreateTime} and #{endCreateTime}
             </if>
             <if test="beginInvalidTime != null and beginInvalidTime != '' and endInvalidTime != null and endInvalidTime != ''">
-                and ti.create_time between #{beginInvalidTime} and #{endInvalidTime}
+                and DATE_FORMAT(ti.create_time,'%Y-%m-%d') between #{beginInvalidTime} and #{endInvalidTime}
             </if>
         </where>
         GROUP BY tc.customer_id

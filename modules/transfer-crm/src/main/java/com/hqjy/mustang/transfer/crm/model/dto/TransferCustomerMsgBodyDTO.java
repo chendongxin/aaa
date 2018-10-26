@@ -88,6 +88,11 @@ public class TransferCustomerMsgBodyDTO {
     private Integer status;
 
     /**
+     * 创建人编号 create_user_dept_id
+     **/
+    private Long createUserDeptId;
+
+    /**
      * 创建人编号 create_user_id
      **/
     private Long createUserId;
@@ -170,7 +175,7 @@ public class TransferCustomerMsgBodyDTO {
     /**
      * 工作经验 work_experience
      **/
-    private Byte workExperience;
+    private Integer workExperience;
 
     /**
      * 注释 memo
