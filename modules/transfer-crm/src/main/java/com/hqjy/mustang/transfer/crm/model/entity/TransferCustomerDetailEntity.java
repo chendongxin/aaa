@@ -103,7 +103,7 @@ public class TransferCustomerDetailEntity implements Serializable {
     /**
 	 * 工作经验 work_experience (0-无经验，1-应届生，2-一年以内，3-两年，4-三年，5-三年以上)
 	 **/
-    private Byte workExperience;
+    private Integer workExperience;
 
     /**
 	 * 备注 note
