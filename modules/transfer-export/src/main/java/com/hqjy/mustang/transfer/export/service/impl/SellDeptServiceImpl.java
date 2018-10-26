@@ -6,16 +6,15 @@ import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
-import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.SellAttacheDao;
+import com.hqjy.mustang.transfer.export.dao.SellDeptDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
-import com.hqjy.mustang.transfer.export.model.dto.CustomerReportData;
-import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportData;
-import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportTotal;
+import com.hqjy.mustang.transfer.export.model.dto.SellDeptReportData;
+import com.hqjy.mustang.transfer.export.model.dto.SellDeptReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.model.query.SellQueryParams;
-import com.hqjy.mustang.transfer.export.service.SellAttacheService;
+import com.hqjy.mustang.transfer.export.service.SellDeptService;
 import com.hqjy.mustang.transfer.export.util.PageUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,33 +33,28 @@ import java.util.stream.Collectors;
 /**
  * @author gmm
  * @date create on 2018/10/22
- * @apiNote 电销专员排行报表数据服务层
+ * @apiNote 部门电销排行报表数据服务层
  */
 @Service
-public class SellAttacheServiceImpl implements SellAttacheService {
+public class SellDeptServiceImpl implements SellDeptService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
     @Autowired
     private SysDeptServiceFeign sysDeptServiceFeign;
     @Autowired
+    private SellDeptDao sellDeptDao;
+    @Autowired
     private SellAttacheDao sellAttacheDao;
 
-    /**
-     * 获取电销专员排行报表数据
-     *
-     * @param params 分页请求参数
-     * @param query  高级请求参数
-     * @return 返回查询结果
-     */
     @Override
-    public PageUtil<SellAttacheReportData> sellAttacheList(PageParams params, SellQueryParams query) {
-        List<SellAttacheReportData> list = this.check(query);
+    public PageUtil<SellDeptReportData> sellDeptList(PageParams params, SellQueryParams query) {
+        List<SellDeptReportData> list = this.check(query);
         this.setSaleNum(query, list);
         this.setSaleRate(list);
         return new PageUtil<>(params, list);
     }
 
-    private List<SellAttacheReportData> check(SellQueryParams query) {
+    private List<SellDeptReportData> check(SellQueryParams query) {
         if (StringUtils.isEmpty(query.getBeginTime())) {
             throw new RRException("请选择开始时间");
         }
@@ -70,13 +64,15 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         if (query.getDeptId() == null) {
             throw new RRException("请选择部门");
         }
-        List<SellAttacheReportData> list = new ArrayList<>();
+        List<SellDeptReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = sysDeptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
+
         List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
+
         deptList.forEach(y -> {
             LOG.info("初始化报表列表");
-            list.add(new SellAttacheReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            list.add(new SellDeptReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
@@ -85,37 +81,19 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         return list;
     }
 
-    private void setSaleNum(SellQueryParams query, List<SellAttacheReportData> list) {
-        List<CustomerEntity> visitBusiness = sellAttacheDao.countVisitBusiness(query);
-        List<CustomerEntity> validBusiness = sellAttacheDao.countValidBusiness(query);
-        List<CustomerEntity> dealBusiness = sellAttacheDao.countDealBusiness(query);
-        List<CustomerEntity> allotBusiness = sellAttacheDao.countAllotBusiness(query);
-        List<CustomerEntity> visitTodayAppointBusiness = sellAttacheDao.countVisitTodayAppointBusiness(query);
-        List<CustomerEntity> visitTomoAppointBusiness = sellAttacheDao.countVisitTomoAppointBusiness(query);
-        List<CustomerEntity> visitValidBusiness = sellAttacheDao.countVisitValidBusiness(query);
+    private void setSaleNum(SellQueryParams query, List<SellDeptReportData> list) {
+        List<CustomerEntity> visitBusiness = sellDeptDao.countVisitBusiness(query);
+        List<CustomerEntity> visitTodayAppointBusiness = sellDeptDao.countVisitTodayAppointBusiness(query);
+        List<CustomerEntity> visitTomoAppointBusiness = sellDeptDao.countVisitTomoAppointBusiness(query);
+        List<CustomerEntity> validBusiness = sellDeptDao.countValidBusiness(query);
+        List<CustomerEntity> dealBusiness = sellDeptDao.countDealBusiness(query);
+        List<CustomerEntity> createBusiness = sellDeptDao.countBusiness(query);
+        List<CustomerEntity> visitValidBusiness = sellDeptDao.countVisitValidBusiness(query);
         list.forEach(x -> {
             //上门量
             visitBusiness.forEach(y -> {
                 if (x.getDeptId().equals(y.getDeptId())) {
                     x.setVisitNum(y.getNum());
-                }
-            });
-            //商机有效量
-            validBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
-                    x.setValidNum(y.getNum());
-                }
-            });
-            //成交量
-            dealBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
-                    x.setDealNum(y.getNum());
-                }
-            });
-            //分配商机量
-            allotBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
-                    x.setAllotNum(y.getNum());
                 }
             });
             //今日预约上门量
@@ -130,6 +108,24 @@ public class SellAttacheServiceImpl implements SellAttacheService {
                     x.setVisitTomorrowAppointNum(y.getNum());
                 }
             });
+            //商机量
+            createBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setBusinessNum(y.getNum());
+                }
+            });
+            //商机有效量
+            validBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setValidNum(y.getNum());
+                }
+            });
+            //成交量
+            dealBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setDealNum(y.getNum());
+                }
+            });
             //有效上门量
             visitValidBusiness.forEach(y -> {
                 if (x.getDeptId().equals(y.getDeptId())) {
@@ -139,43 +135,43 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         });
     }
 
-    private void setSaleRate(List<SellAttacheReportData> list) {
+    private void setSaleRate(List<SellDeptReportData> list) {
         DecimalFormat df = new DecimalFormat("0.00%");
         list.forEach(x -> {
             //有效商机上门率:有效上门量/有效商机总量
             x.setVisitValidRate(df.format(x.getValidNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getValidNum()));
-            //商机有效率:有效商机量/分配给电销专员商机量
-            x.setValidRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getValidNum() / x.getAllotNum()));
-            //实际上门率:有效上门量/电销专员商机量
-            x.setVisitValidRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getAllotNum()));
+            //商机有效率:有效商机量/商机量
+            x.setValidRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getValidNum() / x.getBusinessNum()));
+            //实际上门率:有效上门量/商机量
+            x.setVisitValidRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getBusinessNum()));
         });
     }
 
     @Override
-    public String exportSellAttache(SellQueryParams query) {
+    public String exportSellDept(SellQueryParams query) {
         try {
-            List<SellAttacheReportData> list = this.getSellAttacheData(query);
-            SellAttacheReportTotal total = this.countTotal(list);
-            ExcelUtil<SellAttacheReportData, SellAttacheReportTotal> util1 = new ExcelUtil<>(SellAttacheReportData.class, SellAttacheReportTotal.class);
+            List<SellDeptReportData> list = this.getSellDeptData(query);
+            SellDeptReportTotal total = this.countTotal(list);
+            ExcelUtil<SellDeptReportData, SellDeptReportTotal> util1 = new ExcelUtil<>(SellDeptReportData.class, SellDeptReportTotal.class);
             ByteArrayOutputStream os = new ByteArrayOutputStream();
-            util1.getListToExcel(list, null, total, os);
+            util1.getListToExcel(list, "部门电销排行数据报表_", total, os);
             //aliyun目录
             String dir = "export";
             //文件名称
-            String fileName = "电销专员排行数据报表_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS")) + ".xls";
+            String fileName = "部门电销排行数据报表_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss_SSS")) + ".xls";
             //上传文件至阿里云
             String recordFile = OssFileUtils.uploadFile(os.toByteArray(), dir, fileName);
             //下载地址有效时间1个小时
             URL visitUrl = OssFileUtils.getVisitUrl(recordFile, 3600);
             return visitUrl.toString();
         } catch (Exception e) {
-            LOG.error("电销专员排行数据报表导出异常->{}", e.getMessage());
-            throw new RRException("电销专员排行数据报表导出异常");
+            LOG.error("部门电销排行数据报表导出异常->{}", e.getMessage());
+            throw new RRException("部门电销排行数据报表导出异常");
         }
     }
 
-    private List<SellAttacheReportData> getSellAttacheData(SellQueryParams query) {
-        List<SellAttacheReportData> list = this.check(query);
+    private List<SellDeptReportData> getSellDeptData(SellQueryParams query) {
+        List<SellDeptReportData> list = this.check(query);
         this.setSaleNum(query, list);
         this.setSaleRate(list);
         return list;
@@ -187,24 +183,23 @@ public class SellAttacheServiceImpl implements SellAttacheService {
      * @param list 报表数据集合
      * @return 返回合计对象
      */
-    private SellAttacheReportTotal countTotal(List<SellAttacheReportData> list) {
-        SellAttacheReportTotal total = new SellAttacheReportTotal();
+    private SellDeptReportTotal countTotal(List<SellDeptReportData> list) {
+        SellDeptReportTotal total = new SellDeptReportTotal();
         list.forEach(x -> {
             total.setVisitNum(total.getVisitNum() + x.getVisitNum());
-            total.setValidNum(total.getValidNum() + x.getValidNum());
-            total.setDealNum(total.getDealNum() + x.getDealNum());
-            total.setAllotNum(total.getAllotNum() + x.getAllotNum());
             total.setVisitTodayAppointNum(total.getVisitTodayAppointNum() + x.getVisitTodayAppointNum());
             total.setVisitTomorrowAppointNum(total.getVisitTomorrowAppointNum() + x.getVisitTomorrowAppointNum());
-            total.setVisitValidNum(total.getVisitValidNum() + x.getVisitValidNum());
+            total.setBusinessNum(total.getBusinessNum() + x.getBusinessNum());
+            total.setValidNum(total.getValidNum() + x.getValidNum());
+            total.setDealNum(total.getDealNum() + x.getDealNum());
         });
         DecimalFormat df = new DecimalFormat("0.00%");
         //有效商机上门率:有效上门量/有效商机总量
         total.setVisitValidRate(df.format(total.getValidNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getValidNum()));
-        //商机有效率:有效商机量/分配给电销专员商机量
-        total.setValidRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getValidNum() / total.getAllotNum()));
-        //实际上门率:有效上门量/电销专员商机量
-        total.setVisitValidRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getAllotNum()));
+        //商机有效率:有效商机量/商机量
+        total.setValidRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getValidNum() / total.getBusinessNum()));
+        //实际上门率:有效上门量/商机量
+        total.setVisitValidRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getBusinessNum()));
         return total;
     }
 }

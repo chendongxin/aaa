@@ -156,9 +156,9 @@ public class TarnsferSmsSignatureController {
     @ApiOperation(value = "删除签名", notes = "删除签名：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "id", value = "签名ID", required = true, dataType = "String")
     @SysLog("删除签名")
-    @DeleteMapping("/{id}")
-    public R delete(@PathVariable("id") Long id) {
-        int count = transferSmsSignatureService.delete(id);
+    @DeleteMapping("/{ids}")
+    public R delete(@PathVariable("ids") Long[] ids) {
+        int count = transferSmsSignatureService.deleteBatch(ids);
         if (count > 0) {
             return R.ok();
         }

@@ -19,6 +19,11 @@ public class TransferSmsReplyEntity implements Serializable {
     private Long id;
 
     /**
+     * 客户编号customer_Id
+     */
+    private Long customerId;
+
+    /**
      * 部门id dept_id
      **/
     private Long deptId;

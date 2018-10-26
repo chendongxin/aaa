@@ -14,6 +14,11 @@ public interface TransferSourceService extends BaseService<TransferSourceEntity,
     List<TransferSourceEntity> findNotByCompanyId(Long companyId);
 
     /**
+     * 获取属于指定公司的推广平台
+     */
+    List<TransferSourceEntity> findByCompanyId(Long companyId);
+
+    /**
      * 获取所有推广平台列表
      */
     List<TransferSourceEntity> getAllSourceList();

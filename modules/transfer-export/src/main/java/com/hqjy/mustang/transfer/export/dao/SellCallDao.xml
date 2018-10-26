@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hqjy.mustang.transfer.export.dao.SellCallDao">
+
+    <resultMap id="baseMap" type="com.hqjy.mustang.transfer.export.model.entity.CustomerEntity">
+        <result property="deptId" column="deptId"/>
+        <result property="num" column="num"/>
+    </resultMap>
+
+    <select id="countConnect" resultMap="baseMap">
+		SELECT COUNT(DISTINCT tcr.customer_id) AS num, tc.create_user_dept_id AS deptId
+		FROM transfer_call_record tcr
+		inner join transfer_customer tc on tc.customer_id = tcr.customer_id
+		WHERE tcr.status = false
+		AND tcr.create_time BETWEEN #{beginTime} AND #{endTime} AND tc.dept_id IN ${deptIds}
+		<if test="userId!=null">
+			AND tcr.create_user_id=#{userId}
+		</if>
+		GROUP BY tcr.create_user_id
+	</select>
+
+    <select id="countCall" resultMap="baseMap">
+		SELECT COUNT(DISTINCT tcr.customer_id) AS num, tc.create_user_dept_id AS deptId
+		FROM transfer_call_record tcr
+		inner join transfer_customer tc on tc.customer_id = tcr.customer_id
+		WHERE tcr.create_time BETWEEN #{beginTime} AND #{endTime} AND tc.dept_id IN ${deptIds}
+		<if test="userId!=null">
+			AND tcr.create_user_id=#{userId}
+		</if>
+		GROUP BY tcr.create_user_id
+	</select>
+
+    <select id="countCallTimeConnect" resultMap="baseMap">
+		SELECT SUM(TIME_TO_SEC(tcr.total_duration)) AS duration, tc.create_user_dept_id AS deptId
+		FROM transfer_call_record tcr
+		inner join transfer_customer tc on tc.customer_id = tcr.customer_id
+        WHERE tcr.create_time BETWEEN #{beginTime} AND #{endTime} AND tc.dept_id IN ${deptIds}
+		<if test="userId!=null">
+			AND tcr.create_user_id=#{userId}
+		</if>
+        GROUP BY tcr.create_user_id
+	</select>
+
+</mapper>
