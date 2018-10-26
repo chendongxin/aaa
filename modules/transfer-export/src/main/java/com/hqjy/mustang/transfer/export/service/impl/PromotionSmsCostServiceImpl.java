@@ -22,11 +22,11 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -57,16 +57,17 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
     }
 
     @Override
-    public PageUtil<SmsCostReportData> promotionSmsCostList(PageParams params, SmsCostQueryParams query) {
+    public SmsCostReportResult promotionSmsCostList(PageParams params, SmsCostQueryParams query) {
         List<SmsCostReportData> list = this.check(query);
         this.setData(query, list);
-        return new PageUtil<>(params, list);
+        SmsCostReportTotal total = this.countTotal(list);
+        PageUtil<SmsCostReportData> page = new PageUtil<>(params, list);
+        return new SmsCostReportResult().setList(page.getList()).setTotal(total);
     }
 
     private void setData(SmsCostQueryParams query, List<SmsCostReportData> list) {
         List<SmsCostEntity> entityList = promotionSmsCostDao.getData(query);
         List<SmsCostEntity> collect = entityList.stream().filter(x -> x.getStatus() == 2).collect(Collectors.toList());
-        DecimalFormat df = new DecimalFormat("0.00%");
         list.forEach(l -> {
             collect.forEach(x -> {
                 if (l.getDeptId().equals(x.getDeptId())) {
@@ -79,7 +80,7 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
                     l.setSendSuccessNum(l.getSendSuccessNum() + 1);
                 }
             });
-            l.setCost(df.format(l.getSendNum() * PRICE));
+            l.setCost(String.valueOf(new BigDecimal(l.getSendNum() * PRICE)));
         });
     }
 
@@ -130,15 +131,6 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
     }
 
     private List<SmsCostReportData> check(SmsCostQueryParams query) {
-        if (StringUtils.isEmpty(query.getBeginTime())) {
-            throw new RRException("请选择开始时间");
-        }
-        if (StringUtils.isEmpty(query.getEndTime())) {
-            throw new RRException("请选择结束时间");
-        }
-        if (query.getDeptId() == null) {
-            throw new RRException("请选择部门");
-        }
         List<SmsCostReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
         if (deptInfo.isEmpty()) {
@@ -149,8 +141,9 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
         if (deptList.isEmpty()) {
             throw new RRException("部门(校区)不存在");
         }
+        AtomicInteger sequence = new AtomicInteger();
         deptList.forEach(y -> {
-            list.add(new SmsCostReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            list.add(new SmsCostReportData().setSequence(sequence.incrementAndGet()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));

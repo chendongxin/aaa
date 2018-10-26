@@ -224,12 +224,18 @@ public class Constant {
      * 性别枚举
      */
     public enum Gender {
-
-        WOMEN(2, "女"),
-
+        /**
+         * 未知
+         */
         UNKNOWN(0, "未知"),
-
-        MAN(1, "男");
+        /**
+         * 男
+         */
+        MAN(1, "男"),
+        /**
+         * 女
+         */
+        WOMEN(2, "女");
 
         private Integer value;
         private String code;
@@ -277,13 +283,37 @@ public class Constant {
      * 学历
      */
     public enum Education {
+        /**
+         * 无
+         */
         NONE(0, "无"),
+        /**
+         * 小学
+         */
         PRIMARY(1, "小学"),
+        /**
+         * 初中
+         */
         MIDDLE(2, "初中"),
+        /**
+         * 高中
+         */
         HIGH(3, "高中"),
+        /**
+         * 大专
+         */
         COLLEGE(4, "大专"),
+        /**
+         * 本科
+         */
         UNDERGRADUATE(5, "本科"),
+        /**
+         * 硕士
+         */
         MASTER(6, "硕士"),
+        /**
+         * 博士
+         */
         DOCTORAL(7, "博士");
 
         private Integer value;
@@ -334,14 +364,25 @@ public class Constant {
      */
     public enum CustomerStatus {
 
+        /**
+         * 潜在
+         */
         POTENTIAL(0, "潜在"),
-
+        /**
+         * 有效失败
+         */
         FAILED_VALID(1, "有效失败"),
-
+        /**
+         * 无效失败
+         */
         FAILED_INVALID(2, "无效失败"),
-
+        /**
+         * 预约
+         */
         RESERVATION(3, "预约"),
-
+        /**
+         * 成交
+         */
         DEAL(4, "成交");
 
         private Integer value;
@@ -375,16 +416,49 @@ public class Constant {
      */
     public enum ValidType {
 
+        /**
+         * 找工作不学
+         */
         JOB_SEARCH(0, "找工作不学"),
+        /**
+         * 拒绝贷款
+         */
         LOAN_REJECTION(1, "拒绝贷款"),
+        /**
+         * 找到工作
+         */
         GET_JOB(2, "找到工作"),
+        /**
+         * 寒/暑假工
+         */
         SUM_WIN_PART_TIME(3, "寒/暑假工"),
+        /**
+         * 没投过简历/无兴趣
+         */
         NO_INTEREST(4, "没投过简历/无兴趣"),
+        /**
+         * 负面信息
+         */
         PASSIVE_MESSAGE(5, "负面信息"),
+        /**
+         * 想从事其他岗位
+         */
         OTHER_JOB(6, "想从事其他岗位"),
+        /**
+         * 在校生不能离校
+         */
         INTERNAL_SCHOOL(7, "在校生不能离校"),
+        /**
+         * 年龄＜18岁或＞30岁
+         */
         AGE_OVERSTEP(8, "年龄＜18岁或＞30岁"),
+        /**
+         * 已有同岗位经验1年以上
+         */
         EXPERIENCE_ONE_YEAR(9, "已有同岗位经验1年以上"),
+        /**
+         * 其他
+         */
         OTHER(10, "其他");
 
         private Integer value;
@@ -417,10 +491,21 @@ public class Constant {
      * 无效失败包括
      */
     public enum Valid {
-
+        /**
+         * 参加过同类培训
+         */
         SAME_TRAIN(0, "参加过同类培训"),
+        /**
+         * 小学初中学历
+         */
         LOW_DEGREE(1, "小学初中学历"),
+        /**
+         * 广告信息
+         */
         ADVERTISING_INFORMATION(2, "广告信息"),
+        /**
+         * 同行探子
+         */
         PEER_SPY(3, "同行探子");
 
         private Integer value;
@@ -455,10 +540,25 @@ public class Constant {
      */
     public enum FollowStatus {
 
+        /**
+         * A潜在
+         */
         POTENTIAL("A潜在", 0),
+        /**
+         *
+         */
         VALID_DATA("B(失败)有效", 1),
+        /**
+         * B(失败)有效
+         */
         INVALID_DATA("C(失败)无效", 2),
+        /**
+         * C(失败)无效
+         */
         RESERVATION("D预约", 3),
+        /**
+         * D预约
+         */
         DEAL("E成交", 4);
 
         private int value;
@@ -482,18 +582,23 @@ public class Constant {
      * 推广方式
      */
     public enum GetWayStatus {
-
+        /**
+         * 主动获取
+         */
         ACTIVE_GET("主动获取", 1),
+        /**
+         * 被动获取
+         */
         PASSIVE_GET("被动获取", 2);
-        private int value;
+        private Integer value;
         private String code;
 
-        GetWayStatus(String code, int value) {
+        GetWayStatus(String code, Integer value) {
             this.value = value;
             this.code = code;
         }
 
-        public int getValue() {
+        public Integer getValue() {
             return value;
         }
 
@@ -534,6 +639,10 @@ public class Constant {
      */
     public enum Role {
 
+        /**
+         * 客服专员
+         */
+        SERVICE_COMMISSIONER("SERVICE_COMMISSIONER"),
         /**
          * 电销销售员
          */

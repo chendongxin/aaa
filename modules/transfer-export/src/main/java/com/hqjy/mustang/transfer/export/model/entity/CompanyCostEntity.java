@@ -13,7 +13,12 @@ import java.math.BigDecimal;
 public class CompanyCostEntity {
 
     /**
-     * 推广方式
+     * 推广方式Id
+     */
+    private Long wayId;
+
+    /**
+     * 推广方式名称
      */
     private String wayName;
 

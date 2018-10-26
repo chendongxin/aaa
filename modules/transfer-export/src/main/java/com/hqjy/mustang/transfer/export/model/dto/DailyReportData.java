@@ -16,6 +16,9 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "招转日常报表数据对象")
 public class DailyReportData {
 
+    @ApiModelProperty(value = "序号")
+    private Integer sequence;
+
     @ApiModelProperty(value = "部门Id", hidden = true)
     private Long deptId;
 

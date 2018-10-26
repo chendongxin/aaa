@@ -4,6 +4,9 @@ import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author xyq
@@ -16,12 +19,15 @@ public class SmsCostQueryParams {
 
 
     @ApiModelProperty(value = "开始日期（必选）")
+    @NotEmpty(message = "请选择日期")
     private String beginTime;
 
     @ApiModelProperty(value = "结束日期（必选）")
+    @NotEmpty(message = "请选择日期")
     private String endTime;
 
     @ApiModelProperty(value = "部门ID")
+    @NotNull(message = "请选择部门")
     private Long deptId;
 
     @JSONField(serialize = false)

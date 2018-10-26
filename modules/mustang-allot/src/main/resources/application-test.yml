@@ -1,8 +1,8 @@
 spring:
     redis:
         database: 10
-        host: 10.0.98.9
-        port: 6385
+        host: 10.0.98.75
+        port: 6379
         password:       # 密码（默认为空）
         timeout: 15000  # 连接超时时长（毫秒）
         pool:
@@ -10,13 +10,11 @@ spring:
             max-wait: -1      # 连接池最大阻塞等待时间（使用负值表示没有限制）
             max-idle: 10      # 连接池中的最大空闲连接
             min-idle: 5       # 连接池中的最小空闲连接
-        ws-topic-name: mustang_websocket_dev #websocket推送redis主题的名称
-    # rabbitmq
     rabbitmq:
-      host: 10.0.98.46
+      host: 10.0.98.75
       port: 5672
       username: admin
-      password: mon4498
+      password: Rabbitmq@2018
       # 支持发布确认
       publisher-confirms: true
       # 支持发布返回
@@ -24,20 +22,13 @@ spring:
       listener:
         simple:
           acknowledge-mode: manual
-          # 指定最小的消费者数量
-          concurrency: 1
-          # 指定最大的消费者数量
-          max-concurrency: 1
-          # 是否支持重试
-          retry:
-            enabled: true
 
     datasource:
         type: com.alibaba.druid.pool.DruidDataSource
         druid:
-            url: jdbc:mysql://10.0.98.6:3306/mustang_transfer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
+            url: jdbc:mysql://10.0.98.75:8066/mustang_transfer?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8&useSSL=true
             username: root
-            password: root
+            password: MyNewPass4!
             driverClassName: com.mysql.jdbc.Driver
             initial-size: 10
             max-active: 100
