@@ -58,11 +58,10 @@
       LEFT JOIN transfer_follow tf ON tf.customer_id = tc.customer_id
       LEFT JOIN transfer_keyword k1 ON k1.id=td.apply_type
       LEFT JOIN transfer_keyword k2 ON k1.id=td.apply_key
-
         <where>
             <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
             <if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">
-                and tc.dept_id in ${userAllDeptId}
+                tc.dept_id in ${userAllDeptId}
             </if>
             <if test="userId !=null and !&quot;&quot;.equals(userId)">
                 and tc.user_id=#{userId}
@@ -72,11 +71,10 @@
             </if>
             <if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
             <if test="status != null and !&quot;&quot;.equals(status)">and tc.status = #{status}</if>
-            <if test="deptId != null and !&quot;&quot;.equals(deptId)">and tc.dept_id = #{deptId}</if>
             <if test="proId != null and !&quot;&quot;.equals(proId)">and tc.pro_id = #{proId}</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
             <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-                and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+                and DATE_FORMAT(tc.create_time,'%Y-%m-%d') between #{beginCreateTime} and #{endCreateTime}
             </if>
         </where>
         GROUP BY tc.customer_id

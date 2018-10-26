@@ -143,7 +143,7 @@ public class TransferCustomerDTO {
     /**
      * 工作经验 work_experience
      **/
-    private Byte workExperience;
+    private Integer workExperience;
 
     /**
      * 推广方式：见数据字典GET_WAY枚举(1-主动获取，2-被动获取) get_way

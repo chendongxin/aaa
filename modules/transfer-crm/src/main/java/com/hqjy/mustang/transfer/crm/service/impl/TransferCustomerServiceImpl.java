@@ -539,15 +539,15 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                         this.setSex(c, msgBody);
                     }
                     if (StringUtils.isNotEmpty(c.getExperience())) {
-
+                        this.setExperience(c, msgBody);
                     }
                     msgBody.setProId(upDTO.getProId()).setProName(upDTO.getProName()).setCompanyId(upDTO.getCompanyId()).setCompanyName(upDTO.getCompanyName())
                             .setDeptId(upDTO.getDeptId()).setDeptName(upDTO.getDeptName()).setSourceId(upDTO.getSourceId()).setSourceName(upDTO.getSourceName())
                             .setUserId(upDTO.getUserId()).setGetWay(upDTO.getGetWay()).setNotAllot(upDTO.getNotAllot())
                             .setName(c.getName()).setAge(Byte.valueOf(c.getYear())).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                             .setPhone(c.getPhone()).setEmail(c.getEmail()).setPositionApplied(c.getPositionApplied())
-                            .setWorkingPlace(c.getWorkingPlace()).setSchool(c.getSchool()).setMajor(c.getMajor()).setWorkExperience(Byte.valueOf(c.getExperience()))
-                            .setNote(c.getNote());
+                            .setWorkingPlace(c.getWorkingPlace()).setSchool(c.getSchool()).setMajor(c.getMajor())
+                            .setNote(c.getNote()).setCreateUserDeptId(sysDeptServiceFeign.getUserDept(getUserId()).getDeptId());
 
 //                    发送客户数据到商机分配消息队列
                     rabbitTemplate.convertAndSend(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE,JSON.toJSONString(new TransferCustomerQueueDTO()
@@ -581,6 +581,27 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         }
         if (c.getGender().equals(Constant.Gender.UNKNOWN.getCode())) {
             msgBody.setSex(Constant.Gender.UNKNOWN.getValue());
+        }
+    }
+
+    private void setExperience(TransferCustomerDetailDTO c, TransferCustomerMsgBodyDTO msgBody) {
+        if (c.getExperience().equals(Constant.EXPERIENCE.GRADUATE.getCode())) {
+            msgBody.setWorkExperience(Constant.EXPERIENCE.GRADUATE.getValue());
+        }
+        if (c.getExperience().equals(Constant.EXPERIENCE.NO_EXPERIENCE.getCode())) {
+            msgBody.setWorkExperience(Constant.EXPERIENCE.NO_EXPERIENCE.getValue());
+        }
+        if (c.getExperience().equals(Constant.EXPERIENCE.ONE_EXPERIENCE.getCode())) {
+            msgBody.setWorkExperience(Constant.EXPERIENCE.ONE_EXPERIENCE.getValue());
+        }
+        if (c.getExperience().equals(Constant.EXPERIENCE.TWO_EXPERIENCE.getCode())) {
+            msgBody.setWorkExperience(Constant.EXPERIENCE.TWO_EXPERIENCE.getValue());
+        }
+        if (c.getExperience().equals(Constant.EXPERIENCE.THREE_EXPERIENCE.getCode())) {
+            msgBody.setWorkExperience(Constant.EXPERIENCE.THREE_EXPERIENCE.getValue());
+        }
+        if (c.getExperience().equals(Constant.EXPERIENCE.MORE_THREE_EXPERIENCE.getCode())) {
+            msgBody.setWorkExperience(Constant.EXPERIENCE.MORE_THREE_EXPERIENCE.getValue());
         }
     }
 

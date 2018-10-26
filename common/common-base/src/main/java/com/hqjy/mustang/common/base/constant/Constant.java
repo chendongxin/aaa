@@ -534,6 +534,61 @@ public class Constant {
         }
     }
 
+    /**
+     * 工作经验
+     */
+    public enum EXPERIENCE {
+        /**
+         * 无经验
+         */
+        NO_EXPERIENCE(0, "无经验"),
+        /**
+         * 应届生
+         */
+        GRADUATE(1, "应届生"),
+        /**
+         * 一年以内
+         */
+        ONE_EXPERIENCE(2, "一年以内"),
+        /**
+         * 两年
+         */
+        TWO_EXPERIENCE(3, "两年"),
+        /**
+         * 三年
+         */
+        THREE_EXPERIENCE(4, "三年"),
+        /**
+         * 三年以上
+         */
+        MORE_THREE_EXPERIENCE(5, "三年以上");
+
+        private Integer value;
+
+        private String code;
+
+        EXPERIENCE(Integer value, String code) {
+            this.value = value;
+            this.code = code;
+        }
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public boolean equals(Integer value) {
+            return value.equals(this.value);
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+    }
+
 
     /**
      * 跟进状态

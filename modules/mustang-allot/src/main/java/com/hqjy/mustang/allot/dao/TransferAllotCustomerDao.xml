@@ -112,6 +112,7 @@
              <if test="null != weChat">we_chat,</if>
              <if test="null != qq">qq,</if>
              <if test="null != landLine">land_line,</if>-->
+            <if test="null != createUserDeptId">create_user_dept_id, </if>
             <if test="null != createUserId">create_user_id,</if>
             <if test="null != createUserName">create_user_name,</if>
             <if test="null != createTime">create_time,</if>
@@ -146,6 +147,7 @@
                 <if test="null != weChat">#{weChat},</if>
                 <if test="null != qq">#{qq},</if>
                 <if test="null != landLine">#{landLine},</if>-->
+            <if test="null != createUserDeptId">#{createUserDeptId}, </if>
             <if test="null != createUserId">#{createUserId},</if>
             <if test="null != createUserName">#{createUserName},</if>
             <if test="null != createTime">#{createTime},</if>
