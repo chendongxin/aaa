@@ -6,10 +6,10 @@ import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
-import com.hqjy.mustang.transfer.export.dao.SellAttacheDao;
 import com.hqjy.mustang.transfer.export.dao.SellDeptDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.SellDeptReportData;
+import com.hqjy.mustang.transfer.export.model.dto.SellDeptReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.SellDeptReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
@@ -39,31 +39,31 @@ import java.util.stream.Collectors;
 public class SellDeptServiceImpl implements SellDeptService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
-    @Autowired
     private SysDeptServiceFeign sysDeptServiceFeign;
-    @Autowired
     private SellDeptDao sellDeptDao;
+
     @Autowired
-    private SellAttacheDao sellAttacheDao;
+    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    }
+
+    @Autowired
+    public void setSellDeptDao(SellDeptDao sellDeptDao) {
+        this.sellDeptDao = sellDeptDao;
+    }
 
     @Override
-    public PageUtil<SellDeptReportData> sellDeptList(PageParams params, SellQueryParams query) {
+    public SellDeptReportResult sellDeptList(PageParams params, SellQueryParams query) {
         List<SellDeptReportData> list = this.check(query);
         this.setSaleNum(query, list);
         this.setSaleRate(list);
-        return new PageUtil<>(params, list);
+        SellDeptReportTotal total = this.countTotal(list);
+        PageUtil<SellDeptReportData> page = new PageUtil<>(params, list);
+        return new SellDeptReportResult().setList(page.getList()).setTotal(total);
     }
 
     private List<SellDeptReportData> check(SellQueryParams query) {
-        if (StringUtils.isEmpty(query.getBeginTime())) {
-            throw new RRException("请选择开始时间");
-        }
-        if (StringUtils.isEmpty(query.getEndTime())) {
-            throw new RRException("请选择结束时间");
-        }
-        if (query.getDeptId() == null) {
-            throw new RRException("请选择部门");
-        }
+
         List<SellDeptReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = sysDeptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
 
@@ -71,7 +71,6 @@ public class SellDeptServiceImpl implements SellDeptService {
         List<String> ids = new ArrayList<>();
 
         deptList.forEach(y -> {
-            LOG.info("初始化报表列表");
             list.add(new SellDeptReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });

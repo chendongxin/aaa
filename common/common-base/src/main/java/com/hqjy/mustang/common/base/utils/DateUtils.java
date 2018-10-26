@@ -195,7 +195,7 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
      * @param time "48:13:35"
      * @return 返回秒数
      */
-    private static int timeToSecond(String time) {
+    public static int timeToSecond(String time) {
         if (StringUtils.isNotEmpty(time)) {
             String[] split = time.split(":");
             Integer hour = Integer.valueOf(split[0]);

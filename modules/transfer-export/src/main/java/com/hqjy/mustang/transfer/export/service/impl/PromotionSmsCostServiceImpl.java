@@ -22,11 +22,11 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +80,7 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
                     l.setSendSuccessNum(l.getSendSuccessNum() + 1);
                 }
             });
-            l.setCost(String.valueOf(l.getSendNum() * PRICE));
+            l.setCost(String.valueOf(new BigDecimal(l.getSendNum() * PRICE)));
         });
     }
 
@@ -141,8 +141,9 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
         if (deptList.isEmpty()) {
             throw new RRException("部门(校区)不存在");
         }
+        AtomicInteger sequence = new AtomicInteger();
         deptList.forEach(y -> {
-            list.add(new SmsCostReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            list.add(new SmsCostReportData().setSequence(sequence.incrementAndGet()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));

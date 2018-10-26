@@ -9,6 +9,7 @@ import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.SellCallDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.SellCallReportData;
+import com.hqjy.mustang.transfer.export.model.dto.SellCallReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.SellCallReportTotal;
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
@@ -38,29 +39,33 @@ import java.util.stream.Collectors;
 public class SellCallServiceImpl implements SellCallService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
-    @Autowired
     private SysDeptServiceFeign sysDeptServiceFeign;
-    @Autowired
     private SellCallDao sellCallDao;
 
+    @Autowired
+    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    }
+
+    @Autowired
+    public void setSellCallDao(SellCallDao sellCallDao) {
+        this.sellCallDao = sellCallDao;
+    }
+
     @Override
-    public PageUtil<SellCallReportData> sellCallList(PageParams params, SellQueryParams query) {
+    public SellCallReportResult sellCallList(PageParams params, SellQueryParams query) {
         List<SellCallReportData> list = this.check(query);
         this.setSaleNum(query, list);
         this.setSaleRate(list);
-        return new PageUtil<>(params, list);
+        SellCallReportTotal total = this.countTotal(list);
+        PageUtil<SellCallReportData> page = new PageUtil<>(params, list);
+
+        return new SellCallReportResult().setList(page.getList()).setTotal(total);
+
     }
 
     private List<SellCallReportData> check(SellQueryParams query) {
-        if (StringUtils.isEmpty(query.getBeginTime())) {
-            throw new RRException("请选择开始时间");
-        }
-        if (StringUtils.isEmpty(query.getEndTime())) {
-            throw new RRException("请选择结束时间");
-        }
-        if (query.getDeptId() == null) {
-            throw new RRException("请选择部门");
-        }
+
         List<SellCallReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = sysDeptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
 
@@ -68,7 +73,6 @@ public class SellCallServiceImpl implements SellCallService {
         List<String> ids = new ArrayList<>();
 
         deptList.forEach(y -> {
-            LOG.info("初始化报表列表");
             list.add(new SellCallReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
@@ -153,7 +157,7 @@ public class SellCallServiceImpl implements SellCallService {
         list.forEach(x -> {
             total.setCallNum(total.getCallNum() + x.getCallNum());
             total.setConnectNum(total.getConnectNum() + x.getConnectNum());
-            total.setDuration(total.getDuration() + x.getDuration());
+            total.setDuration(DateUtils.secondToTime(DateUtils.timeToSecond(total.getDuration()) + DateUtils.timeToSecond(x.getDuration())));
         });
         DecimalFormat df = new DecimalFormat("0.00%");
         //接通率:接通量/拨打量

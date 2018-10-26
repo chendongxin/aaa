@@ -5,6 +5,10 @@ import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @author gmm
@@ -15,15 +19,19 @@ import lombok.Data;
 @ApiModel(value = "电销专员排行报表查询参数")
 public class SellQueryParams {
 
-    @ApiModelProperty(value = "开始日期（必选）")
+    @ApiModelProperty(value = "开始日期（必传）")
+    @NotEmpty(message = "日期不能为空")
     private String beginTime;
 
-    @ApiModelProperty(value = "结束日期（必选）")
+    @ApiModelProperty(value = "结束日期（必传）")
+    @NotEmpty(message = "日期不能为空")
     private String endTime;
 
-    @ApiModelProperty(value = "部门Id")
+    @ApiModelProperty(value = "部门ID（必传）")
+    @NotNull(message = "部门ID不能为空")
     private Long deptId;
 
+    @ApiModelProperty(hidden = true)
     @JSONField(serialize = false)
     private String deptIds;
 
