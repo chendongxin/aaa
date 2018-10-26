@@ -52,10 +52,6 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
     @Transactional(rollbackFor = Exception.class)
     public int save(SysUserExtendEntity userExtend){
         userExtend.setCreateId(ShiroUtils.getUserId());
-        //sha256加密
-        String salt = RandomStringUtils.randomAlphanumeric(20);
-        userExtend.setSalt(salt);
-        userExtend.setTqPw(new Sha256Hash(userExtend.getTqPw(),salt).toHex());
         int count = baseDao.save(userExtend);
         return count;
     }
@@ -66,13 +62,6 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int update(SysUserExtendEntity userExtend){
-        if(StringUtils.isBlank(userExtend.getTqPw())){
-            userExtend.setTqPw(null);
-        }else{
-            String salt =  RandomStringUtils.randomAlphanumeric(20);
-            userExtend.setSalt(salt);
-            userExtend.setTqPw(new Sha256Hash(userExtend.getTqPw(),salt).toHex());
-        }
         return baseDao.update(userExtend);
     }
 
