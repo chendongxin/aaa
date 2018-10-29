@@ -71,18 +71,18 @@ shiro:
 # tq 参数及其接口
 tq:
   # 管理员账号
-  adminUin: 9773112
+  adminUin: 9828307
   # 管理员密码
-  password: dodi2035
+  password: hq88
   # 外呼接口
   call:
     # 获取token
-    getToken: http://passport.mobile.tq.cn:81/pulse
+    getToken: http://passport.hn.tq.cn:81/pulse
     # 点击外呼
-    clickCall: http://vip.mobile.tq.cn/vip/workMobile/clickCall
+    clickCall: http://vip.hn.tq.cn/vip/workMobile/clickCall
   # 服务接口地址
   webservice:
-    host: http://webservice.mobile.tq.cn
+    host: http://webservice.tq.cn
     # 获取token
     getAccessToken: ${tq.webservice.host}/webservice/getAccessToken
     # 获取通话记录
