@@ -301,7 +301,7 @@ public class TransferCustomerController extends AbstractMethodError {
             @ApiImplicitParam(name = "proId", paramType = "query", value = "赛道ID", dataType = "Long"),
             @ApiImplicitParam(name = "companyId", paramType = "query", value = "推广公司ID", dataType = "Long"),
             @ApiImplicitParam(name = "deptId", paramType = "query", value = "部门ID", dataType = "Long"),
-            @ApiImplicitParam(name = "firstUserId", paramType = "query", value = "首次跟进人ID", dataType = "Long"),
+            @ApiImplicitParam(name = "userId", paramType = "query", value = "归属人ID", dataType = "Long"),
             @ApiImplicitParam(name = "sourceId", paramType = "query", value = "来源平台ID", dataType = "Long"),
             @ApiImplicitParam(name = "getWay", paramType = "query", value = "获取方式", dataType = "Byte"),
             @ApiImplicitParam(name = "notAllot", paramType = "query", value = "是否不分配：true-不分配，false-自动分配", dataType = "boolean")

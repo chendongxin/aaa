@@ -176,10 +176,10 @@
 				concat('%',#{name},'%')
 			</if>
 			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-				and tci.create_time between #{beginCreateTime} and #{endCreateTime}
+				and tc.create_time between #{beginCreateTime} and #{endCreateTime}
 			</if>
-			<if test=" beginBizCreateTime != null and beginBizCreateTime != '' and endBizCreateTime != null and endBizCreateTime != ''">
-				and  tc.create_time between #{beginTransferCreateTime} and #{endTransferCreateTime}
+			<if test=" beginInvalidTime != null and beginInvalidTime != '' and endInvalidTime != null and endInvalidTime != ''">
+				and  tci.create_time between #{beginInvalidTime} and #{endInvalidTime}
 			</if>
 			<if test="status != null and !&quot;&quot;.equals(status)">and tci.status = #{status}</if>
 		</where>
