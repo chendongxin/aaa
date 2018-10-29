@@ -62,6 +62,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     private AllotApiService allotApiService;
     @Autowired
     private SysDeleteService sysDeleteService;
+    @Autowired
+    private SysUserProService sysUserProService;
     /*@Autowired
     private SysScheduleService sysScheduleService;
     @Autowired
@@ -150,6 +152,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             //user.setDeptList(sysUserDeptService.getDeptList(user.getUserId()));
             user.setUserDeptList(sysUserDeptService.getUserDeptInfoList(user.getUserId()));
             //user.setAvatar(Optional.ofNullable(user.getAvatar()).map(s -> OSSFactory.ali().generatePresignedUrl(s, 86400)).orElse(null));
+            user.setUserProList(sysUserProService.getUserProInfoList(user.getUserId()));
         });
         return list;
     }
@@ -179,6 +182,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             sysUserRoleService.save(user.getUserId(), user.getRoleIdList());
             //保存用户与部门关系
             sysUserDeptService.save(user.getUserId(), user.getUserDeptList());
+            //保存用户与赛道关系
+            sysUserProService.save(user.getUserId(), user.getUserProList());
         }
         return result;
     }
