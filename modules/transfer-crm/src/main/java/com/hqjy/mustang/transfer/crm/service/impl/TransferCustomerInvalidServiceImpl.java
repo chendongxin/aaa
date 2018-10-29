@@ -27,22 +27,37 @@ import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.*;
 
+/**
+ * @author gmm
+ */
 @Service
 @Slf4j
 public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<TransferCustomerInvalidDao, TransferCustomerInvalidEntity, Long> implements TransferCustomerInvalidService {
 
-    @Autowired
     private TransferCustomerService transferCustomerService;
-    @Autowired
     private TransferCustomerContactService transferCustomerContactService;
-    @Autowired
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
+
+    @Autowired
+    public void setTransferCustomerService(TransferCustomerService transferCustomerService) {
+        this.transferCustomerService = transferCustomerService;
+    }
+
+    @Autowired
+    public void setTransferCustomerContactService(TransferCustomerContactService transferCustomerContactService) {
+        this.transferCustomerContactService = transferCustomerContactService;
+    }
+
+    @Autowired
+    public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
+        this.sysUserDeptServiceFeign = sysUserDeptServiceFeign;
+    }
 
     /**
      * 设置客户无效
      */
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public R setCustomerInvalid(TransferCustomerDTO dto) {
         try {
             //添加无效客户记录
@@ -73,7 +88,7 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
     public List<TransferCustomerInvalidEntity> findPage(PageQuery query) {
         transferCustomerContactService.setCustomerIdByContact(query);
         Long customerId = MapUtils.getLong(query, "customerId");
-        if (customerId != null && MapUtils.getLong(query, "customerId").equals(-1L)) {
+        if (customerId != null && customerId.equals(-1L)) {
             return null;
         }
         if (isGeneralSeat()) {
@@ -86,7 +101,8 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         List<String> ids = new ArrayList<>();
         userAllDeptId.forEach(x -> {
-            ids.add(String.valueOf(x));
+            String deptIds = String.valueOf(x);
+            ids.add(deptIds);
         });
         query.put("userAllDeptId", StringUtils.listToString(ids));
         transferCustomerService.formatQueryTime(query);

@@ -22,10 +22,14 @@ import java.util.HashMap;
 @Api(tags = "客户管理-跟进记录", description = "TransferFollowController")
 @RestController
 @RequestMapping("/customer/follow")
-public class TransferFollowController extends AbstractMethodError {
+public class TransferFollowController {
+
+    private TransferFollowService transferFollowService;
 
     @Autowired
-    private TransferFollowService transferFollowService;
+    public void setTransferFollowService(TransferFollowService transferFollowService) {
+        this.transferFollowService = transferFollowService;
+    }
 
     @ApiOperation(value = "分页查询-跟进记录列表", notes = "请求参数说明：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +

@@ -20,7 +20,6 @@ import java.util.HashMap;
 
 /**
  * @author guomiaomiao
- * @description
  * @date create in 2018年9月7日17:51:07
  */
 
@@ -29,8 +28,12 @@ import java.util.HashMap;
 @RequestMapping("/gen/cost")
 public class TransferGenCostController {
 
-    @Autowired
     private TransferGenCostService transferGenCostService;
+
+    @Autowired
+    public void setTransferGenCostService(TransferGenCostService transferGenCostService) {
+        this.transferGenCostService = transferGenCostService;
+    }
 
     /**
      * 分页查询推广费用
@@ -80,7 +83,7 @@ public class TransferGenCostController {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/listPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferGenCostEntity> genCostPageInfo = new PageInfo<>(transferGenCostService.findPage(PageQuery.build(pageParam, queryParam)));

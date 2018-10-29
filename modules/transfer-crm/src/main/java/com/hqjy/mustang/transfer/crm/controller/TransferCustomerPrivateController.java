@@ -22,10 +22,14 @@ import java.util.List;
 @Api(tags = "客户管理-私海", description = "TransferCustomerPrivateController")
 @RestController
 @RequestMapping("/customer/private")
-public class TransferCustomerPrivateController extends AbstractMethodError {
+public class TransferCustomerPrivateController {
+
+    private TransferCustomerService transferCustomerService;
 
     @Autowired
-    private TransferCustomerService transferCustomerService;
+    public void setTransferCustomerService(TransferCustomerService transferCustomerService) {
+        this.transferCustomerService = transferCustomerService;
+    }
 
     @ApiOperation(value = "分页查询-私海客户列表", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
@@ -64,8 +68,7 @@ public class TransferCustomerPrivateController extends AbstractMethodError {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/listPage",method = {RequestMethod.POST,RequestMethod.GET})
-//    @RequiresPermissions("biz:private:list")
+    @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferCustomerEntity> deptPageInfo = new PageInfo<>(transferCustomerService.findPrivatePage(PageQuery.build(pageParam, queryParam)));
@@ -78,7 +81,6 @@ public class TransferCustomerPrivateController extends AbstractMethodError {
             "  32,33\n" +
             "]")
     @PostMapping("/returnToCommon")
-//    @RequiresPermissions("biz:private:returnToCommon")
     @SysLog("私海客户退回公海")
     public R returnToCommon(@RequestBody List<Long> customerId) {
         return transferCustomerService.returnToCommon(customerId);
