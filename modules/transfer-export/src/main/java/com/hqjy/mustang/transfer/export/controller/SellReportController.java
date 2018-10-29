@@ -58,9 +58,9 @@ public class SellReportController {
             "  \"result\": {\n" +
             "    \"list\": [\n" +
             "      {\n" +
+            "        \"userName\": \"丫丫\",\n" +
             "        \"allotNum\": 0,\n" +
             "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 20,\n" +
             "        \"deptName\": \"广州天河校区\",\n" +
             "        \"validNum\": 0,\n" +
             "        \"validRate\": \"0.00%\",\n" +
@@ -71,9 +71,9 @@ public class SellReportController {
             "        \"visitValidRate\": \"0.00%\"\n" +
             "      },\n" +
             "      {\n" +
+            "        \"name\": \"丫丫\",\n" +
             "        \"allotNum\": 0,\n" +
             "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 22,\n" +
             "        \"deptName\": \"广州白云校区\",\n" +
             "        \"validNum\": 0,\n" +
             "        \"validRate\": \"0.00%\",\n" +

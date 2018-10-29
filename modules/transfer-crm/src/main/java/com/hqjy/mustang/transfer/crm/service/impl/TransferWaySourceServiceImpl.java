@@ -72,20 +72,4 @@ public class TransferWaySourceServiceImpl extends BaseServiceImpl<TransferWaySou
         return transferWaySourceDao.listPageSource(pageQuery);
     }
 
-//    /**
-//     * 修改推广平台下的推广方式
-//     */
-//    @Override
-//    public int updateWaySource(TransferGenWaySourceDTO transferGenWaySourceDTO) {
-//        TransferGenWayEntity transferGenWayEntity = transferGenWayDao.findOne(transferGenWaySourceDTO.getWayId());
-//        transferGenWayEntity.setGenWay(transferGenWaySourceDTO.getGenWay());
-//        transferGenWayDao.update(transferGenWayEntity);
-//
-//        TransferWaySourceEntity transferWaySourceEntity = transferWaySourceDao.findOne(transferGenWaySourceDTO.getId());
-//        transferWaySourceEntity.setSourceId(transferGenWaySourceDTO.getSourceId());
-//        transferWaySourceEntity.setStatus(transferGenWaySourceDTO.getStatus());
-//        transferWaySourceEntity.setSeq(transferGenWaySourceDTO.getSeq());
-//        return transferWaySourceDao.update(transferWaySourceEntity);
-//    }
-
 }
