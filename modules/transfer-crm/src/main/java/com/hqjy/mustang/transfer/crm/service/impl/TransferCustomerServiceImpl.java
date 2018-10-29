@@ -45,45 +45,101 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.*;
 @Service
 @Slf4j
 public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustomerDao, TransferCustomerEntity, Long> implements TransferCustomerService {
+    private static final String BEGIN_CREATE_TIME = "beginCreateTime";
+    private static final String END_CREATE_TIME = "endCreateTime";
+    private static final String BEGIN_ALLOT_TIME = "beginAllotTime";
+    private static final String END_ALLOT_TIME = "endAllotTime";
+    private static final String BEGIN_LAST_FOLLOW_TIME = "beginLastFollowTime";
+    private static final String END_LAST_FOLLOW_TIME = "endLastFollowTime";
+
+    /**
+     * 锁有效时间
+     */
+    private static final Long EXPIRATION = 60000L;
+
+    private TransferCustomerContactService transferCustomerContactService;
+    private TransferCustomerRepeatService transferCustomerRepeatService;
+    private TransferCustomerDetailService transferCustomerDetailService;
+    private TransferProcessService transferProcessService;
+    private SysMessageServiceFeign sysMessageServiceFeign;
+    private SysConfigServiceFeign sysConfigServiceFeign;
+    private SysDeptServiceFeign sysDeptServiceFeign;
+    private SysUserDeptServiceFeign sysUserDeptServiceFeign;
+    private ThreadPoolExecutor receiveExecutor;
+    private RedisLockUtils redisLockUtils;
+    private RabbitTemplate rabbitTemplate;
 
     @Autowired
-    private TransferCustomerContactService transferCustomerContactService;
+    public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
+        this.sysUserDeptServiceFeign = sysUserDeptServiceFeign;
+    }
+
     @Autowired
-    private TransferCustomerRepeatService transferCustomerRepeatService;
+    public void setTransferCustomerContactService(TransferCustomerContactService transferCustomerContactService) {
+        this.transferCustomerContactService = transferCustomerContactService;
+    }
+
     @Autowired
-    private TransferCustomerDetailService transferCustomerDetailService;
+    public void setSysMessageServiceFeign(SysMessageServiceFeign sysMessageServiceFeign) {
+        this.sysMessageServiceFeign = sysMessageServiceFeign;
+    }
+
     @Autowired
-    private TransferProcessService transferProcessService;
+    public void setTransferCustomerRepeatService(TransferCustomerRepeatService transferCustomerRepeatService) {
+        this.transferCustomerRepeatService = transferCustomerRepeatService;
+    }
+
     @Autowired
-    private SysMessageServiceFeign sysMessageServiceFeign;
+    public void setTransferProcessService(TransferProcessService transferProcessService) {
+        this.transferProcessService = transferProcessService;
+    }
+
     @Autowired
-    private SysConfigServiceFeign sysConfigServiceFeign;
+    public void setTransferCustomerDetailService(TransferCustomerDetailService transferCustomerDetailService) {
+        this.transferCustomerDetailService = transferCustomerDetailService;
+    }
+
     @Autowired
-    private SysDeptServiceFeign sysDeptServiceFeign;
+    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    }
+
     @Autowired
-    private SysUserDeptServiceFeign sysUserDeptServiceFeign;
+    public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
+        this.rabbitTemplate = rabbitTemplate;
+    }
+
     @Autowired
-    private ThreadPoolExecutor receiveExecutor;
+    public void setReceiveExecutor(ThreadPoolExecutor receiveExecutor) {
+        this.receiveExecutor = receiveExecutor;
+    }
+
     @Autowired
-    private RedisLockUtils redisLockUtils;
+    public void setRedisLockUtils(RedisLockUtils redisLockUtils) {
+        this.redisLockUtils = redisLockUtils;
+    }
+
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    public void setSysConfigServiceFeign(SysConfigServiceFeign sysConfigServiceFeign) {
+        this.sysConfigServiceFeign = sysConfigServiceFeign;
+    }
 
     @Override
     public List<TransferCustomerEntity> findPage(PageQuery pageQuery) {
         transferCustomerContactService.setCustomerIdByContact(pageQuery);
         Long customerId = MapUtils.getLong(pageQuery, "customerId");
-        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
+        if (customerId != null && customerId.equals(-1L)) {
             return null;
         }
         Long deptId = MapUtils.getLong(pageQuery, "deptId");
         //高级查询部门刷选
         if (null != deptId) {
             //部门下所有子部门
-            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
             List<String> ids = new ArrayList<>();
+            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
             allDeptUnderDeptId.forEach(x -> {
-                ids.add(String.valueOf(x));
+                String deptIds = String.valueOf(x);
+                ids.add(deptIds);
             });
             pageQuery.put("deptIds", StringUtils.listToString(ids));
         }
@@ -101,7 +157,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
             List<String> deptIds = new ArrayList<>();
             userAllDeptId.forEach(x -> {
-                deptIds.add(String.valueOf(x));
+                String ids = String.valueOf(x);
+                deptIds.add(ids);
             });
             pageQuery.put("deptIds", StringUtils.listToString(deptIds));
         }
@@ -149,7 +206,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             baseDao.updateCom(customerDto.getCompanyId());
             baseDao.updateSou(customerDto.getSourceId());
             baseDao.updateKey(customerDto.getApplyKey());
-            Map<String, Object> customerHashMap = new HashMap<>();
+            Map<String, Object> customerHashMap = new HashMap<>(16);
             customerHashMap.put("proId", customerDto.getProId());
             customerHashMap.put("phone", customerDto.getPhone());
             List<TransferCustomerEntity> transferCustomerList = baseDao.findList(customerHashMap);
@@ -246,36 +303,32 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     @Override
     public void formatQueryTime(PageQuery pageQuery) {
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginCreateTime"))) {
-            pageQuery.put("beginCreateTime", DateUtils.getBeginTime(MapUtils.getString(pageQuery, "beginCreateTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, BEGIN_CREATE_TIME))) {
+            pageQuery.put(BEGIN_CREATE_TIME, DateUtils.getBeginTime(MapUtils.getString(pageQuery, BEGIN_CREATE_TIME)));
         }
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endCreateTime"))) {
-            pageQuery.put("endCreateTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endCreateTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_CREATE_TIME))) {
+            pageQuery.put(END_CREATE_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_CREATE_TIME)));
         }
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginAllotTime"))) {
-            pageQuery.put("beginAllotTime", DateUtils.getBeginTime(MapUtils.getString(pageQuery, "beginAllotTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, BEGIN_ALLOT_TIME))) {
+            pageQuery.put(BEGIN_ALLOT_TIME, DateUtils.getBeginTime(MapUtils.getString(pageQuery, BEGIN_ALLOT_TIME)));
         }
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endAllotTime"))) {
-            pageQuery.put("endAllotTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endAllotTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_ALLOT_TIME))) {
+            pageQuery.put(END_ALLOT_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_ALLOT_TIME)));
         }
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginLastFollowTime"))) {
-            pageQuery.put("beginLastFollowTime", DateUtils.getBeginTime(MapUtils.getString(pageQuery, "beginLastFollowTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, BEGIN_LAST_FOLLOW_TIME))) {
+            pageQuery.put(BEGIN_LAST_FOLLOW_TIME, DateUtils.getBeginTime(MapUtils.getString(pageQuery, BEGIN_LAST_FOLLOW_TIME)));
         }
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endLastFollowTime"))) {
-            pageQuery.put("endLastFollowTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endLastFollowTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_LAST_FOLLOW_TIME))) {
+            pageQuery.put(END_LAST_FOLLOW_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_LAST_FOLLOW_TIME)));
         }
     }
 
-    /**
-     * 公海客户数据
-     * @param pageQuery 查询参数对象
-     * @return
-     */
+
     @Override
     public List<TransferCustomerEntity> findCommonPage(PageQuery pageQuery) {
         transferCustomerContactService.setCustomerIdByContact(pageQuery);
         Long customerId = MapUtils.getLong(pageQuery, "customerId");
-        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
+        if (customerId != null && customerId.equals(-1L)) {
             return null;
         }
         Long deptId = MapUtils.getLong(pageQuery, "deptId");
@@ -285,7 +338,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             //部门下所有子部门
             List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
             allDeptUnderDeptId.forEach(x -> {
-                ids.add(String.valueOf(x));
+                String s = String.valueOf(x);
+                ids.add(s);
             });
         }
         this.formatQueryTime(pageQuery);
@@ -296,12 +350,13 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
             return baseDao.findCommonPage(pageQuery);
         }
-        if (null == deptId){
+        if (null == deptId) {
             //如果没有刷选部门过滤条件
             //获取当前用户的部门以及子部门
             List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
             userAllDeptId.forEach(x -> {
-                ids.add(String.valueOf(x));
+                String s = String.valueOf(x);
+                ids.add(s);
             });
         }
         pageQuery.put("deptIds", StringUtils.listToString(ids));
@@ -311,7 +366,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     @Override
     public R receiveTransferCustomer(List<Long> customerId) {
-        Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY).substring(1,4));
+        Integer opportunity = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_CUSTOMER_OPPORTUNITY).substring(1, 4));
         Future<R> future = receiveExecutor.submit(() -> {
             List<Long> success = new ArrayList<>();
             this.doReceive(customerId, opportunity, success, getUserId(), getUserName());
@@ -330,7 +385,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             this.checkOpportunity(opportunity, userId);
             String version = UUID.randomUUID().toString();
             try {
-                if (redisLockUtils.setLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version, 60000L)) {
+                if (redisLockUtils.setLock(RedisKeys.Business.receiveLock(String.valueOf(c)), version, EXPIRATION)) {
                     log.info("当前用户：姓名：" + userName + ",用户ID" + userId + ",尝试领取商机【" + c + "】," +
                             "拿到锁KEY=>" + RedisKeys.Business.receiveLock(String.valueOf(c)));
                     Thread.sleep(300L);
@@ -399,7 +454,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     public List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery) {
         transferCustomerContactService.setCustomerIdByContact(pageQuery);
         Long customerId = MapUtils.getLong(pageQuery, "customerId");
-        if (customerId != null && MapUtils.getLong(pageQuery, "customerId").equals(-1L)) {
+        if (customerId != null && customerId.equals(-1L)) {
             return null;
         }
         Long deptId = MapUtils.getLong(pageQuery, "deptId");
@@ -409,7 +464,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             //部门下所有子部门
             List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
             allDeptUnderDeptId.forEach(x -> {
-                ids.add(String.valueOf(x));
+                String s = String.valueOf(x);
+                ids.add(s);
             });
             pageQuery.put("deptIds", StringUtils.listToString(ids));
         }
@@ -425,7 +481,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             //获取当前用户的部门以及子部门
             List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
             userAllDeptId.forEach(x -> {
-                ids.add(String.valueOf(x));
+                String s = String.valueOf(x);
+                ids.add(s);
             });
             pageQuery.put("deptIds", StringUtils.listToString(ids));
         }
@@ -512,8 +569,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     /**
      * 导入客户
      *
-     * @param file 导入的文件
-     * @param upDTO  请求输入参数
+     * @param file  导入的文件
+     * @param upDTO 请求输入参数
      * @return 返回导入结果
      */
     @Override
@@ -525,7 +582,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 if (customerSaveDTOList.isEmpty()) {
                     return R.error("导入失败:导入文件不存在客户数据");
                 }
-                Integer limit = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_IMPORT_LIMIT).substring(1,4));
+                Integer limit = Integer.valueOf(sysConfigServiceFeign.getConfig(ConfigConstant.BIZ_IMPORT_LIMIT).substring(1, 4));
                 if (customerSaveDTOList.size() > limit) {
                     return R.error("导入失败:导入客户数超过限制：【" + limit + "】个");
                 }
@@ -550,7 +607,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             .setNote(c.getNote()).setCreateUserDeptId(sysDeptServiceFeign.getUserDept(getUserId()).getDeptId());
 
 //                    发送客户数据到商机分配消息队列
-                    rabbitTemplate.convertAndSend(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE,JSON.toJSONString(new TransferCustomerQueueDTO()
+                    rabbitTemplate.convertAndSend(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE, JSON.toJSONString(new TransferCustomerQueueDTO()
                             .setMsgType(3)
                             .setMsgBody(JSON.toJSON(msgBody))));
                 });

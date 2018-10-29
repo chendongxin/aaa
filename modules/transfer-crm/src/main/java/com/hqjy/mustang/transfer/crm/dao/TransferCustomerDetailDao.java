@@ -5,6 +5,7 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerExportEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * @author : xyq
  * @date : 2018/09/14 11:19
  */
+@Component
 @Mapper
 public interface TransferCustomerDetailDao extends BaseDao<TransferCustomerDetailEntity, Long> {
 

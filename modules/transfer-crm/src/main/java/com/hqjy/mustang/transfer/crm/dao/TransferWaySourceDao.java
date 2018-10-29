@@ -6,6 +6,7 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferWaySourceEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
@@ -15,6 +16,7 @@ import java.util.List;
  * @author : xyq
  * @date : 2018/09/17 12:04
  */
+@Component
 @Mapper
 public interface TransferWaySourceDao extends BaseDao<TransferWaySourceEntity, Long> {
 

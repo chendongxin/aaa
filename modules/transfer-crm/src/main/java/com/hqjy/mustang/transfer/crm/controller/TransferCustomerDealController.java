@@ -64,7 +64,6 @@ public class TransferCustomerDealController {
             "}"
     )
     @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
-    //@RequiresPermissions("biz:deal:list")
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferCustomerDealEntity> deptPageInfo = new PageInfo<>(transferCustomerDealService.findPage(build(pageParam, queryParam)));

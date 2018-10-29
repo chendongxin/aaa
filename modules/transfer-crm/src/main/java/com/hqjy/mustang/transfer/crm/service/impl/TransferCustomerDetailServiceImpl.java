@@ -11,13 +11,18 @@ import org.springframework.stereotype.Service;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
+/**
+ * @author gmm
+ */
 @Service
 public class TransferCustomerDetailServiceImpl extends BaseServiceImpl<TransferCustomerDetailDao, TransferCustomerDetailEntity, Long> implements TransferCustomerDetailService {
 
-    @Autowired
-    private TransferCustomerDetailDao transferCustomerDetailDao;
-    @Autowired
     private TransferCustomerDao transferCustomerDao;
+
+    @Autowired
+    public void setTransferCustomerDao(TransferCustomerDao transferCustomerDao) {
+        this.transferCustomerDao = transferCustomerDao;
+    }
 
     /**
      * 更新客户资料
@@ -29,11 +34,7 @@ public class TransferCustomerDetailServiceImpl extends BaseServiceImpl<TransferC
         return baseDao.update(customerDetail);
     }
 
-    /**
-     * 根据客户ID查找一条记录
-     * @param customerId
-     * @return TransferCustomerDetailEntity
-     */
+
     @Override
     public TransferCustomerDetailEntity getCustomerDetailByCustomerId(Long customerId) {
         return baseDao.getCustomerDetailByCustomerId(customerId);

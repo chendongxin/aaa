@@ -1,12 +1,10 @@
 package com.hqjy.mustang.transfer.crm.service;
 
 
-import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.transfer.crm.model.dto.*;
 
 
 import java.util.List;
-import java.util.Map;
 
 
 /**

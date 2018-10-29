@@ -19,7 +19,6 @@ import java.util.HashMap;
 
 /**
  * @author guomiaomiao
- * @description
  * @date create in 2018年9月7日15:22:07
  */
 
@@ -28,8 +27,12 @@ import java.util.HashMap;
 @RequestMapping("/keyword")
 public class TransferKeywordController {
 
-    @Autowired
     private TransferKeywordService transferKeywordService;
+
+    @Autowired
+    public void setTransferKeywordService(TransferKeywordService transferKeywordService) {
+        this.transferKeywordService = transferKeywordService;
+    }
 
     /**
      * 关键词管理树数据
@@ -78,7 +81,7 @@ public class TransferKeywordController {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/listPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferKeywordEntity> keywordPageInfo = new PageInfo<>(transferKeywordService.findPage(PageQuery.build(pageParam, queryParam)));

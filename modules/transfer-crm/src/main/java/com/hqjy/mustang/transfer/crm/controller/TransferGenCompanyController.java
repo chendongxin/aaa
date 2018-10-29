@@ -6,7 +6,6 @@ import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
-import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCompanySourceDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCompanyEntity;
@@ -24,21 +23,31 @@ import java.util.HashMap;
 
 /**
  * @author guomiaomiao
- * @description
  * @date create in 2018年9月7日17:51:07
  */
-
 @Api(tags = "推广管理-推广公司", description = "TransferGenCompanyController")
 @RestController
 @RequestMapping("/gen/company")
 public class TransferGenCompanyController {
 
-    @Autowired
     private TransferGenCompanyService transferGenCompanyService;
-    @Autowired
     private TransferCompanySourceService transferCompanySourceService;
-    @Autowired
     private TransferSourceService transferSourceService;
+
+    @Autowired
+    public void setTransferCompanySourceService(TransferCompanySourceService transferCompanySourceService) {
+        this.transferCompanySourceService = transferCompanySourceService;
+    }
+
+    @Autowired
+    public void setTransferGenCompanyService(TransferGenCompanyService transferGenCompanyService) {
+        this.transferGenCompanyService = transferGenCompanyService;
+    }
+
+    @Autowired
+    public void setTransferSourceService(TransferSourceService transferSourceService) {
+        this.transferSourceService = transferSourceService;
+    }
 
     /**
      * 获取所有推广公司
@@ -96,7 +105,7 @@ public class TransferGenCompanyController {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/listPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferGenCompanyEntity> genCompanyPageInfo = new PageInfo<>(transferGenCompanyService.findPage(PageQuery.build(pageParam, queryParam)));
@@ -190,8 +199,6 @@ public class TransferGenCompanyController {
     }
 
 
-    /**********************************************/
-
     /**
      * 分页查询推广公司下的推广平台
      */
@@ -231,7 +238,7 @@ public class TransferGenCompanyController {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/source/listPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/source/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R sourceList(@RequestParam HashMap<String, Object> pageParam,
                         @RequestBody(required = false) HashMap<String, Object> queryParam) {
         //查询列表数据
