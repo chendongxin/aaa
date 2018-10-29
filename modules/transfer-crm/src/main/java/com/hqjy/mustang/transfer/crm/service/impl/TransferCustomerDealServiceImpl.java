@@ -78,7 +78,8 @@ public class TransferCustomerDealServiceImpl extends BaseServiceImpl<TransferCus
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         List<String> ids = new ArrayList<>();
         userAllDeptId.forEach(x -> {
-            ids.add(String.valueOf(x));
+            String deptIds = String.valueOf(x);
+            ids.add(deptIds);
         });
         pageQuery.put("userAllDeptId", StringUtils.listToString(ids));
         return super.findPage(pageQuery);

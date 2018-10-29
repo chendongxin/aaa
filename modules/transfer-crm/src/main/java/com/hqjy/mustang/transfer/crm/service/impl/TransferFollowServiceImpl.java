@@ -19,32 +19,40 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
+/**
+ * @author gmm
+ * @apiNote 跟进记录业务层
+ */
 @Service
-public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDao, TransferFollowEntity, Long> implements TransferFollowService {
+public class TransferFollowServiceImpl extends BaseServiceImpl<TransferFollowDao, TransferFollowEntity, Long> implements TransferFollowService {
+
+    private TransferProcessService transferProcessService;
+    private TransferCustomerService transferCustomerService;
+    private TransferCustomerDao transferCustomerDao;
+    private SysDeptServiceFeign sysDeptServiceFeign;
 
     @Autowired
-    private TransferProcessService transferProcessService;
+    public void setTransferProcessService(TransferProcessService transferProcessService) {
+        this.transferProcessService = transferProcessService;
+    }
+
     @Autowired
-    private TransferCustomerService transferCustomerService;
+    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    }
+
     @Autowired
-    private TransferCustomerDao transferCustomerDao;
+    public void setTransferCustomerService(TransferCustomerService transferCustomerService) {
+        this.transferCustomerService = transferCustomerService;
+    }
+
     @Autowired
-    private SysDeptServiceFeign sysDeptServiceFeign;
-    /**
-     * (批量)跟进客户ID获取最新的跟进记录
-     *
-     * @param customerIds 客户ID
-     * @return 结果
-     * @author xyq 2018年8月20日09:49:38
-     */
-    @Override
-    public List<TransferFollowEntity> getLatestByCustomerIdBatch(String customerIds) {
-        return baseDao.getLatestByCustomerIdBatch(customerIds);
+    public void setTransferCustomerDao(TransferCustomerDao transferCustomerDao) {
+        this.transferCustomerDao = transferCustomerDao;
     }
 
     @Override
@@ -59,15 +67,15 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
         entity.setCreateUserId(getUserId());
         entity.setCreateUserName(getUserName());
         int i = baseDao.save(entity);
-        if( i < 0) {
+        if (i < 0) {
             throw new RRException(StatusCode.BIZ_FOLLOW_SAVE_FAULT);
         }
         //更新流程的跟进部门信息
-        process.setFollowCount(process.getFollowCount()+1);
+        process.setFollowCount(process.getFollowCount() + 1);
         process.setLastFollowId(entity.getFollowId());
         process.setExpireTime(DateUtils.addDays(time, 15));
         int update = transferProcessService.update(process);
-        if( update < 0) {
+        if (update < 0) {
             throw new RRException(StatusCode.BIZ_FOLLOW_UPDATE_PROCESS_FAULT);
         }
         TransferCustomerEntity transferCustomerEntity = transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId());

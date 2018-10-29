@@ -20,10 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "客户管理-联系方式", description = "TransferCustomerContactController")
 @RestController
 @RequestMapping("/customer/contact")
-public class TransferCustomerContactController extends AbstractMethodError {
+public class TransferCustomerContactController {
+
+    private TransferCustomerContactService transferCustomerContactService;
 
     @Autowired
-    private TransferCustomerContactService transferCustomerContactService;
+    public void setTransferCustomerContactService(TransferCustomerContactService transferCustomerContactService) {
+        this.transferCustomerContactService = transferCustomerContactService;
+    }
 
     @ApiOperation(value = "新增客户联系方式", notes = "请求参数：\n" +
             "[customerId客户主键，detail联系方式详情,type联系方式类型]\n" +
