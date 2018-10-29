@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 /**
  * 部门管理
@@ -192,6 +193,27 @@ public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysU
         List<Long> allDeptList = new ArrayList<>();
         RecursionUtil.list(allDeptList, SysDeptEntity.class, "getDeptId", isRoot, new CopyOnWriteArrayList<>(list), parentIdList);
         return allDeptList;
+    }
+
+    /**
+     * 针对招转预约功能部门选择提供的接口：当前用户所负责的部门校区（包含子部门）
+     *
+     * @return 结果
+     * @author xyq
+     * @date 2018年10月29日10:14:27
+     */
+    @Override
+    public List<SysDeptEntity> getUserDeptSchool() {
+        //超级管理员，拥有最高权限
+        if (SystemId.SUPER_ADMIN.equals(ShiroUtils.getUserId())) {
+            List<SysDeptEntity> deptList = sysDeptService.findValidDeptList();
+            return deptList.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
+        }
+        List<Long> parentIdList = this.getUserDeptId(ShiroUtils.getUserId());
+        List<SysDeptEntity> list = sysDeptService.findValidDeptList();
+        List<Long> allDeptId = recursionDept(true, new CopyOnWriteArrayList<>(list), parentIdList);
+        List<SysDeptEntity> deptEntity = sysDeptService.getDeptEntityByDeptIds(sysDeptService.deptIdListToString(allDeptId));
+        return deptEntity.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
     }
 
     /**
