@@ -41,25 +41,19 @@ public class ShiroUtils {
         return (UserDetails) SecurityUtils.getSubject().getPrincipal();
     }
 
-    public  static Boolean isGeneralSeat() {
-        return SecurityUtils.getSubject().hasRole(Constant.Role.SALE.getCode());
+    /**
+     * 判断是否电销专员
+     */
+    public static Boolean isGeneralSeat() {
+        return SecurityUtils.getSubject().hasRole(Constant.Role.SALE_COMMISSIONER.getCode());
     }
-
-    public static Boolean isGeneralNetSales() {
-        return SecurityUtils.getSubject().hasRole(Constant.Role.NET_SALES_ORDINARY.getCode());
-    }
-
+    /**
+     * 判断是否超级管理员
+     */
     public static Boolean isSuperAdmin() {
         return SystemId.SUPER_ADMIN.equals(getUserId());
     }
 
-    public static Boolean isInspection() {
-        return SecurityUtils.getSubject().hasRole(Constant.Role.INSPECTION.getCode());
-    }
-
-    public static Boolean isService() {
-        return SecurityUtils.getSubject().hasRole(Constant.Role.SERVICE.getCode());
-    }
     /**
      * 获得用户名
      */

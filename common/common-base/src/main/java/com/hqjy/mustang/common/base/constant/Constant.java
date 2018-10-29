@@ -699,23 +699,14 @@ public class Constant {
          */
         SERVICE_COMMISSIONER("SERVICE_COMMISSIONER"),
         /**
-         * 电销销售员
+         * 电销专员
          */
-        SALE("SALE"),
+        SALE_COMMISSIONER("SALE_COMMISSIONER"),
 
         /**
-         * 普通客服
+         * 质检专员
          */
-        SERVICE("SERVICE"),
-        /**
-         * 普通网销销售
-         */
-        NET_SALES_ORDINARY("NET_SALES_ORDINARY"),
-
-        /**
-         * 质检员
-         */
-        INSPECTION("INSPECTION");
+        INSPECT_COMMISSIONER("INSPECT_COMMISSIONER");
 
         private String code;
 
