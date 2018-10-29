@@ -79,6 +79,7 @@ public class TqCallServiceImpl implements TqCallService {
         String userName = ShiroUtils.getUserName();
         // 查询用户绑定的tq帐号信息
         SysUserExtendInfo userExtendInfo = sysUserExtendApiService.findByUserId(userId);
+        System.out.println("TQ账号:"+userExtendInfo.getTqId()+":TQ密码: "+userExtendInfo.getTqPw());
         // 请求token
         String token = tqApiService.getCallToken(userExtendInfo);
         String params = Tools.base64Encode(JsonUtil.toJson(new TqCallClienIdDTO().setCustomerId(customerId).setUserId(userId).setUserName(userName)));
