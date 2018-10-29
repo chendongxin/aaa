@@ -31,7 +31,7 @@ public class TransferCustomerInvalidController {
     @ApiOperation(value = "分页查询-无效客户列表", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "高级查询参数（RequestBody数据格式接收）：[createUserName:创建人姓名],[姓名:name],[手机:phone]\n" +
-            "[开始创建时间：beginTransferCreateTime],[结束创建时间：endTransferCreateTime],[开始无效时间：beginCreateTime],[结束无效时间：endCreateTime]\n" +
+            "[开始创建时间：beginCreateTime],[结束创建时间：endCreateTime],[开始无效时间：beginInvalidTime],[结束无效时间：endInvalidTime]\n" +
             "返回参数：【当前页:currPage】,【当前页的数量:size】,【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】\n" +
             "【姓名:name】,【手机:phone】,【无效创建时间:createTime】,【失败状态(1-(失败)有效，2-（失败）无效):status】,【type(见数据字典：失败(有效)类型（VALID_TYPE）和失败(无效)类型（INVALID）):失败原因】\n" +
             "【创建人id:createUserId】,【创建人名称:createUserName】,【客户id:customerId】,【失败操作说明:memo】,【创建时间:transferCreateTime】\n" +
