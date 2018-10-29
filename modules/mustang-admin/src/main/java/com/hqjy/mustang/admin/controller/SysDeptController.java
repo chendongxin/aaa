@@ -1,5 +1,6 @@
 package com.hqjy.mustang.admin.controller;
 
+import com.hqjy.mustang.admin.service.SysUserDeptService;
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.base.AbstractController;
 import com.hqjy.mustang.common.base.constant.StatusCode;
@@ -32,6 +33,12 @@ public class SysDeptController extends AbstractController {
 
 
     private SysDeptService sysDeptService;
+    private SysUserDeptService sysUserDeptService;
+
+    @Autowired
+    public void setSysUserDeptService(SysUserDeptService sysUserDeptService) {
+        this.sysUserDeptService = sysUserDeptService;
+    }
 
     @Autowired
     public void setSysDeptService(SysDeptService sysDeptService) {
@@ -67,6 +74,18 @@ public class SysDeptController extends AbstractController {
         return R.ok(sysDeptService.getSaleDeptTree("电销中心"));
     }
 
+    /**
+     * 针对招转预约功能部门选择提供的接口：当前用户所负责的部门校区（包含子部门）
+     *
+     * @return 结果
+     * @author xyq
+     * @date 2018年10月29日10:14:27
+     */
+    @ApiOperation(value = "私海->预约操作->部门下拉框数据接口", notes = "针对招转预约功能部门选择提供的接口：当前用户所负责的部门校区（包含子部门）")
+    @GetMapping("/getUserDeptSchool")
+    public R getUserDeptSchool() {
+        return R.result(sysUserDeptService.getUserDeptSchool());
+    }
 
     /**
      * 部门选择树数据
