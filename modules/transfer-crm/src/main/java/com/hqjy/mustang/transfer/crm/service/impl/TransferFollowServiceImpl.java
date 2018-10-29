@@ -55,6 +55,11 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
         if (null == process) {
             throw new RRException(StatusCode.BIZ_FOLLOW_NOT_ALLOW_SAVE);
         }
+        TransferCustomerEntity transferCustomerEntity = transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId());
+        int status = transferCustomerEntity.getStatus();
+        if (status != 0 && status != 3) {
+            throw new RRException(StatusCode.BIZ_FOLLOW_NOT_POTENTIAL_RESERVATION);
+        }
         entity.setProcessId(process.getProcessId());
         entity.setCreateUserId(getUserId());
         entity.setCreateUserName(getUserName());
@@ -70,7 +75,6 @@ public class TransferFollowServiceImpl  extends BaseServiceImpl<TransferFollowDa
         if( update < 0) {
             throw new RRException(StatusCode.BIZ_FOLLOW_UPDATE_PROCESS_FAULT);
         }
-        TransferCustomerEntity transferCustomerEntity = transferCustomerDao.getCustomerByCustomerId(entity.getCustomerId());
         SysDeptInfo sysDeptInfo = sysDeptServiceFeign.getUserDept(getUserId());
         if (process.getFollowCount() == 1) {
             transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(sysDeptInfo.getDeptId());
