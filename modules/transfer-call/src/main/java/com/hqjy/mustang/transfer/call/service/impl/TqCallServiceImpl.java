@@ -13,6 +13,7 @@ import com.hqjy.mustang.transfer.call.model.dto.TqCallRecordDTO;
 import com.hqjy.mustang.transfer.call.model.entity.TransferCallRecordEntity;
 import com.hqjy.mustang.transfer.call.service.TransferCallRecordService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

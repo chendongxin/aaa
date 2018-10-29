@@ -131,6 +131,7 @@ public class TqApiServiceImpl implements TqApiService {
     @Override
     public String getAccessToken() {
         String ctime = String.valueOf(System.currentTimeMillis()).substring(0, 10);
+        //md5(admin_uin +"$"+ appkey+"$"+ctime)  32位大写
         String sign = Tools.md5Hex(adminUin + "$sign$" + ctime).toUpperCase();
         MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<>();
         postParameters.add("ctime", ctime);
