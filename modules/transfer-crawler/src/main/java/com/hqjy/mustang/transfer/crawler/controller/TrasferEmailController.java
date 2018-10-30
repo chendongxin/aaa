@@ -160,10 +160,10 @@ public class TrasferEmailController {
     /**
      * 删除邮箱配置
      */
-    @ApiOperation(value = "删除邮箱配置", notes = "只支持单个")
-    @DeleteMapping("/{id}")
-    public R delete(@PathVariable("id") Long id) {
-        int count = trasferEmailService.delete(id);
+    @ApiOperation(value = "删除邮箱配置", notes = "支持批量删除\\n 示例： /1,2,3,4,5")
+    @DeleteMapping("/{ids}")
+    public R delete(@PathVariable("ids") Long[] ids) {
+        int count = trasferEmailService.deleteBatch(ids);
         if (count > 0) {
             return R.ok();
         }

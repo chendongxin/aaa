@@ -29,8 +29,8 @@ public class SmsOpenApiController {
      * 短信发送回调
      */
     @PostMapping("/status")
-    public R status(@RequestBody(required = false) String body) {
-        transferSmsService.smsReport(body);
+    public R status(@RequestBody(required = false) Long[] ids) {
+        transferSmsService.smsReport(ids);
         return R.ok();
     }
 
