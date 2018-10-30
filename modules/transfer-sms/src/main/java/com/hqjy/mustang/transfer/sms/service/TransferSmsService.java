@@ -29,7 +29,7 @@ public interface TransferSmsService extends BaseService<TransferSmsEntity, Long>
     /**
      * 短信发送回调
      */
-    void smsReport();
+    void smsReport(String params);
 
     /**
      * sms短信回复回调

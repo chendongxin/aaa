@@ -199,14 +199,4 @@ public class TarnsferSmsController {
         }
         return R.error(StatusCode.DATABASE_UPDATE_FAILURE);
     }
-
-   /* *//**
-     * 短信发送回调
-     *//*
-    @ApiOperation(value = "短信发送回调", notes = "短信发送回调")
-    @PostMapping("/smsReportStatus/{ids}")
-    public R smsReportStatus(@PathVariable("ids")  Long[] ids){
-        transferSmsService.smsReport(ids);
-        return R.ok();
-    }*/
 }

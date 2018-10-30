@@ -17,6 +17,4 @@ public interface TransferSmsDao extends BaseDao<TransferSmsEntity, Long> {
      * 根据电话号码查询最新一条发送成功的记录
      */
     TransferSmsEntity findLastSuccessByPhone(@Param("phone") Long phone);
-    int saveTimeStemp(TransferSmsEntity smsEntity);
-  //  TransferSmsEntity searchTimeStemp(@Param("id") Long id);
 }

@@ -20,14 +20,13 @@
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_user_id" jdbcType="BIGINT" property="updateUserId"/>
         <result column="update_user_name" jdbcType="VARCHAR" property="updateUserName"/>
-        <result column="timestemp" jdbcType="VARCHAR" property="timeStemp"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
     </resultMap>
 
     <!-- 表基本列 -->
     <sql id="Base_Column_List">
         id, dept_id, dept_name, name, phone, content, send_time, submit_time, done_time, status_value,
-        status, create_user_id, create_user_name, create_time, update_user_id, update_user_name, timestemp,
+        status, create_user_id, create_user_name, create_time, update_user_id, update_user_name,
         update_time
     </sql>
 
@@ -213,12 +212,4 @@
         where status = 2 and phone = #{phone}
         order by id desc limit 1
     </select>
-
-    <update id="saveTimeStemp">
-        update transfer_sms
-        <set>
-            <if test="null != timeStemp">timestemp = #{timeStemp}</if>
-        </set>
-        where id = #{id}
-    </update>
 </mapper>

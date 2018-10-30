@@ -2,7 +2,6 @@ package com.hqjy.mustang.transfer.sms.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
-import com.hqjy.mustang.common.base.utils.JsonUtil;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.crm.TransferCustomerInfo;
@@ -12,7 +11,6 @@ import com.hqjy.mustang.transfer.sms.dao.TransferSmsDao;
 import com.hqjy.mustang.transfer.sms.dao.TransferSmsReplyDao;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsReplyDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsResultDTO;
-import com.hqjy.mustang.transfer.sms.model.dto.SmsResultListDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsStatusDTO;
 import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsEntity;
 import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsReplyEntity;
@@ -133,35 +131,32 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
         return count;
     }
 
-
     /**
      * 短信发送回调
      */
     @Override
-    public void smsReport() {
-            SmsResultDTO smsResultDTO = smsApiService.sendReport();
-            SmsResultListDTO smsResultListDTO = null;
-            if (StringUtils.isNotEmpty(smsResultDTO.getBody())) {
-                smsResultListDTO = JsonUtil.parseObject(smsResultDTO.getBody(), SmsResultListDTO.class);
+    public void smsReport(String params) {
+        if (StringUtils.isNotEmpty(params)) {
+            try {
+                params = StringUtils.cutPrefix(URLDecoder.decode(params, "utf-8"), "Report=");
+                log.info("sms发送状态回调：{}", params);
+                List<SmsStatusDTO> list = JSON.parseArray(params, SmsStatusDTO.class);
+                list.forEach(s -> {
+                    TransferSmsEntity smsEntity = baseDao.findOne(Long.valueOf(s.getMsgId()));
+                    if (smsEntity != null && smsEntity.getStatus() != 2) {
+                        smsEntity.setStatus(s.getResult() == 0 ? SmsConstant.SendStatus.SUCCESS.getCode() : s.getResult());
+                        smsEntity.setStatusValue(SmsConstant.SendStatus.SUCCESS.handleSendStatusName(smsEntity.getStatus()).getValue());
+                        smsEntity.setSubmitTime(dateFormat(s.getSubmitTime()));
+                        smsEntity.setDoneTime(dateFormat(s.getDoneTime()));
+                        smsEntity.setUpdateUserId(0L);
+                        smsEntity.setUpdateUserName("系统回调");
+                        baseDao.update(smsEntity);
+                    }
+                });
+            } catch (UnsupportedEncodingException e) {
+                log.error("短信发送回调处理异常:{}", e);
             }
-            if (smsResultListDTO != null) {
-                log.info("sms发送状态回调：{}", smsResultListDTO);
-                List<SmsStatusDTO> list = smsResultListDTO.getReportList();
-                if (null != list) {
-                    list.forEach(s -> {
-                        TransferSmsEntity smsEntity = baseDao.findOne(Long.valueOf(s.getMsgId()));
-                        if (smsEntity != null && smsEntity.getStatus() != 2) {
-                            smsEntity.setStatus(s.getResult() == 0 ? SmsConstant.SendStatus.SUCCESS.getCode() : s.getResult());
-                            smsEntity.setStatusValue(SmsConstant.SendStatus.SUCCESS.handleSendStatusName(smsEntity.getStatus()).getValue());
-                            smsEntity.setSubmitTime(dateFormat(s.getSubmitTime()));
-                            smsEntity.setDoneTime(dateFormat(s.getDoneTime()));
-                            smsEntity.setUpdateUserId(0L);
-                            smsEntity.setUpdateUserName("系统回调");
-                            baseDao.update(smsEntity);
-                        }
-                    });
-                }
-            }
+        }
     }
 
     /**

@@ -107,9 +107,4 @@ public class TransferSmsEntity implements Serializable {
      * 更新时间 update_time
      **/
     private Date updateTime;
-
-    /**
-     * 时间戳
-     */
-    private String timeStemp;
 }
