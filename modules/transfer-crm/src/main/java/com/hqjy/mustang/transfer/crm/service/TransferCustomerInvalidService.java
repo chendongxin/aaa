@@ -7,6 +7,9 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerInvalidEntity;
 
 import java.util.List;
 
+/**
+ * @author gmm
+ */
 public interface TransferCustomerInvalidService extends BaseService<TransferCustomerInvalidEntity, Long> {
 
     /**

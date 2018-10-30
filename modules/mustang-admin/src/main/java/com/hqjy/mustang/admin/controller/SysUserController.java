@@ -221,6 +221,6 @@ public class SysUserController extends AbstractController {
     @ApiOperation(value = "获取所有角色为电销的用户", notes = "获取所有角色为电销的用户")
     @GetMapping(value = "/getSaleUserList")
     public R getSaleUserList() {
-        return R.result(userService.getUserListByRoleCode(Constant.Role.SALE.getCode()));
+        return R.result(userService.getUserListByRoleCode(Constant.Role.SALE_COMMISSIONER.getCode()));
     }
 }

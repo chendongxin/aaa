@@ -187,7 +187,7 @@
 
 	<select id="findBySourceId" resultMap="BaseResultMap">
 		select
-		tgw.way_id, tgw.gen_way
+		tgw.way_id, tgw.gen_way, tgw.create_time, tgw.seq
 		from transfer_gen_way tgw
 		inner join transfer_way_source tws on tws.way_id = tgw.way_id
 		WHERE

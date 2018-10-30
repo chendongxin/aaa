@@ -7,6 +7,9 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCompanyEntity;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @author gmm
+ */
 public interface TransferGenCompanyService extends BaseService<TransferGenCompanyEntity, Long> {
 
     /**

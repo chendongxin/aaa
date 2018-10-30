@@ -5,7 +5,6 @@ import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
-import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.utils.StringUtils;
@@ -65,7 +64,8 @@ public class TransferCustomerReservationServiceImpl extends BaseServiceImpl<Tran
         List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
         List<String> ids = new ArrayList<>();
         userAllDeptId.forEach(x -> {
-            ids.add(String.valueOf(x));
+            String deptIds = String.valueOf(x);
+            ids.add(deptIds);
         });
         pageQuery.put("userAllDeptId", StringUtils.listToString(ids));
         transferCustomerService.formatQueryTime(pageQuery);

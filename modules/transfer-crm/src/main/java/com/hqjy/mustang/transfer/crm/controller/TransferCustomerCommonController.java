@@ -23,10 +23,14 @@ import java.util.List;
 @Api(tags = "客户管理-公海", description = "TransferCustomerCommonController")
 @RestController
 @RequestMapping("/customer/common")
-public class TransferCustomerCommonController extends AbstractMethodError {
+public class TransferCustomerCommonController {
+
+    private TransferCustomerService transferCustomerService;
 
     @Autowired
-    private TransferCustomerService transferCustomerService;
+    public void setTransferCustomerService(TransferCustomerService transferCustomerService) {
+        this.transferCustomerService = transferCustomerService;
+    }
 
     @ApiOperation(value = "分页查询-公海客户列表", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
@@ -84,7 +88,7 @@ public class TransferCustomerCommonController extends AbstractMethodError {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/listPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
 //    @RequiresPermissions("biz:common:list")
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {

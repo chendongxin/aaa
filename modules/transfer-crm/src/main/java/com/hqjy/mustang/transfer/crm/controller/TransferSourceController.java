@@ -7,7 +7,6 @@ import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
-import com.hqjy.mustang.transfer.crm.service.TransferGenWayService;
 import com.hqjy.mustang.transfer.crm.service.TransferSourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -21,7 +20,6 @@ import java.util.HashMap;
 
 /**
  * @author guomiaomiao
- * @description
  * @date create in 2018年9月6日18:02:07
  */
 
@@ -30,8 +28,12 @@ import java.util.HashMap;
 @RequestMapping("/source")
 public class TransferSourceController {
 
-    @Autowired
     private TransferSourceService transferSourceService;
+
+    @Autowired
+    public void setTransferSourceService(TransferSourceService transferSourceService) {
+        this.transferSourceService = transferSourceService;
+    }
 
     /**
      * 来源平台管理树数据
@@ -75,7 +77,7 @@ public class TransferSourceController {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/listPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferSourceEntity> sourcePageInfo = new PageInfo<>(transferSourceService.findPage(PageQuery.build(pageParam, queryParam)));

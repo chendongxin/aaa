@@ -18,11 +18,18 @@ import java.util.List;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
+/**
+ * @author gmm
+ */
 @Service
 public class TransferCompanySourceServiceImpl extends BaseServiceImpl<TransferCompanySourceDao, TransferCompanySourceEntity, Long> implements TransferCompanySourceService {
 
-    @Autowired
     private TransferCompanySourceDao transferCompanySourceDao;
+
+    @Autowired
+    public void setTransferCompanySourceDao(TransferCompanySourceDao transferCompanySourceDao) {
+        this.transferCompanySourceDao = transferCompanySourceDao;
+    }
 
     @Override
     public List<TransferCompanySourceEntity> findPageSource(PageQuery pageQuery) {
@@ -30,14 +37,12 @@ public class TransferCompanySourceServiceImpl extends BaseServiceImpl<TransferCo
         return transferCompanySourceDao.listPageSource(pageQuery);
     }
 
-    /**
-     * 保存推广公司下的推广平台
-     */
+
     @Override
     public int saveCompanySource(TransferCompanySourceDTO companySource) {
         List<TransferCompanySourceEntity> companySourceList = transferCompanySourceDao.findByCompanyId(companySource.getCompanyId());
         for (TransferCompanySourceEntity transferCompanySource : companySourceList) {
-            if (transferCompanySource.getSourceId() == companySource.getSourceId()) {
+            if (transferCompanySource.getSourceId().equals(companySource.getSourceId())) {
                 throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
             }
         }

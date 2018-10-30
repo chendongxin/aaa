@@ -6,6 +6,9 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferKeywordEntity;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * @author gmm
+ */
 public interface TransferKeywordService extends BaseService<TransferKeywordEntity, Integer> {
 
     /**

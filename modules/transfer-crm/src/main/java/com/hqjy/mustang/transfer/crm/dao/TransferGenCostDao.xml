@@ -174,24 +174,26 @@
 	  tgc.passive_money, tgc.initiative_virtual, tgc.passive_virtual, tgc.create_user_id, tgc.create_user_name,
 	  tgc.create_time, tgc.update_user_id, tgc.update_user_name, tgc.update_time, tgc1.name, tgw.gen_way, sd.dept_name
 	from transfer_gen_cost tgc
-	left join transfer_gen_company tgc1 on tgc.company_id = tgc1.company_id
-	left join transfer_gen_way tgw on tgc.way_id = tgw.way_id
-	left join sys_dept sd on tgc.dept_id = sd.dept_id
+		left join transfer_gen_company tgc1 on tgc.company_id = tgc1.company_id
+		left join transfer_gen_way tgw on tgc.way_id = tgw.way_id
+		left join sys_dept sd on tgc.dept_id = sd.dept_id
 		<where>
+		<if test="proId != null and !&quot;&quot;.equals(proId)">and tgc.pro_id = #{proId}</if>
+		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and tgc.source_id = #{sourceId}</if>
 		<if test="deptId != null and !&quot;&quot;.equals(deptId)">and tgc.dept_id = #{deptId}</if>
 		<if test="companyId != null and !&quot;&quot;.equals(companyId)">and tgc.company_id = #{companyId}</if>
 		<if test="wayId != null and !&quot;&quot;.equals(wayId)">and tgc.way_id = #{wayId}</if>
-		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and tgc.DATE_FORMAT(gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>
+		<if test="genDay != null and !&quot;&quot;.equals(genDay)">and DATE_FORMAT(tgc.gen_day,'%Y-%m-%d') = STR_TO_DATE(#{genDay},'%Y-%m-%d')</if>
 		<if test="initiativeMoney != null and !&quot;&quot;.equals(initiativeMoney)">and tgc.initiative_money = #{initiativeMoney}</if>
 		<if test="passiveMoney != null and !&quot;&quot;.equals(passiveMoney)">and tgc.passive_money = #{passiveMoney}</if>
 		<if test="initiativeVirtual != null and !&quot;&quot;.equals(initiativeVirtual)">and tgc.initiative_virtual = #{initiativeVirtual}</if>
 		<if test="passiveVirtual != null and !&quot;&quot;.equals(passiveVirtual)">and tgc.passive_virtual = #{passiveVirtual}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tgc.create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tgc.create_user_name like concat('%',#{createUserName},'%')</if>
-		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and tgc.DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
+		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(tgc.create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
 		<if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and tgc.update_user_id = #{updateUserId}</if>
 		<if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and tgc.update_user_name like concat('%',#{updateUserName},'%')</if>
-		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and tgc.DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+		<if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(tgc.update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
 	</where>
   </select>
   
