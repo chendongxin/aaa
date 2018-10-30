@@ -252,7 +252,7 @@
             <if test="null != school">school,</if>
             <if test="null != graduateDate">graduate_date,</if>
             <if test="null != major">major,</if>
-            <if test="null != education">education,</if>
+            <if test="null != educationId">education_id,</if>
             <if test="null != applyType">apply_type,</if>
             <if test="null != applyKey">apply_key,</if>
             <if test="null != positionApplied">position_applied,</if>
@@ -265,7 +265,7 @@
             <if test="null != updateUserId">update_user_id,</if>
             <if test="null != updateUserName">update_user_name,</if>
             <if test="null != updateTime">update_time,</if>
-            <if test="null != resumeDetail">resume_detail,</if>
+            <if test="null != resumeDetail">resume_detail</if>
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -277,7 +277,7 @@
             <if test="null != school">#{school},</if>
             <if test="null != graduateDate">#{graduateDate},</if>
             <if test="null != major">#{major},</if>
-            <if test="null != education">#{education},</if>
+            <if test="null != educationId">#{educationId},</if>
             <if test="null != applyType">#{applyType},</if>
             <if test="null != applyKey">#{applyKey},</if>
             <if test="null != positionApplied">#{positionApplied},</if>
@@ -290,7 +290,7 @@
             <if test="null != updateUserId">#{updateUserId},</if>
             <if test="null != updateUserName">#{updateUserName},</if>
             <if test="null != updateTime">#{updateTime},</if>
-            <if test="null != resumeDetail">#{resumeDetail},</if>
+            <if test="null != resumeDetail">#{resumeDetail}</if>
         </trim>
     </insert>
 </mapper>

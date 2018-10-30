@@ -225,6 +225,12 @@ public class TransferAllotCustomerEntity implements Serializable {
     private String education;
 
     /**
+     * 学历ID education_id (0-无，1-小学，2-初中，3-高中，4-大专，5-本科，6-硕士，7-博士)
+     **/
+
+    private Long educationId;
+
+    /**
      * 应聘类别 apply_type
      **/
     private String applyType;
