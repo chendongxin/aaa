@@ -1,6 +1,8 @@
 package com.hqjy.mustang.transfer.sms.service;
 
 import com.hqjy.mustang.transfer.sms.model.dto.SmsResultDTO;
+import com.hqjy.mustang.transfer.sms.model.dto.SmsResultListDTO;
+import com.hqjy.mustang.transfer.sms.model.dto.SmsStatusDTO;
 import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsEntity;
 
 /**
@@ -9,4 +11,5 @@ import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsEntity;
  */
 public interface SmsApiService {
     SmsResultDTO sendSms(TransferSmsEntity smsEntity);
+    SmsResultDTO sendReport(Long id);
 }
