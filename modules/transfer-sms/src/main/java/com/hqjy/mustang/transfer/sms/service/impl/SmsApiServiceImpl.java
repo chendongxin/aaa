@@ -77,9 +77,9 @@ public class SmsApiServiceImpl implements SmsApiService {
             // 响应的包体
             log.info("SMS响应的包体->{}", response);
             if (StringUtils.isNotEmpty(response)) {
-                //保存时间戳，方便后面更新状态
+                /*//保存时间戳，方便后面更新状态
                 smsEntity.setTimeStemp(timestemp);
-                transferSmsDao.saveTimeStemp(smsEntity);
+                transferSmsDao.saveTimeStemp(smsEntity);*/
                 return JsonUtil.parseObject(response, SmsResultDTO.class);
             }
         } catch (Exception e) {
@@ -89,16 +89,16 @@ public class SmsApiServiceImpl implements SmsApiService {
     }
 
     @Override
-    public SmsResultDTO sendReport(Long id){
+    public SmsResultDTO sendReport(){
         try {
-            //查询发送时的时间戳
-            TransferSmsEntity smsEntity = transferSmsDao.findOne(id);
+            /*//查询发送时的时间戳
+            TransferSmsEntity smsEntity = transferSmsDao.findOne(id);*/
             //时间戳
             String timestemp = SmsSendUtils.getTimestemp();
-            if(null != smsEntity && StringUtils.isNotEmpty(smsEntity.getTimeStemp())){
+            /*if(null != smsEntity && StringUtils.isNotEmpty(smsEntity.getTimeStemp())){
                 // 如果数据库中存在，则取数据库中的时间戳
               timestemp = smsEntity.getTimeStemp();
-            }
+            }*/
             // 加密
             String key = SmsSendUtils.getKey(userName, password, timestemp);
             Hashtable<String, String> header = new Hashtable<>();

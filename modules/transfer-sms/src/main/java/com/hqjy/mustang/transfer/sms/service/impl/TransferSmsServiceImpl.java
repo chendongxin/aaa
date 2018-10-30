@@ -138,9 +138,8 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
      * 短信发送回调
      */
     @Override
-    public void smsReport(Long[] ids) {
-        for(Long id : ids) {
-            SmsResultDTO smsResultDTO = smsApiService.sendReport(id);
+    public void smsReport() {
+            SmsResultDTO smsResultDTO = smsApiService.sendReport();
             SmsResultListDTO smsResultListDTO = null;
             if (StringUtils.isNotEmpty(smsResultDTO.getBody())) {
                 smsResultListDTO = JsonUtil.parseObject(smsResultDTO.getBody(), SmsResultListDTO.class);
@@ -163,7 +162,6 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
                     });
                 }
             }
-        }
     }
 
     /**

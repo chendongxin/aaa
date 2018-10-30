@@ -11,5 +11,5 @@ import com.hqjy.mustang.transfer.sms.model.entity.TransferSmsEntity;
  */
 public interface SmsApiService {
     SmsResultDTO sendSms(TransferSmsEntity smsEntity);
-    SmsResultDTO sendReport(Long id);
+    SmsResultDTO sendReport();
 }

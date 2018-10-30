@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 
 /**
  * @author : heshuangshuang
@@ -29,8 +26,8 @@ public class SmsOpenApiController {
      * 短信发送回调
      */
     @PostMapping("/status")
-    public R status(@RequestBody(required = false) Long[] ids) {
-        transferSmsService.smsReport(ids);
+    public R status() {
+        transferSmsService.smsReport();
         return R.ok();
     }
 
