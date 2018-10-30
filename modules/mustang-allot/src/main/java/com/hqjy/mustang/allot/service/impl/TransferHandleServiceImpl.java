@@ -138,7 +138,7 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         allotProcess.setUserId(customerEntity.getUserId());
         allotProcess.setUserName(customerEntity.getUserName());
         // 设置状态有效
-        allotProcess.setActive(1);
+        allotProcess.setActive(0);
         // 0 默认为系统
         allotProcess.setCreateUserId(0L);
         // 联系次数默认0
