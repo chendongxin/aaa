@@ -1,7 +1,9 @@
 package com.hqjy.mustang.transfer.export.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.annotation.SysLog;
 import com.hqjy.mustang.common.base.utils.R;
+import com.hqjy.mustang.transfer.export.model.dto.*;
 import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.model.query.SellQueryParams;
 import com.hqjy.mustang.transfer.export.service.SellAttacheService;
@@ -9,6 +11,8 @@ import com.hqjy.mustang.transfer.export.service.SellCallService;
 import com.hqjy.mustang.transfer.export.service.SellDeptService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +27,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/report/sell")
 public class SellReportController {
-
+    private final static Logger LOG = LoggerFactory.getLogger(SellReportController.class);
     private SellAttacheService sellAttacheService;
     private SellDeptService sellDeptService;
     private SellCallService sellCallService;
@@ -54,49 +58,45 @@ public class SellReportController {
             "}\n" +
             "请求成功：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"allotNum\": 0,\n" +
-            "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 20,\n" +
-            "        \"deptName\": \"广州天河校区\",\n" +
-            "        \"validNum\": 0,\n" +
-            "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitNum\": 0,\n" +
-            "        \"visitTodayAppointNum\": 0,\n" +
-            "        \"visitTomorrowAppointNum\": 0,\n" +
-            "        \"visitValidNum\": 0,\n" +
-            "        \"visitValidRate\": \"0.00%\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"allotNum\": 0,\n" +
-            "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 22,\n" +
-            "        \"deptName\": \"广州白云校区\",\n" +
-            "        \"validNum\": 0,\n" +
-            "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitNum\": 0,\n" +
-            "        \"visitTodayAppointNum\": 0,\n" +
-            "        \"visitTomorrowAppointNum\": 0,\n" +
-            "        \"visitValidNum\": 0,\n" +
-            "        \"visitValidRate\": \"0.00%\"\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"total\": {\n" +
-            "      \"allotNum\": 0,\n" +
-            "      \"dealNum\": 0,\n" +
-            "      \"validNum\": 0,\n" +
-            "      \"validRate\": \"0.00%\",\n" +
-            "      \"visitNum\": 0,\n" +
-            "      \"visitTodayAppointNum\": 0,\n" +
-            "      \"visitTomorrowAppointNum\": 0,\n" +
-            "      \"visitValidNum\": 0,\n" +
-            "      \"visitValidRate\": \"0.00%\"\n" +
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"pageList\": {\n" +
+            "            \"currPage\": 1,\n" +
+            "            \"list\": [\n" +
+            "                {\n" +
+            "                    \"allotNum\": 2,\n" +
+            "                    \"dealNum\": 0,\n" +
+            "                    \"deptId\": 20,\n" +
+            "                    \"deptName\": \"广州天河校区\",\n" +
+            "                    \"validNum\": 1,\n" +
+            "                    \"validRate\": \"50.00%\",\n" +
+            "                    \"visitNum\": 1,\n" +
+            "                    \"visitRate\": \"0.00%\",\n" +
+            "                    \"visitTodayAppointNum\": 1,\n" +
+            "                    \"visitTomorrowAppointNum\": 0,\n" +
+            "                    \"visitValidNum\": 0,\n" +
+            "                    \"visitValidRate\": \"0.00%\"\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"pageSize\": 10,\n" +
+            "            \"size\": 1,\n" +
+            "            \"totalCount\": 1,\n" +
+            "            \"totalPage\": 1\n" +
+            "        },\n" +
+            "        \"total\": {\n" +
+            "            \"allotNum\": 2,\n" +
+            "            \"dealNum\": 0,\n" +
+            "            \"validNum\": 1,\n" +
+            "            \"validRate\": \"50.00%\",\n" +
+            "            \"visitNum\": 1,\n" +
+            "            \"visitRate\": \"0.00%\",\n" +
+            "            \"visitTodayAppointNum\": 1,\n" +
+            "            \"visitTomorrowAppointNum\": 0,\n" +
+            "            \"visitValidNum\": 0,\n" +
+            "            \"visitValidRate\": \"0.00%\"\n" +
+            "        }\n" +
             "    }\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/sellAttacheList")
@@ -136,49 +136,45 @@ public class SellReportController {
             "}\n" +
             "请求成功：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"businessNum\": 0,\n" +
-            "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 20,\n" +
-            "        \"deptName\": \"广州天河校区\",\n" +
-            "        \"validNum\": 0,\n" +
-            "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitNum\": 0,\n" +
-            "        \"visitTodayAppointNum\": 0,\n" +
-            "        \"visitTomorrowAppointNum\": 0,\n" +
-            "        \"visitValidNum\": 0,\n" +
-            "        \"visitValidRate\": \"0.00%\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"businessNum\": 0,\n" +
-            "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 22,\n" +
-            "        \"deptName\": \"广州白云校区\",\n" +
-            "        \"validNum\": 0,\n" +
-            "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitNum\": 0,\n" +
-            "        \"visitTodayAppointNum\": 0,\n" +
-            "        \"visitTomorrowAppointNum\": 0,\n" +
-            "        \"visitValidNum\": 0,\n" +
-            "        \"visitValidRate\": \"0.00%\"\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"total\": {\n" +
-            "      \"businessNum\": 0,\n" +
-            "      \"dealNum\": 0,\n" +
-            "      \"validNum\": 0,\n" +
-            "      \"validRate\": \"0.00%\",\n" +
-            "      \"visitNum\": 0,\n" +
-            "      \"visitTodayAppointNum\": 0,\n" +
-            "      \"visitTomorrowAppointNum\": 0,\n" +
-            "      \"visitValidNum\": 0,\n" +
-            "      \"visitValidRate\": \"0.00%\"\n" +
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"pageList\": {\n" +
+            "            \"currPage\": 1,\n" +
+            "            \"list\": [\n" +
+            "                {\n" +
+            "                    \"businessNum\": 0,\n" +
+            "                    \"dealNum\": 0,\n" +
+            "                    \"deptId\": 20,\n" +
+            "                    \"deptName\": \"广州天河校区\",\n" +
+            "                    \"validNum\": 1,\n" +
+            "                    \"validRate\": \"0.00%\",\n" +
+            "                    \"visitNum\": 1,\n" +
+            "                    \"visitRate\": \"0.00%\",\n" +
+            "                    \"visitTodayAppointNum\": 1,\n" +
+            "                    \"visitTomorrowAppointNum\": 0,\n" +
+            "                    \"visitValidNum\": 0,\n" +
+            "                    \"visitValidRate\": \"0.00%\"\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"pageSize\": 10,\n" +
+            "            \"size\": 1,\n" +
+            "            \"totalCount\": 1,\n" +
+            "            \"totalPage\": 1\n" +
+            "        },\n" +
+            "        \"total\": {\n" +
+            "            \"businessNum\": 0,\n" +
+            "            \"dealNum\": 0,\n" +
+            "            \"validNum\": 1,\n" +
+            "            \"validRate\": \"0.00%\",\n" +
+            "            \"visitNum\": 1,\n" +
+            "            \"visitRate\": \"0.00%\",\n" +
+            "            \"visitTodayAppointNum\": 1,\n" +
+            "            \"visitTomorrowAppointNum\": 0,\n" +
+            "            \"visitValidNum\": 0,\n" +
+            "            \"visitValidRate\": \"0.00%\"\n" +
+            "        }\n" +
             "    }\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/sellDeptList")
@@ -218,34 +214,33 @@ public class SellReportController {
             "}\n" +
             "请求成功：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"callNum\": 0,\n" +
-            "        \"connectNum\": 0,\n" +
-            "        \"connectRate\": \"0.00%\",\n" +
-            "        \"deptId\": 20,\n" +
-            "        \"deptName\": \"广州天河校区\",\n" +
-            "        \"duration\": \"00:00:00\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"callNum\": 0,\n" +
-            "        \"connectNum\": 0,\n" +
-            "        \"connectRate\": \"0.00%\",\n" +
-            "        \"deptId\": 22,\n" +
-            "        \"deptName\": \"广州白云校区\",\n" +
-            "        \"duration\": \"00:00:00\"\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"total\": {\n" +
-            "      \"callNum\": 0,\n" +
-            "      \"connectNum\": 0,\n" +
-            "      \"connectRate\": \"0.00%\",\n" +
-            "      \"duration\": \"00:00:00\"\n" +
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"pageList\": {\n" +
+            "            \"currPage\": 1,\n" +
+            "            \"list\": [\n" +
+            "                {\n" +
+            "                    \"callNum\": 0,\n" +
+            "                    \"connectNum\": 0,\n" +
+            "                    \"connectRate\": \"0.00%\",\n" +
+            "                    \"deptId\": 20,\n" +
+            "                    \"deptName\": \"广州天河校区\",\n" +
+            "                    \"duration\": \"00:00:00\"\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"pageSize\": 10,\n" +
+            "            \"size\": 1,\n" +
+            "            \"totalCount\": 1,\n" +
+            "            \"totalPage\": 1\n" +
+            "        },\n" +
+            "        \"total\": {\n" +
+            "            \"callNum\": 0,\n" +
+            "            \"connectNum\": 0,\n" +
+            "            \"connectRate\": \"0.00%\",\n" +
+            "            \"duration\": \"00:00:00\"\n" +
+            "        }\n" +
             "    }\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/sellCallList")
@@ -272,6 +267,19 @@ public class SellReportController {
     @PostMapping("/exportSellCall")
     public R exportSellCall(@RequestBody @Valid SellQueryParams query) {
         return R.result(sellCallService.exportSellCall(query));
+    }
+
+
+    @ApiOperation(value = "电销报表模块模型参数Models")
+    @GetMapping("hello")
+    public void modelAPI(@RequestBody SellCallReportResult sellCallReportResult,
+                         @RequestBody SellDeptReportResult sellDeptReportResult,
+                         @RequestBody SellAttacheReportResult sellAttacheReportResult
+    ) {
+        LOG.info("报表输出参数说明："
+                + JSON.toJSONString(sellCallReportResult)
+                + JSON.toJSONString(sellDeptReportResult)
+                + JSON.toJSONString(sellAttacheReportResult));
     }
 
 }

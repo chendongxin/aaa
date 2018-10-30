@@ -76,9 +76,9 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
         List<CompanyCostReportData> list = this.initReport(query);
         this.setReportValue(query, list);
         CompanyCostReportTotal total = this.countTotal(list);
-        PageUtil<CompanyCostReportData> page = new PageUtil<>(params, list);
+        PageUtil<CompanyCostReportData> pageList = new PageUtil<>(params, list);
 
-        return new CompanyCostReportResult().setList(page.getList()).setTotal(total);
+        return new CompanyCostReportResult().setPageList(pageList).setTotal(total);
     }
 
     /**

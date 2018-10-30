@@ -61,8 +61,8 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
         List<SmsCostReportData> list = this.check(query);
         this.setData(query, list);
         SmsCostReportTotal total = this.countTotal(list);
-        PageUtil<SmsCostReportData> page = new PageUtil<>(params, list);
-        return new SmsCostReportResult().setList(page.getList()).setTotal(total);
+        PageUtil<SmsCostReportData> pageList = new PageUtil<>(params, list);
+        return new SmsCostReportResult().setPageList(pageList).setTotal(total);
     }
 
     private void setData(SmsCostQueryParams query, List<SmsCostReportData> list) {

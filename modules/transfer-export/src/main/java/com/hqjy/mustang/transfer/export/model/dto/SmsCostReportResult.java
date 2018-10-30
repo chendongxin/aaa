@@ -1,10 +1,10 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 
 /**
  * @author xieyuqing
@@ -16,7 +16,7 @@ import java.util.List;
 @ApiModel(value = "招转短信费用报表输出对象")
 public class SmsCostReportResult {
 
-    private List<SmsCostReportData> list;
+    private PageUtil<SmsCostReportData> pageList;
 
     private SmsCostReportTotal total;
 }

@@ -65,9 +65,9 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         this.setSaleNum(query, list);
         this.setSaleRate(list);
         SellAttacheReportTotal total = this.countTotal(list);
-        PageUtil<SellAttacheReportData> page = new PageUtil<>(params, list);
+        PageUtil<SellAttacheReportData> pageList = new PageUtil<>(params, list);
 
-        return new SellAttacheReportResult().setList(page.getList()).setTotal(total);
+        return new SellAttacheReportResult().setPageList(pageList).setTotal(total);
     }
 
     private List<SellAttacheReportData> check(SellQueryParams query) {
@@ -76,10 +76,11 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
         deptList.forEach(y -> {
-            LOG.info("初始化报表列表");
             list.add(new SellAttacheReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
+
+        //TODO
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
         query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
         query.setDeptIds(StringUtils.listToString(ids));
@@ -148,7 +149,7 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             //商机有效率:有效商机量/分配给电销专员商机量
             x.setValidRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getValidNum() / x.getAllotNum()));
             //实际上门率:有效上门量/电销专员商机量
-            x.setVisitValidRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getAllotNum()));
+            x.setVisitRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getAllotNum()));
         });
     }
 
@@ -205,7 +206,7 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         //商机有效率:有效商机量/分配给电销专员商机量
         total.setValidRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getValidNum() / total.getAllotNum()));
         //实际上门率:有效上门量/电销专员商机量
-        total.setVisitValidRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getAllotNum()));
+        total.setVisitRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getAllotNum()));
         return total;
     }
 }

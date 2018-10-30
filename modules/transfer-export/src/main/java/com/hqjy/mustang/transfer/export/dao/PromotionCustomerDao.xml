@@ -43,18 +43,20 @@
     <select id="countVisitBusiness" resultMap="baseMap">
         SELECT COUNT(customer_id) AS num ,create_user_dept_id AS deptId,create_user_id as userId
         FROM(
-        SELECT c.customer_id ,c.create_user_dept_id,c.create_user_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.visit_status=1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.create_user_id IN ${userIds}
-        <if test="sourceId!=null">
-            AND c.source_id=#{sourceId}
-        </if>
-        <if test="companyId!=null">
-            AND c.company_id=#{companyId}
-        </if>
-        GROUP BY r.customer_id
+            SELECT v2.customer_id ,v2.create_user_dept_id,v2.create_user_id
+            FROM (
+                SELECT c.customer_id ,c.create_user_dept_id,c.create_user_id,r.visit_status
+                FROM transfer_customer_reservation r
+                INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
+                WHERE r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.create_user_id IN ${userIds}
+                <if test="sourceId!=null">
+                    AND c.source_id=#{sourceId}
+                </if>
+                <if test="companyId!=null">
+                    AND c.company_id=#{companyId}
+                </if>
+                GROUP BY r.customer_id
+            )v2 WHERE v2.visit_status=1
         ) v
         GROUP BY userId,deptId;
     </select>
@@ -63,18 +65,20 @@
     <select id="countValidVisitBusiness" resultMap="baseMap">
         SELECT COUNT(v.customer_id) AS num ,v.create_user_dept_id AS deptId,v.create_user_id AS userId
         FROM(
-        SELECT c.customer_id ,c.create_user_dept_id,c.create_user_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.valid_visit=1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.create_user_id IN ${userIds}
-        <if test="sourceId!=null">
-            AND c.source_id=#{sourceId}
-        </if>
-        <if test="companyId!=null">
-            AND c.company_id=#{companyId}
-        </if>
-        GROUP BY r.customer_id
+            SELECT v2.customer_id ,v2.create_user_dept_id,v2.create_user_id
+            FROM(
+                SELECT c.customer_id ,c.create_user_dept_id,c.create_user_id,r.valid_visit
+                FROM transfer_customer_reservation r
+                INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
+                WHERE r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.create_user_id IN ${userIds}
+                <if test="sourceId!=null">
+                    AND c.source_id=#{sourceId}
+                </if>
+                <if test="companyId!=null">
+                    AND c.company_id=#{companyId}
+                </if>
+                GROUP BY r.customer_id
+            )v2 WHERE v2.valid_visit=1
         ) v
         GROUP BY deptId,userId;
 
@@ -93,7 +97,7 @@
         <if test="companyId!=null">
             AND c.company_id=#{companyId}
         </if>
-        GROUP BY  deptId,userId;
+        GROUP BY deptId,userId;
     </select>
 
 </mapper>

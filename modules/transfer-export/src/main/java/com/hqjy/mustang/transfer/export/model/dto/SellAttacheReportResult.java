@@ -1,10 +1,10 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 
 /**
  * @author gmm
@@ -16,7 +16,7 @@ import java.util.List;
 @ApiModel(value = "电销专员排行报表数据输出对象")
 public class SellAttacheReportResult {
 
-    private List<SellAttacheReportData> list;
+    private PageUtil<SellAttacheReportData> pageList;
 
     private SellAttacheReportTotal total;
 }

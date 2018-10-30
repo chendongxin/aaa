@@ -19,7 +19,7 @@ spring:
     name: mustang-admin
   # 环境 dev|test|pro
   profiles:
-    active: dev
+    active: test
   http:
     multipart:
       max-file-size: 100MB

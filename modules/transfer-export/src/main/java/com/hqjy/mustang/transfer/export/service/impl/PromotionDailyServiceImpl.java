@@ -62,8 +62,8 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
         //合计（不分页）
         DailyReportTotal total = this.countTotal(list);
         //分页
-        PageUtil<DailyReportData> page = new PageUtil<>(params, list);
-        return new DailyReportResult().setList(page.getList()).setTotal(total);
+        PageUtil<DailyReportData> pageList = new PageUtil<>(params, list);
+        return new DailyReportResult().setPageList(pageList).setTotal(total);
     }
 
     private void setSaleRate(List<DailyReportData> list) {

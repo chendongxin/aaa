@@ -1,11 +1,10 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 
 /**
  * @author xyq
@@ -17,7 +16,7 @@ import java.util.List;
 @ApiModel(value = "招转推广公司费用报表输出对象")
 public class CompanyCostReportResult {
 
-    private List<CompanyCostReportData> list;
+    private PageUtil<CompanyCostReportData> pageList;
 
     private CompanyCostReportTotal total;
 }

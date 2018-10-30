@@ -67,61 +67,52 @@ public class PromotionReportController {
             "}\n" +
             "请求成功：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"businessNum\": 0,\n" +
-            "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 20,\n" +
-            "        \"deptName\": \"广州天河校区\",\n" +
-            "        \"followNum\": 0,\n" +
-            "        \"intentionNum\": 0,\n" +
-            "        \"unFailNum\": 0,\n" +
-            "        \"unFailRate\": \"0.00%\",\n" +
-            "        \"validNum\": 0,\n" +
-            "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitDealRate\": \"0.00%\",\n" +
-            "        \"visitIntentionRate\": \"0.00%\",\n" +
-            "        \"visitNum\": 0,\n" +
-            "        \"visitValidNum\": 0,\n" +
-            "        \"visitValidRate\": \"0.00%\"\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"businessNum\": 0,\n" +
-            "        \"dealNum\": 0,\n" +
-            "        \"deptId\": 22,\n" +
-            "        \"deptName\": \"广州白云校区\",\n" +
-            "        \"followNum\": 0,\n" +
-            "        \"intentionNum\": 0,\n" +
-            "        \"unFailNum\": 0,\n" +
-            "        \"unFailRate\": \"0.00%\",\n" +
-            "        \"validNum\": 0,\n" +
-            "        \"validRate\": \"0.00%\",\n" +
-            "        \"visitDealRate\": \"0.00%\",\n" +
-            "        \"visitIntentionRate\": \"0.00%\",\n" +
-            "        \"visitNum\": 0,\n" +
-            "        \"visitValidNum\": 0,\n" +
-            "        \"visitValidRate\": \"0.00%\"\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"total\": {\n" +
-            "      \"businessNum\": 0,\n" +
-            "      \"dealNum\": 0,\n" +
-            "      \"followNum\": 0,\n" +
-            "      \"intentionNum\": 0,\n" +
-            "      \"unFailNum\": 0,\n" +
-            "      \"unFailRate\": \"0.00%\",\n" +
-            "      \"validNum\": 0,\n" +
-            "      \"validRate\": \"0.00%\",\n" +
-            "      \"visitDealRate\": \"0.00%\",\n" +
-            "      \"visitIntentionRate\": \"0.00%\",\n" +
-            "      \"visitNum\": 0,\n" +
-            "      \"visitValidNum\": 0,\n" +
-            "      \"visitValidRate\": \"0.00%\"\n" +
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"pageList\": {\n" +
+            "            \"currPage\": 1,\n" +
+            "            \"list\": [\n" +
+            "                {\n" +
+            "                    \"businessNum\": 2,\n" +
+            "                    \"dealNum\": 0,\n" +
+            "                    \"deptId\": 20,\n" +
+            "                    \"deptName\": \"广州天河校区\",\n" +
+            "                    \"followNum\": 1,\n" +
+            "                    \"intentionNum\": 0,\n" +
+            "                    \"sequence\": 1,\n" +
+            "                    \"unFailNum\": 1,\n" +
+            "                    \"unFailRate\": \"50.00%\",\n" +
+            "                    \"validNum\": 1,\n" +
+            "                    \"validRate\": \"50.00%\",\n" +
+            "                    \"visitDealRate\": \"0.00%\",\n" +
+            "                    \"visitIntentionRate\": \"0.00%\",\n" +
+            "                    \"visitNum\": 1,\n" +
+            "                    \"visitValidNum\": 0,\n" +
+            "                    \"visitValidRate\": \"0.00%\"\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"pageSize\": 10,\n" +
+            "            \"size\": 1,\n" +
+            "            \"totalCount\": 1,\n" +
+            "            \"totalPage\": 1\n" +
+            "        },\n" +
+            "        \"total\": {\n" +
+            "            \"businessNum\": 2,\n" +
+            "            \"dealNum\": 0,\n" +
+            "            \"followNum\": 1,\n" +
+            "            \"intentionNum\": 0,\n" +
+            "            \"unFailNum\": 1,\n" +
+            "            \"unFailRate\": \"50.00%\",\n" +
+            "            \"validNum\": 1,\n" +
+            "            \"validRate\": \"50.00%\",\n" +
+            "            \"visitDealRate\": \"0.00%\",\n" +
+            "            \"visitIntentionRate\": \"0.00%\",\n" +
+            "            \"visitNum\": 1,\n" +
+            "            \"visitValidNum\": 0,\n" +
+            "            \"visitValidRate\": \"0.00%\"\n" +
+            "        }\n" +
             "    }\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/promotionDailyList")
@@ -163,31 +154,38 @@ public class PromotionReportController {
             "}" +
             "请求成功：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"businessNum\": 0,\n" +
-            "        \"dealNum\": 0,\n" +
-            "        \"deptName\": \"广州白云校区\",\n" +
-            "        \"name\": \"客服1\",\n" +
-            "        \"sequence\": 1,\n" +
-            "        \"validNum\": 0,\n" +
-            "        \"visitNum\": 0,\n" +
-            "        \"visitValidNum\": 0\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"total\": {\n" +
-            "      \"businessNum\": 0,\n" +
-            "      \"dealNum\": 0,\n" +
-            "      \"deptName\": \"/\",\n" +
-            "      \"name\": \"/\",\n" +
-            "      \"validNum\": 0,\n" +
-            "      \"visitNum\": 0,\n" +
-            "      \"visitValidNum\": 0\n" +
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"pageList\": {\n" +
+            "            \"currPage\": 1,\n" +
+            "            \"list\": [\n" +
+            "                {\n" +
+            "                    \"businessNum\": 0,\n" +
+            "                    \"dealNum\": 0,\n" +
+            "                    \"deptName\": \"广州人和校区\",\n" +
+            "                    \"name\": \"客服Y\",\n" +
+            "                    \"sequence\": 1,\n" +
+            "                    \"validNum\": 0,\n" +
+            "                    \"visitNum\": 0,\n" +
+            "                    \"visitValidNum\": 0\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"pageSize\": 10,\n" +
+            "            \"size\": 1,\n" +
+            "            \"totalCount\": 1,\n" +
+            "            \"totalPage\": 1\n" +
+            "        },\n" +
+            "        \"total\": {\n" +
+            "            \"businessNum\": 0,\n" +
+            "            \"dealNum\": 0,\n" +
+            "            \"deptName\": \"/\",\n" +
+            "            \"name\": \"/\",\n" +
+            "            \"validNum\": 0,\n" +
+            "            \"visitNum\": 0,\n" +
+            "            \"visitValidNum\": 0\n" +
+            "        }\n" +
             "    }\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/promotionCustomerList")
@@ -216,7 +214,7 @@ public class PromotionReportController {
         return R.result(promotionCustomerService.exportPromotionCustomer(query));
     }
 
-    @ApiOperation(value = "客服推广短信费用报表数据列表", notes = "请求参数格式：\n" +
+    @ApiOperation(value = "推广短信费用报表数据列表", notes = "请求参数格式：\n" +
             "分页参数：/report/promotion/promotionDailyList?pageNum=1&pageSize=10\n" +
             "高级查询参数：\n" +
             "{\n" +
@@ -226,30 +224,32 @@ public class PromotionReportController {
             "}\n" +
             "请求成功：\n" +
             "{\n" +
-            "  \"msg\": \"成功\",\n" +
-            "  \"result\": {\n" +
-            "    \"list\": [\n" +
-            "      {\n" +
-            "        \"cost\": \"0.035\",\n" +
-            "        \"deptName\": \"广州天河校区\",\n" +
-            "        \"sendNum\": 1,\n" +
-            "        \"sendSuccessNum\": 1\n" +
-            "      },\n" +
-            "      {\n" +
-            "        \"cost\": \"0.0\",\n" +
-            "        \"deptName\": \"广州白云校区\",\n" +
-            "        \"sendNum\": 0,\n" +
-            "        \"sendSuccessNum\": 0\n" +
-            "      }\n" +
-            "    ],\n" +
-            "    \"total\": {\n" +
-            "      \"cost\": \"0.0350\",\n" +
-            "      \"deptName\": \"/\",\n" +
-            "      \"sendNum\": 1,\n" +
-            "      \"sendSuccessNum\": 1\n" +
+            "    \"code\": 0,\n" +
+            "    \"msg\": \"成功\",\n" +
+            "    \"result\": {\n" +
+            "        \"pageList\": {\n" +
+            "            \"currPage\": 1,\n" +
+            "            \"list\": [\n" +
+            "                {\n" +
+            "                    \"cost\": \"0\",\n" +
+            "                    \"deptName\": \"广州天河校区\",\n" +
+            "                    \"sendNum\": 0,\n" +
+            "                    \"sendSuccessNum\": 0,\n" +
+            "                    \"sequence\": 1\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"pageSize\": 10,\n" +
+            "            \"size\": 1,\n" +
+            "            \"totalCount\": 1,\n" +
+            "            \"totalPage\": 1\n" +
+            "        },\n" +
+            "        \"total\": {\n" +
+            "            \"cost\": \"0.0000\",\n" +
+            "            \"deptName\": \"/\",\n" +
+            "            \"sendNum\": 0,\n" +
+            "            \"sendSuccessNum\": 0\n" +
+            "        }\n" +
             "    }\n" +
-            "  },\n" +
-            "  \"code\": 0\n" +
             "}"
     )
     @PostMapping("/promotionSmsCostList")
@@ -297,31 +297,38 @@ public class PromotionReportController {
             "    \"code\": 0,\n" +
             "    \"msg\": \"成功\",\n" +
             "    \"result\": {\n" +
-            "        \"list\": [\n" +
-            "            {\n" +
-            "                \"date\": \"2018-09-30\",\n" +
-            "                \"genWayCosts\": [\n" +
-            "                    {\n" +
-            "                        \"cost\": \"0.0000\",\n" +
-            "                        \"genWay\": \"精品（帮帮）\",\n" +
-            "                        \"wayId\": 1\n" +
-            "                    },\n" +
-            "                    {\n" +
-            "                        \"cost\": \"0.0000\",\n" +
-            "                        \"genWay\": \"精准（黄金展位）\",\n" +
-            "                        \"wayId\": 2\n" +
-            "                    }\n" +
-            "                ],\n" +
-            "                \"num\": 0,\n" +
-            "                \"totalCost\": \"0.0000\"\n" +
-            "            }\n" +
-            "        ],\n" +
+            "        \"pageList\": {\n" +
+            "            \"currPage\": 1,\n" +
+            "            \"list\": [\n" +
+            "                {\n" +
+            "                    \"date\": \"2018-10-30\",\n" +
+            "                    \"genWayCosts\": [\n" +
+            "                        {\n" +
+            "                            \"cost\": \"0.0000\",\n" +
+            "                            \"genWay\": \"精品帮帮\",\n" +
+            "                            \"wayId\": 1\n" +
+            "                        },\n" +
+            "                        {\n" +
+            "                            \"cost\": \"0.0000\",\n" +
+            "                            \"genWay\": \"精准（黄金展位）\",\n" +
+            "                            \"wayId\": 2\n" +
+            "                        }\n" +
+            "                    ],\n" +
+            "                    \"num\": 2,\n" +
+            "                    \"totalCost\": \"0.0000\"\n" +
+            "                }\n" +
+            "            ],\n" +
+            "            \"pageSize\": 10,\n" +
+            "            \"size\": 1,\n" +
+            "            \"totalCount\": 1,\n" +
+            "            \"totalPage\": 1\n" +
+            "        },\n" +
             "        \"total\": {\n" +
             "            \"date\": \"合计\",\n" +
             "            \"genWayCosts\": [\n" +
             "                {\n" +
             "                    \"cost\": \"0.0000\",\n" +
-            "                    \"genWay\": \"精品（帮帮）\",\n" +
+            "                    \"genWay\": \"精品帮帮\",\n" +
             "                    \"wayId\": 1\n" +
             "                },\n" +
             "                {\n" +
@@ -330,7 +337,7 @@ public class PromotionReportController {
             "                    \"wayId\": 2\n" +
             "                }\n" +
             "            ],\n" +
-            "            \"num\": 0,\n" +
+            "            \"num\": 2,\n" +
             "            \"totalCost\": \"0.0000\"\n" +
             "        }\n" +
             "    }\n" +
