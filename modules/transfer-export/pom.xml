@@ -147,7 +147,7 @@
                             <useUniqueVersions>false</useUniqueVersions>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib</classpathPrefix>
-                            <mainClass>com.hqjy.mustang.transfer.crm.TransferCrmApplication</mainClass>
+                            <mainClass>com.hqjy.mustang.transfer.export.TransferExportApplication</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

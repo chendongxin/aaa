@@ -54,17 +54,9 @@ public class SysUserExtendEntity implements Serializable {
     private Integer tqId;
 
     /**
-     * 用户盐 salt
-     **/
-    @JSONField(serialize = false)
-    private String salt;
-
-    /**
 	 * TQ密码 tq_pw
 	 **/
     @JSONField(serialize = false)
-    @Length(min = 4, max = 8, message = "密码长度4-8位", groups = {RestfulValid.POST.class})
-    @Pattern(regexp = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,8}$", message = "密码必须包含数字和字母", groups = {RestfulValid.POST.class})
     private String tqPw;
 
     /**

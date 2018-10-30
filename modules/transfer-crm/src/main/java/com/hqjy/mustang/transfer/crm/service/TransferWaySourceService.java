@@ -8,6 +8,9 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferWaySourceEntity;
 
 import java.util.List;
 
+/**
+ * @author gmm
+ */
 public interface TransferWaySourceService extends BaseService<TransferWaySourceEntity, Long> {
 
     /**

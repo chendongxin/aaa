@@ -80,3 +80,4 @@ sms:
     # 接口
     api:
       sendSms: ${sms.youxinyun.host}/Platform_Http_Service/servlet/SendSms
+    callback: ${sms.youxinyun.host}/Platform_Http_Service/servlet/GetSMSReport

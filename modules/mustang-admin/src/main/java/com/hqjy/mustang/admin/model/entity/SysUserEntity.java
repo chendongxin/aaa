@@ -110,6 +110,16 @@ public class SysUserEntity implements Serializable {
     private List<Long> roleIdList;
 
     /**
+     * 赛道id列表
+     */
+    private List<Long> proIdList;
+
+    /**
+     * 赛道信息
+     */
+    private List<SysUserProEntity> userProList;
+
+    /**
      * 用户部门信息列表
      */
     private List<SysUserDeptEntity> userDeptList;

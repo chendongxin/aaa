@@ -13,6 +13,7 @@ import com.hqjy.mustang.transfer.call.model.dto.TqCallRecordDTO;
 import com.hqjy.mustang.transfer.call.model.entity.TransferCallRecordEntity;
 import com.hqjy.mustang.transfer.call.service.TransferCallRecordService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.shiro.crypto.hash.Sha256Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -78,6 +79,7 @@ public class TqCallServiceImpl implements TqCallService {
         String userName = ShiroUtils.getUserName();
         // 查询用户绑定的tq帐号信息
         SysUserExtendInfo userExtendInfo = sysUserExtendApiService.findByUserId(userId);
+        System.out.println("TQ账号:"+userExtendInfo.getTqId()+":TQ密码: "+userExtendInfo.getTqPw());
         // 请求token
         String token = tqApiService.getCallToken(userExtendInfo);
         String params = Tools.base64Encode(JsonUtil.toJson(new TqCallClienIdDTO().setCustomerId(customerId).setUserId(userId).setUserName(userName)));

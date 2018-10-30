@@ -5,7 +5,9 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
 
 import java.util.List;
 import java.util.Map;
-
+/**
+ * @author gmm
+ */
 public interface TransferProcessService extends BaseService<TransferProcessEntity, Long> {
 
     /**

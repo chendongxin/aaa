@@ -144,6 +144,11 @@ public class TransferAllotCustomerEntity implements Serializable {
     private String landLine;
 
     /**
+     * 创建人部门编号 create_user_dept_id
+     **/
+    private Long createUserDeptId;
+
+    /**
      * 创建人编号 create_user_id
      **/
     private Long createUserId;

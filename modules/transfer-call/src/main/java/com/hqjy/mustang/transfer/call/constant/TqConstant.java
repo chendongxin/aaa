@@ -10,10 +10,16 @@ public class TqConstant {
         switch (code) {
             case 1:
                 return "成功";
+            case 2:
+                return "参数缺失或不合法";
+            case 4:
+                return "uuid未绑定";
+            case 405:
+                return "get请求不被允许";
             case 0:
-                return "密码不对";
+                return "密码错误";
             case -1:
-                return "token不对";
+                return "token失效";
             case -2:
                 return "uin不合法";
             case -3:
@@ -21,9 +27,9 @@ public class TqConstant {
             case -4:
                 return "服务器内部错误";
             case -5:
-                return "用户不存在";
+                return "账号不存在";
             case -8:
-                return "用户名和TQ号同时为空了";
+                return "账号或密码不合法";
             case -14:
                 return "认证类型不对";
             case -15:

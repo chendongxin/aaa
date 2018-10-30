@@ -23,7 +23,6 @@ import java.util.HashMap;
 
 /**
  * @author guomiaomiao
- * @description
  * @date create in 2018年9月7日17:51:07
  */
 
@@ -32,10 +31,18 @@ import java.util.HashMap;
 @RequestMapping("/gen/way")
 public class TransferGenWayController {
 
-    @Autowired
     private TransferGenWayService transferGenWayService;
-    @Autowired
     private TransferWaySourceService transferWaySourceService;
+
+    @Autowired
+    public void setTransferGenWayService(TransferGenWayService transferGenWayService) {
+        this.transferGenWayService = transferGenWayService;
+    }
+
+    @Autowired
+    public void setTransferWaySourceService(TransferWaySourceService transferWaySourceService) {
+        this.transferWaySourceService = transferWaySourceService;
+    }
 
     /**
      * 获取所有推广方式
@@ -82,7 +89,7 @@ public class TransferGenWayController {
             "  },\n" +
             "  \"code\": 0\n" +
             "}")
-    @RequestMapping(value = "/listPage",method = {RequestMethod.POST,RequestMethod.GET})
+    @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferWaySourceEntity> waySourcePageInfo = new PageInfo<>(transferWaySourceService.findPageSource(PageQuery.build(pageParam, queryParam)));

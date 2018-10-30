@@ -52,10 +52,6 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
     @Transactional(rollbackFor = Exception.class)
     public int save(SysUserExtendEntity userExtend){
         userExtend.setCreateId(ShiroUtils.getUserId());
-        //sha256加密
-        String salt = RandomStringUtils.randomAlphanumeric(20);
-        userExtend.setSalt(salt);
-        userExtend.setTqPw(new Sha256Hash(userExtend.getTqPw(),salt).toHex());
         int count = baseDao.save(userExtend);
         return count;
     }
@@ -66,22 +62,6 @@ public class SysUserExtendServiceImpl extends BaseServiceImpl<SysUserExtendDao, 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int update(SysUserExtendEntity userExtend){
-        if(StringUtils.isBlank(userExtend.getTqPw())){
-            userExtend.setTqPw(null);
-        }else{
-            //验证密码字段；由于该密码为4-8位，因此我们单独写校验方法；
-            if (StringUtils.isNotBlank(userExtend.getTqPw())) {
-                String regEx = "^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,8}$";
-                Pattern pattern = Pattern.compile(regEx);
-                Matcher matcher = pattern.matcher(userExtend.getTqPw());
-                if (!matcher.find()) {
-                    throw new RRException("密码4-8位，必须包含数字和字母");
-                }
-            }
-            String salt =  RandomStringUtils.randomAlphanumeric(20);
-            userExtend.setSalt(salt);
-            userExtend.setTqPw(new Sha256Hash(userExtend.getTqPw(),salt).toHex());
-        }
         return baseDao.update(userExtend);
     }
 

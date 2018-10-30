@@ -142,7 +142,7 @@ public class TransferCustomerDetailDTO {
     /**
      * 工作经验 work_experience
      **/
-    private Byte workExperience;
+    private Integer workExperience;
 
     /**
      * 创建人编号 create_user_id

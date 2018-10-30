@@ -38,7 +38,7 @@
         t.source_name,
         t.company_name,
         t.create_user_name,
-        t.create_time,
+        tr.create_time,
         td.age,
         k1.name as apply_type,
         k2.name as apply_key,
@@ -72,10 +72,10 @@
             <if test="visitStatus != null and !&quot;&quot;.equals(visitStatus)">and visit_status = #{visitStatus}</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and t.phone like concat('%',#{phone},'%')</if>
             <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-                and tr.create_time between #{beginCreateTime} and #{endCreateTime}
+                and DATE_FORMAT(tr.create_time,'%Y-%m-%d') between STR_TO_DATE(#{beginCreateTime},'%Y-%m-%d') and STR_TO_DATE(#{endCreateTime},'%Y-%m-%d')
             </if>
             <if test="beginAppointTime != null and beginAppointTime != '' and endAppointTime != null and endAppointTime != ''">
-                and tr.appointment_time between #{beginAppointTime} and #{endAppointTime}
+                and DATE_FORMAT(tr.appointment_time,'%Y-%m-%d') between STR_TO_DATE(#{beginAppointTime},'%Y-%m-%d') and STR_TO_DATE(#{endAppointTime},'%Y-%m-%d')
             </if>
         </where>
         GROUP BY tr.customer_id

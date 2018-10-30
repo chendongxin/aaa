@@ -45,6 +45,11 @@ public class Constant {
     public static final String API_OPEN_PATH = "/api/public/";
     public static final String API_OPEN_PATH_ANON = API_OPEN_PATH + "**";
 
+    public static final String PHONE = "phone";
+    public static final String LAND_LINE = "landLine";
+    public static final String QQ = "qq";
+    public static final String WEI_XIN = "weiXin";
+
 
     /**
      * 通用状态
@@ -119,6 +124,7 @@ public class Constant {
      * 客户联系方式类型
      */
     public enum CustomerContactType {
+
         /**
          * 1：手机
          */
@@ -423,61 +429,41 @@ public class Constant {
         }
     }
 
-    /**
-     * 有效失败包括
-     */
-    public enum ValidType {
 
+    /**
+     * 工作经验
+     */
+    public enum EXPERIENCE {
         /**
-         * 找工作不学
+         * 无经验
          */
-        JOB_SEARCH(0, "找工作不学"),
+        NO_EXPERIENCE(0, "无经验"),
         /**
-         * 拒绝贷款
+         * 应届生
          */
-        LOAN_REJECTION(1, "拒绝贷款"),
+        GRADUATE(1, "应届生"),
         /**
-         * 找到工作
+         * 一年以内
          */
-        GET_JOB(2, "找到工作"),
+        ONE_EXPERIENCE(2, "一年以内"),
         /**
-         * 寒/暑假工
+         * 两年
          */
-        SUM_WIN_PART_TIME(3, "寒/暑假工"),
+        TWO_EXPERIENCE(3, "两年"),
         /**
-         * 没投过简历/无兴趣
+         * 三年
          */
-        NO_INTEREST(4, "没投过简历/无兴趣"),
+        THREE_EXPERIENCE(4, "三年"),
         /**
-         * 负面信息
+         * 三年以上
          */
-        PASSIVE_MESSAGE(5, "负面信息"),
-        /**
-         * 想从事其他岗位
-         */
-        OTHER_JOB(6, "想从事其他岗位"),
-        /**
-         * 在校生不能离校
-         */
-        INTERNAL_SCHOOL(7, "在校生不能离校"),
-        /**
-         * 年龄＜18岁或＞30岁
-         */
-        AGE_OVERSTEP(8, "年龄＜18岁或＞30岁"),
-        /**
-         * 已有同岗位经验1年以上
-         */
-        EXPERIENCE_ONE_YEAR(9, "已有同岗位经验1年以上"),
-        /**
-         * 其他
-         */
-        OTHER(10, "其他");
+        MORE_THREE_EXPERIENCE(5, "三年以上");
 
         private Integer value;
 
         private String code;
 
-        ValidType(Integer value, String code) {
+        EXPERIENCE(Integer value, String code) {
             this.value = value;
             this.code = code;
         }
@@ -496,97 +482,6 @@ public class Constant {
 
         public void setCode(String code) {
             this.code = code;
-        }
-    }
-
-    /**
-     * 无效失败包括
-     */
-    public enum Valid {
-        /**
-         * 参加过同类培训
-         */
-        SAME_TRAIN(0, "参加过同类培训"),
-        /**
-         * 小学初中学历
-         */
-        LOW_DEGREE(1, "小学初中学历"),
-        /**
-         * 广告信息
-         */
-        ADVERTISING_INFORMATION(2, "广告信息"),
-        /**
-         * 同行探子
-         */
-        PEER_SPY(3, "同行探子");
-
-        private Integer value;
-
-        private String code;
-
-        Valid(Integer value, String code) {
-            this.value = value;
-            this.code = code;
-        }
-
-        public Integer getValue() {
-            return value;
-        }
-
-        public boolean equals(Integer value) {
-            return value.equals(this.value);
-        }
-
-        public String getCode() {
-            return code;
-        }
-
-        public void setCode(String code) {
-            this.code = code;
-        }
-    }
-
-
-    /**
-     * 跟进状态
-     */
-    public enum FollowStatus {
-
-        /**
-         * A潜在
-         */
-        POTENTIAL("A潜在", 0),
-        /**
-         *
-         */
-        VALID_DATA("B(失败)有效", 1),
-        /**
-         * B(失败)有效
-         */
-        INVALID_DATA("C(失败)无效", 2),
-        /**
-         * C(失败)无效
-         */
-        RESERVATION("D预约", 3),
-        /**
-         * D预约
-         */
-        DEAL("E成交", 4);
-
-        private int value;
-        private String code;
-
-        FollowStatus(String code, int value) {
-            this.value = value;
-            this.code = code;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public String getCode() {
-            return code;
         }
     }
 
@@ -656,23 +551,14 @@ public class Constant {
          */
         SERVICE_COMMISSIONER("SERVICE_COMMISSIONER"),
         /**
-         * 电销销售员
+         * 电销专员
          */
-        SALE("SALE"),
+        SALE_COMMISSIONER("SALE_COMMISSIONER"),
 
         /**
-         * 普通客服
+         * 质检专员
          */
-        SERVICE("SERVICE"),
-        /**
-         * 普通网销销售
-         */
-        NET_SALES_ORDINARY("NET_SALES_ORDINARY"),
-
-        /**
-         * 质检员
-         */
-        INSPECTION("INSPECTION");
+        INSPECT_COMMISSIONER("INSPECT_COMMISSIONER");
 
         private String code;
 

@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
+/**
+ * @author gmm
+ */
 public interface TransferCustomerService extends BaseService<TransferCustomerEntity, Long> {
 
     /**
@@ -26,6 +29,7 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      * 新增客户
      *
      * @param customerDto 客户信息对象
+     * @return 返回结果
      */
     R saveTransferCustomer(TransferCustomerDTO customerDto);
 
@@ -78,6 +82,10 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
 
     /**
      * 根据电话和部门，查询一个客户信息
+     *
+     * @param deptId 部门Id
+     * @param phone  手机号码
+     * @return 返回结果
      */
     TransferCustomerEntity findByPhoneAndDeptId(Long deptId, String phone);
 

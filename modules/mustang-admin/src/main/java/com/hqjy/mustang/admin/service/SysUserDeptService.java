@@ -65,6 +65,15 @@ public interface SysUserDeptService extends BaseService<SysUserDeptEntity, Long>
     List<Long> recursionDept(boolean isRoot, List<SysDeptEntity> list, List<Long> parentIdList);
 
     /**
+     * 针对招转预约功能部门选择提供的接口：当前用户所负责的部门校区（包含子部门）
+     *
+     * @return 结果
+     * @author xyq
+     * @date 2018年10月29日10:14:27
+     */
+    List<SysDeptEntity> getUserDeptSchool();
+
+    /**
      * 删除用户部门关系
      */
     int deleteByUserId(Long userId);

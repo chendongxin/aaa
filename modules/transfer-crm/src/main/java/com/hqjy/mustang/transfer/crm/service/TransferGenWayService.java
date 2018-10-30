@@ -6,7 +6,9 @@ import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
 
 import java.util.List;
 
-
+/**
+ * @author gmm
+ */
 public interface TransferGenWayService extends BaseService<TransferGenWayEntity, Long> {
 
     /**

@@ -31,12 +31,20 @@ import java.util.HashMap;
 @Api(tags = "客户管理", description = "TransferCustomerController")
 @RestController
 @RequestMapping("/customer")
-public class TransferCustomerController extends AbstractMethodError {
+public class TransferCustomerController {
+
+    private TransferCustomerService transferCustomerService;
+    private TransferCustomerDetailService transferCustomerDetailService;
 
     @Autowired
-    private TransferCustomerService transferCustomerService;
+    public void setTransferCustomerService(TransferCustomerService transferCustomerService) {
+        this.transferCustomerService = transferCustomerService;
+    }
+
     @Autowired
-    private TransferCustomerDetailService transferCustomerDetailService;
+    public void setTransferCustomerDetailService(TransferCustomerDetailService transferCustomerDetailService) {
+        this.transferCustomerDetailService = transferCustomerDetailService;
+    }
 
     /**
      * 分页查询客户列表
@@ -106,18 +114,13 @@ public class TransferCustomerController extends AbstractMethodError {
             "  \"code\": 0\n" +
             "}")
     @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
-//    @RequiresPermissions("customer:list")
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
         PageInfo<TransferCustomerEntity> deptPageInfo = new PageInfo<>(transferCustomerService.findPage(PageQuery.build(pageParam, queryParam)));
         return R.ok(deptPageInfo);
     }
 
-    /**
-     * 获取某客户的基本资料
-     * @param customerId
-     * @return 客户的具体信息
-     */
+
     @ApiOperation(value = "获取某客户的基本数据资料", notes = "请求参数:[customerId:客户编号]\n" +
             " 响应示例：\n" +
             "{\n" +
@@ -224,7 +227,6 @@ public class TransferCustomerController extends AbstractMethodError {
             "}")
     @SysLog("新增客户")
     @PostMapping("/save")
-//    @RequiresPermissions("biz:customer:save")
     public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferCustomerDTO customerDto) {
         try {
             return transferCustomerService.saveTransferCustomer(customerDto);
@@ -233,11 +235,7 @@ public class TransferCustomerController extends AbstractMethodError {
         }
     }
 
-    /**
-     * 转商机
-     * @param dto
-     * @return 转移结果
-     */
+
     @ApiOperation(value = "客户转移", notes = "请求参数说明：【customerId:客户编码数组类型】,【deptId:部门id】,【userId:用户人员】\n" +
             "部门、人员都为必选；确认后，商机转移到指定人员\n" +
             "示例：\n" +
@@ -249,17 +247,12 @@ public class TransferCustomerController extends AbstractMethodError {
             "  \"userName\": \"郭喵喵\",\n" +
             "}")
     @PostMapping("/transferCustomer")
-//    @RequiresPermissions("biz:customer:transfer")
     @SysLog("客户转移")
     public R transferCustomer(@RequestBody TransferCustomerTransferDTO dto) {
         return transferCustomerService.transferCustomer(dto);
     }
 
-    /**
-     * 保存修改客户基本资料
-     * @param customerDetail
-     * @return 修改结果
-     */
+
     @ApiOperation(value = "保存修改客户基本资料", notes = "输入参数：\n" +
             "参数说明：" +
             "【客户ID:customerId】,【姓名:name】,【性别(0-未知，1-男，2-女):sex】,【创建时间:createTime】,【年龄:age】\n" +
@@ -289,8 +282,11 @@ public class TransferCustomerController extends AbstractMethodError {
     @PostMapping("/update")
     public R update(@RequestBody TransferCustomerDetailEntity customerDetail) {
         try {
-            transferCustomerDetailService.updateCustomerDetail(customerDetail);
-            return R.ok();
+            int i = transferCustomerDetailService.updateCustomerDetail(customerDetail);
+            if (i > 0) {
+                return R.ok();
+            }
+            return R.error("修改不成功");
         } catch (Exception e) {
             return R.error("客户资料修改异常：" + e.getMessage());
         }
@@ -301,13 +297,12 @@ public class TransferCustomerController extends AbstractMethodError {
             @ApiImplicitParam(name = "proId", paramType = "query", value = "赛道ID", dataType = "Long"),
             @ApiImplicitParam(name = "companyId", paramType = "query", value = "推广公司ID", dataType = "Long"),
             @ApiImplicitParam(name = "deptId", paramType = "query", value = "部门ID", dataType = "Long"),
-            @ApiImplicitParam(name = "firstUserId", paramType = "query", value = "首次跟进人ID", dataType = "Long"),
+            @ApiImplicitParam(name = "userId", paramType = "query", value = "归属人ID", dataType = "Long"),
             @ApiImplicitParam(name = "sourceId", paramType = "query", value = "来源平台ID", dataType = "Long"),
             @ApiImplicitParam(name = "getWay", paramType = "query", value = "获取方式", dataType = "Byte"),
             @ApiImplicitParam(name = "notAllot", paramType = "query", value = "是否不分配：true-不分配，false-自动分配", dataType = "boolean")
     })
     @PostMapping("/importCustomer")
-//    @RequiresPermissions("biz:customer:import")
     @SysLog("客户列表导入")
     public R importCustomer(@RequestParam("file") MultipartFile file, @ModelAttribute TransferCustomerUpDTO dto) {
         return transferCustomerService.importCustomer(file, dto);
