@@ -146,7 +146,7 @@
     <select id="findPage" resultMap="BaseResultMap">
         select
         tk.id, tk.parent_id, tk.name, tk.status, tk.level, tk.create_user_id, tk.create_user_name, tk.create_time,
-        tk.update_user_id, tk.update_user_name, tk.update_time
+        tk.update_user_id, tk.update_user_name, tk.update_time, tk.seq
         from transfer_keyword tk
         left join transfer_keyword tk1 on tk1.id = tk.parent_id
         <where>
