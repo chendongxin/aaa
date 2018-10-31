@@ -25,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 
@@ -120,7 +121,15 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         if (ShiroUtils.isAdmin() || ShiroUtils.isSuperAdmin()) {
             return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", listBydeptIdList, parentIdList);
         }
-        if (list.containsAll(currentUserDept)) {
+        AtomicInteger atomicInteger = new AtomicInteger();
+        list.forEach(x -> {
+            currentUserDept.forEach(y -> {
+                if (x.equals(y)) {
+                    atomicInteger.incrementAndGet();
+                }
+            });
+        });
+        if (atomicInteger.get() > 0) {
             return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", listBydeptIdList, new ArrayList<>(currentUserDept));
         }
         return null;
