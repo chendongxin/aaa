@@ -181,7 +181,6 @@
 			<if test=" beginInvalidTime != null and beginInvalidTime != '' and endInvalidTime != null and endInvalidTime != ''">
 				and  tci.create_time between #{beginInvalidTime} and #{endInvalidTime}
 			</if>
-			<if test="status != null and !&quot;&quot;.equals(status)">and tci.status = #{status}</if>
 		</where>
 	</select>
 

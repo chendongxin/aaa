@@ -166,4 +166,10 @@
         where user_id = #{userId}
     </select>
 
+	<!-- 查询用户赛道id列表 -->
+	<select id="findProIdByUserId" resultType="Long">
+        select pro_id
+        from sys_user_pro
+        where user_id = #{userId}
+    </select>
 </mapper>

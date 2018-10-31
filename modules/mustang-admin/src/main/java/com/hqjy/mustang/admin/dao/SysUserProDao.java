@@ -26,4 +26,10 @@ public interface SysUserProDao extends BaseDao<SysUserProEntity, Integer> {
      * 查询用户赛道列表,包含赛道信息
      */
     List<SysUserProEntity> findUserProInfoList(Long userId);
+
+    /**
+     * 查询用户赛道ID列表
+     */
+    List<Long> findProIdByUserId(Long userId);
+
 }

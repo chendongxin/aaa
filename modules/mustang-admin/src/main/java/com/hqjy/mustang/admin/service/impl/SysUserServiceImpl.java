@@ -4,10 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.hqjy.mustang.admin.dao.SysUserDao;
 import com.hqjy.mustang.admin.feign.AllotApiService;
 import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
-import com.hqjy.mustang.admin.model.entity.SysDeptEntity;
-import com.hqjy.mustang.admin.model.entity.SysUserDeptEntity;
-import com.hqjy.mustang.admin.model.entity.SysUserEntity;
-import com.hqjy.mustang.admin.model.entity.SysUserRoleEntity;
+import com.hqjy.mustang.admin.model.entity.*;
 import com.hqjy.mustang.admin.service.*;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
@@ -19,7 +16,6 @@ import com.hqjy.mustang.common.base.utils.RegularUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisUtils;
-import com.hqjy.mustang.common.web.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -87,9 +83,15 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             //获取用户所有的部门列表(不包含子部门)
             List<Long> deptIdList = sysUserDeptService.getUserDeptId(userId);
             user.setDeptIdList(deptIdList);
+            //获取用户所有的赛道列表
+            List<Long> proIdList = sysUserProService.getUserProId(userId);
+            user.setProIdList(proIdList);
             //获取用户部门关系
             List<SysUserDeptEntity> userDeptList = sysUserDeptService.getUserDeptInfoList(userId);
             user.setUserDeptList(userDeptList);
+            //获取用户赛道关系
+            List<SysUserProEntity> userProList = sysUserProService.getUserProInfoList(userId);
+            user.setUserProList(userProList);
         }
         return user;
     }
@@ -259,6 +261,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
             sysUserRoleService.save(user.getUserId(), user.getRoleIdList());
             //保存用户与部门关系
             sysUserDeptService.save(user.getUserId(), user.getUserDeptList());
+            //保存用户与赛道的关系
+            sysUserProService.save(user.getUserId(), user.getUserProList());
             // 清空这个用户的授权缓存
             sysCacheService.cleanUserAuz(user.getUserId());
             //修改了密码

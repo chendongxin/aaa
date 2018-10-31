@@ -106,7 +106,7 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
         });
         query.put("userAllDeptId", StringUtils.listToString(ids));
         transferCustomerService.formatQueryTime(query);
-        return baseDao.findPage(query);
+        return super.findPage(query);
     }
 
     @Override
