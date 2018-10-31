@@ -175,18 +175,18 @@
 			<if test="name != null and !&quot;&quot;.equals(name)">and tc.name like
 				concat('%',#{name},'%')
 			</if>
-			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-				and tc.create_time between #{beginCreateTime} and #{endCreateTime}
+			<if test="beginTransferCreateTime != null and beginTransferCreateTime != '' and endTransferCreateTime != null and endTransferCreateTime != ''">
+				and tc.create_time between #{beginTransferCreateTime} and #{endTransferCreateTime}
 			</if>
-			<if test=" beginInvalidTime != null and beginInvalidTime != '' and endInvalidTime != null and endInvalidTime != ''">
-				and  tci.create_time between #{beginInvalidTime} and #{endInvalidTime}
+			<if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+				and  tci.create_time between #{beginCreateTime} and #{endCreateTime}
 			</if>
 		</where>
 	</select>
 
-	<select id="getCustomerByCustomerId" resultMap="BaseResultMap">
+	<select id="getCustomerByCustomerId" resultType="java.lang.Long">
 		select
-		<include refid="Base_Column_List" />
+		invalid_id
 		from transfer_customer_invalid
 		where
 		customer_id = #{customerId}

@@ -239,7 +239,7 @@
     <!-- 查询用户部门列表 -->
     <select id="findDeptListByUserId" resultMap="BaseResultMap">
         select
-        <include refid="Base_Column_List"/>
+        sd.dept_id, sd.parent_id, sd.dept_name, sd.seq, sd.weights, sd.status
         from sys_dept sd
         left join sys_user_dept sud on sud.dept_id = sd.dept_id
         where

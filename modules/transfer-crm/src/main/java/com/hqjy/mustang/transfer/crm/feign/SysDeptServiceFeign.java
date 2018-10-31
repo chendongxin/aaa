@@ -28,9 +28,8 @@ public interface SysDeptServiceFeign {
      * @author xyq
      * @date xyq 2018年10月8日16:22:32
      */
-    @GetMapping(value = "/getUserDeptList")
-    List<SysDeptInfo> getUserDeptList(@RequestParam("userId") Long userId);
-
+    @GetMapping(Constant.API_PATH + "/dept/getUserDeptList/{userId}")
+    List<SysDeptInfo> getUserDeptList(@PathVariable("userId") Long userId);
 
     /**
      * 获取用户所属部门
