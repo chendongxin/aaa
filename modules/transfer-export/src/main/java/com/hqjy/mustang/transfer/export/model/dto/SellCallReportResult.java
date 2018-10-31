@@ -1,11 +1,11 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
 
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 
 /**
  * @author gmm
@@ -17,7 +17,7 @@ import java.util.List;
 @ApiModel(value = "电销商机拨打排行报表数据输出")
 public class SellCallReportResult {
 
-    private List<SellCallReportData> list;
+    private PageUtil<SellCallReportData> pageList;
 
     private SellCallReportTotal total;
 

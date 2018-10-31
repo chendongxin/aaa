@@ -58,8 +58,8 @@ public class SellDeptServiceImpl implements SellDeptService {
         this.setSaleNum(query, list);
         this.setSaleRate(list);
         SellDeptReportTotal total = this.countTotal(list);
-        PageUtil<SellDeptReportData> page = new PageUtil<>(params, list);
-        return new SellDeptReportResult().setList(page.getList()).setTotal(total);
+        PageUtil<SellDeptReportData> pageList = new PageUtil<>(params, list);
+        return new SellDeptReportResult().setPageList(pageList).setTotal(total);
     }
 
     private List<SellDeptReportData> check(SellQueryParams query) {
@@ -142,7 +142,7 @@ public class SellDeptServiceImpl implements SellDeptService {
             //商机有效率:有效商机量/商机量
             x.setValidRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getValidNum() / x.getBusinessNum()));
             //实际上门率:有效上门量/商机量
-            x.setVisitValidRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getBusinessNum()));
+            x.setVisitRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getBusinessNum()));
         });
     }
 
@@ -198,7 +198,7 @@ public class SellDeptServiceImpl implements SellDeptService {
         //商机有效率:有效商机量/商机量
         total.setValidRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getValidNum() / total.getBusinessNum()));
         //实际上门率:有效上门量/商机量
-        total.setVisitValidRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getBusinessNum()));
+        total.setVisitRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getBusinessNum()));
         return total;
     }
 }

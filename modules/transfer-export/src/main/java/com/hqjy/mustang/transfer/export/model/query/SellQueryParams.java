@@ -40,4 +40,8 @@ public class SellQueryParams {
 
     @ApiModelProperty(value = "电销人员")
     private Long userId;
+
+    @ApiModelProperty(hidden = true)
+    @JSONField(serialize = false)
+    private String userIds;
 }

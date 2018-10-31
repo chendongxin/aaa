@@ -1,10 +1,10 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 
 /**
  * @author xieyuqing
@@ -16,7 +16,7 @@ import java.util.List;
 @ApiModel(value = "招转日常报表输出对象")
 public class DailyReportResult {
 
-    private List<DailyReportData> list;
+    private PageUtil<DailyReportData> pageList;
 
     private DailyReportTotal total;
 }

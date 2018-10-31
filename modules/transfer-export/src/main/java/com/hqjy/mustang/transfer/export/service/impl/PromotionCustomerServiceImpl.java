@@ -61,7 +61,7 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
         this.setSaleNum(query, list);
         CustomerReportTotal total = this.countTotal(list);
         PageUtil<CustomerReportData> pageList = new PageUtil<>(params, list);
-        return new CustomerReportResult().setList(pageList.getList()).setTotal(total);
+        return new CustomerReportResult().setPageList(pageList).setTotal(total);
     }
 
 
@@ -74,31 +74,31 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
         list.forEach(x -> {
             //商机总量
             createBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
                     x.setBusinessNum(y.getNum());
                 }
             });
             //有效商机量
             validBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
                     x.setValidNum(y.getNum());
                 }
             });
             //商机上门量
             visitBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
                     x.setVisitNum(y.getNum());
                 }
             });
             //有效上门量
             validVisitBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
                     x.setVisitValidNum(y.getNum());
                 }
             });
             //成交量
             dealBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
                     x.setDealNum(y.getNum());
                 }
             });

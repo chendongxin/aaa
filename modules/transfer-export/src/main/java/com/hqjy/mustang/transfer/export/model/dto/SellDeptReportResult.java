@@ -1,12 +1,10 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
-import com.hqjy.mustang.common.base.annotation.ExcelAttribute;
+import com.hqjy.mustang.transfer.export.util.PageUtil;
 import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.util.List;
 
 /**
  * @author gmm
@@ -18,7 +16,7 @@ import java.util.List;
 @ApiModel(value = "部门电销排行报表数据输出")
 public class SellDeptReportResult {
 
-    private List<SellDeptReportData> list;
+    private PageUtil<SellDeptReportData> pageList;
 
     private SellDeptReportTotal total;
 }

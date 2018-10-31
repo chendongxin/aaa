@@ -23,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -106,13 +103,24 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
 
     @Override
     public Map<String, List<SysDeptEntity>> getSaleDeptTree(String deptName) {
+
+        //获取所有电销部门ID
         Long deptId = baseDao.getDeptByName(deptName);
         if (deptId == null) {
             throw new RRException("不存在名字为：[" + deptName + "]的部门");
         }
         List<Long> parentIdList = new ArrayList<>();
         parentIdList.add(deptId);
-        return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", getAllDeptList(), parentIdList);
+        List<Long> list = new ArrayList<>();
+        RecursionUtil.list(list, SysDeptEntity.class, "getDeptId", true, new CopyOnWriteArrayList<>(baseDao.findValidDeptList()), parentIdList);
+
+        List<SysDeptEntity> listBydeptIdList = this.getListBydeptIdList(list);
+        //取当前用户的部门Id
+        List<Long> currentUserDept = sysUserDeptService.getUserDeptId(getUserId());
+        if (list.containsAll(currentUserDept)) {
+            return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", listBydeptIdList, new ArrayList<>(currentUserDept));
+        }
+        return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", listBydeptIdList, parentIdList);
     }
 
     /**

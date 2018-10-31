@@ -58,9 +58,9 @@ public class SellCallServiceImpl implements SellCallService {
         this.setSaleNum(query, list);
         this.setSaleRate(list);
         SellCallReportTotal total = this.countTotal(list);
-        PageUtil<SellCallReportData> page = new PageUtil<>(params, list);
+        PageUtil<SellCallReportData> pageList = new PageUtil<>(params, list);
 
-        return new SellCallReportResult().setList(page.getList()).setTotal(total);
+        return new SellCallReportResult().setPageList(pageList).setTotal(total);
 
     }
 
