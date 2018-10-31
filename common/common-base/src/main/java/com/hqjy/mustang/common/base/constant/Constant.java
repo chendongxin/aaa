@@ -547,6 +547,15 @@ public class Constant {
     public enum Role {
 
         /**
+         * 超级管理员
+         */
+        SUPER_ADMIN("SUPER_ADMIN"),
+
+        /**
+         * 管理员
+         */
+        ADMIN("ADMIN"),
+        /**
          * 客服专员
          */
         SERVICE_COMMISSIONER("SERVICE_COMMISSIONER"),

@@ -47,11 +47,20 @@ public class ShiroUtils {
     public static Boolean isGeneralSeat() {
         return SecurityUtils.getSubject().hasRole(Constant.Role.SALE_COMMISSIONER.getCode());
     }
+
     /**
      * 判断是否超级管理员
      */
     public static Boolean isSuperAdmin() {
         return SystemId.SUPER_ADMIN.equals(getUserId());
+    }
+
+    /**
+     * 判断是否管理员
+     */
+    public static Boolean isAdmin() {
+
+        return SecurityUtils.getSubject().hasRole(Constant.Role.ADMIN.getCode());
     }
 
     /**
