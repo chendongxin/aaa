@@ -117,10 +117,13 @@ public class SysDeptServiceImpl extends BaseServiceImpl<SysDeptDao, SysDeptEntit
         List<SysDeptEntity> listBydeptIdList = this.getListBydeptIdList(list);
         //取当前用户的部门Id
         List<Long> currentUserDept = sysUserDeptService.getUserDeptId(getUserId());
+        if (ShiroUtils.isAdmin() || ShiroUtils.isSuperAdmin()) {
+            return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", listBydeptIdList, parentIdList);
+        }
         if (list.containsAll(currentUserDept)) {
             return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", listBydeptIdList, new ArrayList<>(currentUserDept));
         }
-        return RecursionUtil.getTree(true, SysDeptEntity.class, "getDeptId", listBydeptIdList, parentIdList);
+        return null;
     }
 
     /**

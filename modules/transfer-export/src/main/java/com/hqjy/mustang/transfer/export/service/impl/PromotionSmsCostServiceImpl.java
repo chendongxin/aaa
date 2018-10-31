@@ -80,7 +80,7 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
                     l.setSendSuccessNum(l.getSendSuccessNum() + 1);
                 }
             });
-            l.setCost(String.valueOf(new BigDecimal(l.getSendNum() * PRICE)));
+            l.setCost(String.valueOf(new BigDecimal(l.getSendNum() * PRICE).setScale(4,BigDecimal.ROUND_HALF_UP)));
         });
     }
 

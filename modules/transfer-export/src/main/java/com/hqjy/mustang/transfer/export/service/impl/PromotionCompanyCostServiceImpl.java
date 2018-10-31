@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -217,19 +218,19 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
         BigDecimal money;
         switch (costType.get(0)) {
             case INITIATIVE_RMB:
-                money = y.getInitiativeMoney();
+                money = y.getInitiativeMoney().setScale(4,BigDecimal.ROUND_HALF_UP);
                 break;
             case INITIATIVE_VIRTUAL:
-                money = y.getInitiativeVirtual();
+                money = y.getInitiativeVirtual().setScale(4,BigDecimal.ROUND_HALF_UP);
                 break;
             case PASSIVE_RMB:
-                money = y.getPassiveMoney();
+                money = y.getPassiveMoney().setScale(4,BigDecimal.ROUND_HALF_UP);
                 break;
             case PASSIVE_VIRTUAL:
-                money = y.getPassiveVirtual();
+                money = y.getPassiveVirtual().setScale(4,BigDecimal.ROUND_HALF_UP);
                 break;
             default:
-                money = BigDecimal.ZERO;
+                money = BigDecimal.ZERO.setScale(4,BigDecimal.ROUND_HALF_UP);
         }
         return money;
     }
