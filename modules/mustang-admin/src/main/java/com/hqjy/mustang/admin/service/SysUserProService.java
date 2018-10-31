@@ -17,4 +17,9 @@ public interface SysUserProService extends BaseService<SysUserProEntity, Integer
      */
     List<SysUserProEntity> getUserProInfoList(Long userId);
 
+    /**
+     * 查询用户赛道Id列表
+     */
+    List<Long> getUserProId(Long userId);
+
 }

@@ -45,4 +45,13 @@ public class SysUserProServiceImpl extends BaseServiceImpl<SysUserProDao, SysUse
     public List<SysUserProEntity> getUserProInfoList(Long userId) {
         return baseDao.findUserProInfoList(userId);
     }
+
+    /**
+     * 查询用户赛道Id列表
+     */
+    @Override
+    public List<Long> getUserProId(Long userId) {
+        return baseDao.findProIdByUserId(userId);
+    }
+
 }
