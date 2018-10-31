@@ -90,7 +90,6 @@ public class TqApiServiceImpl implements TqApiService {
         }
         // 请求token
         String result = restTemplate.getForEntity(getTokenUrl + "?uin={1}&pw={2}", String.class, userExtendInfo.getTqId(), userExtendInfo.getTqPw()).getBody();
-        System.out.println("服务器地址: "+getTokenUrl);
         if (StringUtils.isNotEmpty(result)) {
             // 请求token异常
             if (result.startsWith(STATE)) {
@@ -116,7 +115,6 @@ public class TqApiServiceImpl implements TqApiService {
         postParameters.add("access_token", token);
         postParameters.add("phone", phone);
         postParameters.add("admin_uin", adminUin);
-        System.out.println("TQ管理员账号: "+adminUin);
         postParameters.add("client_id", params);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded");
@@ -137,7 +135,9 @@ public class TqApiServiceImpl implements TqApiService {
         String sign = Tools.md5Hex(adminUin + "$sign$" + ctime).toUpperCase();
         MultiValueMap<String, String> postParameters = new LinkedMultiValueMap<>();
         postParameters.add("ctime", ctime);
+        System.out.println("ctime: " +ctime);
         postParameters.add("sign", sign);
+        System.out.println("sign : "+ sign);
         postParameters.add("admin_uin", adminUin);
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/x-www-form-urlencoded");

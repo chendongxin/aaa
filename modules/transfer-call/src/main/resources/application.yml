@@ -82,7 +82,7 @@ tq:
     clickCall: http://vip.hn.tq.cn/vip/workMobile/clickCall
   # 服务接口地址
   webservice:
-    host: http://webservice.tq.cn
+    host: http://webservice.hn.tq.cn
     # 获取token
     getAccessToken: ${tq.webservice.host}/webservice/getAccessToken
     # 获取通话记录
