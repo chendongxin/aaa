@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -66,12 +67,13 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
     }
 
     private void setData(SmsCostQueryParams query, List<SmsCostReportData> list) {
+
         List<SmsCostEntity> entityList = promotionSmsCostDao.getData(query);
         List<SmsCostEntity> collect = entityList.stream().filter(x -> x.getStatus() == 2).collect(Collectors.toList());
         list.forEach(l -> {
             collect.forEach(x -> {
                 if (l.getDeptId().equals(x.getDeptId())) {
-                    if (x.getContent().length() <= CONTENT_LENGTH_BASE) {
+                    if (x.getContent().replace(" ", "").length() <= CONTENT_LENGTH_BASE) {
                         l.setSendNum(l.getSendNum() + 1);
                     } else {
                         int count = (int) Math.ceil(x.getContent().length() / CONTENT_LENGTH_CARDINAL);
@@ -80,8 +82,10 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
                     l.setSendSuccessNum(l.getSendSuccessNum() + 1);
                 }
             });
-            l.setCost(String.valueOf(new BigDecimal(l.getSendNum() * PRICE).setScale(4,BigDecimal.ROUND_HALF_UP)));
+            l.setCost(String.valueOf(new BigDecimal(l.getSendNum() * PRICE).setScale(4, BigDecimal.ROUND_HALF_UP)));
         });
+
+
     }
 
     private List<SmsCostReportData> getDailyData(SmsCostQueryParams query) {

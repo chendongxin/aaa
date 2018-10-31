@@ -2,7 +2,9 @@ package com.hqjy.mustang.admin.service.impl;
 
 import com.google.gson.reflect.TypeToken;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
+import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.base.constant.SystemId;
+import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
@@ -264,6 +266,27 @@ public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysU
         return baseDao.getUserDeptInfo(deptIds);
     }
 
+    /**
+     * 根据部门ID集合字符串和角色编号获取用户和部门信息
+     *
+     * @return 返回
+     * @author xyq 2018年10月31日16:14:26
+     */
+    @Override
+    public List<UserDeptInfo> getUserDeptByRoleCode() {
+        //获取所有电销部门ID
+        Long deptId = sysDeptService.getDeptByName("电销中心");
+        if (deptId == null) {
+            throw new RRException("电销中心部门不存在！");
+        }
+        List<Long> parentIdList = new ArrayList<>();
+        parentIdList.add(deptId);
+        List<Long> list = new ArrayList<>();
+        RecursionUtil.list(list, SysDeptEntity.class, "getDeptId", true, new CopyOnWriteArrayList<>(sysDeptService.findValidDeptList()), parentIdList);
+
+        String deptIds = sysDeptService.deptIdListToString(list);
+        return baseDao.getUserDeptByRoleCode(deptIds, Constant.Role.SERVICE_COMMISSIONER.getCode());
+    }
 
     /**
      * new  by gmm 2018年10月19日15:07:52

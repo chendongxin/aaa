@@ -235,4 +235,16 @@
         WHERE sud.user_id = #{userId}
     </select>
 
+
+    <select id="getUserDeptByRoleCode" resultType="com.hqjy.mustang.common.model.admin.UserDeptInfo">
+        SELECT u.user_id,u.user_name ,d.dept_id,d.dept_name
+        FROM sys_user u
+        INNER JOIN sys_user_dept ud ON u.user_id=ud.user_id
+        INNER JOIN sys_dept d ON d.dept_id=ud.dept_id
+        INNER JOIN  sys_user_role ur ON u.user_id=ur.user_id
+        INNER JOIN sys_role r ON ur.role_id=r.role_id
+        WHERE r.role_code=#{roleCode}
+        AND d.dept_id IN ${deptIds};
+    </select>
+
 </mapper>
