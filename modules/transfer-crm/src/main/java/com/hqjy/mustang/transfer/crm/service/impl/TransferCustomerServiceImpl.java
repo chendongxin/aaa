@@ -224,13 +224,13 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
             } else {
                 Date date = new Date();
-                SysDeptInfo sysDeptInfo = sysDeptServiceFeign.getUserDept(getUserId());
+                List<SysDeptInfo> sysDeptInfoList = sysDeptServiceFeign.getUserDeptList(getUserId());
                 TransferCustomerEntity entity = new TransferCustomerEntity()
                         .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq()).setLandLine(customerDto.getLandLine())
                         .setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId()).setCompanyName(customerDto.getCompanyName())
                         .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
                         .setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-                        .setCreateUserDeptId(sysDeptInfo.getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
+                        .setCreateUserDeptId(sysDeptInfoList.get(0).getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
                 super.save(entity);
                 customerDto.setCustomerId(entity.getCustomerId());
                 transferCustomerDetailService.save(
@@ -243,7 +243,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 );
                 transferCustomerContactService.save(customerDto);
                 transferProcessService.save(new TransferProcessEntity()
-                        .setExpireTime(DateUtils.addDays(date, 15)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfo.getDeptId()).setDeptName(sysDeptInfo.getDeptName())
+                        .setExpireTime(DateUtils.addDays(date, 15)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfoList.get(0).getDeptId()).setDeptName(sysDeptInfoList.get(0).getDeptName())
                         .setCreateTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()));
                 return R.ok();
             }
@@ -321,6 +321,13 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_LAST_FOLLOW_TIME))) {
             pageQuery.put(END_LAST_FOLLOW_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_LAST_FOLLOW_TIME)));
         }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginTransferCreateTime"))) {
+            pageQuery.put("beginTransferCreateTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "beginTransferCreateTime")));
+        }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endTransferCreateTime"))) {
+            pageQuery.put("endTransferCreateTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endTransferCreateTime")));
+        }
+
     }
 
 
@@ -604,7 +611,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             .setName(c.getName()).setAge(Byte.valueOf(c.getYear())).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                             .setPhone(c.getPhone()).setEmail(c.getEmail()).setPositionApplied(c.getPositionApplied())
                             .setWorkingPlace(c.getWorkingPlace()).setSchool(c.getSchool()).setMajor(c.getMajor())
-                            .setNote(c.getNote()).setCreateUserDeptId(sysDeptServiceFeign.getUserDept(getUserId()).getDeptId());
+                            .setNote(c.getNote()).setCreateUserDeptId(sysDeptServiceFeign.getUserDeptList(getUserId()).get(0).getDeptId());
 
 //                    发送客户数据到商机分配消息队列
                     rabbitTemplate.convertAndSend(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE, JSON.toJSONString(new TransferCustomerQueueDTO()

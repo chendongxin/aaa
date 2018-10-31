@@ -118,7 +118,7 @@ public class TransferCustomerInvalidServiceImpl extends BaseServiceImpl<Transfer
             customerEntity.setStatus(Constant.CustomerStatus.POTENTIAL.getValue())
                     .setUpdateUserId(getUserId()).setUpdateUserName(getUserName()).setUpdateTime(new Date());
             transferCustomerService.update(customerEntity);
-            baseDao.delete(baseDao.getCustomerByCustomerId(customerId).getInvalidId());
+            baseDao.deleteBatch(baseDao.getCustomerByCustomerId(customerId).stream().toArray(Long[]::new));
             return R.ok();
         } catch (Exception e) {
             log.error("客户无效转私海处理异常" + e.getMessage());

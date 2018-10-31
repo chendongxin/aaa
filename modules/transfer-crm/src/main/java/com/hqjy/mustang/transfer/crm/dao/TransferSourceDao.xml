@@ -209,10 +209,10 @@
         select
         <include refid="Base_Column_List"/>
         from transfer_source ts
-        where ts.source_id not in
+        where ts.status = false and ts.source_id not in
         (select tcs.source_id
         from transfer_company_source tcs
-        where tcs.company_id = #{companyId} and ts.status = false)
+        where tcs.company_id = #{companyId})
     </select>
 
     <select id="findByCompanyId" resultMap="BaseResultMap">
