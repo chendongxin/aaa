@@ -66,6 +66,17 @@ public interface SysUserDeptDao extends BaseDao<SysUserDeptEntity, Long> {
 
 
     /**
+     * 根据部门ID集合字符串和角色编号获取用户和部门信息
+     *
+     * @param deptIds  部门Id
+     * @param roleCode 角色编号
+     * @return 返回
+     * @author xyq 2018年10月31日16:14:26
+     */
+    List<UserDeptInfo> getUserDeptByRoleCode(@Param("deptIds") String deptIds, @Param("roleCode") String roleCode);
+
+
+    /**
      * 获取用户所属部门
      */
     SysDeptEntity getUserDept(Long userId);

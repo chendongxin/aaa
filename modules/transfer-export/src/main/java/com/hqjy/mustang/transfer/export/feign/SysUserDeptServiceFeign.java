@@ -1,14 +1,15 @@
 package com.hqjy.mustang.transfer.export.feign;
 
 import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.model.admin.SysUserInfo;
 import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import feign.hystrix.FallbackFactory;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -42,6 +43,25 @@ public interface SysUserDeptServiceFeign {
     @GetMapping(value = Constant.API_PATH + "/getUserDeptInfo")
     List<UserDeptInfo> getUserDeptInfo(@RequestParam("deptName") String deptName);
 
+
+    /**
+     * 获取所有角色为客服的用户
+     *
+     * @return 返回 客服用户信息
+     * @author xyq 2018年10月31日15:06:36
+     */
+    @GetMapping(value = Constant.API_PATH + "user/getCustomerUser")
+    List<SysUserInfo> getCustomerUser();
+
+    /**
+     * 根据部门ID集合字符串和角色编号获取用户和部门信息
+     *
+     * @return 返回 角色为客服的用户信息以及其所负责的电销部门数据
+     * @author xyq 2018年10月31日16:14:26
+     */
+    @GetMapping(value = Constant.API_PATH +"/getUserDeptByRoleCode")
+    List<UserDeptInfo> getUserDeptByRoleCode();
+
 }
 
 @Component
@@ -60,6 +80,18 @@ class UserDeptServiceFallbackFactory implements FallbackFactory<SysUserDeptServi
             @Override
             public List<UserDeptInfo> getUserDeptInfo(String deptName) {
                 LOGGER.error("调用{}异常:{},原因：{}", "SysUserDeptServiceFeign.getUserDeptInfo(String deptName)", deptName, throwable.getMessage());
+                return new ArrayList<>();
+            }
+
+            @Override
+            public List<SysUserInfo> getCustomerUser() {
+                LOGGER.error("调用{}异常:{},原因：{}", "SysUserDeptServiceFeign.getCustomerUser()", throwable.getMessage());
+                return new ArrayList<>();
+            }
+
+            @Override
+            public List<UserDeptInfo> getUserDeptByRoleCode() {
+                LOGGER.error("调用{}异常:{},原因：{}", "SysUserDeptServiceFeign.getUserDeptByRoleCode()", throwable.getMessage());
                 return new ArrayList<>();
             }
         };

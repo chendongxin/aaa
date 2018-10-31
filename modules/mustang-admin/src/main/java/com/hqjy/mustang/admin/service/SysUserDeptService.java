@@ -106,4 +106,12 @@ public interface SysUserDeptService extends BaseService<SysUserDeptEntity, Long>
      * @return 返回
      */
     List<UserDeptInfo> getUserDeptInfo(String deptName);
+
+    /**
+     * 根据部门ID集合字符串和角色编号获取用户和部门信息
+     *
+     * @return 返回
+     * @author xyq 2018年10月31日16:14:26
+     */
+    List<UserDeptInfo> getUserDeptByRoleCode();
 }
