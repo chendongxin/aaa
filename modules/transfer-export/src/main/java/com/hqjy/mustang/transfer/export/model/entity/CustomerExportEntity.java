@@ -28,10 +28,6 @@ public class CustomerExportEntity implements Serializable {
     @ExcelAttribute(name = "性别")
     private String sex;
 
-    @ApiModelProperty(value = "年龄")
-    @ExcelAttribute(name = "年龄")
-    private String age;
-
     @ApiModelProperty(value = "联系电话")
     @ExcelAttribute(name = "联系电话")
     private String phone;
@@ -39,6 +35,10 @@ public class CustomerExportEntity implements Serializable {
     @ApiModelProperty(value = "学历")
     @ExcelAttribute(name = "学历")
     private String education;
+
+    @ApiModelProperty(value = "年龄")
+    @ExcelAttribute(name = "年龄")
+    private String age;
 
     @ApiModelProperty(value = "工作经验")
     @ExcelAttribute(name = "工作经验")
@@ -66,7 +66,7 @@ public class CustomerExportEntity implements Serializable {
 
     @ApiModelProperty(value = "是否上门")
     @ExcelAttribute(name = "是否上门")
-    private String visitState;
+    private String visitStatus;
 
     @ApiModelProperty(value = "是否意向")
     @ExcelAttribute(name = "是否意向")
@@ -74,14 +74,14 @@ public class CustomerExportEntity implements Serializable {
 
     @ApiModelProperty(value = "是否成交")
     @ExcelAttribute(name = "是否成交")
-    private String dealState;
+    private String dealStatus;
 
     @ApiModelProperty(value = "创建时间")
     @ExcelAttribute(name = "创建时间")
     private String createTime;
 
-    @ApiModelProperty(value = "商机获取方式")
-    @ExcelAttribute(name = "商机获取方式")
+    @ApiModelProperty(value = "获取方式")
+    @ExcelAttribute(name = "获取方式")
     private String getWay;
 
     @ApiModelProperty(value = "来源平台")
