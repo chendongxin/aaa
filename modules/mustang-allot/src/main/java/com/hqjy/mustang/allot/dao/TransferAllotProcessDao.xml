@@ -270,7 +270,7 @@
         select
         <include refid="Base_Column_List"/>
         from transfer_process
-        where customer_id = #{customerId} and active =1
+        where customer_id = #{customerId} and active =0
     </select>
 
 </mapper>
