@@ -83,11 +83,11 @@ public class TransferFollowServiceImpl extends BaseServiceImpl<TransferFollowDao
         if (update < 0) {
             throw new RRException(StatusCode.BIZ_FOLLOW_UPDATE_PROCESS_FAULT);
         }
-        SysDeptInfo sysDeptInfo = sysDeptServiceFeign.getUserDept(getUserId());
+        List<SysDeptInfo> sysDeptInfoList = sysDeptServiceFeign.getUserDeptList(getUserId());
         if (process.getFollowCount() == 1) {
-            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(sysDeptInfo.getDeptId());
+            transferCustomerEntity.setFirstUserId(getUserId()).setFirstUserName(getUserName()).setFirstUserDeptId(sysDeptInfoList.get(0).getDeptId());
         }
-        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId(sysDeptInfo.getDeptId())
+        transferCustomerEntity.setLastUserId(getUserId()).setLastUserName(getUserName()).setLastUserDeptId(sysDeptInfoList.get(0).getDeptId())
                 .setUpdateUserId(getUserId()).setUpdateUserName(getUserName()).setUpdateTime(time).setLastFollowTime(time);
         update = transferCustomerService.update(transferCustomerEntity);
         if (update < 0) {

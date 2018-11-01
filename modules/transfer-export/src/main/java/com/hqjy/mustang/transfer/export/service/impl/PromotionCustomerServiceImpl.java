@@ -74,31 +74,31 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
         list.forEach(x -> {
             //商机总量
             createBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setBusinessNum(y.getNum());
                 }
             });
             //有效商机量
             validBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setValidNum(y.getNum());
                 }
             });
             //商机上门量
             visitBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setVisitNum(y.getNum());
                 }
             });
             //有效上门量
             validVisitBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setVisitValidNum(y.getNum());
                 }
             });
             //成交量
             dealBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())&& x.getUserId().equals(y.getUserId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setDealNum(y.getNum());
                 }
             });
@@ -106,7 +106,7 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
     }
 
     private List<CustomerReportData> check(CustomerQueryParams query) {
-        List<UserDeptInfo> userDeptInfo = userDeptServiceFeign.getUserDeptInfo("客服部");
+        List<UserDeptInfo> userDeptInfo = userDeptServiceFeign.getUserDeptByRoleCode();
         if (userDeptInfo.isEmpty()) {
             throw new RRException("客服数据不存在!");
         }
@@ -116,7 +116,8 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
         }
         List<UserDeptInfo> deptList = userDeptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         if (deptList.isEmpty()) {
-            throw new RRException("部门(校区)不存在");
+            LOG.error("所选客服没有负责的电销校区");
+            throw new RRException("所选客服没有负责的电销校区");
         }
         List<CustomerReportData> list = new ArrayList<>();
         List<String> ids = new ArrayList<>();

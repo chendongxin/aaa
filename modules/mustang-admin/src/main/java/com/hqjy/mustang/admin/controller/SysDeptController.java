@@ -71,7 +71,7 @@ public class SysDeptController extends AbstractController {
     @ApiOperation(value = "招转电销中心部门树", notes = "招转电销中心部门树")
     @GetMapping("/saleDeptTree")
     public R deptTree() {
-        return R.ok(sysDeptService.getSaleDeptTree("电销中心"));
+        return R.result(sysDeptService.getSaleDeptTree("电销中心"));
     }
 
     /**

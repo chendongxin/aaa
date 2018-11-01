@@ -82,8 +82,9 @@ public class SysDeptApi {
      * @date : 2018/9/15 16:31, update xyq 2018年10月8日16:22:32
      * 获取用户对应的部门列表
      */
-    @GetMapping(value = "/getUserDeptList")
-    public List<SysDeptEntity> getUserDeptList(@RequestParam("userId") Long userId) {
+    @ApiOperation(value = "返回用户所属部门列表", notes = "返回用户所属部门列表")
+    @GetMapping(value = "/getUserDeptList/{userId}")
+    public List<SysDeptEntity> getUserDeptList(@PathVariable("userId") Long userId) {
         return sysDeptService.getUserDeptList(userId);
     }
 

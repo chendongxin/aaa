@@ -4,6 +4,8 @@ import com.hqjy.mustang.common.base.base.BaseDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerInvalidEntity;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * transfer_customer_invalid 持久化层
  * 
@@ -14,7 +16,7 @@ import org.apache.ibatis.annotations.Mapper;
 public interface TransferCustomerInvalidDao extends BaseDao<TransferCustomerInvalidEntity, Long> {
 
     /**
-     * 通过customerId查找一条记录
+     * 通过customerId查找无效客户记录
      */
-    TransferCustomerInvalidEntity getCustomerByCustomerId(Long customerId);
+    List<Long> getCustomerByCustomerId(Long customerId);
 }
