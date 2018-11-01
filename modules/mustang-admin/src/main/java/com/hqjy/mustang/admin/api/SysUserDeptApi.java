@@ -49,6 +49,20 @@ public class SysUserDeptApi {
     }
 
     /**
+     * 根据部门Id获取部门下节点所有用户和部门信息
+     *
+     * @param deptId 部门名称
+     * @return 返回
+     * @author xyq 2018年11月1日10:00:56
+     */
+    @ApiOperation(value = "根据部门名称集合字符串获取用户和部门信息")
+    @GetMapping(value = "/getUserDeptInfoByDeptId")
+    public List<UserDeptInfo> getUserDeptInfoByDeptId(@RequestParam("deptId") Long deptId) {
+        return sysUserDeptService.getUserDeptInfoByDeptId(deptId);
+    }
+
+
+    /**
      * 根据部门ID集合字符串和角色编号获取用户和部门信息
      *
      * @return 返回 角色为客服的用户信息以及其所负责的电销部门数据

@@ -266,6 +266,17 @@ public class SysUserDeptServiceImpl extends BaseServiceImpl<SysUserDeptDao, SysU
         return baseDao.getUserDeptInfo(deptIds);
     }
 
+    @Override
+    public List<UserDeptInfo> getUserDeptInfoByDeptId(Long deptId) {
+        List<Long> allDeptUnderDeptId = sysDeptService.getAllDeptUnderDeptId(deptId);
+        if (allDeptUnderDeptId.size() == 0) {
+            log.error("部门编号：" + deptId + "不存在");
+            return new ArrayList<>();
+        }
+        String deptIds = sysDeptService.deptIdListToString(allDeptUnderDeptId);
+        return baseDao.getUserDeptByRoleCode(deptIds, Constant.Role.SALE_COMMISSIONER.getCode());
+    }
+
     /**
      * 根据部门ID集合字符串和角色编号获取用户和部门信息
      *
