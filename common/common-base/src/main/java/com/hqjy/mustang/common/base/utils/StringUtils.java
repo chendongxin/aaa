@@ -1,9 +1,6 @@
 package com.hqjy.mustang.common.base.utils;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -339,10 +336,25 @@ public final class StringUtils {
      * @return 返回部门加密的手机字符串
      */
     public static String encryptPhone(String phone) {
-        if (isNotEmpty(phone)){
+        if (isNotEmpty(phone)) {
             StringBuilder sb = new StringBuilder(phone);
             return sb.replace(3, 5, "**").toString();
         }
         return "";
+    }
+
+    /**
+     * 将字符串切割成集合
+     *
+     * @param str 字符串 "abc打瞌睡"
+     * @return ["a","b","c","打","瞌","睡"]
+     */
+    public static List<String> stringToList(String str) {
+        List<String> list = new ArrayList<>();
+        while (StringUtils.isNotBlank(str)) {
+            list.add(str.substring(0, 1));
+            str = str.substring(1);
+        }
+        return list;
     }
 }

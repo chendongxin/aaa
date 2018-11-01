@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
@@ -73,7 +74,7 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
         list.forEach(l -> {
             collect.forEach(x -> {
                 if (l.getDeptId().equals(x.getDeptId())) {
-                    if (x.getContent().replace(" ", "").length() <= CONTENT_LENGTH_BASE) {
+                    if (StringUtils.stringToList(x.getContent()).size() <= CONTENT_LENGTH_BASE) {
                         l.setSendNum(l.getSendNum() + 1);
                     } else {
                         int count = (int) Math.ceil(x.getContent().length() / CONTENT_LENGTH_CARDINAL);
@@ -155,5 +156,4 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
         query.setDeptIds(StringUtils.listToString(ids));
         return list;
     }
-
 }

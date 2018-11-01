@@ -5,9 +5,9 @@ import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.SellAttacheDao;
-import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
+import com.hqjy.mustang.transfer.export.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportData;
 import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.SellAttacheReportTotal;
@@ -39,12 +39,12 @@ import java.util.stream.Collectors;
 public class SellAttacheServiceImpl implements SellAttacheService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
-    private SysDeptServiceFeign sysDeptServiceFeign;
+    private SysUserDeptServiceFeign sysUserDeptServiceFeign;
     private SellAttacheDao sellAttacheDao;
 
     @Autowired
-    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
-        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
+        this.sysUserDeptServiceFeign = sysUserDeptServiceFeign;
     }
 
     @Autowired
@@ -72,15 +72,14 @@ public class SellAttacheServiceImpl implements SellAttacheService {
 
     private List<SellAttacheReportData> check(SellQueryParams query) {
         List<SellAttacheReportData> list = new ArrayList<>();
-        List<SysDeptInfo> deptInfo = sysDeptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
-        List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
+        List<UserDeptInfo> userDeptInfos = sysUserDeptServiceFeign.getUserDeptInfoByDeptId(query.getDeptId());
+        List<UserDeptInfo> userDeptInfoList = userDeptInfos.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
-        deptList.forEach(y -> {
-            list.add(new SellAttacheReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+        userDeptInfoList.forEach(y -> {
+            list.add(new SellAttacheReportData().setUserId(y.getUserId()).setName(y.getUserName()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getDeptId()));
         });
 
-        //TODO
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
         query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
         query.setDeptIds(StringUtils.listToString(ids));

@@ -4,22 +4,25 @@
 
     <resultMap id="baseMap" type="com.hqjy.mustang.transfer.export.model.entity.CustomerEntity">
         <result property="deptId" column="deptId"/>
+        <result property="userId" column="userId"/>
         <result property="num" column="num"/>
     </resultMap>
 
-    <!-- 商机上门量	-->
+    <!-- 商机上门量 上门时间在统计周期内上门商机量	-->
     <select id="countVisitBusiness" resultMap="baseMap">
         SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId,v.create_user_id AS userId
         FROM(
-        SELECT r.customer_id ,r.dept_id,r.create_user_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.visit_status=1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND c.get_way=#{getWay}
-        </if>
-        GROUP BY r.customer_id
+            SELECT v1.customer_id ,v1.dept_id,v1.create_user_id
+            FROM (
+                SELECT r.customer_id ,r.dept_id,r.create_user_id,r.visit_status
+                FROM transfer_customer_reservation r
+                INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
+                WHERE r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds} AND create_user_id IN (userIds)
+                <if test="getWay!=null">
+                    AND c.get_way=#{getWay}
+                </if>
+                GROUP BY r.customer_id
+            ) v1 WHERE v1.visit_status=1
         ) v
         GROUP BY userId, deptId
     </select>
@@ -29,22 +32,32 @@
         SELECT COUNT(customer_id) AS num, user_id AS userId, dept_id AS deptId
         FROM transfer_customer
         WHERE `status` IN(0,1,3,4)
-        AND create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds}
+        AND create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds} AND user_id IN (userIds)
         <if test="getWay!=null">
             AND get_way=#{getWay}
         </if>
         GROUP BY userId, deptId
     </select>
 
-    <!-- 分配商机量-->
+    <!-- 分配商机量 创建时间在统计周期内分配给电销的商机量（包括分配+导入，销售个人新增及领取的不算在内)-->
     <select id="countAllotBusiness" resultMap="baseMap">
-        SELECT COUNT(customer_id) AS num , user_id AS userId, dept_id AS deptId
-        FROM transfer_customer
-        WHERE create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND get_way=#{getWay}
-        </if>
-        GROUP BY userId, deptId
+        SELECT COUNT(c.customer_id),p.user_id AS userId,p.dept_id AS deptId
+            FROM
+                transfer_customer c
+            INNER JOIN (
+                SELECT
+                    MIN(process_id) AS process_id,customer_id,dept_id,user_id
+                FROM
+                    transfer_process
+                WHERE  memo = '首次咨询，自动分配' AND dept_id IN ${deptIds} AND user_id IN (userIds)
+                GROUP BY
+                    customer_id
+            ) p ON p.customer_id = c.customer_id
+            WHERE c.create_time BETWEEN #{beginTime} AND #{endTime}
+            <if test="getWay!=null">
+                AND c.get_way=#{getWay}
+            </if>
+            GROUP BY userId,deptId
     </select>
 
     <!-- 成交量	成交时间在统计周期内商机的成交量-->
@@ -53,7 +66,7 @@
         FROM transfer_customer_deal d
         INNER JOIN transfer_customer c ON c.customer_id=d.customer_id
         WHERE d.is_deleted=0
-        AND d.create_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
+        AND d.create_time BETWEEN #{beginTime} AND #{endTime} AND d.dept_id IN ${deptIds},d.user_id IN (userIds)
         <if test="getWay!=null">
             AND c.get_way=#{getWay}
         </if>
