@@ -244,7 +244,8 @@
         INNER JOIN  sys_user_role ur ON u.user_id=ur.user_id
         INNER JOIN sys_role r ON ur.role_id=r.role_id
         WHERE r.role_code=#{roleCode}
-        AND d.dept_id IN ${deptIds};
+        AND d.dept_id IN ${deptIds}
+        ORDER BY d.dept_id ASC
     </select>
 
 </mapper>

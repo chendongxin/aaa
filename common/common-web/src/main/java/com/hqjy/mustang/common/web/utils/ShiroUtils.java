@@ -52,7 +52,8 @@ public class ShiroUtils {
      * 判断是否超级管理员
      */
     public static Boolean isSuperAdmin() {
-        return SystemId.SUPER_ADMIN.equals(getUserId());
+        SecurityUtils.getSubject().hasRole(Constant.Role.SUPER_ADMIN.getCode());
+        return  SecurityUtils.getSubject().hasRole(Constant.Role.SUPER_ADMIN.getCode());
     }
 
     /**

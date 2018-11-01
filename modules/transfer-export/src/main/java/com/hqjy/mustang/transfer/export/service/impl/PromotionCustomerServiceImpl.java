@@ -58,7 +58,9 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
     @Override
     public CustomerReportResult promotionCustomerList(PageParams params, CustomerQueryParams query) {
         List<CustomerReportData> list = this.check(query);
-        this.setSaleNum(query, list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+        }
         CustomerReportTotal total = this.countTotal(list);
         PageUtil<CustomerReportData> pageList = new PageUtil<>(params, list);
         return new CustomerReportResult().setPageList(pageList).setTotal(total);
@@ -108,7 +110,7 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
     private List<CustomerReportData> check(CustomerQueryParams query) {
         List<UserDeptInfo> userDeptInfo = userDeptServiceFeign.getUserDeptByRoleCode();
         if (userDeptInfo.isEmpty()) {
-            throw new RRException("客服数据不存在!");
+            LOG.error("客服数据不存在");
         }
         Long userId = query.getUserId();
         if (userId != null) {
@@ -117,14 +119,10 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
         List<UserDeptInfo> deptList = userDeptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         if (deptList.isEmpty()) {
             LOG.error("所选客服没有负责的电销校区");
-            throw new RRException("所选客服没有负责的电销校区");
         }
         List<CustomerReportData> list = new ArrayList<>();
         List<String> ids = new ArrayList<>();
         AtomicInteger sequence = new AtomicInteger();
-        //部门ID降序排序
-        Collections.sort(deptList, Comparator.comparing(UserDeptInfo::getDeptId));
-        Collections.reverse(deptList);
         deptList.forEach(y -> {
             list.add(new CustomerReportData().setSequence(sequence.incrementAndGet()).setUserId(y.getUserId()).setName(y.getUserName()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
             ids.add(String.valueOf(y.getUserId()));
@@ -158,7 +156,9 @@ public class PromotionCustomerServiceImpl implements PromotionCustomerService {
 
     private List<CustomerReportData> getDailyData(CustomerQueryParams query) {
         List<CustomerReportData> list = this.check(query);
-        this.setSaleNum(query, list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+        }
         return list;
     }
 

@@ -108,6 +108,14 @@ public interface SysUserDeptService extends BaseService<SysUserDeptEntity, Long>
     List<UserDeptInfo> getUserDeptInfo(String deptName);
 
     /**
+     * 根据部门Id获取部门下节点所有用户（电销专员）和部门信息
+     *
+     * @param deptId 部门Id
+     * @return 返回
+     */
+    List<UserDeptInfo> getUserDeptInfoByDeptId(Long deptId);
+
+    /**
      * 根据部门ID集合字符串和角色编号获取用户和部门信息
      *
      * @return 返回
