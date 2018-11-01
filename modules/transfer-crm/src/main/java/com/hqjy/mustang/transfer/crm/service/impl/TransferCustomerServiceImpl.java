@@ -51,6 +51,9 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private static final String END_ALLOT_TIME = "endAllotTime";
     private static final String BEGIN_LAST_FOLLOW_TIME = "beginLastFollowTime";
     private static final String END_LAST_FOLLOW_TIME = "endLastFollowTime";
+    private static final String FIRST_TRANSFER_CREATE_TIME = "beginTransferCreateTime";
+    private static final String END_TRANSFER_CREATE_TIME = "endTransferCreateTime";
+
 
     /**
      * 锁有效时间
@@ -321,11 +324,11 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_LAST_FOLLOW_TIME))) {
             pageQuery.put(END_LAST_FOLLOW_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_LAST_FOLLOW_TIME)));
         }
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "beginTransferCreateTime"))) {
-            pageQuery.put("beginTransferCreateTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "beginTransferCreateTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, FIRST_TRANSFER_CREATE_TIME))) {
+            pageQuery.put(FIRST_TRANSFER_CREATE_TIME, DateUtils.getBeginTime(MapUtils.getString(pageQuery, FIRST_TRANSFER_CREATE_TIME)));
         }
-        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, "endTransferCreateTime"))) {
-            pageQuery.put("endTransferCreateTime", DateUtils.getEndTime(MapUtils.getString(pageQuery, "endTransferCreateTime")));
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_TRANSFER_CREATE_TIME))) {
+            pageQuery.put(END_TRANSFER_CREATE_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_TRANSFER_CREATE_TIME)));
         }
 
     }

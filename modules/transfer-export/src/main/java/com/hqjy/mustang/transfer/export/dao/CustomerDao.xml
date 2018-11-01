@@ -6,9 +6,9 @@
     <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.export.model.entity.CustomerExportEntity">
         <result column="dept_name" property="deptName"/>
         <result column="name" property="name"/>
+        <result column="sex" property="sex"/>
         <result column="phone" property="phone"/>
         <result column="age" property="age"/>
-        <result column="sex" property="sex"/>
         <result column="education_id" property="education"/>
         <result column="work_experience" property="experience"/>
         <result column="apply_type" property="jobType"/>
@@ -16,7 +16,7 @@
         <result column="user_name" property="userName"/>
         <result column="follow_status" property="followStatus"/>
         <result column="status" property="status"/>
-        <result column="visit_status" property="visitState"/>
+        <result column="visit_status" property="visitStatus"/>
         <result column="intention" property="intention"/>
         <result column="create_time" property="createTime"/>
         <result column="get_way" property="getWay"/>
@@ -24,40 +24,41 @@
         <result column="company_name" property="company"/>
         <result column="major" property="major"/>
         <result column="position_applied" property="applyPosition"/>
+        <result column="deal_status" property="dealStatus"/>
     </resultMap>
 
     <select id="getExportData" resultMap="BaseResultMap">
       SELECT
         tc.dept_name,
         tc.name,
-        tc.phone,
-        tc.source_name,
-        tc.company_name,
-        tc.create_time,
-        tc.user_name,
-        td.age,
-        td.major,
-        td.position_applied,
-        td.major,
-        k1.name as apply_type,
-        k2.name as apply_key,
         (CASE td.sex WHEN 0 THEN '未知' WHEN 1 THEN '男' WHEN 2 THEN '女' END) AS sex,
-        (CASE tc.status WHEN 0 THEN '潜在' WHEN 1 THEN '失败有效' WHEN 2 THEN '失败无效' WHEN 3 THEN '预约' WHEN 4 THEN '成交' END) AS status,
-        (CASE tc.get_way WHEN 1 THEN '主动' WHEN 2 THEN '被动' END) AS get_way,
-        (CASE td.work_experience WHEN -1 THEN '应届生' WHEN 0 THEN '无经验' WHEN 1 THEN '一年' WHEN 2 THEN '两年' WHEN 3 THEN '三年'
-        WHEN td.work_experience &gt;3 THEN '三年以上'ELSE '/' END) AS work_experience,
+        tc.phone,
         (CASE td.education_id WHEN 0 THEN '无' WHEN 1 THEN '小学' WHEN 2 THEN '初中'WHEN 3 THEN '高中'WHEN 4 THEN '大专'WHEN 5
         THEN '本科'WHEN 6 THEN '硕士'WHEN 7 THEN '博士'ELSE '/'END) AS education_id,
+        td.age,
+        (CASE td.work_experience WHEN 0 THEN '无经验' WHEN 1 THEN '应届生' WHEN 2 THEN '一年以内' WHEN 3 THEN '两年' WHEN 4 THEN '三年'
+        WHEN td.work_experience &gt;4 THEN '三年以上'ELSE '/' END) AS work_experience,
+        k1.name as apply_type,
+        k2.name as apply_key,
+        tc.user_name,
+        (CASE tf.follow_status WHEN 0 THEN '未接通(未接)' WHEN 1 THEN '未接通(拒接)' WHEN 2 THEN '未接通(空号)' WHEN 3 THEN '未接通(过期)' WHEN 4 THEN '需要二次回访' ELSE '/' END) AS follow_status,
+        (CASE tc.status WHEN 0 THEN '潜在' WHEN 1 THEN '失败有效' WHEN 2 THEN '失败无效' WHEN 3 THEN '预约' WHEN 4 THEN '成交' END) AS status,
         (CASE tr.intention WHEN 0 THEN '否' WHEN 1 THEN '是' ELSE '/' END) AS intention,
         (CASE tr.visit_status WHEN 0 THEN '未上门' WHEN 1 THEN '已上门' ELSE '/' END) AS visit_status,
-        (CASE tf.follow_status WHEN 0 THEN '未接通(未接)' WHEN 1 THEN '未接通(拒接)' WHEN 0 THEN '未接通(空号)' WHEN 0 THEN '未接通(过期)' WHEN 0 THEN '需要二次回访' ELSE '/' END) AS visit_status
+        (CASE tc.status WHEN 4 THEN '是' ELSE '否' END) AS deal_status,
+        tc.create_time,
+        (CASE tc.get_way WHEN 1 THEN '主动' WHEN 2 THEN '被动' END) AS get_way,
+        tc.source_name,
+        tc.company_name,
+        td.position_applied,
+        td.major
       FROM
         transfer_customer tc
       INNER JOIN transfer_customer_detail td ON tc.customer_id = td.customer_id
       LEFT JOIN transfer_customer_reservation tr ON tr.customer_id = tc.customer_id
       LEFT JOIN transfer_follow tf ON tf.customer_id = tc.customer_id
       LEFT JOIN transfer_keyword k1 ON k1.id=td.apply_type
-      LEFT JOIN transfer_keyword k2 ON k1.id=td.apply_key
+      LEFT JOIN transfer_keyword k2 ON k2.id=td.apply_key
         <where>
             <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
             <if test="userAllDeptId != null and !&quot;&quot;.equals(userAllDeptId)">

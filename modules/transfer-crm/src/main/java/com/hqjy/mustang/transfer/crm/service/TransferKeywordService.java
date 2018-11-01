@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.service;
 
 import com.hqjy.mustang.common.base.base.BaseService;
+import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferKeywordEntity;
 
 import java.util.HashMap;
@@ -35,4 +36,12 @@ public interface TransferKeywordService extends BaseService<TransferKeywordEntit
      * 获取关键词(第四级)
      */
     List<TransferKeywordEntity> getAllKeyword(Integer parentId);
+
+    /**
+     * 获取关键词列表
+     * @param O
+     * @param pageQuery
+     * @return
+     */
+    List<TransferKeywordEntity> findKeyPage(Object O, PageQuery pageQuery);
 }
