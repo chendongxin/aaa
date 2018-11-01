@@ -4,7 +4,6 @@ import com.hqjy.mustang.common.base.constant.Constant;
 import com.hqjy.mustang.common.model.admin.SysUserInfo;
 import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import feign.hystrix.FallbackFactory;
-import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -43,6 +42,16 @@ public interface SysUserDeptServiceFeign {
     @GetMapping(value = Constant.API_PATH + "/getUserDeptInfo")
     List<UserDeptInfo> getUserDeptInfo(@RequestParam("deptName") String deptName);
 
+    /**
+     * 根据部门Id获取部门下节点所有用户和部门信息
+     *
+     * @param deptId 部门名称
+     * @return 返回
+     * @author xyq 2018年11月1日10:02:26
+     */
+    @GetMapping(value = Constant.API_PATH + "/getUserDeptInfoByDeptId")
+    List<UserDeptInfo> getUserDeptInfoByDeptId(@RequestParam("deptId") Long deptId);
+
 
     /**
      * 获取所有角色为客服的用户
@@ -59,7 +68,7 @@ public interface SysUserDeptServiceFeign {
      * @return 返回 角色为客服的用户信息以及其所负责的电销部门数据
      * @author xyq 2018年10月31日16:14:26
      */
-    @GetMapping(value = Constant.API_PATH +"/getUserDeptByRoleCode")
+    @GetMapping(value = Constant.API_PATH + "/getUserDeptByRoleCode")
     List<UserDeptInfo> getUserDeptByRoleCode();
 
 }
@@ -92,6 +101,12 @@ class UserDeptServiceFallbackFactory implements FallbackFactory<SysUserDeptServi
             @Override
             public List<UserDeptInfo> getUserDeptByRoleCode() {
                 LOGGER.error("调用{}异常:{},原因：{}", "SysUserDeptServiceFeign.getUserDeptByRoleCode()", throwable.getMessage());
+                return new ArrayList<>();
+            }
+
+            @Override
+            public List<UserDeptInfo> getUserDeptInfoByDeptId(Long deptId) {
+                LOGGER.error("调用{}异常:{},原因：{}", "SysUserDeptServiceFeign.getUserDeptInfoByDeptId()",deptId, throwable.getMessage());
                 return new ArrayList<>();
             }
         };

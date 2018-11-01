@@ -32,7 +32,7 @@ public class SysUserEntity implements Serializable {
      * 用户名 user_name
      **/
     @NotBlank(message = "用户名不能为空", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
-    @Length(min = 1, max = 10, message = "用户名长度1-10位", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
+    @Length(min = 1, max = 15, message = "用户名长度1-15位", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
     private String userName;
 
     /**
