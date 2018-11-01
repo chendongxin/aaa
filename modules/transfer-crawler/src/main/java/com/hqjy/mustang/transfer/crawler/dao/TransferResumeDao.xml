@@ -296,7 +296,7 @@
             <if test="syncTime != null and !&quot;&quot;.equals(syncTime)">and DATE_FORMAT(sync_time,'%Y-%m-%d') = STR_TO_DATE(#{syncTime},'%Y-%m-%d')</if>
             <if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
             <if test="beginCreateTime != null and !&quot;&quot;.equals(beginCreateTime)">and DATE_FORMAT(send_time,'%Y-%m-%d') >= STR_TO_DATE(#{beginCreateTime},'%Y-%m-%d')</if>
-            <if test="endCreateTime != null and !&quot;&quot;.equals(endCreateTime)"> and DATE_FORMAT(send_time,'%Y-%m-%d') &lt;  STR_TO_DATE(#{endCreateTime},'%Y-%m-%d') </if>
+            <if test="endCreateTime != null and !&quot;&quot;.equals(endCreateTime)"> and DATE_FORMAT(send_time,'%Y-%m-%d') &lt;=  STR_TO_DATE(#{endCreateTime},'%Y-%m-%d') </if>
         </where>
     </select>
 
