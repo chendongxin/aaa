@@ -47,7 +47,7 @@ public class TransferGenWayController {
     /**
      * 获取所有推广方式
      */
-    @ApiOperation(value = "获取指定平台推广方式", notes = "获取所有推广方式，包含所有推广方式数据")
+    @ApiOperation(value = "获取所有推广方式", notes = "获取所有推广方式，包含所有推广方式数据")
     @GetMapping("/get/all")
     public R getAllGenWay() {
         return R.ok(transferGenWayService.getAllGenWayList());
