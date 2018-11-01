@@ -27,7 +27,14 @@ public class CallTaskServiceImpl implements CallTaskService {
     @Override
     public void callStart() {
         log.info("开始同步通话记录");
-       trasferCallApiService.callOut(LocalDateTime.now().minus(30, ChronoUnit.DAYS).toEpochSecond(ZoneOffset.of("+8")));
+        trasferCallApiService.callOut(LocalDateTime.now().minus(30, ChronoUnit.DAYS).toEpochSecond(ZoneOffset.of("+8")));
+        log.info("结束同步通话记录");
+    }
+
+    @Override
+    public void callStartStr(String hourStr) {
+        log.info("开始同步通话记录");
+        trasferCallApiService.callOut(LocalDateTime.now().minus(Integer.valueOf(hourStr), ChronoUnit.DAYS).toEpochSecond(ZoneOffset.of("+8")));
         log.info("结束同步通话记录");
     }
 }

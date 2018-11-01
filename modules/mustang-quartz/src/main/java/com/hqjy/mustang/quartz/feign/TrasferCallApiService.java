@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-/**
- * @author : heshuangshuang
- * @date : 2018/9/20 11:16
- */
+
 @FeignClient(name = "transfer-call", fallback = TransferCallApiServiceFallbackImpl.class)
 public interface TrasferCallApiService {
 

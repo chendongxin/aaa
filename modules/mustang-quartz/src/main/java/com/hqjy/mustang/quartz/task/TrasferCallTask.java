@@ -17,6 +17,9 @@ public class TrasferCallTask {
         this.callTaskService = callTaskService;
     }
 
+    public void callStartStr(String hourStr) {
+        callTaskService.callStartStr(hourStr);
+    }
     public void callStart() {
         callTaskService.callStart();
     }
