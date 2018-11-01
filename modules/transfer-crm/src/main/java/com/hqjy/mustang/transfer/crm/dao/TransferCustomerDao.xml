@@ -399,7 +399,6 @@
 			<if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like
 				concat('%',#{userName},'%')
 			</if>
-			<if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
 			<if test="deptName != null and !&quot;&quot;.equals(deptName)">and deptName like concat('%',#{deptName},'%')</if>
 			<if test="beginAllotTime != null and beginAllotTime != '' and endAllotTime != null and endAllotTime != ''">
 				and allot_time between #{beginAllotTime} and #{endAllotTime}

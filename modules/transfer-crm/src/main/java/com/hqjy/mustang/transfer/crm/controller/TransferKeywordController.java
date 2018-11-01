@@ -84,7 +84,7 @@ public class TransferKeywordController {
     @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
-        PageInfo<TransferKeywordEntity> keywordPageInfo = new PageInfo<>(transferKeywordService.findPage(PageQuery.build(pageParam, queryParam)));
+        PageInfo<TransferKeywordEntity> keywordPageInfo = new PageInfo<>(transferKeywordService.findKeyPage(pageParam.get("treeValue"), PageQuery.build(pageParam, queryParam)));
         return R.ok(keywordPageInfo);
     }
 
@@ -190,7 +190,7 @@ public class TransferKeywordController {
     /**
      * 获取关键词
      */
-    @ApiOperation(value = "获取关键词", notes = "获取关键词")
+    @ApiOperation(value = "获取指定父id下关键词", notes = "获取指定父id下关键词")
     @GetMapping("/get/all/Keyword/{id}")
     public R getAllKeyword(@PathVariable("id") Integer id) {
         return R.ok(transferKeywordService.getAllKeyword(id));

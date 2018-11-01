@@ -97,9 +97,9 @@ public class TransferGenWayController {
     }
 
     /**
-     * 新增推广方式
+     * 新增推广平台下的推广方式
      */
-    @ApiOperation(value = "新增推广方式", notes = "请求参数：\n" +
+    @ApiOperation(value = "新增推广平台下的推广方式", notes = "请求参数：\n" +
             "参数说明：\n" +
             "【推广平台Id:sourceId】,【推广方式名称:genWay】,【排序号:seq】,【状态:status】\n" +
             "示例：\n" +

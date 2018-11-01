@@ -157,7 +157,7 @@
             user_id = #{userId}
     </delete>
 
-	<!--  查询用户部门列表,包含部门信息 -->
+	<!--  查询用户赛道列表,包含赛道信息 -->
 	<select id="findUserProInfoList" resultMap="BaseResultMap">
         select
             sup.id, sup.user_id, sup.pro_id, sup.create_user_id, sup.create_time, sp.name

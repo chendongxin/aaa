@@ -5,6 +5,7 @@ import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.constant.SystemId;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.KeyWordUtil;
+import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.RecursionUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferKeywordDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferKeywordEntity;
@@ -42,6 +43,18 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
     @Override
     public HashMap<String, List<TransferKeywordEntity>> getRecursionTree(boolean showRoot) {
         return RecursionUtil.listTree(showRoot, TransferKeywordEntity.class, "getId", getAllKeywordList(), Collections.singletonList(SystemId.TREE_ROOT_INTE));
+    }
+
+    @Override
+    public List<TransferKeywordEntity> findKeyPage(Object o, PageQuery pageQuery) {
+        List<TransferKeywordEntity> list = baseDao.findPage(pageQuery);
+        List<TransferKeywordEntity> entityList = new ArrayList<>();
+        for (TransferKeywordEntity entity : list) {
+            if (!entity.getId().equals(Integer.valueOf(o.toString()))) {
+                entityList.add(entity);
+            }
+        }
+        return entityList;
     }
 
     /**
