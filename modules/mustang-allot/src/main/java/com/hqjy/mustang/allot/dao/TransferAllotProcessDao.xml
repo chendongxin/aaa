@@ -228,7 +228,7 @@
         </trim>
         values
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            1,
+            0,
             <if test="null != customerId">#{customerId},</if>
             <if test="null != deptId">#{deptId},</if>
             <if test="null != deptName">#{deptName},</if>
@@ -251,7 +251,7 @@
     <update id="updateNotActivated">
         update transfer_process
         <set>
-            active = 0
+            active = 1
         </set>
         where customer_id = #{customerId}
     </update>
@@ -260,7 +260,7 @@
     <update id="updateActive">
         update transfer_process
         <set>
-            active = 1
+            active = 0
         </set>
         where process_id = #{processId}
     </update>
