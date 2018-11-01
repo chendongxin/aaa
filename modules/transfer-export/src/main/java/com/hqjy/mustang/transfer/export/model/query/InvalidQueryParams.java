@@ -28,16 +28,16 @@ public class InvalidQueryParams {
     private Long userName;
 
     @ApiModelProperty(value = "开始创建时间")
-    private String beginCreateTime;
+    private String beginTransferCreateTime;
 
     @ApiModelProperty(value = "结束创建时间")
-    private String endCreateTime;
+    private String endTransferCreateTime;
 
     @ApiModelProperty(value = "开始无效时间")
-    private String beginInvalidTime;
+    private String beginCreateTime;
 
     @ApiModelProperty(value = "结束无效时间")
-    private String endInvalidTime;
+    private String endCreateTime;
 
     @ApiModelProperty(value = "客户姓名")
     private String name;
