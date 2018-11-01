@@ -37,7 +37,7 @@ public class SysDeptEntity implements Serializable {
      * 部门名称 dept_name
      **/
     @NotBlank(message = "部门名称不能为空", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
-    @Length(min = 1, max = 10, message = "部门名称长度1-10位", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
+    @Length(min = 1, max = 15, message = "部门名称长度1-15位", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
     private String deptName;
 
     /**

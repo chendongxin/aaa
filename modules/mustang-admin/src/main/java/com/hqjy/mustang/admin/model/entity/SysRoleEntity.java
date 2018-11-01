@@ -2,6 +2,7 @@ package com.hqjy.mustang.admin.model.entity;
 
 import com.hqjy.mustang.common.base.validator.RestfulValid;
 import lombok.Data;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Min;
@@ -34,6 +35,7 @@ public class SysRoleEntity implements Serializable {
      * 角色名称 role_name
      **/
     @NotBlank(message = "角色名称", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
+    @Length(min = 1, max = 15, message = "用户名长度1-15位", groups = {RestfulValid.POST.class, RestfulValid.PUT.class})
     private String roleName;
 
     /**
