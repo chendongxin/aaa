@@ -97,7 +97,14 @@ public class TransferCallRecordServiceImpl extends BaseServiceImpl<TransferCallR
         List<TransferCallRecordEntity> list = baseDao.findPage(pageQuery);
         list.forEach(v -> {
             v.setRingTimeStr(DateUtils.secondToTime(v.getRingTime()));
-            v.setTotalDurationStr(DateUtils.secondToTime(v.getTotalDuration()));
+            if(v.getTotalDuration() != null){
+                v.setTotalDurationStr(DateUtils.secondToTime(v.getTotalDuration()));
+                v.setTotalCall(v.getRingTime()+v.getTotalDuration());
+                v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
+            }else{
+                v.setTotalCall(v.getRingTime());
+                v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
+            }
         });
         return list;
     }

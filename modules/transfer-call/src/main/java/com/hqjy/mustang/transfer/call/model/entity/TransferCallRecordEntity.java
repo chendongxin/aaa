@@ -115,5 +115,10 @@ public class TransferCallRecordEntity implements Serializable {
     @JSONField(serialize = false)
     private Long insertDbTime;
 
+    /**
+     * 通话总时长
+     */
+    private Long totalCall;
+    private String totalCallStr;
     private static final long serialVersionUID = 1L;
 }

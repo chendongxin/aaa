@@ -1,10 +1,14 @@
 package com.hqjy.mustang.transfer.call.controller;
 
+import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.utils.PageInfo;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.R;
+import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.transfer.call.model.entity.TransferCallRecordEntity;
+import com.hqjy.mustang.transfer.call.service.CallCenterService;
 import com.hqjy.mustang.transfer.call.service.TransferCallRecordService;
+import com.netflix.discovery.converters.Auto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +27,8 @@ public class TransferCallRecordController {
 
     @Autowired
     private TransferCallRecordService transferCallRecordService;
-
+    @Autowired
+    private CallCenterService callRecordService;
     @ApiOperation(value = "查询通话记录", notes = "支持分页，排序和高级查询\n" +
             "{\n" +
             "    \"msg\": \"成功\",\n" +
@@ -49,6 +54,8 @@ public class TransferCallRecordController {
             "                \"[拨号状态]\tstatus\": \"接通\",\n" +
             "                \"[通话时长(秒)]\t totalDuration\": 80,\n" +
             "                \"[通话时长（时分秒）]  totalDurationStr\": \"00:01:20\",\n" +
+            "                \"[总时长(秒)]\t totalCall\": 124,\n" +
+            "                \"[总时长（时分秒）]  totalCallStr\": \"00:02:04\",\n" +
             "                \"[通话唯一识别码]\t uniqueId\": \"94e7816c-1887-4d27-bc75-a3018584c2b0\"\n" +
             "            }\n" +
             "        ],\n" +
@@ -66,4 +73,16 @@ public class TransferCallRecordController {
         return R.ok(userPageInfo);
     }
 
+    /**
+     * 获取录音文件地址
+     */
+    @GetMapping("/recordFile/{id}")
+    @ApiOperation(value = "获取录音文件地址", notes = "参数说明：{id}:通话记录ID  示例：/recordFile/{id} ")
+    public R loadRecordFile(@PathVariable("id") Long id) {
+        String fileUrl = callRecordService.getRecordFileUrl(id);
+        if (StringUtils.isNotEmpty(fileUrl)) {
+            return R.result(fileUrl);
+        }
+        return R.error(StatusCode.DATABASE_SELECT_FAILURE);
+    }
 }

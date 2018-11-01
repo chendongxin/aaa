@@ -1,5 +1,7 @@
 package com.hqjy.mustang.transfer.call.service;
 
+import com.hqjy.mustang.transfer.call.model.entity.TransferCallRecordEntity;
+
 /**
  * @author : heshuangshuang
  * @date : 2018/9/7 16:45
