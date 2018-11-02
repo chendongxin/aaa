@@ -41,47 +41,48 @@
 
     <!-- 商机上门量	-->
     <select id="countVisitBusiness" resultMap="baseMap">
-        SELECT COUNT(customer_id) AS num ,create_user_dept_id AS deptId,create_user_id as userId
-        FROM(
-            SELECT v2.customer_id ,v2.create_user_dept_id,v2.create_user_id
-            FROM (
-                SELECT c.customer_id ,c.create_user_dept_id,c.create_user_id,r.visit_status
-                FROM transfer_customer_reservation r
-                INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-                WHERE r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.create_user_id IN ${userIds}
-                <if test="sourceId!=null">
-                    AND c.source_id=#{sourceId}
-                </if>
-                <if test="companyId!=null">
-                    AND c.company_id=#{companyId}
-                </if>
-                GROUP BY r.customer_id
-            )v2 WHERE v2.visit_status=1
+        SELECT COUNT(v.customer_id) AS num,v.create_user_dept_id AS deptId,v.create_user_id AS userId
+        FROM (
+            <!-- 首次预约单	-->
+            SELECT
+            r.customer_id,c.create_user_dept_id,c.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            FROM
+            transfer_customer_reservation r
+            INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
+            WHERE c.create_user_id IN ${userIds}
+            <if test="sourceId!=null">
+                AND c.source_id=#{sourceId}
+            </if>
+            <if test="companyId!=null">
+                AND c.company_id=#{companyId}
+            </if>
+            GROUP BY r.customer_id
         ) v
-        GROUP BY userId,deptId;
+        WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime} AND v.visit_status=1
+        GROUP BY deptId,userId
     </select>
 
     <!-- 有效上门量-->
     <select id="countValidVisitBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.create_user_dept_id AS deptId,v.create_user_id AS userId
-        FROM(
-            SELECT v2.customer_id ,v2.create_user_dept_id,v2.create_user_id
-            FROM(
-                SELECT c.customer_id ,c.create_user_dept_id,c.create_user_id,r.valid_visit
-                FROM transfer_customer_reservation r
-                INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-                WHERE r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.create_user_id IN ${userIds}
-                <if test="sourceId!=null">
-                    AND c.source_id=#{sourceId}
-                </if>
-                <if test="companyId!=null">
-                    AND c.company_id=#{companyId}
-                </if>
-                GROUP BY r.customer_id
-            )v2 WHERE v2.valid_visit=1
+        SELECT COUNT(v.customer_id) AS num,v.create_user_dept_id AS deptId,v.create_user_id AS userId
+        FROM (
+            <!-- 首次预约单	-->
+            SELECT
+            r.customer_id,c.create_user_dept_id,c.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            FROM
+            transfer_customer_reservation r
+            INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
+            WHERE c.create_user_id IN ${userIds}
+            <if test="sourceId!=null">
+                AND c.source_id=#{sourceId}
+            </if>
+            <if test="companyId!=null">
+                AND c.company_id=#{companyId}
+            </if>
+            GROUP BY r.customer_id
         ) v
-        GROUP BY deptId,userId;
-
+        WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime} AND v.valid_visit=1
+        GROUP BY deptId,userId
     </select>
 
     <!-- 成交量	成交时间在统计周期内商机的成交量-->

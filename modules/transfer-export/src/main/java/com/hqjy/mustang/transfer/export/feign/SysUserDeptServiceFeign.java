@@ -43,9 +43,9 @@ public interface SysUserDeptServiceFeign {
     List<UserDeptInfo> getUserDeptInfo(@RequestParam("deptName") String deptName);
 
     /**
-     * 根据部门Id获取部门下节点所有用户和部门信息
+     * 根据部门Id获取所选部门下（含子部门，本部门）的电销专员及其对应电销部门
      *
-     * @param deptId 部门名称
+     * @param deptId 部门Id
      * @return 返回
      * @author xyq 2018年11月1日10:02:26
      */

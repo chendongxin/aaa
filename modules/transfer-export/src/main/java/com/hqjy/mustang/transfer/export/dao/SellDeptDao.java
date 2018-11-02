@@ -1,7 +1,6 @@
 package com.hqjy.mustang.transfer.export.dao;
 
 import com.hqjy.mustang.transfer.export.model.entity.CustomerEntity;
-import com.hqjy.mustang.transfer.export.model.query.CustomerQueryParams;
 import com.hqjy.mustang.transfer.export.model.query.SellQueryParams;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Component;
@@ -33,21 +32,6 @@ public interface SellDeptDao {
      */
     List<CustomerEntity> countVisitBusiness(SellQueryParams params);
 
-    /**
-     * 统计今日预约上门量
-     *
-     * @param params 参数
-     * @return 返回结果
-     */
-    List<CustomerEntity> countVisitTodayAppointBusiness(SellQueryParams params);
-
-    /**
-     * 统计明日预约上门量
-     *
-     * @param params 参数
-     * @return 返回结果
-     */
-    List<CustomerEntity> countVisitTomoAppointBusiness(SellQueryParams params);
 
     /**
      * 统计有效商机量
@@ -64,6 +48,15 @@ public interface SellDeptDao {
      * @return 返回结果
      */
     List<CustomerEntity> countDealBusiness(SellQueryParams params);
+
+
+    /**
+     * 统计电销部门预约量
+     *
+     * @param params 参数
+     * @return 返回结果
+     */
+    List<CustomerEntity> countReservation(SellQueryParams params);
 
     /**
      * 统计部门有效上门量

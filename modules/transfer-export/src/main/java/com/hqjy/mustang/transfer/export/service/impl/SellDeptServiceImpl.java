@@ -55,8 +55,10 @@ public class SellDeptServiceImpl implements SellDeptService {
     @Override
     public SellDeptReportResult sellDeptList(PageParams params, SellQueryParams query) {
         List<SellDeptReportData> list = this.check(query);
-        this.setSaleNum(query, list);
-        this.setSaleRate(list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+            this.setSaleRate(list);
+        }
         SellDeptReportTotal total = this.countTotal(list);
         PageUtil<SellDeptReportData> pageList = new PageUtil<>(params, list);
         return new SellDeptReportResult().setPageList(pageList).setTotal(total);
@@ -82,12 +84,11 @@ public class SellDeptServiceImpl implements SellDeptService {
 
     private void setSaleNum(SellQueryParams query, List<SellDeptReportData> list) {
         List<CustomerEntity> visitBusiness = sellDeptDao.countVisitBusiness(query);
-        List<CustomerEntity> visitTodayAppointBusiness = sellDeptDao.countVisitTodayAppointBusiness(query);
-        List<CustomerEntity> visitTomoAppointBusiness = sellDeptDao.countVisitTomoAppointBusiness(query);
         List<CustomerEntity> validBusiness = sellDeptDao.countValidBusiness(query);
         List<CustomerEntity> dealBusiness = sellDeptDao.countDealBusiness(query);
         List<CustomerEntity> createBusiness = sellDeptDao.countBusiness(query);
         List<CustomerEntity> visitValidBusiness = sellDeptDao.countVisitValidBusiness(query);
+        List<CustomerEntity> reservation = sellDeptDao.countReservation(query);
         list.forEach(x -> {
             //上门量
             visitBusiness.forEach(y -> {
@@ -95,18 +96,7 @@ public class SellDeptServiceImpl implements SellDeptService {
                     x.setVisitNum(y.getNum());
                 }
             });
-            //今日预约上门量
-            visitTodayAppointBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
-                    x.setVisitTodayAppointNum(y.getNum());
-                }
-            });
-            //明日预约上门量
-            visitTomoAppointBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
-                    x.setVisitTomorrowAppointNum(y.getNum());
-                }
-            });
+
             //商机量
             createBusiness.forEach(y -> {
                 if (x.getDeptId().equals(y.getDeptId())) {
@@ -125,6 +115,12 @@ public class SellDeptServiceImpl implements SellDeptService {
                     x.setDealNum(y.getNum());
                 }
             });
+            //预约量
+            reservation.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId())) {
+                    x.setReservationNum(y.getNum());
+                }
+            });
             //有效上门量
             visitValidBusiness.forEach(y -> {
                 if (x.getDeptId().equals(y.getDeptId())) {
@@ -141,8 +137,8 @@ public class SellDeptServiceImpl implements SellDeptService {
             x.setVisitValidRate(df.format(x.getValidNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getValidNum()));
             //商机有效率:有效商机量/商机量
             x.setValidRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getValidNum() / x.getBusinessNum()));
-            //实际上门率:有效上门量/商机量
-            x.setVisitRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getBusinessNum()));
+            //实际上门率:上门量/预约量
+            x.setVisitRate(df.format(x.getReservationNum() == 0 ? 0 : (double) x.getVisitNum() / x.getReservationNum()));
         });
     }
 
@@ -171,8 +167,10 @@ public class SellDeptServiceImpl implements SellDeptService {
 
     private List<SellDeptReportData> getSellDeptData(SellQueryParams query) {
         List<SellDeptReportData> list = this.check(query);
-        this.setSaleNum(query, list);
-        this.setSaleRate(list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+            this.setSaleRate(list);
+        }
         return list;
     }
 
@@ -186,8 +184,6 @@ public class SellDeptServiceImpl implements SellDeptService {
         SellDeptReportTotal total = new SellDeptReportTotal();
         list.forEach(x -> {
             total.setVisitNum(total.getVisitNum() + x.getVisitNum());
-            total.setVisitTodayAppointNum(total.getVisitTodayAppointNum() + x.getVisitTodayAppointNum());
-            total.setVisitTomorrowAppointNum(total.getVisitTomorrowAppointNum() + x.getVisitTomorrowAppointNum());
             total.setBusinessNum(total.getBusinessNum() + x.getBusinessNum());
             total.setValidNum(total.getValidNum() + x.getValidNum());
             total.setDealNum(total.getDealNum() + x.getDealNum());
@@ -197,8 +193,8 @@ public class SellDeptServiceImpl implements SellDeptService {
         total.setVisitValidRate(df.format(total.getValidNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getValidNum()));
         //商机有效率:有效商机量/商机量
         total.setValidRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getValidNum() / total.getBusinessNum()));
-        //实际上门率:有效上门量/商机量
-        total.setVisitRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getBusinessNum()));
+        //实际上门率:上门量/预约量
+        total.setVisitRate(df.format(total.getReservationNum() == 0 ? 0 : (double) total.getVisitNum() / total.getReservationNum()));
         return total;
     }
 }

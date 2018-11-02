@@ -6,8 +6,10 @@ import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.admin.SysDeptInfo;
+import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.SellCallDao;
 import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
+import com.hqjy.mustang.transfer.export.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.SellCallReportData;
 import com.hqjy.mustang.transfer.export.model.dto.SellCallReportResult;
 import com.hqjy.mustang.transfer.export.model.dto.SellCallReportTotal;
@@ -39,12 +41,12 @@ import java.util.stream.Collectors;
 public class SellCallServiceImpl implements SellCallService {
 
     private final static Logger LOG = LoggerFactory.getLogger(PromotionDailyServiceImpl.class);
-    private SysDeptServiceFeign sysDeptServiceFeign;
+    private SysUserDeptServiceFeign sysUserDeptServiceFeign;
     private SellCallDao sellCallDao;
 
     @Autowired
-    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
-        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
+        this.sysUserDeptServiceFeign = sysUserDeptServiceFeign;
     }
 
     @Autowired
@@ -55,8 +57,10 @@ public class SellCallServiceImpl implements SellCallService {
     @Override
     public SellCallReportResult sellCallList(PageParams params, SellQueryParams query) {
         List<SellCallReportData> list = this.check(query);
-        this.setSaleNum(query, list);
-        this.setSaleRate(list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+            this.setSaleRate(list);
+        }
         SellCallReportTotal total = this.countTotal(list);
         PageUtil<SellCallReportData> pageList = new PageUtil<>(params, list);
 
@@ -67,18 +71,20 @@ public class SellCallServiceImpl implements SellCallService {
     private List<SellCallReportData> check(SellQueryParams query) {
 
         List<SellCallReportData> list = new ArrayList<>();
-        List<SysDeptInfo> deptInfo = sysDeptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
-
-        List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
-        List<String> ids = new ArrayList<>();
-
-        deptList.forEach(y -> {
-            list.add(new SellCallReportData().setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
-            ids.add(String.valueOf(y.getDeptId()));
+        //获取所选部门下（含子部门，本部门）的电销专员及其对应电销部门
+        List<UserDeptInfo> userDeptInfos = sysUserDeptServiceFeign.getUserDeptInfoByDeptId(query.getDeptId());
+        List<UserDeptInfo> userDeptInfoList = userDeptInfos.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
+        List<String> deptIds = new ArrayList<>();
+        List<String> userIds = new ArrayList<>();
+        userDeptInfoList.forEach(y -> {
+            list.add(new SellCallReportData().setUserId(y.getUserId()).setSellName(y.getUserName()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
+            deptIds.add(String.valueOf(y.getDeptId()));
+            userIds.add(String.valueOf(y.getUserId()));
         });
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
         query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
-        query.setDeptIds(StringUtils.listToString(ids));
+        query.setDeptIds(StringUtils.listToString(deptIds));
+        query.setUserIds(StringUtils.listToString(userIds));
         return list;
     }
 
@@ -89,19 +95,19 @@ public class SellCallServiceImpl implements SellCallService {
         list.forEach(x -> {
             //拨打量
             callBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setCallNum(y.getNum());
                 }
             });
             //接通量
             connectBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setConnectNum(y.getNum());
                 }
             });
             //通话时长
             callTimeBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setDuration(y.getDuration());
                 }
             });
@@ -141,8 +147,10 @@ public class SellCallServiceImpl implements SellCallService {
 
     private List<SellCallReportData> getSellCallData(SellQueryParams query) {
         List<SellCallReportData> list = this.check(query);
-        this.setSaleNum(query, list);
-        this.setSaleRate(list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+            this.setSaleRate(list);
+        }
         return list;
     }
 

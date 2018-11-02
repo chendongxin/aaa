@@ -62,8 +62,10 @@ public class SellAttacheServiceImpl implements SellAttacheService {
     @Override
     public SellAttacheReportResult sellAttacheList(PageParams params, SellQueryParams query) {
         List<SellAttacheReportData> list = this.check(query);
-        this.setSaleNum(query, list);
-        this.setSaleRate(list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+            this.setSaleRate(list);
+        }
         SellAttacheReportTotal total = this.countTotal(list);
         PageUtil<SellAttacheReportData> pageList = new PageUtil<>(params, list);
 
@@ -72,17 +74,21 @@ public class SellAttacheServiceImpl implements SellAttacheService {
 
     private List<SellAttacheReportData> check(SellQueryParams query) {
         List<SellAttacheReportData> list = new ArrayList<>();
+        //获取所选部门下（含子部门，本部门）的电销专员及其对应电销部门
         List<UserDeptInfo> userDeptInfos = sysUserDeptServiceFeign.getUserDeptInfoByDeptId(query.getDeptId());
         List<UserDeptInfo> userDeptInfoList = userDeptInfos.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
-        List<String> ids = new ArrayList<>();
+        List<String> deptIds = new ArrayList<>();
+        List<String> userIds = new ArrayList<>();
         userDeptInfoList.forEach(y -> {
             list.add(new SellAttacheReportData().setUserId(y.getUserId()).setName(y.getUserName()).setDeptId(y.getDeptId()).setDeptName(y.getDeptName()));
-            ids.add(String.valueOf(y.getDeptId()));
+            deptIds.add(String.valueOf(y.getDeptId()));
+            userIds.add(String.valueOf(y.getUserId()));
         });
 
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
         query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
-        query.setDeptIds(StringUtils.listToString(ids));
+        query.setDeptIds(StringUtils.listToString(deptIds));
+        query.setUserIds(StringUtils.listToString(userIds));
         return list;
     }
 
@@ -91,49 +97,42 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         List<CustomerEntity> validBusiness = sellAttacheDao.countValidBusiness(query);
         List<CustomerEntity> dealBusiness = sellAttacheDao.countDealBusiness(query);
         List<CustomerEntity> allotBusiness = sellAttacheDao.countAllotBusiness(query);
-        List<CustomerEntity> visitTodayAppointBusiness = sellAttacheDao.countVisitTodayAppointBusiness(query);
-        List<CustomerEntity> visitTomoAppointBusiness = sellAttacheDao.countVisitTomoAppointBusiness(query);
         List<CustomerEntity> visitValidBusiness = sellAttacheDao.countVisitValidBusiness(query);
+        List<CustomerEntity> reservation = sellAttacheDao.countReservation(query);
         list.forEach(x -> {
             //上门量
             visitBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setVisitNum(y.getNum());
                 }
             });
             //商机有效量
             validBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setValidNum(y.getNum());
                 }
             });
             //成交量
             dealBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setDealNum(y.getNum());
                 }
             });
             //分配商机量
             allotBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setAllotNum(y.getNum());
                 }
             });
-            //今日预约上门量
-            visitTodayAppointBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
-                    x.setVisitTodayAppointNum(y.getNum());
-                }
-            });
-            //明日预约上门量
-            visitTomoAppointBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
-                    x.setVisitTomorrowAppointNum(y.getNum());
+            //预约量
+            reservation.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
+                    x.setReservationNum(y.getNum());
                 }
             });
             //有效上门量
             visitValidBusiness.forEach(y -> {
-                if (x.getDeptId().equals(y.getDeptId())) {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setVisitValidNum(y.getNum());
                 }
             });
@@ -147,8 +146,8 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             x.setVisitValidRate(df.format(x.getValidNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getValidNum()));
             //商机有效率:有效商机量/分配给电销专员商机量
             x.setValidRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getValidNum() / x.getAllotNum()));
-            //实际上门率:有效上门量/电销专员商机量
-            x.setVisitRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getAllotNum()));
+            //实际上门率:上门量/预约量
+            x.setVisitRate(df.format(x.getReservationNum() == 0 ? 0 : (double) x.getVisitNum() / x.getReservationNum()));
         });
     }
 
@@ -177,8 +176,10 @@ public class SellAttacheServiceImpl implements SellAttacheService {
 
     private List<SellAttacheReportData> getSellAttacheData(SellQueryParams query) {
         List<SellAttacheReportData> list = this.check(query);
-        this.setSaleNum(query, list);
-        this.setSaleRate(list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+            this.setSaleRate(list);
+        }
         return list;
     }
 
@@ -195,8 +196,6 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             total.setValidNum(total.getValidNum() + x.getValidNum());
             total.setDealNum(total.getDealNum() + x.getDealNum());
             total.setAllotNum(total.getAllotNum() + x.getAllotNum());
-            total.setVisitTodayAppointNum(total.getVisitTodayAppointNum() + x.getVisitTodayAppointNum());
-            total.setVisitTomorrowAppointNum(total.getVisitTomorrowAppointNum() + x.getVisitTomorrowAppointNum());
             total.setVisitValidNum(total.getVisitValidNum() + x.getVisitValidNum());
         });
         DecimalFormat df = new DecimalFormat("0.00%");
@@ -204,8 +203,8 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         total.setVisitValidRate(df.format(total.getValidNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getValidNum()));
         //商机有效率:有效商机量/分配给电销专员商机量
         total.setValidRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getValidNum() / total.getAllotNum()));
-        //实际上门率:有效上门量/电销专员商机量
-        total.setVisitRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getAllotNum()));
+        //实际上门率:上门量/预约量
+        total.setVisitRate(df.format(total.getReservationNum() == 0 ? 0 : (double) total.getVisitNum() / total.getReservationNum()));
         return total;
     }
 }
