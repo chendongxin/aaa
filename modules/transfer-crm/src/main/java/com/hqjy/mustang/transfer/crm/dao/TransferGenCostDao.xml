@@ -11,7 +11,7 @@
     <result column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="source_id" jdbcType="BIGINT" property="sourceId" />
     <result column="way_id" jdbcType="BIGINT" property="wayId" />
-    <result column="gen_day" jdbcType="TIMESTAMP" property="genDay" />
+    <result column="gen_day" jdbcType="DATE" property="genDay" />
     <result column="initiative_money" jdbcType="DECIMAL" property="initiativeMoney" />
     <result column="passive_money" jdbcType="DECIMAL" property="passiveMoney" />
     <result column="initiative_virtual" jdbcType="DECIMAL" property="initiativeVirtual" />
@@ -172,7 +172,7 @@
     select
 	  tgc.id, tgc.dept_id, tgc.company_id, tgc.pro_id, tgc.source_id, tgc.way_id, tgc.gen_day, tgc.initiative_money,
 	  tgc.passive_money, tgc.initiative_virtual, tgc.passive_virtual, tgc.create_user_id, tgc.create_user_name,
-	  tgc.create_time, tgc.update_user_id, tgc.update_user_name, tgc.update_time, tgc1.name, tgw.gen_way, sd.dept_name
+	  tgc.create_time, tgc1.name, tgw.gen_way, sd.dept_name
 	from transfer_gen_cost tgc
 		left join transfer_gen_company tgc1 on tgc.company_id = tgc1.company_id
 		left join transfer_gen_way tgw on tgc.way_id = tgw.way_id
