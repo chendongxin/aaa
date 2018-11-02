@@ -144,7 +144,9 @@
         from transfer_sms_template
         <where>
             <if test="id != null and !&quot;&quot;.equals(id)">and id = #{id}</if>
-            <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+            <if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+                and dept_id in ${deptIds}
+            </if>
             <if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
             <if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
             <if test="content != null and !&quot;&quot;.equals(content)">and content like concat('%',#{content},'%')</if>

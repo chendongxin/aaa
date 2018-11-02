@@ -2,6 +2,7 @@ package com.hqjy.mustang.transfer.sms.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
+import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.model.crm.TransferCustomerInfo;
@@ -9,6 +10,7 @@ import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.transfer.sms.constant.SmsConstant;
 import com.hqjy.mustang.transfer.sms.dao.TransferSmsDao;
 import com.hqjy.mustang.transfer.sms.dao.TransferSmsReplyDao;
+import com.hqjy.mustang.transfer.sms.fegin.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsReplyDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsResultDTO;
 import com.hqjy.mustang.transfer.sms.model.dto.SmsStatusDTO;
@@ -18,6 +20,7 @@ import com.hqjy.mustang.transfer.sms.service.SmsApiService;
 import com.hqjy.mustang.transfer.sms.service.TransferSmsReplyService;
 import com.hqjy.mustang.transfer.sms.service.TransferSmsService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -27,10 +30,13 @@ import java.net.URLDecoder;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 
 /**
  * @author : heshuangshuang
@@ -46,13 +52,15 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
     private final SmsApiService smsApiService;
     private final TransferSmsReplyService transferSmsReplyService;
     private final TransferSmsReplyDao transferSmsReplyDao;
+    private final SysDeptServiceFeign sysDeptServiceFeign;
 
     @Autowired
     @Lazy
-    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService, TransferSmsReplyDao transferSmsReplyDao) {
+    public TransferSmsServiceImpl(SmsApiService smsApiService, TransferSmsReplyService transferSmsReplyService, TransferSmsReplyDao transferSmsReplyDao, SysDeptServiceFeign sysDeptServiceFeign) {
         this.smsApiService = smsApiService;
         this.transferSmsReplyService = transferSmsReplyService;
         this.transferSmsReplyDao = transferSmsReplyDao;
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
     }
 
     /**
@@ -210,5 +218,31 @@ public class TransferSmsServiceImpl extends BaseServiceImpl<TransferSmsDao, Tran
             }
         }
         return null;
+    }
+
+    @Override
+    public List<TransferSmsEntity> findPage(PageQuery pageQuery) {
+        Long deptId = MapUtils.getLong(pageQuery, "deptId");
+        //高级查询部门刷选
+        if (null != deptId) {
+            //部门下所有子部门
+            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
+            List<String> ids = new ArrayList<>();
+            allDeptUnderDeptId.forEach(x -> {
+                ids.add(String.valueOf(x));
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(ids));
+        }
+        //如果没有刷选部门过滤条件
+        if (null == deptId) {
+            //获取当前用户的部门以及子部门
+            List<Long> userAllDeptId = sysDeptServiceFeign.getUserDeptIdList(getUserId());
+            List<String> deptIds = new ArrayList<>();
+            userAllDeptId.forEach(x -> {
+                deptIds.add(String.valueOf(x));
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(deptIds));
+        }
+        return super.findPage(pageQuery);
     }
 }
