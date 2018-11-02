@@ -197,6 +197,7 @@
 		left join transfer_source ts on ts.source_id = tcs.source_id
 		where
 			tcs.company_id = #{companyId}
+		order by tcs.create_time desc
 	</select>
 
 	<select id="findByCompanyIdAndSourceId" resultMap="BaseResultMap">

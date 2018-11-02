@@ -218,6 +218,7 @@
             <if test="updateId != null and !&quot;&quot;.equals(updateId)">and sd.update_id = #{updateId}</if>
             <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and sd.DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
         </where>
+        order by sd.parent_id, sd.seq desc, sd.create_time desc
     </select>
 
     <!-- 查询记录数量 -->
