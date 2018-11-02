@@ -9,6 +9,7 @@
     <result column="source_id" jdbcType="BIGINT" property="sourceId" />
 	<result column="seq" jdbcType="INTEGER" property="seq" />
     <result column="status" jdbcType="TINYINT" property="status" />
+	<result column="sign" jdbcType="TINYINT" property="sign" />
 	<result column="gen_way" jdbcType="VARCHAR" property="genWay" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
@@ -20,7 +21,7 @@
   
   <!-- 表基本列 -->
   <sql id="Base_Column_List">
-    id, way_id, source_id, seq, status, create_user_id, create_user_name, create_time, update_user_id,
+    id, way_id, source_id, seq, status, sign, create_user_id, create_user_name, create_time, update_user_id,
     update_user_name, update_time
   </sql>
   
@@ -31,6 +32,7 @@
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and source_id = #{sourceId}</if>
 		<if test="seq != null and !&quot;&quot;.equals(seq)">and seq = #{seq}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
+		<if test="sign != null and !&quot;&quot;.equals(sign)">and sign = #{sign}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and create_user_name = #{createUserName}</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -48,6 +50,7 @@
 			<if test="null != sourceId">source_id, </if>
 			<if test="null != seq">seq, </if>
 			<if test="null != status">status, </if>
+			<if test="null != sign">sign, </if>
 			<if test="null != createUserId">create_user_id, </if>
 			<if test="null != createUserName">create_user_name, </if>
 			<if test="null != createTime">create_time, </if>
@@ -61,6 +64,7 @@
 			<if test="null != sourceId">#{sourceId}, </if>
 			<if test="null != seq">#{seq}, </if>
 			<if test="null != status">#{status}, </if>
+			<if test="null != sign">#{sign}, </if>
 			<if test="null != createUserId">#{createUserId}, </if>
 			<if test="null != createUserName">#{createUserName}, </if>
 			<if test="null != createTime">#{createTime}, </if>
@@ -78,6 +82,7 @@
 			<if test="null != sourceId">source_id = #{sourceId}, </if>
 			<if test="null != seq">seq = #{seq}, </if>
 			<if test="null != status">status = #{status}, </if>
+			<if test="null != sign">sign = #{sign}, </if>
 			<if test="null != createUserId">create_user_id = #{createUserId}, </if>
 			<if test="null != createUserName">create_user_name = #{createUserName}, </if>
 			<if test="null != createTime">create_time = #{createTime}, </if>
@@ -144,6 +149,7 @@
 		<if test="sourceId != null and !&quot;&quot;.equals(sourceId)">and tws.source_id = #{sourceId}</if>
 		<if test="seq != null and !&quot;&quot;.equals(seq)">and tws.seq = #{seq}</if>
 		<if test="status != null and !&quot;&quot;.equals(status)">and tws.status = #{status}</if>
+		<if test="sign != null and !&quot;&quot;.equals(sign)">and sign = #{sign}</if>
 		<if test="createUserId != null and !&quot;&quot;.equals(createUserId)">and tws.create_user_id = #{createUserId}</if>
 		<if test="createUserName != null and !&quot;&quot;.equals(createUserName)">and tws.create_user_name like concat('%',#{createUserName},'%')</if>
 		<if test="createTime != null and !&quot;&quot;.equals(createTime)">and tws.DATE_FORMAT(create_time,'%Y-%m-%d') = STR_TO_DATE(#{createTime},'%Y-%m-%d')</if>
@@ -195,6 +201,5 @@
 			source_id = #{sourceId}
 		and way_id = #{wayId}
 	</select>
-  
 
 </mapper>

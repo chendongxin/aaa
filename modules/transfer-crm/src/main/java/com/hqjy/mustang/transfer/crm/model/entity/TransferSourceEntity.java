@@ -22,11 +22,6 @@ public class TransferSourceEntity implements Serializable {
     private Long sourceId;
 
     /**
-     * 主键 parent_id
-     **/
-    private Long parentId;
-
-    /**
 	 * 来源名称 name
 	 **/
     private String name;
@@ -75,11 +70,6 @@ public class TransferSourceEntity implements Serializable {
 	 * 更新时间 update_time
 	 **/
     private Date updateTime;
-
-    /**
-     * 子推广公司
-     */
-    private List<TransferSourceEntity> children;
 
     /**
      * 该推广方式下的推广平台

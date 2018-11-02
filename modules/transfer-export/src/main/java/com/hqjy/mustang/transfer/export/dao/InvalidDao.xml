@@ -61,11 +61,11 @@
             </if>
             <if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
-            <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-                and DATE_FORMAT(tc.create_time,'%Y-%m-%d') between #{beginCreateTime} and #{endCreateTime}
+            <if test="beginTransferCreateTime != null and beginTransferCreateTime != '' and endTransferCreateTime != null and endTransferCreateTime != ''">
+                and DATE_FORMAT(tc.create_time,'%Y-%m-%d') between #{beginTransferCreateTime} and #{endTransferCreateTime}
             </if>
-            <if test="beginInvalidTime != null and beginInvalidTime != '' and endInvalidTime != null and endInvalidTime != ''">
-                and DATE_FORMAT(ti.create_time,'%Y-%m-%d') between #{beginInvalidTime} and #{endInvalidTime}
+            <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
+                and DATE_FORMAT(ti.create_time,'%Y-%m-%d') between #{beginCreateTime} and #{endCreateTime}
             </if>
         </where>
         GROUP BY tc.customer_id
