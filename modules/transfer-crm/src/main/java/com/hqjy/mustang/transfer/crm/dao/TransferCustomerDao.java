@@ -84,12 +84,7 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
     /**
      * 更新公司的被用标志
      */
-    int updateCom(Long companyId);
-
-    /**
-     * 更新平台的被用标志
-     */
-    int updateSou(Long sourceId);
+    int updateCom(@Param("companyId") Long companyId, @Param("sourceId") Long sourceId);
 
     /**
      * 更新关键词的被用标志
