@@ -7,10 +7,10 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="dept_id" jdbcType="INTEGER" property="deptId" />
     <result column="dept_name" jdbcType="VARCHAR" property="deptName" />
-    <result column="company_id" jdbcType="INTEGER" property="companyId" />
+    <result column="company_id" jdbcType="BIGINT" property="companyId" />
     <result column="pro_id" jdbcType="BIGINT" property="proId" />
     <result column="source_id" jdbcType="BIGINT" property="sourceId" />
-    <result column="way_id" jdbcType="INTEGER" property="wayId" />
+    <result column="way_id" jdbcType="BIGINT" property="wayId" />
     <result column="gen_day" jdbcType="TIMESTAMP" property="genDay" />
     <result column="initiative_money" jdbcType="DECIMAL" property="initiativeMoney" />
     <result column="passive_money" jdbcType="DECIMAL" property="passiveMoney" />

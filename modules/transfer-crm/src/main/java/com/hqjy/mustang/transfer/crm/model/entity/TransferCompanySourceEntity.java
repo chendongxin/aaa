@@ -49,6 +49,11 @@ public class TransferCompanySourceEntity implements Serializable {
     private byte status;
 
     /**
+     * 是否被用 0 未被用 1 被用
+     **/
+    private Integer sign;
+
+    /**
      * 创建人编号 create_user_id
      **/
     private Long createUserId;

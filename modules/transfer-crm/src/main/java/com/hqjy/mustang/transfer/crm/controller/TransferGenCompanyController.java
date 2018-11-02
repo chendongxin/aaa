@@ -296,12 +296,12 @@ public class TransferGenCompanyController {
     /**
      * 删除推广公司下的推广平台
      */
-    @ApiOperation(value = "删除推广平台", notes = "删除推广平台：/delete/1")
+    @ApiOperation(value = "删除推广公司下的推广平台", notes = "删除推广平台：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "sourceId", value = "推广平台ID", required = true, dataType = "Integer")
     @SysLog("删除推广公司")
-    @DeleteMapping("/source/{ids}")
-    public R deleteSource(@PathVariable("ids") Long[] ids) {
-        int count = transferCompanySourceService.deleteBatch(ids);
+    @DeleteMapping("/source/{id}")
+    public R deleteSource(@PathVariable("id") Long id) {
+        int count = transferCompanySourceService.delete(id);
         if (count > 0) {
             return R.ok();
         }

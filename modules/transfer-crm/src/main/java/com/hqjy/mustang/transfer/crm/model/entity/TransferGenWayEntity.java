@@ -16,6 +16,11 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class TransferGenWayEntity implements Serializable {
+
+    /**
+     * 来源平台与推广方式对应编号 id
+     **/
+    private Long id;
     /**
 	 * 编号 way_id
 	 **/

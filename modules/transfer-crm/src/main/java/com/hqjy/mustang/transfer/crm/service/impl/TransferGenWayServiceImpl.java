@@ -23,19 +23,9 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 public class TransferGenWayServiceImpl extends BaseServiceImpl<TransferGenWayDao, TransferGenWayEntity, Long> implements TransferGenWayService {
 
     @Autowired
+    private TransferGenWayDao transferGenWayDao;
+    @Autowired
     private TransferWaySourceService transferWaySourceService;
-    /**
-     * 增加推广方式
-     */
-    @Override
-    public int save(TransferGenWayEntity transferGenWayEntity) {
-        if (baseDao.findOneByGenName(transferGenWayEntity.getGenWay()) != null) {
-            throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
-        }
-        transferGenWayEntity.setCreateUserId(getUserId());
-        transferGenWayEntity.setCreateUserName(getUserName());
-        return baseDao.save(transferGenWayEntity);
-    }
 
     /**
      * 删除推广方式
@@ -58,27 +48,40 @@ public class TransferGenWayServiceImpl extends BaseServiceImpl<TransferGenWayDao
      */
     @Override
     public int update(TransferGenWaySourceDTO genWaySourceDTO) {
-        if (genWaySourceDTO.getGenWay() == null) {
-            return transferWaySourceService.update(new TransferWaySourceEntity().setSourceId(genWaySourceDTO.getSourceId())
-                .setSeq(genWaySourceDTO.getSeq()).setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-            );
+        TransferGenWayEntity transferGenWayEntity = transferGenWayDao.findOneByGenName(genWaySourceDTO.getGenWay());
+        TransferWaySourceEntity transferWaySourceEntity = new TransferWaySourceEntity();
+        if (null == transferGenWayEntity) {
+            transferGenWayEntity = new TransferGenWayEntity().setGenWay(genWaySourceDTO.getGenWay()).setStatus(genWaySourceDTO.getStatus())
+                    .setSeq(genWaySourceDTO.getSeq()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
+            transferGenWayDao.save(transferGenWayEntity);
         }
-        TransferGenWayEntity transferGenWayEntity = new TransferGenWayEntity().setGenWay(genWaySourceDTO.getGenWay()).setSeq(genWaySourceDTO.getSeq())
-                .setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
-        int count = super.save(transferGenWayEntity);
-        if (count > 0) {
-            count = transferWaySourceService.save(
-                    new TransferWaySourceEntity()
-                        .setWayId(transferGenWayEntity.getWayId()).setSourceId(genWaySourceDTO.getSourceId()).setSeq(genWaySourceDTO.getSeq())
-                        .setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-            );
-            if (count > 0) {
-                Long[] ids = new Long[1];
-                ids[0] = genWaySourceDTO.getId();
-                count = transferWaySourceService.deleteBatch(ids);
-            }
+        if (null == transferWaySourceService.findByWayIdAndSourceId(transferGenWayEntity.getWayId(),genWaySourceDTO.getSourceId())) {
+            transferWaySourceEntity.setWayId(transferGenWayEntity.getWayId());
         }
-        return count;
+        transferWaySourceEntity.setId(genWaySourceDTO.getId()).setSourceId(genWaySourceDTO.getSourceId()).setSeq(genWaySourceDTO.getSeq()).setStatus(genWaySourceDTO.getStatus())
+                .setUpdateUserId(getUserId()).setUpdateUserName(getUserName());
+        return transferWaySourceService.update(transferWaySourceEntity);
+//        if (genWaySourceDTO.getGenWay() == null) {
+//            return transferWaySourceService.update(new TransferWaySourceEntity().setSourceId(genWaySourceDTO.getSourceId())
+//                .setSeq(genWaySourceDTO.getSeq()).setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+//            );
+//        }
+//        TransferGenWayEntity transferGenWayEntity = new TransferGenWayEntity().setGenWay(genWaySourceDTO.getGenWay()).setSeq(genWaySourceDTO.getSeq())
+//                .setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
+//        int count = super.save(transferGenWayEntity);
+//        if (count > 0) {
+//            count = transferWaySourceService.save(
+//                    new TransferWaySourceEntity()
+//                        .setWayId(transferGenWayEntity.getWayId()).setSourceId(genWaySourceDTO.getSourceId()).setSeq(genWaySourceDTO.getSeq())
+//                        .setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+//            );
+//            if (count > 0) {
+//                Long[] ids = new Long[1];
+//                ids[0] = genWaySourceDTO.getId();
+//                count = transferWaySourceService.deleteBatch(ids);
+//            }
+//        }
+//        return count;
     }
 
     /**
