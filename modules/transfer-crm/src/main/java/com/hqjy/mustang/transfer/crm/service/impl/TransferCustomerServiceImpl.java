@@ -206,8 +206,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             }
             // 将赛道、公司、平台、关键词的sign改为被用
             baseDao.updatePro(customerDto.getProId());
-            baseDao.updateCom(customerDto.getCompanyId());
-            baseDao.updateSou(customerDto.getSourceId());
+            baseDao.updateCom(customerDto.getCompanyId(), customerDto.getSourceId());
             baseDao.updateKey(customerDto.getApplyKey());
             Map<String, Object> customerHashMap = new HashMap<>(16);
             customerHashMap.put("proId", customerDto.getProId());
@@ -233,7 +232,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                         .setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId()).setCompanyName(customerDto.getCompanyName())
                         .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
                         .setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-                        .setCreateUserDeptId(sysDeptInfoList.get(0).getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
+                        .setCreateUserDeptId(customerDto.getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
                 super.save(entity);
                 customerDto.setCustomerId(entity.getCustomerId());
                 transferCustomerDetailService.save(
@@ -614,7 +613,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             .setName(c.getName()).setAge(Byte.valueOf(c.getYear())).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                             .setPhone(c.getPhone()).setEmail(c.getEmail()).setPositionApplied(c.getPositionApplied())
                             .setWorkingPlace(c.getWorkingPlace()).setSchool(c.getSchool()).setMajor(c.getMajor())
-                            .setNote(c.getNote()).setCreateUserDeptId(sysDeptServiceFeign.getUserDeptList(getUserId()).get(0).getDeptId());
+                            .setNote(c.getNote()).setCreateUserDeptId(upDTO.getDeptId());
 
 //                    发送客户数据到商机分配消息队列
                     rabbitTemplate.convertAndSend(RabbitQueueConstant.MUSTANG_TRANSFER_QUEUE, JSON.toJSONString(new TransferCustomerQueueDTO()

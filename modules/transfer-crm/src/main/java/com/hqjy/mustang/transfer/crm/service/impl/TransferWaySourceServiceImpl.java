@@ -31,8 +31,11 @@ public class TransferWaySourceServiceImpl extends BaseServiceImpl<TransferWaySou
      * 删除指定平台下的推广方式
      */
     @Override
-    public int deleteBatch(Long[] ids) {
-        return baseDao.deleteBatch(ids);
+    public int delete(Long id) {
+        if (baseDao.findOne(id).getSign() == 1) {
+            throw new RRException(StatusCode.DATABASE_SELECT_USE);
+        }
+        return baseDao.delete(id);
     }
 
     /**
@@ -58,7 +61,7 @@ public class TransferWaySourceServiceImpl extends BaseServiceImpl<TransferWaySou
             }
         }
         return transferWaySourceDao.save(transferWaySourceEntity.setSourceId(transferGenWaySourceDTO.getSourceId())
-                .setSeq(transferGenWaySourceDTO.getSeq()).setStatus(transferGenWaySourceDTO.getStatus())
+                .setSeq(transferGenWaySourceDTO.getSeq()).setStatus(transferGenWaySourceDTO.getStatus()).setSign(0)
                 .setCreateUserId(getUserId()).setCreateUserName(getUserName())
         );
     }
@@ -70,6 +73,14 @@ public class TransferWaySourceServiceImpl extends BaseServiceImpl<TransferWaySou
     public List<TransferWaySourceEntity> findPageSource(PageQuery pageQuery) {
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
         return transferWaySourceDao.listPageSource(pageQuery);
+    }
+
+    /**
+     * 根据wayId和sourceId查询是否存在重复数据
+     */
+    @Override
+    public TransferWaySourceEntity findByWayIdAndSourceId(Long wayId, Long sourceId) {
+        return baseDao.findByWayIdAndSourceId(wayId,sourceId);
     }
 
 }

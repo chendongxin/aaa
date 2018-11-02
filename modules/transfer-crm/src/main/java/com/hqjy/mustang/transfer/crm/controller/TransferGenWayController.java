@@ -130,9 +130,9 @@ public class TransferGenWayController {
     @ApiOperation(value = "删除指定平台的推广方式", notes = "删除指定平台的推广方式：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "wayId", value = "推广方式ID", required = true, dataType = "Long")
     @SysLog("删除指定平台的推广方式")
-    @DeleteMapping("/{ids}")
-    public R delete(@PathVariable("ids") Long[] ids) {
-        int count = transferWaySourceService.deleteBatch(ids);
+    @DeleteMapping("/{id}")
+    public R delete(@PathVariable("id") Long id) {
+        int count = transferWaySourceService.delete(id);
         if (count > 0) {
             return R.ok();
         }
@@ -184,21 +184,5 @@ public class TransferGenWayController {
     public R listPage(@PathVariable("sourceId") Long sourceId) {
         return R.ok(transferGenWayService.findNotBySourceId(sourceId));
     }
-
-//    /**
-//     * 查询一个推广方式
-//     */
-//    @ApiOperation(value = "推广方式信息", notes = "推广方式信息: /info/1")
-//    @ApiImplicitParam(paramType = "path", name = "wayId", value = "推广方式ID", required = true, dataType = "Long")
-//    @SysLog("查询一个推广方式")
-//    @GetMapping("/{wayId}")
-//    public R info(@PathVariable("wayId") Long wayId) {
-//        TransferGenWayEntity transferGenWayEntity = transferGenWayService.findOne(wayId);
-//        if (transferGenWayEntity != null) {
-//            return R.ok(transferGenWayEntity);
-//        }
-//        return R.error(StatusCode.DATABASE_SELECT_FAILURE);
-//    }
-
 
 }

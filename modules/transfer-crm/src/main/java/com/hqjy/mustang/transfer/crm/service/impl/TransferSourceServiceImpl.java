@@ -63,11 +63,7 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
         if (baseDao.findOneByName(transferSourceEntity.getName()) != null) {
             throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
         }
-        transferSourceEntity.setSign(0);
-        transferSourceEntity.setParentId(1L);
-        transferSourceEntity.setCreateUserId(getUserId());
-        transferSourceEntity.setCreateUserName(getUserName());
-        return baseDao.save(transferSourceEntity);
+        return baseDao.save(transferSourceEntity.setSign(0).setCreateUserId(getUserId()).setCreateUserName(getUserName()));
     }
 
     /**

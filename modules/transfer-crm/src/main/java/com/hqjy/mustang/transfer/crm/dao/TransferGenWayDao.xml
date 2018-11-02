@@ -4,6 +4,7 @@
   
   <!-- 实体映射 -->
   <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity">
+	<id column="id" jdbcType="BIGINT" property="id" />
     <id column="way_id" jdbcType="BIGINT" property="wayId" />
     <result column="gen_way" jdbcType="VARCHAR" property="genWay" />
 	<result column="seq" jdbcType="INTEGER" property="seq" />
@@ -187,11 +188,12 @@
 
 	<select id="findBySourceId" resultMap="BaseResultMap">
 		select
-		tgw.way_id, tgw.gen_way, tgw.create_time, tgw.seq
+		tws.id, tgw.way_id, tgw.gen_way, tgw.create_time, tgw.seq
 		from transfer_gen_way tgw
 		inner join transfer_way_source tws on tws.way_id = tgw.way_id
 		WHERE
 			tws.source_id = #{sourceId} and tgw.status = false
+		order by tgw.seq desc, tgw.create_time desc
 	</select>
 
     <select id="findNotBySourceId" resultMap="BaseResultMap">

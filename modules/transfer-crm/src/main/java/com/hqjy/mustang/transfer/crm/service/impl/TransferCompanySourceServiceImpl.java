@@ -7,6 +7,7 @@ import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferCompanySourceDao;
+import com.hqjy.mustang.transfer.crm.dao.TransferSourceDao;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCompanySourceDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCompanySourceEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferCompanySourceService;
@@ -24,12 +25,10 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 @Service
 public class TransferCompanySourceServiceImpl extends BaseServiceImpl<TransferCompanySourceDao, TransferCompanySourceEntity, Long> implements TransferCompanySourceService {
 
-    private TransferCompanySourceDao transferCompanySourceDao;
-
     @Autowired
-    public void setTransferCompanySourceDao(TransferCompanySourceDao transferCompanySourceDao) {
-        this.transferCompanySourceDao = transferCompanySourceDao;
-    }
+    private TransferCompanySourceDao transferCompanySourceDao;
+    @Autowired
+    private TransferSourceDao transferSourceDao;
 
     @Override
     public List<TransferCompanySourceEntity> findPageSource(PageQuery pageQuery) {
@@ -49,7 +48,17 @@ public class TransferCompanySourceServiceImpl extends BaseServiceImpl<TransferCo
         TransferCompanySourceEntity newCompanySourceEntity = PojoConvertUtil.convert(companySource, TransferCompanySourceEntity.class);
         newCompanySourceEntity.setCreateUserId(getUserId());
         newCompanySourceEntity.setCreateUserName(getUserName());
+        newCompanySourceEntity.setSign(0);
+        transferSourceDao.update(transferSourceDao.findOne(companySource.getSourceId()).setSign(1));
         return transferCompanySourceDao.save(newCompanySourceEntity);
+    }
+
+    @Override
+    public int delete(Long id) {
+        if (baseDao.findOne(id).getSign() == 1) {
+            throw new RRException(StatusCode.DATABASE_SELECT_USE);
+        }
+        return baseDao.delete(id);
     }
 
 }

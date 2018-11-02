@@ -31,7 +31,7 @@ public class TransferGenCostEntity implements Serializable {
     /**
 	 * 推广公司id company_id
 	 **/
-    private Integer companyId;
+    private Long companyId;
 
     /**
      * 推广公司名称
@@ -56,7 +56,7 @@ public class TransferGenCostEntity implements Serializable {
     /**
 	 * 推广方式id way_id
 	 **/
-    private Integer wayId;
+    private Long wayId;
 
     /**
 	 * 推广日期 格式YYYY-MM-DD gen_day
