@@ -61,7 +61,9 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
     @Override
     public SmsCostReportResult promotionSmsCostList(PageParams params, SmsCostQueryParams query) {
         List<SmsCostReportData> list = this.check(query);
-        this.setData(query, list);
+        if (!list.isEmpty()) {
+            this.setData(query, list);
+        }
         SmsCostReportTotal total = this.countTotal(list);
         PageUtil<SmsCostReportData> pageList = new PageUtil<>(params, list);
         return new SmsCostReportResult().setPageList(pageList).setTotal(total);
@@ -91,7 +93,9 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
 
     private List<SmsCostReportData> getDailyData(SmsCostQueryParams query) {
         List<SmsCostReportData> list = this.check(query);
-        this.setData(query, list);
+        if (!list.isEmpty()) {
+            this.setData(query, list);
+        }
         return list;
     }
 
@@ -139,12 +143,12 @@ public class PromotionSmsCostServiceImpl implements PromotionSmsCostService {
         List<SmsCostReportData> list = new ArrayList<>();
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
         if (deptInfo.isEmpty()) {
-            throw new RRException("部门不存在");
+            LOG.error("部门不存在");
         }
         List<SysDeptInfo> deptList = deptInfo.stream().filter(x -> x.getDeptName().contains("校区")).collect(Collectors.toList());
         List<String> ids = new ArrayList<>();
         if (deptList.isEmpty()) {
-            throw new RRException("部门(校区)不存在");
+            LOG.error("部门(校区)不存在");
         }
         AtomicInteger sequence = new AtomicInteger();
         deptList.forEach(y -> {
