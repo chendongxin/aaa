@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.hqjy.mustang.common.base.annotation.ExcelAttribute;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -28,42 +29,39 @@ public class SellAttacheReportTotal {
     @ExcelAttribute(name = "部门", column = "C")
     private String deptName;
 
-    @ApiModelProperty(value = "有效商机上门率")
-    @ExcelAttribute(name = "有效商机上门率", column = "D")
-    private String visitValidRate;
-
-    @ApiModelProperty(value = "上门量")
-    @ExcelAttribute(name = "上门量", column = "E")
-    private int visitNum;
-
-    @ApiModelProperty(value = "今日预约上门量")
-    @ExcelAttribute(name = "今日预约上门量", column = "F")
-    private int visitTodayAppointNum;
-
-    @ApiModelProperty(value = "明日预约上门量")
-    @ExcelAttribute(name = "名日预约上门量", column = "G")
-    private int visitTomorrowAppointNum;
-
     @ApiModelProperty(value = "分配商机量")
-    @ExcelAttribute(name = "分配商机量", column = "H")
-    private int AllotNum;
+    @ExcelAttribute(name = "分配商机量", column = "D")
+    private int allotNum;
 
     @ApiModelProperty(value = "商机有效量")
-    @ExcelAttribute(name = "商机有效量", column = "I")
+    @ExcelAttribute(name = "商机有效量", column = "E")
     private int validNum;
 
+    @ApiModelProperty(value = "预约量")
+    @ExcelAttribute(name = "预约量", column = "F")
+    private int reservationNum;
+
+    @ApiModelProperty(value = "有效上门量", hidden = true)
+    @JSONField(serialize = false)
+    private int visitValidNum;
+
+    @ApiModelProperty(value = "上门量")
+    @ExcelAttribute(name = "上门量", column = "G")
+    private int visitNum;
+
+    @ApiModelProperty(value = "成交量")
+    @ExcelAttribute(name = "成交量", column = "H")
+    private int dealNum;
+
     @ApiModelProperty(value = "商机有效率")
-    @ExcelAttribute(name = "商机有效率", column = "J")
+    @ExcelAttribute(name = "商机有效率", column = "I")
     private String validRate;
 
     @ApiModelProperty(value = "实际上门率")
-    @ExcelAttribute(name = "实际上门率", column = "K")
+    @ExcelAttribute(name = "实际上门率", column = "L")
     private String visitRate;
 
-    @ApiModelProperty(value = "成交量")
-    @ExcelAttribute(name = "成交量", column = "L")
-    private int dealNum;
-
-    @ApiModelProperty(value = "有效上门量")
-    private int visitValidNum;
+    @ApiModelProperty(value = "有效商机上门率")
+    @ExcelAttribute(name = "有效商机上门率", column = "K")
+    private String visitValidRate;
 }

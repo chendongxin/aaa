@@ -54,7 +54,8 @@ public class SellReportController {
             "  \"beginTime\": \"2018-09-10\",\n" +
             "  \"endTime\": \"2018-10-20\",\n" +
             "  \"deptId\":1869,\n" +
-            "  \"getWay\":1869\n" +
+            "  \"sourceId\":1,\n" +
+            "  \"getWay\":1\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
@@ -65,17 +66,17 @@ public class SellReportController {
             "            \"currPage\": 1,\n" +
             "            \"list\": [\n" +
             "                {\n" +
-            "                    \"allotNum\": 2,\n" +
+            "                    \"allotNum\": 0,\n" +
             "                    \"dealNum\": 0,\n" +
             "                    \"deptId\": 20,\n" +
             "                    \"deptName\": \"广州天河校区\",\n" +
-            "                    \"validNum\": 1,\n" +
-            "                    \"validRate\": \"50.00%\",\n" +
-            "                    \"visitNum\": 1,\n" +
+            "                    \"name\": \"电销专员一\",\n" +
+            "                    \"reservationNum\": 0,\n" +
+            "                    \"userId\": 26,\n" +
+            "                    \"validNum\": 0,\n" +
+            "                    \"validRate\": \"0.00%\",\n" +
+            "                    \"visitNum\": 0,\n" +
             "                    \"visitRate\": \"0.00%\",\n" +
-            "                    \"visitTodayAppointNum\": 1,\n" +
-            "                    \"visitTomorrowAppointNum\": 0,\n" +
-            "                    \"visitValidNum\": 0,\n" +
             "                    \"visitValidRate\": \"0.00%\"\n" +
             "                }\n" +
             "            ],\n" +
@@ -85,15 +86,13 @@ public class SellReportController {
             "            \"totalPage\": 1\n" +
             "        },\n" +
             "        \"total\": {\n" +
-            "            \"allotNum\": 2,\n" +
+            "            \"allotNum\": 0,\n" +
             "            \"dealNum\": 0,\n" +
-            "            \"validNum\": 1,\n" +
-            "            \"validRate\": \"50.00%\",\n" +
-            "            \"visitNum\": 1,\n" +
+            "            \"reservationNum\": 0,\n" +
+            "            \"validNum\": 0,\n" +
+            "            \"validRate\": \"0.00%\",\n" +
+            "            \"visitNum\": 0,\n" +
             "            \"visitRate\": \"0.00%\",\n" +
-            "            \"visitTodayAppointNum\": 1,\n" +
-            "            \"visitTomorrowAppointNum\": 0,\n" +
-            "            \"visitValidNum\": 0,\n" +
             "            \"visitValidRate\": \"0.00%\"\n" +
             "        }\n" +
             "    }\n" +
@@ -110,8 +109,9 @@ public class SellReportController {
             "{\n" +
             "  \"beginTime\": \"2018-09-10\",\n" +
             "  \"endTime\": \"2018-10-20\",\n" +
-            "  \"deptId\":1869\n" +
-            "  \"getWay\":1869\n" +
+            "  \"deptId\":1869,\n" +
+            "  \"sourceId\":1,\n" +
+            "  \"getWay\":1\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
@@ -131,8 +131,9 @@ public class SellReportController {
             "{\n" +
             "  \"beginTime\": \"2018-09-10\",\n" +
             "  \"endTime\": \"2018-10-20\",\n" +
-            "  \"deptId\":1869\n" +
-            "  \"getWay\":1869\n" +
+            "  \"deptId\":1869,\n" +
+            "  \"sourceId\":1,\n" +
+            "  \"getWay\":1\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
@@ -147,13 +148,11 @@ public class SellReportController {
             "                    \"dealNum\": 0,\n" +
             "                    \"deptId\": 20,\n" +
             "                    \"deptName\": \"广州天河校区\",\n" +
+            "                    \"reservationNum\": 0,\n" +
             "                    \"validNum\": 1,\n" +
             "                    \"validRate\": \"0.00%\",\n" +
-            "                    \"visitNum\": 1,\n" +
+            "                    \"visitNum\": 0,\n" +
             "                    \"visitRate\": \"0.00%\",\n" +
-            "                    \"visitTodayAppointNum\": 1,\n" +
-            "                    \"visitTomorrowAppointNum\": 0,\n" +
-            "                    \"visitValidNum\": 0,\n" +
             "                    \"visitValidRate\": \"0.00%\"\n" +
             "                }\n" +
             "            ],\n" +
@@ -165,13 +164,11 @@ public class SellReportController {
             "        \"total\": {\n" +
             "            \"businessNum\": 0,\n" +
             "            \"dealNum\": 0,\n" +
+            "            \"reservationNum\": 0,\n" +
             "            \"validNum\": 1,\n" +
             "            \"validRate\": \"0.00%\",\n" +
-            "            \"visitNum\": 1,\n" +
+            "            \"visitNum\": 0,\n" +
             "            \"visitRate\": \"0.00%\",\n" +
-            "            \"visitTodayAppointNum\": 1,\n" +
-            "            \"visitTomorrowAppointNum\": 0,\n" +
-            "            \"visitValidNum\": 0,\n" +
             "            \"visitValidRate\": \"0.00%\"\n" +
             "        }\n" +
             "    }\n" +
@@ -188,8 +185,9 @@ public class SellReportController {
             "{\n" +
             "  \"beginTime\": \"2018-09-10\",\n" +
             "  \"endTime\": \"2018-10-20\",\n" +
-            "  \"deptId\":1869\n" +
-            "  \"getWay\":1869\n" +
+            "  \"deptId\":1869,\n" +
+            "  \"sourceId\":1,\n" +
+            "  \"getWay\":1\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
@@ -210,7 +208,6 @@ public class SellReportController {
             "  \"beginTime\": \"2018-09-10\",\n" +
             "  \"endTime\": \"2018-10-20\",\n" +
             "  \"deptId\":1869\n" +
-            "  \"name\":\"张三\",\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +
@@ -255,7 +252,6 @@ public class SellReportController {
             "  \"beginTime\": \"2018-09-10\",\n" +
             "  \"endTime\": \"2018-10-20\",\n" +
             "  \"deptId\":1869\n" +
-            "  \"getWay\":1869\n" +
             "}\n" +
             "请求成功：\n" +
             "{\n" +

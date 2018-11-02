@@ -16,7 +16,6 @@ import com.hqjy.mustang.transfer.export.model.query.PageParams;
 import com.hqjy.mustang.transfer.export.service.PromotionCompanyCostService;
 import com.hqjy.mustang.transfer.export.util.PageUtil;
 import org.apache.poi.hssf.usermodel.*;
-import org.aspectj.weaver.patterns.HasMemberTypePatternForPerThisMatching;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +24,6 @@ import org.springframework.stereotype.Service;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -75,7 +73,9 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
     @Override
     public CompanyCostReportResult promotionCompanyCostList(PageParams params, CompanyCostQueryParams query) {
         List<CompanyCostReportData> list = this.initReport(query);
-        this.setReportValue(query, list);
+        if (!list.isEmpty()) {
+            this.setReportValue(query, list);
+        }
         CompanyCostReportTotal total = this.countTotal(list);
         PageUtil<CompanyCostReportData> pageList = new PageUtil<>(params, list);
 
@@ -171,10 +171,11 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
         List<SysDeptInfo> deptInfo = deptServiceFeign.getDeptEntityByDeptId(query.getDeptId());
         List<String> ids = new ArrayList<>();
         if (deptInfo.isEmpty()) {
-            throw new RRException("部门不存在");
+            LOG.error("部门不存在");
         }
         deptInfo.forEach(y -> {
-            ids.add(String.valueOf(y.getDeptId()));
+            String str = String.valueOf(y.getDeptId());
+            ids.add(str);
         });
         query.setBeginTime(DateUtils.getBeginTime(query.getBeginTime()));
         query.setEndTime(DateUtils.getEndTime(query.getEndTime()));
@@ -218,19 +219,19 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
         BigDecimal money;
         switch (costType.get(0)) {
             case INITIATIVE_RMB:
-                money = y.getInitiativeMoney().setScale(4,BigDecimal.ROUND_HALF_UP);
+                money = y.getInitiativeMoney().setScale(4, BigDecimal.ROUND_HALF_UP);
                 break;
             case INITIATIVE_VIRTUAL:
-                money = y.getInitiativeVirtual().setScale(4,BigDecimal.ROUND_HALF_UP);
+                money = y.getInitiativeVirtual().setScale(4, BigDecimal.ROUND_HALF_UP);
                 break;
             case PASSIVE_RMB:
-                money = y.getPassiveMoney().setScale(4,BigDecimal.ROUND_HALF_UP);
+                money = y.getPassiveMoney().setScale(4, BigDecimal.ROUND_HALF_UP);
                 break;
             case PASSIVE_VIRTUAL:
-                money = y.getPassiveVirtual().setScale(4,BigDecimal.ROUND_HALF_UP);
+                money = y.getPassiveVirtual().setScale(4, BigDecimal.ROUND_HALF_UP);
                 break;
             default:
-                money = BigDecimal.ZERO.setScale(4,BigDecimal.ROUND_HALF_UP);
+                money = BigDecimal.ZERO.setScale(4, BigDecimal.ROUND_HALF_UP);
         }
         return money;
     }

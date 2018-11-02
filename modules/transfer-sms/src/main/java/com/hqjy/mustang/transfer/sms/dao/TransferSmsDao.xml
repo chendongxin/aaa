@@ -169,7 +169,9 @@
         <include refid="Base_Column_List"/>
         from transfer_sms
         <where>
-            <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
+            <if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+                and dept_id in ${deptIds}
+            </if>
             <if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
             <if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>

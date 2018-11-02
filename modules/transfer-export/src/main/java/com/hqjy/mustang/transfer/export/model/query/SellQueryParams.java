@@ -38,6 +38,9 @@ public class SellQueryParams {
     @ApiModelProperty(value = "获取方式")
     private Long getWay;
 
+    @ApiModelProperty(value = "来源平台")
+    private Long sourceId;
+
     @ApiModelProperty(value = "电销人员")
     private Long userId;
 

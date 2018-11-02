@@ -57,8 +57,10 @@ public class PromotionDailyServiceImpl implements PromotionDailyService {
     public DailyReportResult promotionDailyList(PageParams params, DailyQueryParams query) {
 
         List<DailyReportData> list = this.check(query);
-        this.setSaleNum(query, list);
-        this.setSaleRate(list);
+        if (!list.isEmpty()) {
+            this.setSaleNum(query, list);
+            this.setSaleRate(list);
+        }
         //合计（不分页）
         DailyReportTotal total = this.countTotal(list);
         //分页

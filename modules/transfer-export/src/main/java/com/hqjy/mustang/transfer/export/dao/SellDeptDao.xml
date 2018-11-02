@@ -15,57 +15,9 @@
         <if test="getWay!=null">
             AND get_way=#{getWay}
         </if>
-        GROUP BY deptId
-    </select>
-
-    <!-- 商机上门量	-->
-    <select id="countVisitBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId
-        FROM(
-        SELECT r.customer_id ,r.dept_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.visit_status=1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND c.get_way=#{getWay}
+        <if test="sourceId!=null">
+            AND source_id=#{sourceId}
         </if>
-        GROUP BY r.customer_id
-        ) v
-        GROUP BY deptId
-    </select>
-
-    <!-- 今日预约上门量-->
-    <select id="countVisitTodayAppointBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId
-        FROM(
-        SELECT r.customer_id ,r.dept_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.visit_status=1 and c.status=3 and to_days(r.appointment_time) = to_days(now())
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND c.get_way=#{getWay}
-        </if>
-        GROUP BY r.customer_id
-        ) v
-        GROUP BY deptId
-    </select>
-
-    <!-- 明日预约上门量-->
-    <select id="countVisitTomoAppointBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId
-        FROM(
-        SELECT r.customer_id, r.dept_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.visit_status=1 and c.status=3 and to_days(r.appointment_time) - to_days( now( ) ) = 1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND c.get_way=#{getWay}
-        </if>
-        GROUP BY r.customer_id
-        ) v
         GROUP BY deptId
     </select>
 
@@ -78,6 +30,9 @@
         <if test="getWay!=null">
             AND get_way=#{getWay}
         </if>
+        <if test="sourceId!=null">
+            AND source_id=#{sourceId}
+        </if>
         GROUP BY deptId
     </select>
 
@@ -87,27 +42,91 @@
         FROM transfer_customer_deal d
         INNER JOIN transfer_customer c ON c.customer_id=d.customer_id
         WHERE d.is_deleted=0
-        AND d.create_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
+        AND d.create_time BETWEEN #{beginTime} AND #{endTime} AND d.dept_id IN ${deptIds}
         <if test="getWay!=null">
             AND c.get_way=#{getWay}
         </if>
+        <if test="sourceId!=null">
+            AND c.source_id=#{sourceId}
+        </if>
+        GROUP BY deptId
+    </select>
+
+    <!-- 预约量 预约时间在统计周期内的商机量 同个商机被不同的电销预约分别计算一次，部门统计预约求总和	-->
+    <select id="countReservation" resultMap="baseMap">
+        SELECT COUNT(v.customer_id) AS num,deptId
+        FROM (
+            SELECT
+                r.customer_id,
+                r.dept_id AS deptId,
+                r.create_user_id AS userId
+            FROM
+                transfer_customer c
+            INNER JOIN transfer_customer_reservation r ON c.customer_id = r.customer_id
+            WHERE
+                r.appointment_time BETWEEN #{beginTime} AND #{endTime}
+            AND r.dept_id IN ${deptIds}
+            <if test="getWay!=null">
+                AND c.get_way=#{getWay}
+            </if>
+            <if test="sourceId!=null">
+                AND c.source_id=#{sourceId}
+            </if>
+            GROUP BY
+                r.dept_id,
+                r.create_user_id
+        ) v GROUP BY deptId
+    </select>
+
+    <!-- 商机上门量	-->
+    <select id="countVisitBusiness" resultMap="baseMap">
+        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId
+        FROM (
+            <!-- 首次预约单	-->
+            SELECT
+            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            FROM
+            transfer_customer_reservation r
+            INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
+          <where>
+              <if test="getWay!=null">
+                  AND c.get_way=#{getWay}
+              </if>
+              <if test="sourceId!=null">
+                  AND c.source_id=#{sourceId}
+              </if>
+          </where>
+            GROUP BY r.customer_id
+        ) v
+        WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime}
+        AND v.visit_status=1
+        AND v.dept_id IN ${deptIds}
         GROUP BY deptId
     </select>
 
     <!-- 有效上门量-->
     <select id="countVisitValidBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId
-        FROM(
-        SELECT r.customer_id ,r.dept_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.valid_visit=1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND c.get_way=#{getWay}
-        </if>
-        GROUP BY r.customer_id
+        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId
+        FROM (
+            <!-- 首次预约单	-->
+            SELECT
+            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            FROM
+            transfer_customer_reservation r
+            INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
+        <where>
+            <if test="getWay!=null">
+                AND c.get_way=#{getWay}
+            </if>
+            <if test="sourceId!=null">
+                AND c.source_id=#{sourceId}
+            </if>
+        </where>
+            GROUP BY r.customer_id
         ) v
+        WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime}
+        AND v.valid_visit=1
+        AND v.dept_id IN ${deptIds}
         GROUP BY deptId
     </select>
 

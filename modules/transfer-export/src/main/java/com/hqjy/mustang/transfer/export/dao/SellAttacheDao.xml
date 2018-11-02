@@ -8,33 +8,18 @@
         <result property="num" column="num"/>
     </resultMap>
 
-    <!-- 商机上门量 上门时间在统计周期内上门商机量	-->
-    <select id="countVisitBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId,v.create_user_id AS userId
-        FROM(
-            SELECT v1.customer_id ,v1.dept_id,v1.create_user_id
-            FROM (
-                SELECT r.customer_id ,r.dept_id,r.create_user_id,r.visit_status
-                FROM transfer_customer_reservation r
-                INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-                WHERE r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds} AND create_user_id IN (userIds)
-                <if test="getWay!=null">
-                    AND c.get_way=#{getWay}
-                </if>
-                GROUP BY r.customer_id
-            ) v1 WHERE v1.visit_status=1
-        ) v
-        GROUP BY userId, deptId
-    </select>
 
     <!-- 有效商机量	非标记为失败状态是无效失败的商机-->
     <select id="countValidBusiness" resultMap="baseMap">
         SELECT COUNT(customer_id) AS num, user_id AS userId, dept_id AS deptId
         FROM transfer_customer
         WHERE `status` IN(0,1,3,4)
-        AND create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds} AND user_id IN (userIds)
+        AND create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds} AND user_id IN  ${userIds}
         <if test="getWay!=null">
             AND get_way=#{getWay}
+        </if>
+        <if test="sourceId!=null">
+            AND source_id=#{sourceId}
         </if>
         GROUP BY userId, deptId
     </select>
@@ -49,13 +34,16 @@
                     MIN(process_id) AS process_id,customer_id,dept_id,user_id
                 FROM
                     transfer_process
-                WHERE  memo = '首次咨询，自动分配' AND dept_id IN ${deptIds} AND user_id IN (userIds)
+                WHERE  memo = '首次咨询，自动分配' AND dept_id IN ${deptIds} AND user_id IN  ${userIds}
                 GROUP BY
                     customer_id
             ) p ON p.customer_id = c.customer_id
             WHERE c.create_time BETWEEN #{beginTime} AND #{endTime}
             <if test="getWay!=null">
                 AND c.get_way=#{getWay}
+            </if>
+            <if test="sourceId!=null">
+                AND c.source_id=#{sourceId}
             </if>
             GROUP BY userId,deptId
     </select>
@@ -66,61 +54,85 @@
         FROM transfer_customer_deal d
         INNER JOIN transfer_customer c ON c.customer_id=d.customer_id
         WHERE d.is_deleted=0
-        AND d.create_time BETWEEN #{beginTime} AND #{endTime} AND d.dept_id IN ${deptIds},d.user_id IN (userIds)
+        AND d.create_time BETWEEN #{beginTime} AND #{endTime}
+        AND d.dept_id IN ${deptIds}
+        AND d.user_id IN  ${userIds}
         <if test="getWay!=null">
             AND c.get_way=#{getWay}
+        </if>
+        <if test="sourceId!=null">
+            AND c.source_id=#{sourceId}
         </if>
         GROUP BY userId, deptId
     </select>
 
-    <!-- 今日预约上门量-->
-    <select id="countVisitTodayAppointBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId,v.create_user_id AS userId
-        FROM(
-        SELECT r.customer_id ,r.dept_id,r.create_user_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.visit_status=1 and c.status=3 and to_days(r.appointment_time) = to_days(now())
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
+    <!-- 预约量 预约时间在统计周期内的商机量 同个商机被不同的电销预约分别计算一次	-->
+    <select id="countReservation" resultMap="baseMap">
+        SELECT COUNT(DISTINCT r.customer_id),r.dept_id AS deptId,r.create_user_id AS userId
+        FROM transfer_customer c
+        INNER JOIN transfer_customer_reservation r ON c.customer_id=r.customer_id
+        WHERE  r.appointment_time BETWEEN #{beginTime} AND #{endTime}
+        AND r.dept_id IN ${deptIds} AND r.create_user_id IN  ${userIds}
         <if test="getWay!=null">
             AND c.get_way=#{getWay}
         </if>
-        GROUP BY r.customer_id
-        ) v
-        GROUP BY userId,deptId
+        <if test="sourceId!=null">
+            AND c.source_id=#{sourceId}
+        </if>
+        GROUP BY r.dept_id,r.create_user_id
     </select>
 
-    <!-- 明日预约上门量-->
-    <select id="countVisitTomoAppointBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId,v.create_user_id AS userId
-        FROM(
-        SELECT r.customer_id, r.dept_id, r.create_user_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.visit_status=1 and c.status=3 and to_days(r.appointment_time) - to_days( now( ) ) = 1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND c.get_way=#{getWay}
-        </if>
-        GROUP BY r.customer_id
+
+    <!-- 商机上门量 上门时间在统计周期内上门商机量	-->
+    <select id="countVisitBusiness" resultMap="baseMap">
+        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId,v.create_user_id AS userId
+        FROM (
+            <!-- 首次预约单	-->
+            SELECT
+            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            FROM
+            transfer_customer_reservation r
+            INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
+           <where>
+               <if test="getWay!=null">
+                    c.get_way=#{getWay}
+               </if>
+               <if test="sourceId!=null">
+                   AND c.source_id=#{sourceId}
+               </if>
+           </where>
+            GROUP BY r.customer_id
         ) v
-        GROUP BY userId,deptId
+        WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime}
+        AND v.visit_status=1
+        AND v.dept_id IN ${deptIds}
+        AND v.create_user_id IN ${userIds}
+        GROUP BY deptId,userId
     </select>
 
     <!-- 有效上门量-->
     <select id="countVisitValidBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num ,v.dept_id AS deptId,v.create_user_id AS userId
-        FROM(
-        SELECT r.customer_id ,r.dept_id, r.create_user_id
-        FROM transfer_customer_reservation r
-        INNER JOIN transfer_customer c ON r.customer_id=c.customer_id
-        WHERE r.valid_visit=1
-        AND r.visit_time BETWEEN #{beginTime} AND #{endTime} AND c.dept_id IN ${deptIds}
-        <if test="getWay!=null">
-            AND c.get_way=#{getWay}
-        </if>
-        GROUP BY r.customer_id
+        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId,v.create_user_id AS userId
+        FROM (
+        <!-- 首次预约单	-->
+            SELECT
+            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            FROM
+            transfer_customer_reservation r
+            INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
+            <where>
+                <if test="getWay!=null">
+                    AND c.get_way=#{getWay}
+                </if>
+                <if test="sourceId!=null">
+                    AND c.source_id=#{sourceId}
+                </if>
+        </where>
+            GROUP BY r.customer_id
         ) v
-        GROUP BY userId,deptId
+        WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime} AND v.valid_visit=1
+        AND v.dept_id IN ${deptIds} AND v.create_user_id IN  ${userIds}
+        GROUP BY deptId,userId
     </select>
+
 </mapper>
