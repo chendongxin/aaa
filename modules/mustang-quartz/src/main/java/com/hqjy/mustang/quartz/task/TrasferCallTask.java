@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 
 @Slf4j
-@Service("trasferCallTask")
+@Service("callTask")
 public class TrasferCallTask {
 
     @Autowired
