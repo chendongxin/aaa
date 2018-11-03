@@ -162,6 +162,7 @@ public class SellCallServiceImpl implements SellCallService {
      */
     private SellCallReportTotal countTotal(List<SellCallReportData> list) {
         SellCallReportTotal total = new SellCallReportTotal();
+        total.setDeptName("N/A");
         list.forEach(x -> {
             total.setCallNum(total.getCallNum() + x.getCallNum());
             total.setConnectNum(total.getConnectNum() + x.getConnectNum());
