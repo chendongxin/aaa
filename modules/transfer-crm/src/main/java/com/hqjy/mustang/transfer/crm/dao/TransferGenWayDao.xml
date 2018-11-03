@@ -188,12 +188,10 @@
 
 	<select id="findBySourceId" resultMap="BaseResultMap">
 		select
-		tws.id, tgw.way_id, tgw.gen_way, tgw.create_time, tgw.seq
+		tws.id, tgw.way_id, tgw.gen_way, tgw.seq
 		from transfer_gen_way tgw
 		inner join transfer_way_source tws on tws.way_id = tgw.way_id
-		WHERE
-			tws.source_id = #{sourceId} and tgw.status = false
-		order by tgw.seq desc, tgw.create_time desc
+		WHERE tws.source_id = #{sourceId} and tws.status = false
 	</select>
 
     <select id="findNotBySourceId" resultMap="BaseResultMap">

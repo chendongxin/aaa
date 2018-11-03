@@ -29,7 +29,7 @@ public interface TransferWaySourceDao extends BaseDao<TransferWaySourceEntity, L
      * 获取来源平台下的推广方式列表
      *
      */
-    List<TransferWaySourceEntity> listPageSource(PageQuery pageQuery);
+    List<TransferWaySourceEntity> listPageGenWay(PageQuery pageQuery);
 
     /**
      * 根据wayId和sourceId查询是否存在重复数据
