@@ -29,6 +29,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author xyq
@@ -129,12 +131,17 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
 
         List<TransferGenWayInfo> allGenWayList = transferGenWayFeign.getAllGenWayList();
         List<TransferGenWayCost> wayCosts = new ArrayList<>();
-        allGenWayList.forEach(w -> {
-            wayCosts.add(new TransferGenWayCost().setWayId(w.getWayId()).setGenWay(w.getGenWay()));
+        //初始化费用报表对象数据
+        list.forEach(x -> {
+            allGenWayList.forEach(w -> {
+                wayCosts.add(new TransferGenWayCost().setDate(x.getDate()).setWayId(w.getWayId()).setGenWay(w.getGenWay()));
+            });
         });
 
+        //设置推广方式费用数据
         list.forEach(x -> {
             customerEntities.forEach(y -> {
+                //日期对应的商机量
                 if (x.getDate().equals(y.getDate())) {
                     x.setNum(y.getNum());
                 }
@@ -143,15 +150,26 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
                 BigDecimal money = this.getCostTypeMoney(costType, y);
                 if (x.getDate().equals(y.getDate())) {
                     wayCosts.forEach(w -> {
-                        if (w.getWayId().equals(y.getWayId())) {
+                        if (w.getWayId().equals(y.getWayId()) && w.getDate().equals(y.getDate())) {
+                            //日期对应的各个推广方式的费用
                             w.setCost(money.toString());
                         }
                     });
                 }
             });
-            x.setGenWayCosts(wayCosts);
-            wayCosts.forEach(w -> {
-                x.setTotalCost(new BigDecimal(w.getCost()).add(new BigDecimal(x.getTotalCost())).toString());
+        });
+        //推广方式费用数据以日期分组
+        Map<String, List<TransferGenWayCost>> listMap = wayCosts.stream().collect(Collectors.groupingBy(TransferGenWayCost::getDate));
+        list.forEach(x -> {
+            listMap.forEach((j, k) -> {
+                if (j.equals(x.getDate())) {
+                    //设置对应日期的推广方式费用集合对象
+                    x.setGenWayCosts(k);
+                    k.forEach(w -> {
+                        //统计对应日期的总费用
+                        x.setTotalCost(new BigDecimal(w.getCost()).add(new BigDecimal(x.getTotalCost())).toString());
+                    });
+                }
             });
         });
     }

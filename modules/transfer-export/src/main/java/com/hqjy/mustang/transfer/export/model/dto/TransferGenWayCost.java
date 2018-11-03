@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,5 +25,10 @@ public class TransferGenWayCost {
     private String genWay;
 
     @ApiModelProperty(value = "推广方式费用")
-    private String cost="0.0000";
+    private String cost = "0.0000";
+
+
+    @ApiModelProperty(value = "创建日期", hidden = true)
+    @JSONField(serialize = false)
+    private String date;
 }
