@@ -3,12 +3,11 @@ package com.hqjy.mustang.quartz.task;
 import com.hqjy.mustang.quartz.service.CallTaskService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 
 @Slf4j
-@Component("callTask")
+@Service("callTask")
 public class TrasferCallTask {
 
     @Autowired
