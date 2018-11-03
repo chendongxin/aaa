@@ -53,6 +53,7 @@ public class TransferGenWayController {
         return R.ok(transferGenWayService.getAllGenWayList());
     }
 
+
     @ApiOperation(value = "分页查询-指定平台推广方式", notes = "请求参数：\n" +
             "分页参数(requestParam数据格式接收)：[pageNum:当前页],[pageSize:每页的数量]\n" +
             "返回参数：【当前页:currPage】，【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】,【开始编号:startRow】,【结束编号:endRow】 \n" +
@@ -92,7 +93,7 @@ public class TransferGenWayController {
     @RequestMapping(value = "/listPage", method = {RequestMethod.POST, RequestMethod.GET})
     public R list(@RequestParam HashMap<String, Object> pageParam,
                   @RequestBody(required = false) HashMap<String, Object> queryParam) {
-        PageInfo<TransferWaySourceEntity> waySourcePageInfo = new PageInfo<>(transferWaySourceService.findPageSource(PageQuery.build(pageParam, queryParam)));
+        PageInfo<TransferWaySourceEntity> waySourcePageInfo = new PageInfo<>(transferWaySourceService.findPageGenWay(PageQuery.build(pageParam, queryParam)));
         return R.ok(waySourcePageInfo);
     }
 
@@ -117,7 +118,7 @@ public class TransferGenWayController {
     @SysLog("新增推广方式")
     @PostMapping
     public R save(@Validated(RestfulValid.POST.class) @RequestBody TransferGenWaySourceDTO transferGenWaySourceDTO) {
-        int count = transferWaySourceService.saveWaySource(transferGenWaySourceDTO);
+        int count = transferGenWayService.saveWaySource(transferGenWaySourceDTO);
         if (count > 0) {
             return R.ok();
         }
@@ -132,7 +133,7 @@ public class TransferGenWayController {
     @SysLog("删除指定平台的推广方式")
     @DeleteMapping("/{id}")
     public R delete(@PathVariable("id") Long id) {
-        int count = transferWaySourceService.delete(id);
+        int count = transferGenWayService.delete(id);
         if (count > 0) {
             return R.ok();
         }
@@ -140,9 +141,9 @@ public class TransferGenWayController {
     }
 
     /**
-     * 修改推广方式
+     * 修改推广平台下的广方式
      */
-    @ApiOperation(value = "修改推广方式", notes = "输入参数：\n" +
+    @ApiOperation(value = "修改推广平台下的广方式", notes = "输入参数：\n" +
             "参数说明：\n" +
             "【推广方式名称:genWay】,【推广平台Id:sourceId】,【排序号:seq】, 【状态( 1:正常; 0:禁用):status】\n" +
             "示例：\n" +
@@ -159,8 +160,8 @@ public class TransferGenWayController {
             "}")
     @SysLog("修改推广方式")
     @PutMapping
-    public R update(@Validated(RestfulValid.PUT.class) @RequestBody TransferGenWaySourceDTO transferGenWaySourceDTO) {
-        int count = transferGenWayService.update(transferGenWaySourceDTO);
+    public R update(@Validated(RestfulValid.PUT.class) @RequestBody TransferWaySourceEntity waySource) {
+        int count = transferGenWayService.update(waySource);
         if (count > 0) {
             return R.ok();
         }
