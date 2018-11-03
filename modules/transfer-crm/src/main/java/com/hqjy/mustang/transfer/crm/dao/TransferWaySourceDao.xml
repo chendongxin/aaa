@@ -11,6 +11,7 @@
     <result column="status" jdbcType="TINYINT" property="status" />
 	<result column="sign" jdbcType="TINYINT" property="sign" />
 	<result column="gen_way" jdbcType="VARCHAR" property="genWay" />
+	<result column="name" jdbcType="VARCHAR" property="name" />
     <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
     <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -183,14 +184,16 @@
 		source_id = #{sourceId}
 	</select>
 
-	<select id="listPageSource" resultMap="BaseResultMap">
+	<select id="listPageGenWay" resultMap="BaseResultMap">
 		select
 			tws.id, tws.way_id, tws.source_id, tws.seq, tws.status, tws.create_user_id, tws.create_user_name, tws.create_time, tws.update_user_id,
-    		tws.update_user_name, tws.update_time, tw.gen_way
+    		tws.update_user_name, tws.update_time, tw.gen_way, ts.name
 		from transfer_way_source tws
 		left join transfer_gen_way tw on tw.way_id = tws.way_id
+		left join transfer_source ts on ts.source_id = tws.source_id
 		where
 			tws.source_id = #{sourceId}
+		order by tws.seq desc, tws.create_time desc
 	</select>
 
 	<select id="findByWayIdAndSourceId" resultMap="BaseResultMap">

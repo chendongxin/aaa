@@ -39,4 +39,9 @@ public class TransferGenWaySourceDTO {
      * 状态
      */
     private byte status;
+
+    /**
+     * 被用标志 0，未被用，1被用
+     */
+    private Integer sign;
 }

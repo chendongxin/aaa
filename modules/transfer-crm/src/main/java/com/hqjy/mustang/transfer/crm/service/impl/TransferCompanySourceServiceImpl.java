@@ -5,7 +5,6 @@ import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.PageQuery;
-import com.hqjy.mustang.common.base.utils.PojoConvertUtil;
 import com.hqjy.mustang.transfer.crm.dao.TransferCompanySourceDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferSourceDao;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferCompanySourceDTO;
@@ -36,7 +35,6 @@ public class TransferCompanySourceServiceImpl extends BaseServiceImpl<TransferCo
         return transferCompanySourceDao.listPageSource(pageQuery);
     }
 
-
     @Override
     public int saveCompanySource(TransferCompanySourceDTO companySource) {
         List<TransferCompanySourceEntity> companySourceList = transferCompanySourceDao.findByCompanyId(companySource.getCompanyId());
@@ -45,12 +43,13 @@ public class TransferCompanySourceServiceImpl extends BaseServiceImpl<TransferCo
                 throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
             }
         }
-        TransferCompanySourceEntity newCompanySourceEntity = PojoConvertUtil.convert(companySource, TransferCompanySourceEntity.class);
-        newCompanySourceEntity.setCreateUserId(getUserId());
-        newCompanySourceEntity.setCreateUserName(getUserName());
-        newCompanySourceEntity.setSign(0);
         transferSourceDao.update(transferSourceDao.findOne(companySource.getSourceId()).setSign(1));
-        return transferCompanySourceDao.save(newCompanySourceEntity);
+        TransferCompanySourceEntity newCompanySourceEntity = new TransferCompanySourceEntity()
+                .setCreateUserId(getUserId()).setCreateUserName(getUserName()).setSign(0)
+                .setCompanyId(companySource.getCompanyId()).setSourceId(companySource.getSourceId())
+                .setDeptId(companySource.getDeptId()).setDeptName(companySource.getDeptName())
+                .setStatus(companySource.getStatus());
+        return baseDao.save(newCompanySourceEntity);
     }
 
     @Override
@@ -61,4 +60,11 @@ public class TransferCompanySourceServiceImpl extends BaseServiceImpl<TransferCo
         return baseDao.delete(id);
     }
 
+    /**
+     * 修改推广公司下的推广平台
+     */
+    @Override
+    public int update(TransferCompanySourceEntity companySource) {
+        return baseDao.update(companySource.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
+    }
 }

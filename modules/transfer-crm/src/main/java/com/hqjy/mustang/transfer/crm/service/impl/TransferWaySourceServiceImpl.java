@@ -24,55 +24,14 @@ public class TransferWaySourceServiceImpl extends BaseServiceImpl<TransferWaySou
 
     @Autowired
     private TransferWaySourceDao transferWaySourceDao;
-    @Autowired
-    private TransferGenWayDao transferGenWayDao;
-
-    /**
-     * 删除指定平台下的推广方式
-     */
-    @Override
-    public int delete(Long id) {
-        if (baseDao.findOne(id).getSign() == 1) {
-            throw new RRException(StatusCode.DATABASE_SELECT_USE);
-        }
-        return baseDao.delete(id);
-    }
-
-    /**
-     * 保存推广平台下的推广方式
-     */
-    @Override
-    public int saveWaySource(TransferGenWaySourceDTO transferGenWaySourceDTO) {
-        TransferGenWayEntity transferGenWayEntity = transferGenWayDao.findOneByGenName(transferGenWaySourceDTO.getGenWay());
-        TransferWaySourceEntity transferWaySourceEntity = new TransferWaySourceEntity();
-        if (transferGenWayEntity == null) {
-            transferGenWayEntity = new TransferGenWayEntity().setGenWay(transferGenWaySourceDTO.getGenWay()).setStatus(transferGenWaySourceDTO.getStatus())
-                    .setSeq(transferGenWaySourceDTO.getSeq()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
-            int count = transferGenWayDao.save(transferGenWayEntity);
-            if (count > 0) {
-                transferWaySourceEntity.setWayId(transferGenWayEntity.getWayId());
-            } else {
-                throw new RRException(StatusCode.DATABASE_SAVE_FAILURE);
-            }
-        } else {
-            transferWaySourceEntity.setWayId(transferGenWayDao.findOneByGenName(transferGenWaySourceDTO.getGenWay()).getWayId());
-            if (baseDao.findByWayIdAndSourceId(transferWaySourceEntity.getWayId(), transferGenWaySourceDTO.getSourceId()) != null) {
-                throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
-            }
-        }
-        return transferWaySourceDao.save(transferWaySourceEntity.setSourceId(transferGenWaySourceDTO.getSourceId())
-                .setSeq(transferGenWaySourceDTO.getSeq()).setStatus(transferGenWaySourceDTO.getStatus()).setSign(0)
-                .setCreateUserId(getUserId()).setCreateUserName(getUserName())
-        );
-    }
 
     /**
      * 分页查询推广平台下的推广方式
      */
     @Override
-    public List<TransferWaySourceEntity> findPageSource(PageQuery pageQuery) {
+    public List<TransferWaySourceEntity> findPageGenWay(PageQuery pageQuery) {
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
-        return transferWaySourceDao.listPageSource(pageQuery);
+        return transferWaySourceDao.listPageGenWay(pageQuery);
     }
 
     /**
