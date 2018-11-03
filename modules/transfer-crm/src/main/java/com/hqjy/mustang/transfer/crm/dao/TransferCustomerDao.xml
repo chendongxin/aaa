@@ -441,4 +441,18 @@
         where id = #{id}
     </update>
 
+	<!-- 根据用户id更新用户非成交商机到公海,HSS 2018-08-11 -->
+	<update id="updateUserTransferToPublic">
+		update transfer_customer
+		<set>
+			user_id = null, user_name = null
+		</set>
+		where status != 4 and user_id = #{userId}
+		<if test="sign == true">
+			AND dept_id NOT IN (SELECT dept_id
+			from sys_user_dept
+			where user_id = #{userId})
+		</if>
+	</update>
+
 </mapper>

@@ -1,13 +1,19 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
+import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferProcessDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
 import com.hqjy.mustang.transfer.crm.service.TransferProcessService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
 @Service
 public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessDao, TransferProcessEntity, Long> implements TransferProcessService {
@@ -63,5 +69,33 @@ public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessD
     @Override
     public TransferProcessEntity getProcessByPublicCustomerId(Long customerId) {
         return baseDao.getProcessByPublicCustomerId(customerId);
+    }
+
+    /**
+     * 根据用户id更新用户非成交商机到公海
+     *
+     * @author HSS 2018-08-11
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUserTransferProcessToPublic(Long userId, boolean sign) {
+        List<TransferProcessEntity> list = baseDao.findUserActive(userId, sign);
+        if (list.size() > 0) {
+            list.forEach(process -> {
+                TransferProcessEntity newProcess = new TransferProcessEntity()
+                        .setActive(false)
+                        .setDeptId(process.getDeptId())
+                        .setDeptName(process.getDeptName())
+                        .setFollowCount((long)0)
+                        .setMemo(sign ? "部门变更，原部门商机进入公海" : "人员删除，商机进入公海")
+                        .setCreateUserId(getUserId())
+                        .setCreateUserName(getUserName())
+                        .setCustomerId(process.getCustomerId());
+                baseDao.save(newProcess);
+            });
+            //设置流程过期
+            baseDao.disableProcessActiveBatch(StringUtils.listToString(list.stream().map(p -> String.valueOf(p.getProcessId())).collect(Collectors.toList())));
+        }
+        return list.size();
     }
 }
