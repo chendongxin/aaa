@@ -249,4 +249,50 @@
 		where customer_id = #{customerId} and user_id is null and active = false
 	</select>
 
+	<!-- 根据用户id获取所有非成交，有效状态的商机流程,HSS 2018-08-11 -->
+	<select id="findUserActive" resultMap="BaseResultMap">
+		SELECT
+		p.process_id,
+		p.customer_id,
+		p.dept_id,
+		p.user_id
+		FROM
+		(
+		SELECT
+		customer_id,
+		max(process_id) process_id
+		FROM
+		transfer_process
+		WHERE
+		customer_id IN (
+		SELECT customer_id
+		FROM
+		transfer_process
+		WHERE
+		user_id = #{userId}
+		AND active = 0
+		<if test="sign == true">
+			AND dept_id NOT IN (SELECT dept_id
+			from sys_user_dept
+			where user_id = #{userId})
+		</if>
+		GROUP BY
+		customer_id
+		)
+		GROUP BY
+		customer_id
+		) u
+		LEFT JOIN transfer_process p ON u.process_id = p.process_id
+		LEFT JOIN transfer_customer c ON c.customer_id = u.customer_id
+		WHERE
+		c.STATUS != 4
+		AND p.user_id = #{userId}
+	</select>
+
+	<update id="disableProcessActiveBatch">
+        update transfer_process
+        set active = true
+        where process_id in ${processIdList} AND active = false
+    </update>
+
 </mapper>

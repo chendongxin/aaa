@@ -64,6 +64,7 @@ public class TransferSourceController {
             "        \"name\": \"灵儿\",\n" +
             "        \"status\": 0,\n" +
             "        \"createId\": 1,\n" +
+            "        \"emailDomain\": \"jianli@zp.58.com\",\n" +
             "        \"createTime\": \"2018-09-06 17:19:24\",\n" +
             "        \"updateId\": 1,\n" +
             "        \"updateName\": \"2018-09-06 17:19:24\",\n" +
@@ -116,9 +117,9 @@ public class TransferSourceController {
     @ApiOperation(value = "删除来源", notes = "删除一条来源：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "sourceId", value = "来源ID", required = true, dataType = "Long")
     @SysLog("删除来源")
-    @DeleteMapping("/{sourceIds}")
-    public R delete(@PathVariable("sourceIds") Long[] sourceIds) {
-        int count = transferSourceService.deleteBatch(sourceIds);
+    @DeleteMapping("/{sourceId}")
+    public R delete(@PathVariable("sourceId") Long sourceId) {
+        int count = transferSourceService.delete(sourceId);
         if (count > 0) {
             return R.ok();
         }

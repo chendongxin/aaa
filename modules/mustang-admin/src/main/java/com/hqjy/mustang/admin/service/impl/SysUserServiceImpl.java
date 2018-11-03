@@ -3,6 +3,7 @@ package com.hqjy.mustang.admin.service.impl;
 import com.github.pagehelper.PageHelper;
 import com.hqjy.mustang.admin.dao.SysUserDao;
 import com.hqjy.mustang.admin.feign.AllotApiService;
+import com.hqjy.mustang.admin.feign.TransferCustomerApiService;
 import com.hqjy.mustang.admin.model.dto.LoginUserDTO;
 import com.hqjy.mustang.admin.model.entity.*;
 import com.hqjy.mustang.admin.service.*;
@@ -60,6 +61,8 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
     private SysDeleteService sysDeleteService;
     @Autowired
     private SysUserProService sysUserProService;
+    @Autowired
+    private TransferCustomerApiService transferCustomerApiService;
     /*@Autowired
     private SysScheduleService sysScheduleService;
     @Autowired
@@ -327,7 +330,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
         // 删除这个用户在原来部门中的的排班信息
         // sysScheduleService.deleteUserOldDeptIdSchedule(user.getUserId());
         // 转移用户在原部门下持有的非成交商机到公海
-        //bizCustomerService.updateUserBizToPublic(user.getUserId(), true);
+        transferCustomerApiService.updateUserTransferToPublic(user.getUserId(), true);
 
         return count;
     }
@@ -410,7 +413,7 @@ public class SysUserServiceImpl extends BaseServiceImpl<SysUserDao, SysUserEntit
                 sysDeleteService.saveLogs(keyWord, SysUserRoleEntity.class.getSimpleName(), userRoleList, "删除用户角色关系");
             }
             // 非成交商机放入公海
-            //bizCustomerService.updateUserBizToPublic(userId, false);
+            transferCustomerApiService.updateUserTransferToPublic(userId, false);
 
             // 删除所有排班
             // sysScheduleService.deleteUserAllSchedule(userId);

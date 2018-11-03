@@ -32,4 +32,13 @@ public class TransferCustomerApi {
     public TransferCustomerInfo findByPhoneAndDeptId(@PathVariable("deptId") Long deptId, @PathVariable("phone") String phone) {
         return Optional.ofNullable(transferCustomerService.findByPhoneAndDeptId(deptId, phone)).map(s -> PojoConvertUtil.convert(s, TransferCustomerInfo.class)).orElse(null);
     }
+
+    /**
+     * 根据用户id更新用户非成交商机到公海
+     */
+    @GetMapping("/getCustomer/{userId}/{sign}")
+    public Integer updateUserTransferToPublic(@PathVariable("userId") Long userId, @PathVariable("sign") Boolean sign) {
+        return transferCustomerService.updateUserTransferToPublic(userId, sign);
+    }
+
 }

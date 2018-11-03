@@ -45,11 +45,6 @@ public class TransferGenCostEntity implements Serializable {
     private Long proId;
 
     /**
-     * 赛道名称
-     */
-    private String genWay;
-
-    /**
      * 推广来源id
      */
     private Long sourceId;
@@ -60,9 +55,14 @@ public class TransferGenCostEntity implements Serializable {
     private Long wayId;
 
     /**
+     * 推广方式名称
+     */
+    private String genWay;
+
+    /**
 	 * 推广日期 格式YYYY-MM-DD gen_day
 	 **/
-    private LocalDate genDay;
+    private Date genDay;
 
     /**
 	 * 人民币主动 initiative_money

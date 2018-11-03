@@ -66,4 +66,19 @@ public interface TransferProcessDao extends BaseDao<TransferProcessEntity, Long>
      * @return 返回流程对象
      */
     TransferProcessEntity getProcessByPublicCustomerId(Long customerId);
+
+    /**
+     * 根据用户id获取所有非成交，有效状态的商机流程,主要用于删除人员和部门变更放入公海
+     *
+     * @author HSS 2018-08-11
+     */
+    List<TransferProcessEntity> findUserActive(@Param("userId") Long userId, @Param("sign") Boolean sign);
+
+    /**
+     * 修改原来激活状态的流程为过期状态(批量)
+     *
+     * @param processIdList 流程id
+     * @return 退回结果
+     */
+    int disableProcessActiveBatch(@Param("processIdList") String processIdList);
 }
