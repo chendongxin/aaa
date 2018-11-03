@@ -58,4 +58,11 @@ public interface TransferProcessService extends BaseService<TransferProcessEntit
      * @return 返回流程对象
      */
     TransferProcessEntity getProcessByPublicCustomerId(Long customerId);
+
+    /**
+     * 根据用户id更新用户非成交商机到公海
+     *
+     * @author HSS 2018-08-11
+     */
+    int updateUserTransferProcessToPublic(Long userId, boolean sign);
 }

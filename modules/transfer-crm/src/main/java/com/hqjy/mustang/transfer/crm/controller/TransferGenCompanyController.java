@@ -146,9 +146,9 @@ public class TransferGenCompanyController {
     @ApiOperation(value = "删除推广公司", notes = "删除推广公司：/delete/1")
     @ApiImplicitParam(paramType = "path", name = "companyId", value = "推广公司ID", required = true, dataType = "Long")
     @SysLog("删除推广公司")
-    @DeleteMapping("/{companyIds}")
-    public R delete(@PathVariable("companyIds") Long[] companyIds) {
-        int count = transferGenCompanyService.deleteBatch(companyIds);
+    @DeleteMapping("/{companyId}")
+    public R delete(@PathVariable("companyId") Long companyId) {
+        int count = transferGenCompanyService.delete(companyId);
         if (count > 0) {
             return R.ok();
         }

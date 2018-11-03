@@ -96,18 +96,15 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
      * 删除所选来源平台
      */
     @Override
-    public int deleteBatch(Long[] sourceIds) {
-        List<Long> list = Arrays.asList(sourceIds);
-        for (Long sourceId : list) {
-            if (baseDao.findOne(sourceId).getSign() == 1) {
-                throw new RRException(StatusCode.DATABASE_SELECT_USE);
-            }
-            List<TransferGenWayEntity> genWay = transferGenWayService.findBySourceId(sourceId);
-            if (genWay.size() > 0) {
-                throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
-            }
+    public int delete(Long sourceId) {
+        List<TransferGenWayEntity> genWay = transferGenWayService.findBySourceId(sourceId);
+        if (genWay.size() > 0) {
+            throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
         }
-        return super.deleteBatch(sourceIds);
+        if (baseDao.findOne(sourceId).getSign() == 1) {
+            throw new RRException(StatusCode.DATABASE_SELECT_USE);
+        }
+        return super.delete(sourceId);
     }
 
 
