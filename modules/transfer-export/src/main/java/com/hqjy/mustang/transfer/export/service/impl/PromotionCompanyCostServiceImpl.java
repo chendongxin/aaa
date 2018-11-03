@@ -350,7 +350,7 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
             HSSFCell cell = header.createCell(i);
             cellStyle.setFont(font);
             cell.setCellStyle(cellStyle);
-            sheet.setColumnWidth(i, 8 * 200);
+            sheet.setColumnWidth(i, 25 * 200);
             // 设置列中写入内容为String类型
             cell.setCellType(HSSFCell.CELL_TYPE_STRING);
             //设置值
@@ -384,6 +384,16 @@ public class PromotionCompanyCostServiceImpl implements PromotionCompanyCostServ
             for (int j = 0; j < genWayCosts.size(); j++) {
                 this.buildCell(row, j + 3, genWayCosts.get(j).getCost());
             }
+        }
+        //合计行
+        HSSFRow row = sheet.createRow(size + 2);
+        CompanyCostReportTotal total = this.countTotal(list);
+        this.buildCell(row, 0, total.getDate());
+        this.buildCell(row, 1, total.getTotalCost());
+        this.buildCell(row, 2, String.valueOf(total.getNum()));
+        List<TransferGenWayCost> genWayCosts = total.getGenWayCosts();
+        for (int j = 0; j < genWayCosts.size(); j++) {
+            this.buildCell(row, j + 3, genWayCosts.get(j).getCost());
         }
     }
 
