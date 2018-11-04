@@ -11,6 +11,9 @@
         <result column="education_id" property="education"/>
         <result column="work_experience" property="experience"/>
         <result column="apply_key" property="jobKey"/>
+        <result column="first_appoint_time" property="firstAppointTime"/>
+        <result column="last_appoint_time" property="lastAppointTime"/>
+        <result column="appoint_count" property="appointCount"/>
         <result column="user_name" property="userName"/>
         <result column="create_time" property="createTime"/>
         <result column="create_user_name" property="createUserName"/>
@@ -29,9 +32,12 @@
         tc.phone,
         tc.user_name,
         td.age,
-        ti.create_time,
+        tc.create_time,
         ti.create_user_name,
         tk.name as apply_key,
+        min(tr.appointment_time) as first_appoint_time,
+        max(tr.appointment_time) as last_appoint_time,
+        count(tr.id) as appoint_count,
         tc.source_name,
         tc.company_name,
         td.major,
@@ -44,8 +50,9 @@
         (CASE tc.get_way WHEN 1 THEN '主动' WHEN 2 THEN '被动' END) AS get_way
         FROM
         transfer_customer tc
-        INNER JOIN transfer_customer_detail td ON tc.customer_id = td.customer_id
+        INNER JOIN transfer_customer_detail td ON td.customer_id = tc.customer_id
         INNER JOIN transfer_customer_invalid ti ON ti.customer_id = tc.customer_id
+        LEFT JOIN transfer_customer_reservation tr ON tr.customer_id = tc.customer_id
         LEFT JOIN transfer_keyword tk ON tk.id=td.apply_key
         <where>
             tc.status in (1,2)
@@ -56,16 +63,13 @@
             <if test="userId !=null and !&quot;&quot;.equals(userId)">
                 and tc.user_id=#{userId}
             </if>
-            <if test="userName !=null and !&quot;&quot;.equals(userName)">
-                and tc.user_name=#{userName}
-            </if>
             <if test="name != null and !&quot;&quot;.equals(name)">and tc.name like concat('%',#{name},'%')</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
             <if test="beginTransferCreateTime != null and beginTransferCreateTime != '' and endTransferCreateTime != null and endTransferCreateTime != ''">
-                and DATE_FORMAT(tc.create_time,'%Y-%m-%d') between #{beginTransferCreateTime} and #{endTransferCreateTime}
+                and tc.create_time between #{beginTransferCreateTime} and #{endTransferCreateTime}
             </if>
             <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-                and DATE_FORMAT(ti.create_time,'%Y-%m-%d') between #{beginCreateTime} and #{endCreateTime}
+                and ti.create_time between #{beginCreateTime} and #{endCreateTime}
             </if>
         </where>
         GROUP BY tc.customer_id
