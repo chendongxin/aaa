@@ -54,13 +54,13 @@ public class ReservationServiceImpl implements ReservationService {
             params.setBeginCreateTime(DateUtils.getBeginTime(params.getBeginCreateTime()));
         }
         if (StringUtils.isNotBlank(params.getEndCreateTime())) {
-            params.setEndCreateTime(DateUtils.getBeginTime(params.getEndCreateTime()));
+            params.setEndCreateTime(DateUtils.getEndTime(params.getEndCreateTime()));
         }
-        if (StringUtils.isNotBlank(params.getBeginAppointTime())) {
-            params.setBeginAppointTime(DateUtils.getBeginTime(params.getBeginAppointTime()));
+        if (StringUtils.isNotBlank(params.getBeginAppointmentTime())) {
+            params.setBeginAppointmentTime(DateUtils.getBeginTime(params.getBeginAppointmentTime()));
         }
-        if (StringUtils.isNotBlank(params.getEndAppointTime())) {
-            params.setEndAppointTime(DateUtils.getBeginTime(params.getEndAppointTime()));
+        if (StringUtils.isNotBlank(params.getEndAppointmentTime())) {
+            params.setEndAppointmentTime(DateUtils.getEndTime(params.getEndAppointmentTime()));
         }
         if (isGeneralSeat()) {
             params.setUserId(getUserId());

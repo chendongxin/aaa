@@ -526,7 +526,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 }
                 if (!customerEntity.getStatus().equals(Constant.CustomerStatus.POTENTIAL.getValue())) {
                     log.error(error + StatusCode.BIZ_CUSTOMER_NOT_POTENTIAL.getMsg());
-                    return;
+                    throw new RRException(StatusCode.BIZ_CUSTOMER_NOT_POTENTIAL);
                 }
                 //设置流程过期
                 int i = transferProcessService.disableProcessActive(process.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));

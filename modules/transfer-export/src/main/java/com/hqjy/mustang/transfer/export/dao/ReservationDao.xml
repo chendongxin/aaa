@@ -5,60 +5,59 @@
     <!-- 实体映射 -->
     <resultMap id="BaseResultMap" type="com.hqjy.mustang.transfer.export.model.entity.ReservationExportEntity">
         <result column="dept_name" property="deptName"/>
-        <result column="user_name" property="userName"/>
         <result column="name" property="name"/>
         <result column="phone" property="phone"/>
+        <result column="education_id" property="education"/>
+        <result column="age" property="age"/>
+        <result column="work_experience" property="experience"/>
+        <result column="apply_type" property="jobType"/>
+        <result column="apply_key" property="jobKey"/>
+        <result column="appointment_time" property="firstAppointTime"/>
+        <result column="visit_time" property="firstVisitTime"/>
+        <result column="valid_visit" property="validVisit"/>
+        <result column="visit_status" property="visitStatus"/>
+        <result column="intention" property="intentionName"/>
+        <result column="create_user_name" property="createUserName"/>
+        <result column="create_time" property="createTime"/>
+        <result column="user_name" property="userName"/>
         <result column="get_way" property="getWay"/>
         <result column="source_name" property="source"/>
         <result column="company_name" property="company"/>
-        <result column="create_user_name" property="createUserName"/>
-        <result column="create_time" property="createTime"/>
-        <result column="age" property="age"/>
-        <result column="apply_type" property="jobType"/>
-        <result column="apply_key" property="jobKey"/>
-        <result column="education_id" property="education"/>
         <result column="major" property="profession"/>
-        <result column="work_experience" property="experience"/>
         <result column="position_applied" property="applyPosition"/>
-        <result column="appointment_time" property="firstAppointTime"/>
-        <result column="visit_time" property="firstVisitTime"/>
-        <result column="visit_status" property="visitState"/>
-        <result column="intention" property="intentionName"/>
-        <result column="valid_visit" property="validVisit"/>
     </resultMap>
-
 
     <select id="getExportData" resultMap="BaseResultMap">
         SELECT
         t.dept_name,
-        t.user_name,
-        t.`name`,
+        t.name,
         t.phone,
+        (CASE td.education_id WHEN 0 THEN '无' WHEN 1 THEN '小学' WHEN 2 THEN '初中'WHEN 3 THEN '高中'WHEN 4 THEN '大专'WHEN 5
+        THEN '本科'WHEN 6 THEN '硕士'WHEN 7 THEN '博士'ELSE '/'END) AS education_id,
+        td.age,
+        (CASE td.work_experience WHEN 0 THEN '无经验' WHEN 1 THEN '应届生' WHEN 2 THEN '一年以内' WHEN 3 THEN '两年' WHEN 4 THEN '三年'
+        WHEN td.work_experience &gt;4 THEN '三年以上'ELSE '/' END) AS work_experience,
+        k1.name as apply_type,
+        k2.name as apply_key,
+        min(tr.appointment_time) appointment_time,
+        tr.visit_time,
+        (CASE tr.valid_visit WHEN 0 THEN '否' WHEN 1 THEN '是' ELSE '/' END) AS valid_visit,
+        (CASE tr.visit_status WHEN 0 THEN '未上门' WHEN 1 THEN '已上门' ELSE '/' END) AS visit_status,
+        (CASE tr.intention WHEN 0 THEN '否' WHEN 1 THEN '是' ELSE '/' END) AS intention,
+        t.create_user_name,
+        tr.create_time,
+        t.user_name,
         (CASE t.get_way WHEN 1 THEN '主动' WHEN 2 THEN '被动' END) AS get_way,
         t.source_name,
         t.company_name,
-        t.create_user_name,
-        tr.create_time,
-        td.age,
-        k1.name as apply_type,
-        k2.name as apply_key,
-        (CASE td.education_id WHEN 0 THEN '无' WHEN 1 THEN '小学' WHEN 2 THEN '初中'WHEN 3 THEN '高中'WHEN 4 THEN '大专'WHEN 5
-        THEN '本科'WHEN 6 THEN '硕士'WHEN 7 THEN '博士'ELSE '/'END) AS get_way,
         td.major,
-        (CASE td.work_experience WHEN -1 THEN '应届生' WHEN 0 THEN '无经验' WHEN 1 THEN '一年' WHEN 2 THEN '两年' WHEN 3 THEN '三年'
-        WHEN td.work_experience &gt;3 THEN '三年以上'ELSE '/' END) AS work_experience,
-        td.position_applied,
-        tr.appointment_time,
-        tr.visit_time,
-        (CASE tr.visit_status WHEN 0 THEN '未上门' WHEN 1 THEN '已上门' ELSE '/' END) AS visit_status,
-        (CASE tr.intention WHEN 0 THEN '否' WHEN 1 THEN '是' ELSE '/' END) AS intention,
-        (CASE tr.valid_visit WHEN 0 THEN '否' WHEN 1 THEN '是' ELSE '/' END) AS valid_visit
+        td.position_applied
         FROM
         transfer_customer t
-        INNER JOIN transfer_customer_detail td ON t.customer_id = td.customer_id
+        INNER JOIN transfer_customer_detail td ON td.customer_id = t.customer_id
         INNER JOIN transfer_customer_reservation tr ON tr.customer_id = t.customer_id
         LEFT JOIN transfer_keyword k1 ON k1.id=td.apply_type
-        LEFT JOIN transfer_keyword k2 ON k1.id=td.apply_key
+        LEFT JOIN transfer_keyword k2 ON k2.id=td.apply_key
         <where>
             t.status=3 and t.user_id is not null
             <!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->
@@ -69,13 +68,13 @@
                 and t.user_id=#{userId}
             </if>
             <if test="name != null and !&quot;&quot;.equals(name)">and t.name like concat('%',#{name},'%')</if>
-            <if test="visitStatus != null and !&quot;&quot;.equals(visitStatus)">and visit_status = #{visitStatus}</if>
+            <if test="visitStatus != null and !&quot;&quot;.equals(visitStatus)">and tr.visit_status = #{visitStatus}</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and t.phone like concat('%',#{phone},'%')</if>
             <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-                and DATE_FORMAT(tr.create_time,'%Y-%m-%d') between STR_TO_DATE(#{beginCreateTime},'%Y-%m-%d') and STR_TO_DATE(#{endCreateTime},'%Y-%m-%d')
+                and tr.create_time between #{beginCreateTime} and #{endCreateTime}
             </if>
-            <if test="beginAppointTime != null and beginAppointTime != '' and endAppointTime != null and endAppointTime != ''">
-                and DATE_FORMAT(tr.appointment_time,'%Y-%m-%d') between STR_TO_DATE(#{beginAppointTime},'%Y-%m-%d') and STR_TO_DATE(#{endAppointTime},'%Y-%m-%d')
+            <if test="beginAppointmentTime != null and beginAppointmentTime != '' and endAppointmentTime != null and endAppointmentTime != ''">
+                and tr.appointment_time between #{beginAppointmentTime} and #{endAppointmentTime}
             </if>
         </where>
         GROUP BY tr.customer_id
