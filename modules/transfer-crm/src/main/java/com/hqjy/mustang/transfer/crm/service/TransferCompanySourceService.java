@@ -28,4 +28,9 @@ public interface TransferCompanySourceService extends BaseService<TransferCompan
      * @return 返回保存结果
      */
     int saveCompanySource(TransferCompanySourceDTO transferCompanySourceDTO);
+
+    /**
+     * 修改推广公司下的推广平台
+     */
+    int update(TransferCompanySourceEntity companySource);
 }

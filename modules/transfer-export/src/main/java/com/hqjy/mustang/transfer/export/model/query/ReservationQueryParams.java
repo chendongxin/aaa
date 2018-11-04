@@ -33,10 +33,10 @@ public class ReservationQueryParams {
     private String endCreateTime;
 
     @ApiModelProperty(value = "开始预约时间")
-    private String beginAppointTime;
+    private String beginAppointmentTime;
 
     @ApiModelProperty(value = "结束预约时间")
-    private String endAppointTime;
+    private String endAppointmentTime;
 
     @ApiModelProperty(value = "客户姓名")
     private String name;

@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.export.service.impl;
 
 import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
@@ -58,6 +59,18 @@ public class InvalidServiceImpl implements InvalidService {
     }
 
     private List<InvalidExportEntity> getExportData(InvalidQueryParams query) {
+        if (StringUtils.isNotBlank(query.getBeginCreateTime())) {
+            query.setBeginCreateTime(DateUtils.getBeginTime(query.getBeginCreateTime()));
+        }
+        if (StringUtils.isNotBlank(query.getEndCreateTime())) {
+            query.setEndCreateTime(DateUtils.getEndTime(query.getEndCreateTime()));
+        }
+        if (StringUtils.isNotBlank(query.getBeginTransferCreateTime())) {
+            query.setBeginTransferCreateTime(DateUtils.getBeginTime(query.getBeginTransferCreateTime()));
+        }
+        if (StringUtils.isNotBlank(query.getEndTransferCreateTime())) {
+            query.setEndTransferCreateTime(DateUtils.getEndTime(query.getEndTransferCreateTime()));
+        }
         if (isGeneralSeat() ) {
             query.setUserId(getUserId());
         }

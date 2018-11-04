@@ -16,12 +16,6 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "电销商机拨打排行报表数据对象")
 public class SellCallReportTotal {
 
-    @ApiModelProperty(value = "电销专员")
-    @ExcelAttribute(name = "电销专员", column = "A")
-    private String sellName;
-
-    @ApiModelProperty(value = "部门Id", hidden = true)
-    private Long deptId;
 
     @ApiModelProperty(value = "部门")
     @ExcelAttribute(name = "部门", column = "B")

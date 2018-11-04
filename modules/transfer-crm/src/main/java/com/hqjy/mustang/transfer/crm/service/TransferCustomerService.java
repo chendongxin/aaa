@@ -108,4 +108,11 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      */
     R importCustomer(MultipartFile file, TransferCustomerUpDTO dto);
 
+    /**
+     * 根据用户id更新用户非成交商机到公海
+     *
+     * @author HSS 2018-08-11
+     */
+    int updateUserTransferToPublic(Long userId, Boolean sign);
+
 }

@@ -90,4 +90,11 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
      * 更新关键词的被用标志
      */
     int updateKey(Integer id);
+
+    /**
+     * 根据用户id更新用户非成交商机到公海
+     *
+     * @author HSS 2018-08-11
+     */
+    int updateUserTransferToPublic(@Param("userId") Long userId, @Param("sign") Boolean sign);
 }

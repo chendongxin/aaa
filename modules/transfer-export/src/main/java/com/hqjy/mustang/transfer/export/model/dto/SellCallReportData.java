@@ -18,16 +18,13 @@ import lombok.experimental.Accessors;
 @ApiModel(value = "电销商机拨打排行报表数据对象")
 public class SellCallReportData {
 
-    @ApiModelProperty(value = "序号")
-    @ExcelAttribute(name = "序号", column = "A")
-    private Integer sequence;
 
     @ApiModelProperty(value = "电销专员Id", hidden = true)
     @JSONField(serialize = false)
     private Long userId;
 
     @ApiModelProperty(value = "电销专员")
-    @ExcelAttribute(name = "电销专员", column = "B")
+    @ExcelAttribute(name = "电销专员", column = "A")
     private String sellName;
 
     @ApiModelProperty(value = "部门Id", hidden = true)
@@ -35,23 +32,23 @@ public class SellCallReportData {
     private Long deptId;
 
     @ApiModelProperty(value = "部门")
-    @ExcelAttribute(name = "部门", column = "C")
+    @ExcelAttribute(name = "部门", column = "B")
     private String deptName;
 
     @ApiModelProperty(value = "拨打量")
-    @ExcelAttribute(name = "拨打量", column = "D")
+    @ExcelAttribute(name = "拨打量", column = "C")
     private int callNum;
 
     @ApiModelProperty(value = "接通量")
-    @ExcelAttribute(name = "接通量", column = "E")
+    @ExcelAttribute(name = "接通量", column = "D")
     private int connectNum;
 
     @ApiModelProperty(value = "接通率")
-    @ExcelAttribute(name = "接通率", column = "F")
+    @ExcelAttribute(name = "接通率", column = "E")
     private String connectRate;
 
     @ApiModelProperty(value = "通话时长")
-    @ExcelAttribute(name = "通话时长", column = "G")
+    @ExcelAttribute(name = "通话时长", column = "F")
     private String duration="00:00:00";
 
 }

@@ -191,6 +191,7 @@ public class SellAttacheServiceImpl implements SellAttacheService {
      */
     private SellAttacheReportTotal countTotal(List<SellAttacheReportData> list) {
         SellAttacheReportTotal total = new SellAttacheReportTotal();
+        total.setDeptName("N/A");
         list.forEach(x -> {
             total.setVisitNum(total.getVisitNum() + x.getVisitNum());
             total.setValidNum(total.getValidNum() + x.getValidNum());

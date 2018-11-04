@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * transfer_company_source 推广公司-来源关联实体类
@@ -12,6 +13,7 @@ import lombok.Data;
  * @date : 2018/09/07 10:16
  */
 @Data
+@Accessors(chain = true)
 public class TransferCompanySourceEntity implements Serializable {
     /**
      * 编号 id
