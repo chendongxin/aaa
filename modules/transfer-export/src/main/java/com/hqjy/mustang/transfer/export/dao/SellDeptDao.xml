@@ -9,7 +9,7 @@
 
     <!-- 商机总量	该部门的商机总量-->
     <select id="countBusiness" resultMap="baseMap">
-        SELECT COUNT(customer_id) AS num, create_user_dept_id AS deptId
+        SELECT COUNT(customer_id) AS num, dept_id AS deptId
         FROM transfer_customer
         WHERE create_time BETWEEN #{beginTime} AND #{endTime} AND dept_id IN ${deptIds}
         <if test="getWay!=null">
