@@ -98,13 +98,14 @@ public class TransferCallRecordServiceImpl extends BaseServiceImpl<TransferCallR
         list.forEach(v -> {
             v.setRingTimeStr(DateUtils.secondToTime(v.getRingTime()));
             if(v.getTotalDuration() != null){
-                v.setTotalDurationStr(DateUtils.secondToTime(v.getTotalDuration()));
+                //总时长
                 v.setTotalCall(v.getRingTime()+v.getTotalDuration());
-                v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
-            }else{
+             }else{
+                v.setTotalDuration(0L);
                 v.setTotalCall(v.getRingTime());
-                v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
             }
+            v.setTotalDurationStr(DateUtils.secondToTime(v.getTotalDuration()));
+            v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
         });
         return list;
     }
