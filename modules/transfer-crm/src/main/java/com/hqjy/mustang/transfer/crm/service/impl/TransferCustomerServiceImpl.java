@@ -345,11 +345,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         //高级查询部门刷选
         if (null != deptId) {
             //部门下所有子部门
-            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-            allDeptUnderDeptId.forEach(x -> {
-                String s = String.valueOf(x);
-                ids.add(s);
-            });
+            this.getAllDeptId(ids, deptId);
         }
         this.formatQueryTime(pageQuery);
         if (isGeneralSeat()) {
@@ -362,11 +358,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (null == deptId) {
             //如果没有刷选部门过滤条件
             //获取当前用户的部门以及子部门
-            List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
-            userAllDeptId.forEach(x -> {
-                String s = String.valueOf(x);
-                ids.add(s);
-            });
+            this.getUserDeptIdList(ids, getUserId());
         }
         pageQuery.put("deptIds", StringUtils.listToString(ids));
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
@@ -471,32 +463,52 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         //高级查询部门刷选
         if (null != deptId) {
             //部门下所有子部门
-            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-            allDeptUnderDeptId.forEach(x -> {
-                String s = String.valueOf(x);
-                ids.add(s);
-            });
-            pageQuery.put("deptIds", StringUtils.listToString(ids));
+            this.getAllDeptId(ids, deptId);
         }
         this.formatQueryTime(pageQuery);
         if (isGeneralSeat()) {
             pageQuery.put("userId", getUserId());
         }
         if (isSuperAdmin()) {
+            PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
             return baseDao.findPrivatePage(pageQuery);
         }
         //如果没有刷选部门过滤条件
         if (null == deptId) {
             //获取当前用户的部门以及子部门
-            List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
-            userAllDeptId.forEach(x -> {
-                String s = String.valueOf(x);
-                ids.add(s);
-            });
-            pageQuery.put("deptIds", StringUtils.listToString(ids));
+            this.getUserDeptIdList(ids, getUserId());
         }
+        pageQuery.put("deptIds", StringUtils.listToString(ids));
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
         return baseDao.findPrivatePage(pageQuery);
+    }
+
+    /**
+     * 获取当前用户的部门以及子部门
+     * @param userId 用户Id
+     * @return
+     */
+    private List<String> getUserDeptIdList(List<String> ids, Long userId) {
+        List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(userId);
+        userAllDeptId.forEach(x -> {
+            String s = String.valueOf(x);
+            ids.add(s);
+        });
+        return ids;
+    }
+
+    /**
+     * 部门下所有子部门
+     * @param deptId 部门Id
+     * @return
+     */
+    private List<String> getAllDeptId(List<String> ids, Long deptId) {
+        List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
+        allDeptUnderDeptId.forEach(x -> {
+            String s = String.valueOf(x);
+            ids.add(s);
+        });
+        return ids;
     }
 
     @Override
@@ -514,7 +526,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 }
                 if (!customerEntity.getStatus().equals(Constant.CustomerStatus.POTENTIAL.getValue())) {
                     log.error(error + StatusCode.BIZ_CUSTOMER_NOT_POTENTIAL.getMsg());
-                    return;
+                    throw new RRException(StatusCode.BIZ_CUSTOMER_NOT_POTENTIAL);
                 }
                 //设置流程过期
                 int i = transferProcessService.disableProcessActive(process.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
@@ -670,5 +682,25 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             msgBody.setWorkExperience(Constant.EXPERIENCE.MORE_THREE_EXPERIENCE.getValue());
         }
     }
+
+    /**
+     * 根据用户id更新用户非成交商机到公海
+     *
+     * @author HSS 2018-08-11
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int updateUserTransferToPublic(Long userId, Boolean sign) {
+        if (sign) {
+            log.debug("用户变更部门，原来部门非成交商机放入公海:{}", getUserId());
+        } else {
+            log.debug("用户删除，所有非成交商机放入公海:{}", getUserId());
+        }
+        int count = 0;
+        count += baseDao.updateUserTransferToPublic(userId, sign);
+        count += transferProcessService.updateUserTransferProcessToPublic(userId, sign);
+        return count;
+    }
+
 
 }

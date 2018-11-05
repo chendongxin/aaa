@@ -57,17 +57,17 @@ public class ReservationExportEntity implements Serializable {
     @ExcelAttribute(name = "上门时间")
     private String firstVisitTime;
 
-    @ApiModelProperty(value = "有效上门")
-    @ExcelAttribute(name = "有效上门")
+    @ApiModelProperty(value = "是否有效上门")
+    @ExcelAttribute(name = "是否有效上门")
     private String validVisit;
 
-    @ApiModelProperty(value = "意向度")
-    @ExcelAttribute(name = "意向度")
-    private String intentionName;
+    @ApiModelProperty(value = "是否上门")
+    @ExcelAttribute(name = "是否上门")
+    private String visitStatus;
 
-    @ApiModelProperty(value = "上门状态")
-    @ExcelAttribute(name = "上门状态")
-    private String visitState;
+    @ApiModelProperty(value = "是否意向")
+    @ExcelAttribute(name = "是否意向")
+    private String intentionName;
 
     @ApiModelProperty(value = "创建者")
     @ExcelAttribute(name = "创建者")
@@ -90,7 +90,7 @@ public class ReservationExportEntity implements Serializable {
     private String source;
 
     @ApiModelProperty(value = "推广公司")
-    @ExcelAttribute(name = "来源平台")
+    @ExcelAttribute(name = "推广公司")
     private String company;
 
     @ApiModelProperty(value = "专业")
@@ -98,8 +98,7 @@ public class ReservationExportEntity implements Serializable {
     private String profession;
 
     @ApiModelProperty(value = "应聘岗位")
-    @ExcelAttribute(name = "来源平台")
+    @ExcelAttribute(name = "应聘岗位")
     private String applyPosition;
-
 
 }

@@ -55,6 +55,12 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     private List<CustomerExportEntity> getExportData(CustomerExportQueryParams query) {
+        if (StringUtils.isNotBlank(query.getBeginCreateTime())) {
+            query.setBeginCreateTime(DateUtils.getBeginTime(query.getBeginCreateTime()));
+        }
+        if (StringUtils.isNotBlank(query.getEndCreateTime())) {
+            query.setEndCreateTime(DateUtils.getEndTime(query.getEndCreateTime()));
+        }
         if (isGeneralSeat() ) {
             query.setUserId(getUserId());
         }

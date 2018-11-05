@@ -2,6 +2,7 @@ package com.hqjy.mustang.transfer.crm.model.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import lombok.Data;
 
@@ -44,11 +45,6 @@ public class TransferGenCostEntity implements Serializable {
     private Long proId;
 
     /**
-     * 赛道名称
-     */
-    private String genWay;
-
-    /**
      * 推广来源id
      */
     private Long sourceId;
@@ -57,6 +53,11 @@ public class TransferGenCostEntity implements Serializable {
 	 * 推广方式id way_id
 	 **/
     private Long wayId;
+
+    /**
+     * 推广方式名称
+     */
+    private String genWay;
 
     /**
 	 * 推广日期 格式YYYY-MM-DD gen_day

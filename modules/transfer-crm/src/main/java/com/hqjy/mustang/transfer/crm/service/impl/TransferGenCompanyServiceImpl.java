@@ -79,26 +79,22 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
 
     /**
      * 删除推广公司
-     * @param companyIds 删除推广公司数组
+     * @param companyId 删除推广公司数组
      * @return int>0 为删除成功
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public int deleteBatch(Long[] companyIds) {
-        List<Long> list = Arrays.asList(companyIds);
-        for (Long companyId : list) {
-            if (companyId == 1) {
-                throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
-            } else if (baseDao.findOne(companyId).getSign() == 1) {
+    public int delete(Long companyId) {
+        List<TransferCompanySourceEntity> companySourceList = transferCompanySourceDao.findByCompanyId(companyId);
+        if (companyId == 1) {
+            throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
+        } else if (companySourceList.size() > 0) {
+            throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
+        } else {
+            if (baseDao.findOne(companyId).getSign() == 1) {
                 throw new RRException(StatusCode.DATABASE_SELECT_USE);
-            } else {
-                List<TransferCompanySourceEntity> companySourceList = transferCompanySourceDao.findByCompanyId(companyId);
-                if (companySourceList.size() > 0) {
-                    throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
-                }
             }
         }
-        return super.deleteBatch(companyIds);
+        return super.delete(companyId);
     }
-
 }

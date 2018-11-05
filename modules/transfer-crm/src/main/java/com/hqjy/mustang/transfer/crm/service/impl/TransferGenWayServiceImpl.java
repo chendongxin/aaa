@@ -4,6 +4,7 @@ import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.transfer.crm.dao.TransferGenWayDao;
+import com.hqjy.mustang.transfer.crm.dao.TransferWaySourceDao;
 import com.hqjy.mustang.transfer.crm.model.dto.TransferGenWaySourceDTO;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferGenWayEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferWaySourceEntity;
@@ -11,9 +12,7 @@ import com.hqjy.mustang.transfer.crm.service.TransferGenWayService;
 import com.hqjy.mustang.transfer.crm.service.TransferWaySourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
@@ -23,65 +22,56 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 public class TransferGenWayServiceImpl extends BaseServiceImpl<TransferGenWayDao, TransferGenWayEntity, Long> implements TransferGenWayService {
 
     @Autowired
-    private TransferGenWayDao transferGenWayDao;
-    @Autowired
     private TransferWaySourceService transferWaySourceService;
+    @Autowired
+    private TransferWaySourceDao transferWaySourceDao;
+
 
     /**
-     * 删除推广方式
+     * 保存推广平台下的推广方式
      */
     @Override
-    @Transactional(rollbackFor = Exception.class)
-    public int deleteBatch(Long[] wayIds) {
-        List<Long> list = Arrays.asList(wayIds);
-        for (Long wayId : list) {
-            List<TransferGenWayEntity> genWayList = baseDao.findByParentId(wayId);
-            if (genWayList.size() > 0) {
-                throw new RRException(StatusCode.DATABASE_DELETE_CHILD);
+    public int saveWaySource(TransferGenWaySourceDTO transferGenWaySourceDTO) {
+        TransferGenWayEntity transferGenWayEntity = baseDao.findOneByGenName(transferGenWaySourceDTO.getGenWay());
+        TransferWaySourceEntity transferWaySourceEntity = new TransferWaySourceEntity();
+        if (transferGenWayEntity == null) {
+            transferGenWayEntity = new TransferGenWayEntity().setGenWay(transferGenWaySourceDTO.getGenWay()).setStatus(transferGenWaySourceDTO.getStatus())
+                    .setSeq(transferGenWaySourceDTO.getSeq()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
+            int count = baseDao.save(transferGenWayEntity);
+            if (count > 0) {
+                transferWaySourceEntity.setWayId(transferGenWayEntity.getWayId());
+            } else {
+                throw new RRException(StatusCode.DATABASE_SAVE_FAILURE);
+            }
+        } else {
+            transferWaySourceEntity.setWayId(baseDao.findOneByGenName(transferGenWaySourceDTO.getGenWay()).getWayId());
+            if (transferWaySourceService.findByWayIdAndSourceId(transferWaySourceEntity.getWayId(), transferGenWaySourceDTO.getSourceId()) != null) {
+                throw new RRException(StatusCode.DATABASE_DUPLICATEKEY);
             }
         }
-        return super.deleteBatch(wayIds);
+        return transferWaySourceDao.save(transferWaySourceEntity.setSourceId(transferGenWaySourceDTO.getSourceId())
+                .setSeq(transferGenWaySourceDTO.getSeq()).setStatus(transferGenWaySourceDTO.getStatus()).setSign(0)
+                .setCreateUserId(getUserId()).setCreateUserName(getUserName())
+        );
     }
 
     /**
-     * 修改推广方式
+     * 删除指定平台下的推广方式
      */
     @Override
-    public int update(TransferGenWaySourceDTO genWaySourceDTO) {
-        TransferGenWayEntity transferGenWayEntity = transferGenWayDao.findOneByGenName(genWaySourceDTO.getGenWay());
-        TransferWaySourceEntity transferWaySourceEntity = new TransferWaySourceEntity();
-        if (null == transferGenWayEntity) {
-            transferGenWayEntity = new TransferGenWayEntity().setGenWay(genWaySourceDTO.getGenWay()).setStatus(genWaySourceDTO.getStatus())
-                    .setSeq(genWaySourceDTO.getSeq()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
-            transferGenWayDao.save(transferGenWayEntity);
+    public int delete(Long id) {
+        if (transferWaySourceService.findOne(id).getSign() == 1) {
+            throw new RRException(StatusCode.DATABASE_SELECT_USE);
         }
-        if (null == transferWaySourceService.findByWayIdAndSourceId(transferGenWayEntity.getWayId(),genWaySourceDTO.getSourceId())) {
-            transferWaySourceEntity.setWayId(transferGenWayEntity.getWayId());
-        }
-        transferWaySourceEntity.setId(genWaySourceDTO.getId()).setSourceId(genWaySourceDTO.getSourceId()).setSeq(genWaySourceDTO.getSeq()).setStatus(genWaySourceDTO.getStatus())
-                .setUpdateUserId(getUserId()).setUpdateUserName(getUserName());
-        return transferWaySourceService.update(transferWaySourceEntity);
-//        if (genWaySourceDTO.getGenWay() == null) {
-//            return transferWaySourceService.update(new TransferWaySourceEntity().setSourceId(genWaySourceDTO.getSourceId())
-//                .setSeq(genWaySourceDTO.getSeq()).setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-//            );
-//        }
-//        TransferGenWayEntity transferGenWayEntity = new TransferGenWayEntity().setGenWay(genWaySourceDTO.getGenWay()).setSeq(genWaySourceDTO.getSeq())
-//                .setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName());
-//        int count = super.save(transferGenWayEntity);
-//        if (count > 0) {
-//            count = transferWaySourceService.save(
-//                    new TransferWaySourceEntity()
-//                        .setWayId(transferGenWayEntity.getWayId()).setSourceId(genWaySourceDTO.getSourceId()).setSeq(genWaySourceDTO.getSeq())
-//                        .setStatus(genWaySourceDTO.getStatus()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-//            );
-//            if (count > 0) {
-//                Long[] ids = new Long[1];
-//                ids[0] = genWaySourceDTO.getId();
-//                count = transferWaySourceService.deleteBatch(ids);
-//            }
-//        }
-//        return count;
+        return transferWaySourceService.delete(id);
+    }
+
+    /**
+     * 修改指定平台下的推广方式
+     */
+    @Override
+    public int update(TransferWaySourceEntity waySource) {
+        return transferWaySourceService.update(waySource.setUpdateUserId(getUserId()).setUpdateUserName(getUserName()));
     }
 
     /**

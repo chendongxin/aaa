@@ -75,7 +75,7 @@
             <if test="proId != null and !&quot;&quot;.equals(proId)">and tc.pro_id = #{proId}</if>
             <if test="phone != null and !&quot;&quot;.equals(phone)">and tc.phone like concat('%',#{phone},'%')</if>
             <if test="beginCreateTime != null and beginCreateTime != '' and endCreateTime != null and endCreateTime != ''">
-                and DATE_FORMAT(tc.create_time,'%Y-%m-%d') between #{beginCreateTime} and #{endCreateTime}
+                and tc.create_time between #{beginCreateTime} and #{endCreateTime}
             </if>
         </where>
         GROUP BY tc.customer_id
