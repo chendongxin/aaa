@@ -6,6 +6,7 @@ import com.hqjy.mustang.transfer.export.model.query.ReservationQueryParams;
 import com.hqjy.mustang.transfer.export.service.ReservationService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ public class ReservationReportController {
     @SysLog("邀约报表导出")
     @ApiOperation(value = "邀约报表导出", notes = "请求参数格式:\n")
     @PostMapping("/exportReservation")
+    @RequiresPermissions("tr:rev:export")
     public R exportReservation(@RequestBody ReservationQueryParams query) {
         return R.result(reservationService.exportReservation(query));
     }

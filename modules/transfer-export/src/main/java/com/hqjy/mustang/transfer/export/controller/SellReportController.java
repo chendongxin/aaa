@@ -11,6 +11,7 @@ import com.hqjy.mustang.transfer.export.service.SellCallService;
 import com.hqjy.mustang.transfer.export.service.SellDeptService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,6 +100,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/sellAttacheList")
+    @RequiresPermissions("tr:sell:att-list")
     public R sellAttacheList(@ModelAttribute PageParams params, @RequestBody @Valid SellQueryParams query) {
         return R.result(sellAttacheService.sellAttacheList(params, query));
     }
@@ -121,6 +123,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/exportSellAttache")
+    @RequiresPermissions("tr:sell:att-export")
     public R exportSellAttache(@RequestBody @Valid SellQueryParams query) {
         return R.result(sellAttacheService.exportSellAttache(query));
     }
@@ -175,6 +178,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/sellDeptList")
+    @RequiresPermissions("tr:sell:dept-list")
     public R sellDeptList(@ModelAttribute PageParams params, @RequestBody @Valid SellQueryParams query) {
         return R.result(sellDeptService.sellDeptList(params, query));
     }
@@ -197,6 +201,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/exportSellDept")
+    @RequiresPermissions("tr:sell:dept-export")
     public R exportSellDept(@RequestBody @Valid SellQueryParams query) {
         return R.result(sellDeptService.exportSellDept(query));
     }
@@ -241,6 +246,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/sellCallList")
+    @RequiresPermissions("tr:sell:call-list")
     public R sellCallList(@ModelAttribute PageParams params, @RequestBody @Valid SellQueryParams query) {
         return R.result(sellCallService.sellCallList(params, query));
     }
@@ -261,6 +267,7 @@ public class SellReportController {
             "}"
     )
     @PostMapping("/exportSellCall")
+    @RequiresPermissions("tr:sell:call-export")
     public R exportSellCall(@RequestBody @Valid SellQueryParams query) {
         return R.result(sellCallService.exportSellCall(query));
     }

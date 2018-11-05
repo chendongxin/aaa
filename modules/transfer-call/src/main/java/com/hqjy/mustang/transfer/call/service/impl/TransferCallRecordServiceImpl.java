@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.utils.*;
 import com.hqjy.mustang.transfer.call.dao.TransferCallRecordDao;
+import com.hqjy.mustang.transfer.call.model.dto.CallStatisDTO;
 import com.hqjy.mustang.transfer.call.model.dto.TqCallClienIdDTO;
 import com.hqjy.mustang.transfer.call.model.dto.TqCallRecordDTO;
 import com.hqjy.mustang.transfer.call.model.entity.TransferCallRecordEntity;
@@ -11,7 +12,10 @@ import com.hqjy.mustang.transfer.call.service.TransferCallRecordService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.List;
+
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 
 /**
  * @author : heshuangshuang
@@ -92,19 +96,54 @@ public class TransferCallRecordServiceImpl extends BaseServiceImpl<TransferCallR
     }
 
     @Override
+    public CallStatisDTO getPersonStatis(String type) {
+        CallStatisDTO callStatisDTO = baseDao.statisPerson(getUserId(), type);
+        if (callStatisDTO != null) {
+            //总通话时长
+            Long talkSecond = callStatisDTO.getTalkSecond();
+            //有效通话时长
+            Long validSecond = callStatisDTO.getValidSecond();
+
+            callStatisDTO.setTalkTime(DateUtils.secondToTime(talkSecond));
+            callStatisDTO.setValidTime(DateUtils.secondToTime(validSecond));
+
+            // 拨打数量
+            int seatAnswer = callStatisDTO.getSeatAnswer();
+            // 客户接听数
+            int customerAnswer = callStatisDTO.getCustomerAnswer();
+
+            if (seatAnswer != 0) {
+                //平均通话时长
+                callStatisDTO.setAverageTime(DateUtils.secondToTime(talkSecond / seatAnswer));
+            } else {
+                callStatisDTO.setAverageTime(DateUtils.secondToTime(0));
+            }
+            if (customerAnswer != 0) {
+                DecimalFormat df = new DecimalFormat("0.00");
+                callStatisDTO.setAnswerRate(df.format((float) customerAnswer * 100 / seatAnswer) + "%");
+            } else {
+                callStatisDTO.setAnswerRate("0%");
+            }
+        }
+        return callStatisDTO;
+    }
+
+
+    @Override
     public List<TransferCallRecordEntity> findPage(PageQuery pageQuery) {
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
         List<TransferCallRecordEntity> list = baseDao.findPage(pageQuery);
         list.forEach(v -> {
             v.setRingTimeStr(DateUtils.secondToTime(v.getRingTime()));
             if(v.getTotalDuration() != null){
-                v.setTotalDurationStr(DateUtils.secondToTime(v.getTotalDuration()));
+                //总时长
                 v.setTotalCall(v.getRingTime()+v.getTotalDuration());
-                v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
-            }else{
+             }else{
+                v.setTotalDuration(0L);
                 v.setTotalCall(v.getRingTime());
-                v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
             }
+            v.setTotalDurationStr(DateUtils.secondToTime(v.getTotalDuration()));
+            v.setTotalCallStr(DateUtils.secondToTime(v.getTotalCall()));
         });
         return list;
     }

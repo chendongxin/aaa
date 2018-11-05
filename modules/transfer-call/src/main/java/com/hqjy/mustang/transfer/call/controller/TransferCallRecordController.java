@@ -85,4 +85,13 @@ public class TransferCallRecordController {
         }
         return R.error(StatusCode.DATABASE_SELECT_FAILURE);
     }
+
+    /**
+     * 个人通话首页统计
+     */
+    @GetMapping("/statis/person/{type}")
+    @ApiOperation(value = "首页获取个人通话统计",notes = "参数说明: {type}:统计时间  示例: /person/{type} 本日:day 本周:week,本月:month " )
+    public R callStatistics(@PathVariable("type") String type) {
+        return R.ok(transferCallRecordService.getPersonStatis(type));
+    }
 }

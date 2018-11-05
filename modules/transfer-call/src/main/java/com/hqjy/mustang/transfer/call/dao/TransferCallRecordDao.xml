@@ -227,4 +227,28 @@
         limit 1
     </select>
 
+
+    <!-- 个人通话首页统计 -->
+    <select id="statisPerson" resultType="com.hqjy.mustang.transfer.call.model.dto.CallStatisDTO">
+        select
+        count(customer_id) seatAnswer,
+        count(case when status = '接通'
+        then customer_id
+        ELSE NULL END) customerAnswer,
+        SUM(TIME_TO_SEC(`total_duration`)) talk_second,
+        SUM(TIME_TO_SEC(`ring_time`+`total_duration`)) valid_second
+        from transfer_call_record
+        where create_user_id = #{createuserId} and
+        <choose>
+            <when test="type == 'week'">
+                DATE_FORMAT(start_time,'%Y-%m-%d') BETWEEN subdate(CURDATE(),date_format(CURDATE(),'%w')-1) and subdate(CURDATE(),date_format(CURDATE(),'%w')-7)
+            </when>
+            <when test="type == 'month'">
+                DATE_FORMAT(start_time, '%Y-%m') = DATE_FORMAT( CURDATE( ) , '%Y-%m' )
+            </when>
+            <otherwise>
+                DATE_FORMAT(start_time, '%Y-%m-%d') = CURDATE()
+            </otherwise>
+        </choose>
+    </select>
 </mapper>
