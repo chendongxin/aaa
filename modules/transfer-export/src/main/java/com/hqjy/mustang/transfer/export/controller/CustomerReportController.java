@@ -6,6 +6,7 @@ import com.hqjy.mustang.transfer.export.model.query.CustomerExportQueryParams;
 import com.hqjy.mustang.transfer.export.service.CustomerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,12 +22,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/report/customer")
 public class CustomerReportController {
 
-    @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    public void setCustomerService(CustomerService customerService) {
+        this.customerService = customerService;
+    }
 
     @ApiOperation(value = "导出客户列表", notes = "请求参数格式:见swagger的model:客户报表导出参数模型")
     @PostMapping("/exportCustomer")
-//    @RequiresPermissions("biz:customer:export")
+    @RequiresPermissions("tr:cm:export")
     @SysLog("客户列表导出")
     public R exportCustomer(@RequestBody CustomerExportQueryParams query) {
         return R.result(customerService.exportCustomer(query));

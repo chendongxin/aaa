@@ -11,6 +11,7 @@ import com.hqjy.mustang.transfer.export.service.PromotionDailyService;
 import com.hqjy.mustang.transfer.export.service.PromotionSmsCostService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -116,6 +117,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/promotionDailyList")
+    @RequiresPermissions("tr:prm:daily-list")
     public R promotionDailyList(@ModelAttribute PageParams params, @RequestBody @Valid DailyQueryParams query) {
         return R.result(promotionDailyService.promotionDailyList(params, query));
     }
@@ -138,6 +140,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/exportPromotionDaily")
+    @RequiresPermissions("tr:prm:daily-export")
     public R exportPromotionDaily(@RequestBody @Valid DailyQueryParams query) {
         return R.result(promotionDailyService.exportPromotionDaily(query));
     }
@@ -189,6 +192,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/promotionCustomerList")
+    @RequiresPermissions("tr:prm:ctm-list")
     public R promotionCustomerList(@ModelAttribute PageParams params, @RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.promotionCustomerList(params, query));
     }
@@ -210,6 +214,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/exportPromotionCustomer")
+    @RequiresPermissions("tr:prm:ctm-export")
     public R exportPromotionCustomer(@RequestBody @Valid CustomerQueryParams query) {
         return R.result(promotionCustomerService.exportPromotionCustomer(query));
     }
@@ -253,6 +258,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/promotionSmsCostList")
+    @RequiresPermissions("tr:prm:sms-list")
     public R promotionSmsCostList(@ModelAttribute PageParams params, @RequestBody @Valid SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.promotionSmsCostList(params, query));
     }
@@ -272,6 +278,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/exportPromotionSmsCost")
+    @RequiresPermissions("tr:prm:sms-export")
     public R exportPromotionSmsCost(@RequestBody @Valid SmsCostQueryParams query) {
         return R.result(promotionSmsCostService.exportPromotionSmsCost(query));
     }
@@ -344,6 +351,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/promotionCompanyCostList")
+    @RequiresPermissions("tr:prm:cmp-cost-list")
     public R promotionCompanyCostList(@ModelAttribute PageParams params, @RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.promotionCompanyCostList(params, query));
     }
@@ -370,6 +378,7 @@ public class PromotionReportController {
             "}"
     )
     @PostMapping("/exportPromotionCompanyCost")
+    @RequiresPermissions("tr:prm:cmp-cost-export")
     public R exportPromotionCompanyCost(@RequestBody @Valid CompanyCostQueryParams query) {
         return R.result(promotionCompanyCostService.exportPromotionCompanyCost(query));
     }

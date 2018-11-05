@@ -185,9 +185,12 @@ public class SellDeptServiceImpl implements SellDeptService {
         list.forEach(x -> {
             total.setVisitNum(total.getVisitNum() + x.getVisitNum());
             total.setBusinessNum(total.getBusinessNum() + x.getBusinessNum());
+            total.setVisitValidNum(total.getVisitValidNum() + x.getVisitValidNum());
             total.setValidNum(total.getValidNum() + x.getValidNum());
             total.setDealNum(total.getDealNum() + x.getDealNum());
+            total.setReservationNum(total.getReservationNum()+x.getReservationNum());
         });
+
         DecimalFormat df = new DecimalFormat("0.00%");
         //有效商机上门率:有效上门量/有效商机总量
         total.setVisitValidRate(df.format(total.getValidNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getValidNum()));

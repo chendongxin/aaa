@@ -8,6 +8,7 @@ import com.hqjy.mustang.transfer.export.model.query.ReservationQueryParams;
 import com.hqjy.mustang.transfer.export.service.InvalidService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,6 +32,7 @@ public class InvalidReportController {
     @SysLog("无效客户报表导出")
     @ApiOperation(value = "无效客户报表导出", notes = "请求参数格式:\n")
     @PostMapping("/exportInvalid")
+    @RequiresPermissions("tr:cm:iv-export")
     public R exportReservation(@RequestBody InvalidQueryParams query) {
         return R.result(invalidService.exportInvalid(query));
     }
