@@ -97,4 +97,12 @@ public class TransferGenCompanyServiceImpl extends BaseServiceImpl<TransferGenCo
         }
         return super.delete(companyId);
     }
+
+    /**
+     * 通过推广公司名称获取推广公司信息
+     */
+    @Override
+    public TransferGenCompanyEntity findOneByName(String name) {
+        return baseDao.findOneByName(name);
+    }
 }

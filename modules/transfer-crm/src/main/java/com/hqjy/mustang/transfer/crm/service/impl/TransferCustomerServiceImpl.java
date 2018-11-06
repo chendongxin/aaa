@@ -15,10 +15,7 @@ import com.hqjy.mustang.common.model.crm.MessageSendVO;
 import com.hqjy.mustang.common.redis.utils.RedisKeys;
 import com.hqjy.mustang.common.redis.utils.RedisLockUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDao;
-import com.hqjy.mustang.transfer.crm.feign.SysConfigServiceFeign;
-import com.hqjy.mustang.transfer.crm.feign.SysDeptServiceFeign;
-import com.hqjy.mustang.transfer.crm.feign.SysMessageServiceFeign;
-import com.hqjy.mustang.transfer.crm.feign.SysUserDeptServiceFeign;
+import com.hqjy.mustang.transfer.crm.feign.*;
 import com.hqjy.mustang.transfer.crm.model.dto.*;
 import com.hqjy.mustang.transfer.crm.model.entity.*;
 import com.hqjy.mustang.transfer.crm.service.*;
@@ -64,10 +61,13 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private TransferCustomerRepeatService transferCustomerRepeatService;
     private TransferCustomerDetailService transferCustomerDetailService;
     private TransferProcessService transferProcessService;
+    private TransferGenCompanyService transferGenCompanyService;
+    private TransferSourceService transferSourceService;
     private SysMessageServiceFeign sysMessageServiceFeign;
     private SysConfigServiceFeign sysConfigServiceFeign;
     private SysDeptServiceFeign sysDeptServiceFeign;
     private SysUserDeptServiceFeign sysUserDeptServiceFeign;
+    private SysProductServiceFeign sysProductServiceFeign;
     private ThreadPoolExecutor receiveExecutor;
     private RedisLockUtils redisLockUtils;
     private RabbitTemplate rabbitTemplate;
@@ -108,6 +108,21 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     }
 
     @Autowired
+    public void setTransferGenCompanyService(TransferGenCompanyService transferGenCompanyService) {
+        this.transferGenCompanyService = transferGenCompanyService;
+    }
+
+    @Autowired
+    public void setTransferSourceService(TransferSourceService transferSourceService) {
+        this.transferSourceService = transferSourceService;
+    }
+
+    @Autowired
+    public void setSysProductServiceFeign(SysProductServiceFeign sysProductServiceFeign) {
+        this.sysProductServiceFeign = sysProductServiceFeign;
+    }
+
+    @Autowired
     public void setRabbitTemplate(RabbitTemplate rabbitTemplate) {
         this.rabbitTemplate = rabbitTemplate;
     }
@@ -135,17 +150,18 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             return null;
         }
         Long deptId = MapUtils.getLong(pageQuery, "deptId");
+        List<String> ids = new ArrayList<>();
         //高级查询部门刷选
         if (null != deptId) {
             //部门下所有子部门
-            List<String> ids = new ArrayList<>();
-            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
-            allDeptUnderDeptId.forEach(x -> {
-                String deptIds = String.valueOf(x);
-                ids.add(deptIds);
-            });
-            pageQuery.put("deptIds", StringUtils.listToString(ids));
+            this.getAllDeptId(ids, deptId);
         }
+        //如果没有刷选部门过滤条件
+        if (null == deptId) {
+            //获取当前用户的部门以及子部门
+            this.getUserDeptIdList(ids, getUserId());
+        }
+        pageQuery.put("deptIds", StringUtils.listToString(ids));
         this.formatQueryTime(pageQuery);
         if (isGeneralSeat()) {
             pageQuery.put("userId", getUserId());
@@ -153,17 +169,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         if (isSuperAdmin()) {
             log.debug("用户角色是超级管理员：" + isSuperAdmin());
             return super.findPage(pageQuery);
-        }
-        //如果没有刷选部门过滤条件
-        if (null == deptId) {
-            //获取当前用户的部门以及子部门
-            List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
-            List<String> deptIds = new ArrayList<>();
-            userAllDeptId.forEach(x -> {
-                String ids = String.valueOf(x);
-                deptIds.add(ids);
-            });
-            pageQuery.put("deptIds", StringUtils.listToString(deptIds));
         }
         return super.findPage(pageQuery);
     }
@@ -215,14 +220,19 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             if (transferCustomerList.size() > 0) {
                 //如果存在，将客户添加到重单客户表中
                 TransferCustomerEntity customer = baseDao.findOne(transferCustomerList.get(0).getCustomerId());
-                transferCustomerRepeatService.save(
-                        new TransferCustomerRepeatEntity()
-                                .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
-                                .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
-                                .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
-                                .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId()).
-                                setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
-                );
+                TransferCustomerRepeatEntity customerEntity = new TransferCustomerRepeatEntity()
+                        .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
+                        .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
+                        .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
+                        .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId())
+                        .setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName());
+                if (isGeneralSeat()) {
+                    List<Long> proList = sysProductServiceFeign.findByUserId(getUserId());
+                    customerEntity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
+                            .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
+                            .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
+                }
+                transferCustomerRepeatService.save(customerEntity);
                 return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
             } else {
                 Date date = new Date();
@@ -233,6 +243,12 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                         .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
                         .setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
                         .setCreateUserDeptId(customerDto.getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
+                if (isGeneralSeat()) {
+                    List<Long> proList = sysProductServiceFeign.findByUserId(getUserId());
+                    entity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
+                            .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
+                            .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
+                }
                 super.save(entity);
                 customerDto.setCustomerId(entity.getCustomerId());
                 transferCustomerDetailService.save(
@@ -347,21 +363,20 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             //部门下所有子部门
             this.getAllDeptId(ids, deptId);
         }
-        this.formatQueryTime(pageQuery);
-        if (isGeneralSeat()) {
-            pageQuery.put("userId", getUserId());
-        }
-        if (isSuperAdmin()) {
-            PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
-            return baseDao.findCommonPage(pageQuery);
-        }
         if (null == deptId) {
             //如果没有刷选部门过滤条件
             //获取当前用户的部门以及子部门
             this.getUserDeptIdList(ids, getUserId());
         }
         pageQuery.put("deptIds", StringUtils.listToString(ids));
+        this.formatQueryTime(pageQuery);
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
+        if (isGeneralSeat()) {
+            pageQuery.put("userId", getUserId());
+        }
+        if (isSuperAdmin()) {
+            return baseDao.findCommonPage(pageQuery);
+        }
         return baseDao.findCommonPage(pageQuery);
     }
 
@@ -465,21 +480,20 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             //部门下所有子部门
             this.getAllDeptId(ids, deptId);
         }
-        this.formatQueryTime(pageQuery);
-        if (isGeneralSeat()) {
-            pageQuery.put("userId", getUserId());
-        }
-        if (isSuperAdmin()) {
-            PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
-            return baseDao.findPrivatePage(pageQuery);
-        }
         //如果没有刷选部门过滤条件
         if (null == deptId) {
             //获取当前用户的部门以及子部门
             this.getUserDeptIdList(ids, getUserId());
         }
         pageQuery.put("deptIds", StringUtils.listToString(ids));
+        this.formatQueryTime(pageQuery);
         PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
+        if (isGeneralSeat()) {
+            pageQuery.put("userId", getUserId());
+        }
+        if (isSuperAdmin()) {
+            return baseDao.findPrivatePage(pageQuery);
+        }
         return baseDao.findPrivatePage(pageQuery);
     }
 

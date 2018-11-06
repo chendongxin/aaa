@@ -149,7 +149,7 @@
 		<include refid="Base_Where_SQL" />
   </select>
 
-	<!-- 删除用户部门关系 -->
+	<!-- 删除用户赛道关系 -->
 	<delete id="deleteByUserId">
         DELETE
         FROM sys_user_pro
@@ -171,5 +171,15 @@
         select pro_id
         from sys_user_pro
         where user_id = #{userId}
+    </select>
+
+	<!-- 根据用户ID，获取赛道列表 -->
+	<select id="findProList" resultType="com.hqjy.mustang.admin.model.entity.SysProductEntity">
+        SELECT
+            sp.pro_id,
+            sp.name
+        FROM sys_user_pro sup
+            LEFT JOIN sys_product sp ON sp.pro_id = sup.pro_id
+        WHERE sup.user_id = #{userId}
     </select>
 </mapper>

@@ -15,6 +15,7 @@ public class UserDetails {
     private String jwt;
     private Set<Long> deptSet;
     private Set<String> roleSet;
+    private Set<String> proSet;
     private Set<String> permSet;
 
     public UserDetails() {

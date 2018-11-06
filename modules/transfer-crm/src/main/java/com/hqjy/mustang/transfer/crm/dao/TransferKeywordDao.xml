@@ -212,7 +212,7 @@
         <include refid="Base_Column_List"/>
         from transfer_keyword
         WHERE
-        parent_id = #{parentId}
+        parent_id = #{parentId} and status = false
         order by seq asc
     </select>
 
