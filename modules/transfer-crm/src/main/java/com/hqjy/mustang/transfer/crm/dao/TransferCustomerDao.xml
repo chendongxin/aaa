@@ -363,6 +363,9 @@
 			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
 				and dept_id in ${deptIds}
 			</if>
+			<if test="userId !=null and !&quot;&quot;.equals(userId)">
+				and user_id=#{userId}
+			</if>
 			<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
 			<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>

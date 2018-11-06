@@ -144,7 +144,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     @Override
     public List<TransferCustomerEntity> findPage(PageQuery pageQuery) {
-        transferCustomerContactService.setCustomerIdByContact(pageQuery);
         Long customerId = MapUtils.getLong(pageQuery, "customerId");
         if (customerId != null && customerId.equals(-1L)) {
             return null;
@@ -213,62 +212,115 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             baseDao.updatePro(customerDto.getProId());
             baseDao.updateCom(customerDto.getCompanyId(), customerDto.getSourceId());
             baseDao.updateKey(customerDto.getApplyKey());
-            Map<String, Object> customerHashMap = new HashMap<>(16);
-            customerHashMap.put("proId", customerDto.getProId());
-            customerHashMap.put("phone", customerDto.getPhone());
-            List<TransferCustomerEntity> transferCustomerList = baseDao.findList(customerHashMap);
-            if (transferCustomerList.size() > 0) {
-                //如果存在，将客户添加到重单客户表中
-                TransferCustomerEntity customer = baseDao.findOne(transferCustomerList.get(0).getCustomerId());
-                TransferCustomerRepeatEntity customerEntity = new TransferCustomerRepeatEntity()
-                        .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
-                        .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
-                        .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
-                        .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId())
-                        .setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName());
-                if (isGeneralSeat()) {
-                    List<Long> proList = sysProductServiceFeign.findByUserId(getUserId());
-                    customerEntity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
-                            .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
-                            .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
+            List<Long> proList = sysProductServiceFeign.findByUserId(getUserId());
+            if (isGeneralSeat()) {
+                customerDto.setProId(proList.get(0));
+            }
+            List<TransferCustomerContactEntity> list = this.checkContactHasExit(customerDto, customerDto.getProId());
+            if (list.size() > 0) {
+                Long customerId = list.get(0).getCustomerId();
+                TransferCustomerEntity customer = baseDao.findOne(customerId);
+                //如果重单商机状态为无效失败
+                if (customer.getStatus() == 2) {
+                    //如果在15天保护期内，就新增失败
+                    if (new Date().before(transferProcessService.getProcessByCustomerId(customerId).getExpireTime())) {
+                        return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
+                    } else {
+                        //否则按照新商机对待
+                        return this.saveCustomer(customerDto, proList);
+                    }
+                } else {
+                    TransferCustomerRepeatEntity customerEntity = new TransferCustomerRepeatEntity()
+                            .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
+                            .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
+                            .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
+                            .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId())
+                            .setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName());
+                    if (isGeneralSeat()) {
+                        customerEntity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
+                                .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
+                                .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
+                    }
+                    transferCustomerRepeatService.save(customerEntity);
+                    return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
                 }
-                transferCustomerRepeatService.save(customerEntity);
-                return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
             } else {
-                Date date = new Date();
-                List<SysDeptInfo> sysDeptInfoList = sysDeptServiceFeign.getUserDeptList(getUserId());
-                TransferCustomerEntity entity = new TransferCustomerEntity()
-                        .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq()).setLandLine(customerDto.getLandLine())
-                        .setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId()).setCompanyName(customerDto.getCompanyName())
-                        .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
-                        .setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-                        .setCreateUserDeptId(customerDto.getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
-                if (isGeneralSeat()) {
-                    List<Long> proList = sysProductServiceFeign.findByUserId(getUserId());
-                    entity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
-                            .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
-                            .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
-                }
-                super.save(entity);
-                customerDto.setCustomerId(entity.getCustomerId());
-                transferCustomerDetailService.save(
-                        new TransferCustomerDetailEntity()
-                                .setCustomerId(entity.getCustomerId()).setSex(customerDto.getSex()).setAge(customerDto.getAge())
-                                .setEducationId(customerDto.getEducationId()).setSchool(customerDto.getSchool()).setGraduateDate(customerDto.getGraduateDate())
-                                .setMajor(customerDto.getMajor()).setApplyType(customerDto.getApplyType()).setPositionApplied(customerDto.getPositionApplied())
-                                .setWorkingPlace(customerDto.getWorkingPlace()).setApplyKey(customerDto.getApplyKey()).setWorkExperience(customerDto.getWorkExperience())
-                                .setNote(customerDto.getNote()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
-                );
-                transferCustomerContactService.save(customerDto);
-                transferProcessService.save(new TransferProcessEntity()
-                        .setExpireTime(DateUtils.addDays(date, 15)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfoList.get(0).getDeptId()).setDeptName(sysDeptInfoList.get(0).getDeptName())
-                        .setCreateTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()));
-                return R.ok();
+                return this.saveCustomer(customerDto, proList);
             }
         } catch (Exception e) {
             e.printStackTrace();
             throw new RRException(e.getMessage());
         }
+    }
+
+    /**
+     *
+     * 新增客户(未重单)
+     *
+     * @param customerDto 客户信息对象
+     */
+    private R saveCustomer(TransferCustomerDTO customerDto, List<Long> proList) {
+        Date date = new Date();
+        List<SysDeptInfo> sysDeptInfoList = sysDeptServiceFeign.getUserDeptList(getUserId());
+        TransferCustomerEntity entity = new TransferCustomerEntity()
+                .setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq()).setLandLine(customerDto.getLandLine())
+                .setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId()).setCompanyName(customerDto.getCompanyName())
+                .setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setProId(customerDto.getProId()).setProName(customerDto.getProName())
+                .setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setName(customerDto.getName()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+                .setCreateUserDeptId(customerDto.getDeptId()).setAllotTime(date).setGetWay(customerDto.getGetWay());
+        if (isGeneralSeat()) {
+            entity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
+                    .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
+                    .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
+        }
+        super.save(entity);
+        customerDto.setCustomerId(entity.getCustomerId());
+        transferCustomerDetailService.save(
+                new TransferCustomerDetailEntity()
+                        .setCustomerId(entity.getCustomerId()).setSex(customerDto.getSex()).setAge(customerDto.getAge())
+                        .setEducationId(customerDto.getEducationId()).setSchool(customerDto.getSchool()).setGraduateDate(customerDto.getGraduateDate())
+                        .setMajor(customerDto.getMajor()).setApplyType(customerDto.getApplyType()).setPositionApplied(customerDto.getPositionApplied())
+                        .setWorkingPlace(customerDto.getWorkingPlace()).setApplyKey(customerDto.getApplyKey()).setWorkExperience(customerDto.getWorkExperience())
+                        .setNote(customerDto.getNote()).setCreateUserId(getUserId()).setCreateUserName(getUserName())
+        );
+        transferCustomerContactService.save(customerDto);
+        TransferProcessEntity processEntity = new TransferProcessEntity()
+                .setExpireTime(DateUtils.addDays(date, 15)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfoList.get(0).getDeptId()).setDeptName(sysDeptInfoList.get(0).getDeptName())
+                .setCreateTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName());
+        if (isGeneralSeat()) {
+            processEntity.setUserId(getUserId()).setUserName(getUserName());
+        }
+        transferProcessService.save(processEntity);
+        return R.ok();
+    }
+
+    private List<TransferCustomerContactEntity> checkContactHasExit(TransferCustomerDTO dto, Long proId) {
+        List<TransferCustomerContactEntity> list = new ArrayList<>();
+        if (StringUtils.isNotEmpty(dto.getPhone())) {
+            TransferCustomerContactEntity detail = transferCustomerContactService.getByDetail(Constant.CustomerContactType.PHONE.getValue(), dto.getPhone());
+            if (detail != null && detail.getProId().equals(proId)) {
+                list.add(detail);
+            }
+        }
+        if (StringUtils.isNotEmpty(dto.getLandLine())) {
+            TransferCustomerContactEntity detail = transferCustomerContactService.getByDetail(Constant.CustomerContactType.LAND_LINE.getValue(), dto.getLandLine());
+            if (detail != null && detail.getProId().equals(proId)) {
+                list.add(detail);
+            }
+        }
+        if (StringUtils.isNotEmpty(dto.getWeiXin())) {
+            TransferCustomerContactEntity detail = transferCustomerContactService.getByDetail(Constant.CustomerContactType.WE_CHAT.getValue(), dto.getWeiXin());
+            if (detail != null && detail.getProId().equals(proId)) {
+                list.add(detail);
+            }
+        }
+        if (StringUtils.isNotEmpty(dto.getQq())) {
+            TransferCustomerContactEntity detail = transferCustomerContactService.getByDetail(Constant.CustomerContactType.QQ.getValue(), dto.getQq());
+            if (detail != null && detail.getProId().equals(proId)) {
+                list.add(detail);
+            }
+        }
+        return list;
     }
 
     /**
@@ -351,7 +403,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     @Override
     public List<TransferCustomerEntity> findCommonPage(PageQuery pageQuery) {
-        transferCustomerContactService.setCustomerIdByContact(pageQuery);
         Long customerId = MapUtils.getLong(pageQuery, "customerId");
         if (customerId != null && customerId.equals(-1L)) {
             return null;
@@ -468,7 +519,6 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
 
     @Override
     public List<TransferCustomerEntity> findPrivatePage(PageQuery pageQuery) {
-        transferCustomerContactService.setCustomerIdByContact(pageQuery);
         Long customerId = MapUtils.getLong(pageQuery, "customerId");
         if (customerId != null && customerId.equals(-1L)) {
             return null;
