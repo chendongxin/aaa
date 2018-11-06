@@ -1,6 +1,8 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
+import com.hqjy.mustang.common.base.constant.StatusCode;
+import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDao;
 import com.hqjy.mustang.transfer.crm.dao.TransferCustomerDetailDao;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferCustomerDetailEntity;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.isGeneralSeat;
 
 /**
  * @author gmm
@@ -42,6 +45,9 @@ public class TransferCustomerDetailServiceImpl extends BaseServiceImpl<TransferC
 
     @Override
     public int updateCustomerDetail(TransferCustomerDetailEntity customerDetail) {
+        if (isGeneralSeat()) {
+            throw new RRException(StatusCode.USER_UNAUTHORIZED);
+        }
         int countDetail = baseDao.update(baseDao.getCustomerDetailByCustomerId(customerDetail.getCustomerId())
                 .setSex(customerDetail.getSex()).setAge(customerDetail.getAge()).setPositionApplied(customerDetail.getPositionApplied())
                 .setApplyType(customerDetail.getApplyType()).setApplyKey(customerDetail.getApplyKey()).setWorkExperience(customerDetail.getWorkExperience())
