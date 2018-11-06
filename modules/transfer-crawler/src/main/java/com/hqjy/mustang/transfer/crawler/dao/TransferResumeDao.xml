@@ -280,7 +280,6 @@
             <if test="sendTime != null and !&quot;&quot;.equals(sendTime)">and DATE_FORMAT(send_time,'%Y-%m-%d') = STR_TO_DATE(#{sendTime},'%Y-%m-%d')</if>
             <if test="emailTitle != null and !&quot;&quot;.equals(emailTitle)">and email_title like concat('%',#{emailTitle},'%')</if>
             <if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
-            <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
             <if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
             <if test="createEmailId != null and !&quot;&quot;.equals(createEmailId)">and create_email_id = #{createEmailId}</if>
             <if test="createEmail != null and !&quot;&quot;.equals(createEmail)">and create_email like concat('%',#{createEmail},'%')</if>
@@ -297,6 +296,10 @@
             <if test="resumeDetail != null and !&quot;&quot;.equals(resumeDetail)">and resume_detail = #{resumeDetail}</if>
             <if test="beginCreateTime != null and !&quot;&quot;.equals(beginCreateTime)">and DATE_FORMAT(send_time,'%Y-%m-%d') >= STR_TO_DATE(#{beginCreateTime},'%Y-%m-%d')</if>
             <if test="endCreateTime != null and !&quot;&quot;.equals(endCreateTime)"> and DATE_FORMAT(send_time,'%Y-%m-%d') &lt;=  STR_TO_DATE(#{endCreateTime},'%Y-%m-%d') </if>
+            <!-- 高级查询筛选部门-->
+            <if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+                and dept_id in ${deptIds}
+            </if>
         </where>
     </select>
 

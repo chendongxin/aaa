@@ -235,8 +235,8 @@
         count(case when status = '接通'
         then customer_id
         ELSE NULL END) customerAnswer,
-        SUM(TIME_TO_SEC(`total_duration`)) talk_second,
-        SUM(TIME_TO_SEC(`ring_time`+`total_duration`)) valid_second
+        SUM(`total_duration`) valid_second,
+        SUM(`ring_time`) +SUM(`total_duration`) talk_second
         from transfer_call_record
         where create_user_id = #{createuserId} and
         <choose>

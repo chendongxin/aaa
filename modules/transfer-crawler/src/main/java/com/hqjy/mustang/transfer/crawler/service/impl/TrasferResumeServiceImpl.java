@@ -3,12 +3,15 @@ package com.hqjy.mustang.transfer.crawler.service.impl;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.utils.JsonUtil;
+import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.base.utils.Tools;
 import com.hqjy.mustang.common.model.crm.TransferSourceInfo;
 import com.hqjy.mustang.transfer.crawler.context.ParseMailContext;
 import com.hqjy.mustang.transfer.crawler.dao.TransferResumeDao;
+import com.hqjy.mustang.transfer.crawler.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crawler.feign.TrasferSourceApiService;
+import com.hqjy.mustang.transfer.crawler.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferEmailEntity;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
 import com.hqjy.mustang.transfer.crawler.service.MqSendService;
@@ -17,11 +20,13 @@ import com.hqjy.mustang.transfer.crawler.service.TrasferResumeService;
 import com.hqjy.mustang.transfer.crawler.utils.MailUtils;
 import com.sun.mail.imap.IMAPMessage;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import javax.mail.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +34,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.isGeneralSeat;
+import static com.hqjy.mustang.common.web.utils.ShiroUtils.isSuperAdmin;
 
 /**
  * @author : heshuangshuang
@@ -48,6 +57,18 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
     private TrasferSourceApiService trasferSourceApiService;
     @Autowired
     private MqSendService mqSendService;
+
+    private SysDeptServiceFeign sysDeptServiceFeign;
+    private SysUserDeptServiceFeign sysUserDeptServiceFeign;
+
+    @Autowired
+    public void setSysDeptServiceFeign(SysDeptServiceFeign sysDeptServiceFeign) {
+        this.sysDeptServiceFeign = sysDeptServiceFeign;
+    }
+    @Autowired
+    public void setSysUserDeptServiceFeign(SysUserDeptServiceFeign sysUserDeptServiceFeign) {
+        this.sysUserDeptServiceFeign = sysUserDeptServiceFeign;
+    }
 
 
     @PostConstruct
@@ -227,5 +248,39 @@ public class TrasferResumeServiceImpl extends BaseServiceImpl<TransferResumeDao,
         }
         log.error("{},重试登录邮箱 3 次 失败", JsonUtil.toJson(emailConfig));
         return null;
+    }
+    @Override
+    public List<TransferResumeEntity> findPage(PageQuery pageQuery) {
+        Long deptId = MapUtils.getLong(pageQuery, "deptId");
+        //高级查询部门刷选
+        if (null != deptId) {
+            //部门下所有子部门
+            List<String> ids = new ArrayList<>();
+            List<Long> allDeptUnderDeptId = sysDeptServiceFeign.getAllDeptId(deptId);
+            allDeptUnderDeptId.forEach(x -> {
+                String deptIds = String.valueOf(x);
+                ids.add(deptIds);
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(ids));
+        }
+        if (isGeneralSeat()) {
+            pageQuery.put("userId", getUserId());
+        }
+        if (isSuperAdmin()) {
+            log.debug("用户角色是超级管理员：" + isSuperAdmin());
+            return super.findPage(pageQuery);
+        }
+        //如果没有刷选部门过滤条件
+        if (null == deptId) {
+            //获取当前用户的部门以及子部门
+            List<Long> userAllDeptId = sysUserDeptServiceFeign.getUserDeptIdList(getUserId());
+            List<String> deptIds = new ArrayList<>();
+            userAllDeptId.forEach(x -> {
+                String ids = String.valueOf(x);
+                deptIds.add(ids);
+            });
+            pageQuery.put("deptIds", StringUtils.listToString(deptIds));
+        }
+        return super.findPage(pageQuery);
     }
 }

@@ -181,7 +181,6 @@
             <if test="userName != null and !&quot;&quot;.equals(userName)">and user_name like concat('%',#{userName},'%')</if>
             <if test="proId != null and !&quot;&quot;.equals(proId)">and pro_id = #{proId}</if>
             <if test="proName != null and !&quot;&quot;.equals(proName)">and pro_name like concat('%',#{proName},'%')</if>
-            <if test="deptId != null and !&quot;&quot;.equals(deptId)">and dept_id = #{deptId}</if>
             <if test="deptName != null and !&quot;&quot;.equals(deptName)">and dept_name like concat('%',#{deptName},'%')</if>
             <if test="email != null and !&quot;&quot;.equals(email)">and email like concat('%',#{email},'%')</if>
             <if test="password != null and !&quot;&quot;.equals(password)">and password like concat('%',#{password},'%')</if>
@@ -192,6 +191,10 @@
             <if test="updateUserId != null and !&quot;&quot;.equals(updateUserId)">and update_user_id = #{updateUserId}</if>
             <if test="updateUserName != null and !&quot;&quot;.equals(updateUserName)">and update_user_name like concat('%',#{updateUserName},'%')</if>
             <if test="updateTime != null and !&quot;&quot;.equals(updateTime)">and DATE_FORMAT(update_time,'%Y-%m-%d') = STR_TO_DATE(#{updateTime},'%Y-%m-%d')</if>
+            <!-- 高级查询筛选部门-->
+            <if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+                and dept_id in ${deptIds}
+            </if>
         </where>
     </select>
 

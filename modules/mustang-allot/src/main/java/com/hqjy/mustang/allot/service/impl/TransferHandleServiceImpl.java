@@ -88,6 +88,7 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         // 商机来源，进行数据初始化
         // 创建人不存在，设置默认系统创建人
         customerEntity.setCreateUserId(Optional.ofNullable(customerEntity.getCreateUserId()).orElse(NO_CREATE_ID.getValue()));
+        customerEntity.setCreateUserName(Optional.ofNullable(customerEntity.getCreateUserName()).orElse("系统"));
         // 如果没有姓名，设置为未知
         customerEntity.setName(StringUtils.isNotEmpty(customerEntity.getName()) ? customerEntity.getName() : "未知");
         //创建部门不存在，设置默认部门
@@ -98,8 +99,6 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setGetWay(1);
         // 设置分配时间为当前时间
         customerEntity.setAllotTime(new Date());
-        customerEntity.setCreateUserId(Optional.ofNullable(customerEntity.getCreateUserId()).orElse(0L));
-        customerEntity.setCreateUserName(Optional.ofNullable(customerEntity.getCreateUserName()).orElse("系统"));
         // 先直接保存用户信息，获取用户编号，不写入nc_id，phone，we_chat，qq， land_line
         transferAllotCustomerDao.save(customerEntity);
 
@@ -156,7 +155,7 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         //二次咨询
         else {
             allotProcess.setMemo("二次咨询，自动分配");
-            // 流程的到期时间，默认为3天，写到系统配置里面
+            // 流程的到期时间，默认为15天，写到系统配置里面
             allotProcess.setExpireTime(processTimeout(ConfigConstant.TRANSFER_ALLOT_REPEAT_TIMEOUT, 15));
         }
 
@@ -213,10 +212,6 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setDeptName(process.getDeptName());
         customerEntity.setUserId(process.getUserId());
         customerEntity.setUserName(process.getUserName());
-        customerEntity.setFirstUserId(customer.getFirstUserId());
-        customerEntity.setFirstUserName(customer.getFirstUserName());
-        customerEntity.setLastUserId(process.getUserId());
-        customerEntity.setLastUserName(process.getUserName());
 
         // 设置联系方式
         customerEntity.setPhone(customer.getPhone());
