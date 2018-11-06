@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@ApiModel(value = "电销专员排行报表数据输出对象")
+@ApiModel(value = "电销专员排行报表输出对象")
 public class SellAttacheReportResult {
 
     private PageUtil<SellAttacheReportData> pageList;

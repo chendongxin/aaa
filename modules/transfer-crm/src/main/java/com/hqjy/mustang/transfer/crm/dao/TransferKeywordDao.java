@@ -36,7 +36,7 @@ public interface TransferKeywordDao extends BaseDao<TransferKeywordEntity, Integ
     List<TransferKeywordEntity> findDictionaryList();
 
     /**
-     * 获取父ID下对应关键词
+     * 获取父ID下对应非禁用关键词
      */
     List<TransferKeywordEntity> findIdByParentId(Integer parentId);
 

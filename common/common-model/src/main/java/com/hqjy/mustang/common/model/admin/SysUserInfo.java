@@ -96,4 +96,9 @@ public class SysUserInfo implements Serializable {
      */
     private List<Long> deptIdList;
 
+    /**
+     * 赛道ID列表
+     */
+    private List<Long> proIdList;
+
 }

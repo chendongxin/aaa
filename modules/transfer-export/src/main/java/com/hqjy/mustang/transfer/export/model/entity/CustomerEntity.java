@@ -26,5 +26,5 @@ public class CustomerEntity {
     /**
      * 通话时长
      */
-    private String duration;
+    private long duration;
 }

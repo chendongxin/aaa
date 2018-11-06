@@ -27,4 +27,9 @@ public interface TransferGenCompanyService extends BaseService<TransferGenCompan
      */
     List<TransferGenCompanyEntity> getAllGenCompany();
 
+    /**
+     * 通过推广公司名称获取推广公司信息
+     */
+    TransferGenCompanyEntity findOneByName(String name);
+
 }

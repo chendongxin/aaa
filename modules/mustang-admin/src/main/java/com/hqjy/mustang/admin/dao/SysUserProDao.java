@@ -1,5 +1,6 @@
 package com.hqjy.mustang.admin.dao;
 
+import com.hqjy.mustang.admin.model.entity.SysProductEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserProEntity;
 import com.hqjy.mustang.common.base.base.BaseDao;
 import org.apache.ibatis.annotations.Mapper;
@@ -31,5 +32,10 @@ public interface SysUserProDao extends BaseDao<SysUserProEntity, Integer> {
      * 查询用户赛道ID列表
      */
     List<Long> findProIdByUserId(Long userId);
+
+    /**
+     * 根据用户ID，获取赛道列表
+     */
+    List<SysProductEntity> findProList(Long userId);
 
 }
