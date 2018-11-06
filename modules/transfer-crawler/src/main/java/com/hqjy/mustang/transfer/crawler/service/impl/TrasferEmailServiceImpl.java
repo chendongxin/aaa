@@ -1,12 +1,12 @@
 package com.hqjy.mustang.transfer.crawler.service.impl;
 
-import com.hqjy.mustang.common.base.base.BaseService;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.utils.PageQuery;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.common.web.utils.ShiroUtils;
 import com.hqjy.mustang.transfer.crawler.dao.TransferEmailDao;
 import com.hqjy.mustang.transfer.crawler.feign.SysDeptServiceFeign;
+import com.hqjy.mustang.transfer.crawler.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferEmailEntity;
 import com.hqjy.mustang.transfer.crawler.service.TrasferEmailService;
 import lombok.extern.slf4j.Slf4j;

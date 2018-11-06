@@ -11,6 +11,7 @@ import com.hqjy.mustang.transfer.crawler.context.ParseMailContext;
 import com.hqjy.mustang.transfer.crawler.dao.TransferResumeDao;
 import com.hqjy.mustang.transfer.crawler.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.crawler.feign.TrasferSourceApiService;
+import com.hqjy.mustang.transfer.crawler.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferEmailEntity;
 import com.hqjy.mustang.transfer.crawler.model.entity.TransferResumeEntity;
 import com.hqjy.mustang.transfer.crawler.service.MqSendService;
