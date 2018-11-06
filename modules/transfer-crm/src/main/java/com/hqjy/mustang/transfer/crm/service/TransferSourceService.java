@@ -1,6 +1,7 @@
 package com.hqjy.mustang.transfer.crm.service;
 
 import com.hqjy.mustang.common.base.base.BaseService;
+import com.hqjy.mustang.transfer.crm.model.entity.TransferGenCompanyEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferSourceEntity;
 
 import java.util.HashMap;
@@ -34,5 +35,10 @@ public interface TransferSourceService extends BaseService<TransferSourceEntity,
      * 根据邮箱后缀查询来源
      */
     TransferSourceEntity findByEmailDomain(String emailDomain);
+
+    /**
+     * 通过名称获取来源信息
+     */
+    TransferSourceEntity findOneByName(String name);
 
 }

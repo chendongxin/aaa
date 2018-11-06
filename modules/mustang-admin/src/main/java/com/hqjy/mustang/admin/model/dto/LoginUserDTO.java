@@ -94,5 +94,9 @@ public class LoginUserDTO implements Serializable {
      * 部门列表
      */
     private List deptList;
+    /**
+     * 赛道列表
+     */
+    private List proList;
 
 }

@@ -1,5 +1,6 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
 import com.hqjy.mustang.common.base.constant.StatusCode;
 import com.hqjy.mustang.common.base.constant.SystemId;
@@ -47,14 +48,15 @@ public class TransferKeywordServiceImpl extends BaseServiceImpl<TransferKeywordD
 
     @Override
     public List<TransferKeywordEntity> findKeyPage(Object o, PageQuery pageQuery) {
+        PageHelper.startPage(pageQuery.getPageNum(), pageQuery.getPageSize(), pageQuery.getPageOrder());
         List<TransferKeywordEntity> list = baseDao.findPage(pageQuery);
-        List<TransferKeywordEntity> entityList = new ArrayList<>();
         for (TransferKeywordEntity entity : list) {
-            if (!entity.getId().equals(Integer.valueOf(o.toString()))) {
-                entityList.add(entity);
+            if (entity.getId().equals(Integer.valueOf(o.toString()))) {
+                list.remove(entity);
+                break;
             }
         }
-        return entityList;
+        return list;
     }
 
     /**

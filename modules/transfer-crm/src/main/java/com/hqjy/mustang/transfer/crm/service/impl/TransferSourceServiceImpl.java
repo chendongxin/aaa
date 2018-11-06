@@ -107,14 +107,19 @@ public class TransferSourceServiceImpl extends BaseServiceImpl<TransferSourceDao
         return super.delete(sourceId);
     }
 
-
-
-
     /**
      * 根据邮箱后缀查询来源
      */
     @Override
     public TransferSourceEntity findByEmailDomain(String emailDomain) {
         return baseDao.findByEmailDomain(emailDomain);
+    }
+
+    /**
+     * 通过名称获取来源信息
+     */
+    @Override
+    public TransferSourceEntity findOneByName(String name) {
+        return baseDao.findOneByName(name);
     }
 }

@@ -32,6 +32,8 @@ public class LoginServiceImpl implements LoginService {
     private SysUserDeptService sysUserDeptService;
     @Autowired
     private SysLogService sysLogService;
+    @Autowired
+    private SysUserProService sysUserProService;
 
     /**
      * 根据用户和密码获取用户信息
@@ -95,12 +97,13 @@ public class LoginServiceImpl implements LoginService {
     }
 
     /**
-     * 查询用户部门和角色
+     * 查询用户部门、角色和赛道信息
      */
     @Override
     public LoginUserDTO processDeptRole(LoginUserDTO userDTO) {
         userDTO.setRoleList(sysUserRoleService.getRoleList(userDTO.getUserId()));
         userDTO.setDeptList(sysUserDeptService.getDeptList(userDTO.getUserId()));
+        userDTO.setProList(sysUserProService.getProList(userDTO.getUserId()));
         return userDTO;
     }
 

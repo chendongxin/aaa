@@ -1,6 +1,7 @@
 package com.hqjy.mustang.admin.service.impl;
 
 import com.hqjy.mustang.admin.dao.SysUserProDao;
+import com.hqjy.mustang.admin.model.entity.SysProductEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserProEntity;
 import com.hqjy.mustang.admin.service.SysUserProService;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
@@ -52,6 +53,14 @@ public class SysUserProServiceImpl extends BaseServiceImpl<SysUserProDao, SysUse
     @Override
     public List<Long> getUserProId(Long userId) {
         return baseDao.findProIdByUserId(userId);
+    }
+
+    /**
+     * 根据用户ID，获取赛道列表
+     */
+    @Override
+    public List<SysProductEntity> getProList(Long userId) {
+        return baseDao.findProList(userId);
     }
 
 }

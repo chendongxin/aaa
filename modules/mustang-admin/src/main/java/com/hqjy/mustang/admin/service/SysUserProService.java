@@ -1,5 +1,6 @@
 package com.hqjy.mustang.admin.service;
 
+import com.hqjy.mustang.admin.model.entity.SysProductEntity;
 import com.hqjy.mustang.admin.model.entity.SysUserProEntity;
 import com.hqjy.mustang.common.base.base.BaseService;
 
@@ -21,5 +22,10 @@ public interface SysUserProService extends BaseService<SysUserProEntity, Integer
      * 查询用户赛道Id列表
      */
     List<Long> getUserProId(Long userId);
+
+    /**
+     * 根据用户ID，获取赛道列表
+     */
+    List<SysProductEntity> getProList(Long userId);
 
 }
