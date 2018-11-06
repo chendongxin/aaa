@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@ApiModel(value = "部门电销排行报表数据对象")
+@ApiModel(value = "部门电销排行报表对象")
 public class SellDeptReportData {
 
 

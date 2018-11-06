@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
  * @apiNote 电销专员排行报表
  */
 @Data
-@ApiModel(value = "电销专员排行报表查询参数")
+@ApiModel(value = "电销报表查询参数")
 public class SellQueryParams {
 
     @ApiModelProperty(value = "开始日期（必传）")
