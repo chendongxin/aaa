@@ -88,8 +88,6 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
     private ContactSaveResultDTO save(ContactSaveResultDTO result, int type, String detail, boolean isPrimary, TransferAllotCustomerEntity content) {
         TransferAllotCustomerContactEntity contactEntity = new TransferAllotCustomerContactEntity();
         contactEntity.setCustomerId(content.getCustomerId());
-        // 如果是电话才设置主联系方式
-        // contactEntity.setIsPrimary(type == PHONE.getValue() ? (isPrimary ? 1 : 0) : 0);
         contactEntity.setProId(content.getProId());
         contactEntity.setCreateUserId(content.getCreateUserId());
         contactEntity.setType(type);
@@ -109,7 +107,7 @@ public class TransferAllotContactServiceImpl extends BaseServiceImpl<TransferAll
                 //只要发现重单，后面的联系方式就不保存了
                 return result;
             }
-            // 设置主联系方式状态
+            // 设置联系方式状态,true:首单，false:重单
             result.setContacStatus(true);
         }
         // 不是主联系方式，不管保存结果
