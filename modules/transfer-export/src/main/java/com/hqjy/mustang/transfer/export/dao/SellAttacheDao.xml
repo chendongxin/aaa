@@ -68,7 +68,7 @@
 
     <!-- 预约量 预约时间在统计周期内的商机量 同个商机被不同的电销预约分别计算一次	-->
     <select id="countReservation" resultMap="baseMap">
-        SELECT COUNT(DISTINCT r.customer_id),r.dept_id AS deptId,r.create_user_id AS userId
+        SELECT COUNT(DISTINCT r.customer_id) as num,r.dept_id AS deptId,r.create_user_id AS userId
         FROM transfer_customer c
         INNER JOIN transfer_customer_reservation r ON c.customer_id=r.customer_id
         WHERE  r.appointment_time BETWEEN #{beginTime} AND #{endTime}
