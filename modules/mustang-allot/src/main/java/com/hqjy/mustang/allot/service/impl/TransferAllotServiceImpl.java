@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Optional;
 
 import static com.hqjy.mustang.allot.constant.AllotCode.BIZ_INVALID;
@@ -101,7 +102,6 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
      */
     private TransferAllotCustomerEntity firstAllot(TransferAllotCustomerEntity customer) {
         // 保存简历详情 TODO 学历详情待处理
-//       customer.setEducation(null);
         customer.setEducationId(Optional.ofNullable(Constant.Education.NONE.getValueByEducationName(customer.getEducation()).longValue()).orElse(0L));
         transferAllotCustomerDetailDao.saveCustomer(customer);
         return bizAllot(true, customer);
@@ -126,13 +126,10 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
             log.debug("删除刚才增加的客户信息");
             //删除刚才增加的客户信息
             allotCustomerDao.delete(customer.getCustomerId());
-            //log.debug("更新原客户联系次数");
-            //更新原客户联系次数
-            // allotCustomerDao.updateConsult(oldCustomerId);
         }
 
         //无效商机处理，TODO 同个赛道。如果简历已经标记为失败状态为无效失败，而且时间在15天内（包括15天）则过滤掉这部分简历。
-        if (newCustomer.getStatus() == -2) {
+        if (newCustomer.getStatus() == 2) {
             // 判断无效失败时间长度
             boolean isBefore = newCustomer.getAllotTime().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().isBefore(LocalDate.now().plus(15, ChronoUnit.DAYS));
             if (isBefore) {
@@ -153,15 +150,12 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
                 newCustomer.setUserId(customer.getUserId());
                 bizAllot(false, newCustomer);
             } else {
-                // 商机仍然存在电销的私海，此时重复导入同一条商机，此时导入不成功（因为仍在电销私海处在15天保护期，每次跟新会刷新保护期时间）
-                // 商机留回公海，此时重复导入同一条商机，更新商机的创建的时间，其他电销领取后当作新商机处理（外呼记录和历史记录隐藏
-                log.debug("商机仍然存在电销的私海，更新商机的创建时间，分配时间");
+                log.debug("商机仍然存在电销的私海");
                 newCustomer.setDeptId(curProcess.getDeptId());
                 newCustomer.setUserId(curProcess.getUserId());
                 bizAllot(false, newCustomer);
             }
         }
-        // 记录重单
         repeatSave(saveResultDTO, customer, newCustomer);
         return newCustomer;
     }
@@ -212,12 +206,7 @@ public class TransferAllotServiceImpl implements AbstractAllotService<TransferAl
         }
         // 用户存在
         customer.setUserName(userName);
-        customer.setLastUserId(customer.getUserId());
-        customer.setLastUserName(customer.getUserName());
-        if (isFirst) {
-            customer.setFirstUserId(customer.getUserId());
-            customer.setFirstUserName(customer.getUserName());
-        }
+
         return customer;
     }
 

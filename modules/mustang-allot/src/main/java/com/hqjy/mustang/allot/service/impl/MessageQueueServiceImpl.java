@@ -43,8 +43,6 @@ public class MessageQueueServiceImpl implements MessageQueueService {
         switch (mqType) {
             // 自考商机类型
             case 2:
-                // 转换消息类型
-                // return bizAllotService.process(msgId, JsonUtil.fromJson(content, AllotCustomerEntity.class));
                 return false;
             // 招转商机类型
             case 3:
