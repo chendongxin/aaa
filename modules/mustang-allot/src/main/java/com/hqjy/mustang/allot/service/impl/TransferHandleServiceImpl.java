@@ -212,10 +212,6 @@ public class TransferHandleServiceImpl extends AbstractHandleService<TransferAll
         customerEntity.setDeptName(process.getDeptName());
         customerEntity.setUserId(process.getUserId());
         customerEntity.setUserName(process.getUserName());
-        customerEntity.setFirstUserId(customer.getFirstUserId());
-        customerEntity.setFirstUserName(customer.getFirstUserName());
-        customerEntity.setLastUserId(process.getUserId());
-        customerEntity.setLastUserName(process.getUserName());
 
         // 设置联系方式
         customerEntity.setPhone(customer.getPhone());
