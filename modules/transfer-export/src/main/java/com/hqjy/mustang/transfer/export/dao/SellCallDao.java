@@ -25,7 +25,7 @@ public interface SellCallDao {
     List<CustomerEntity> countConnect(SellQueryParams params);
 
     /**
-     * 统计接通量
+     * 统计拨打量
      *
      * @param params 参数
      * @return 返回结果

@@ -5,10 +5,8 @@ import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.ExcelUtil;
 import com.hqjy.mustang.common.base.utils.OssFileUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
-import com.hqjy.mustang.common.model.admin.SysDeptInfo;
 import com.hqjy.mustang.common.model.admin.UserDeptInfo;
 import com.hqjy.mustang.transfer.export.dao.SellCallDao;
-import com.hqjy.mustang.transfer.export.feign.SysDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.feign.SysUserDeptServiceFeign;
 import com.hqjy.mustang.transfer.export.model.dto.SellCallReportData;
 import com.hqjy.mustang.transfer.export.model.dto.SellCallReportResult;
@@ -108,7 +106,7 @@ public class SellCallServiceImpl implements SellCallService {
             //通话时长
             callTimeBusiness.forEach(y -> {
                 if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
-                    x.setDuration(y.getDuration());
+                    x.setDuration(DateUtils.secondToTime(y.getDuration()));
                 }
             });
         });

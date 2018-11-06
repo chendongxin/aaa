@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-@ApiModel(value = "电销专员排行报表数据合计对象")
+@ApiModel(value = "电销专员排行报表合计对象")
 public class SellAttacheReportTotal {
 
 
