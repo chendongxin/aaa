@@ -49,6 +49,13 @@ public class ShiroUtils {
     }
 
     /**
+     * 判断是否客服专员
+     */
+    public static Boolean isServiceCommissioner() {
+        return SecurityUtils.getSubject().hasRole(Constant.Role.SERVICE_COMMISSIONER.getCode());
+    }
+
+    /**
      * 判断是否超级管理员
      */
     public static Boolean isSuperAdmin() {

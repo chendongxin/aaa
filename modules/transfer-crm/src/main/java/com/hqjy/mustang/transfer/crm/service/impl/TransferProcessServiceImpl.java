@@ -1,13 +1,26 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.hqjy.mustang.common.base.base.BaseServiceImpl;
+import com.hqjy.mustang.common.base.constant.Constant;
+import com.hqjy.mustang.common.base.constant.SystemId;
+import com.hqjy.mustang.common.base.exception.RRException;
+import com.hqjy.mustang.common.base.utils.DateUtils;
 import com.hqjy.mustang.common.base.utils.StringUtils;
 import com.hqjy.mustang.transfer.crm.dao.TransferProcessDao;
+import com.hqjy.mustang.transfer.crm.feign.SysLogServiceFeign;
+import com.hqjy.mustang.transfer.crm.model.entity.SysLogEntity;
 import com.hqjy.mustang.transfer.crm.model.entity.TransferProcessEntity;
+import com.hqjy.mustang.transfer.crm.service.TransferCustomerService;
 import com.hqjy.mustang.transfer.crm.service.TransferProcessService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,7 +29,13 @@ import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserId;
 import static com.hqjy.mustang.common.web.utils.ShiroUtils.getUserName;
 
 @Service
+@Slf4j
 public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessDao, TransferProcessEntity, Long> implements TransferProcessService {
+
+    @Autowired
+    private TransferCustomerService transferCustomerService;
+    @Autowired
+    private SysLogServiceFeign sysLogServiceFeign;
 
     /**
      * 获取当前流程为激活状态的流程数据
@@ -97,5 +116,52 @@ public class TransferProcessServiceImpl extends BaseServiceImpl<TransferProcessD
             baseDao.disableProcessActiveBatch(StringUtils.listToString(list.stream().map(p -> String.valueOf(p.getProcessId())).collect(Collectors.toList())));
         }
         return list.size();
+    }
+
+    @Override
+    @Transactional(rollbackFor = RRException.class)
+    public void RecyclingCustomer() throws Exception {
+        long beginTime = System.currentTimeMillis();
+        String time = DateUtils.format(new Date()) + Constant.CUSTOMER_RECYCLE_TIME;
+        List<TransferProcessEntity> list = this.findListIsActive(time);
+        if (!list.isEmpty()) {
+            //记录系统回收日志
+            List<String> stringList = new ArrayList<>();
+            list.forEach(x -> {
+                stringList.add(String.valueOf(x.getProcessId()));
+            });
+            log.info("回收的流程ID:" + stringList);
+            sysLogServiceFeign.save(new SysLogEntity().setCreateTime(new Date()).setOperation("即将被回收商机流程").setMethod("回收任务")
+                    .setUsername("系统").setParams(JSON.toJSONString(list)).setTime(System.currentTimeMillis() - beginTime)
+                    .setIp(InetAddress.getLocalHost().getHostAddress()));
+            //设置流程过期
+            baseDao.disableProcessActiveBatch(StringUtils.listToString(stringList));
+            //customerId去重
+            List<TransferProcessEntity> customerList = list.stream().filter(StringUtils.distinctByKey(TransferProcessEntity::getCustomerId)).collect(Collectors.toList());
+            List<String> customerIdList = new ArrayList<>();
+            List<TransferProcessEntity> saveProcessList = new ArrayList<>();
+            customerList.forEach(c -> {
+                customerIdList.add(String.valueOf(c.getCustomerId()));
+                saveProcessList.add(new TransferProcessEntity().setDeptId(c.getDeptId()).setDeptName(c.getDeptName()).setCustomerId(c.getCustomerId())
+                        .setCreateUserId(SystemId.User.NO_CREATE_ID.getValue()).setCreateUserName("/").setMemo("回收生成流程"));
+            });
+            //新增流程记录(批量)
+            baseDao.saveBatch(saveProcessList);
+            //更新客户表user_id为null（批量）
+            transferCustomerService.returnToCommonBatch(StringUtils.listToString(customerIdList), SystemId.User.NO_CREATE_ID.getValue());
+            log.info("回收的客户ID:" + customerIdList);
+            //记录系统回收日志
+            sysLogServiceFeign.save(new SysLogEntity().setCreateTime(new Date()).setOperation("成功被回收商机流程").setMethod("回收任务")
+                    .setUsername("系统").setParams(JSON.toJSONString(saveProcessList)).setTime(System.currentTimeMillis() - beginTime)
+                    .setIp(InetAddress.getLocalHost().getHostAddress()));
+        } else {
+            //记录系统回收日志
+            sysLogServiceFeign.save(new SysLogEntity().setCreateTime(new Date()).setOperation("不存在需要回收的商机").setMethod("回收任务")
+                    .setUsername("系统").setTime(System.currentTimeMillis() - beginTime).setIp(InetAddress.getLocalHost().getHostAddress()));
+        }
+    }
+
+    private List<TransferProcessEntity> findListIsActive(String time) {
+        return baseDao.findListIsActive(time);
     }
 }

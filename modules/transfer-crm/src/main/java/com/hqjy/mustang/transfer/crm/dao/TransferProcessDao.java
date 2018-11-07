@@ -81,4 +81,13 @@ public interface TransferProcessDao extends BaseDao<TransferProcessEntity, Long>
      * @return 退回结果
      */
     int disableProcessActiveBatch(@Param("processIdList") String processIdList);
+
+    /**
+     * 获取激活状态且过期时间<当天 23:59:59的流程数据
+     *
+     * @param time 当天的的时间23:59:59
+     * @return 返回结果集
+     * @author create by xyq 2018年7月5日16:43:04 update by xyq on 2018年7月27日15:07:32
+     */
+    List<TransferProcessEntity> findListIsActive(@Param("time") String time);
 }

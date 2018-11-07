@@ -65,4 +65,9 @@ public interface TransferProcessService extends BaseService<TransferProcessEntit
      * @author HSS 2018-08-11
      */
     int updateUserTransferProcessToPublic(Long userId, boolean sign);
+
+    /**
+     * 招转客户回收处理
+     */
+    void RecyclingCustomer() throws Exception;
 }
