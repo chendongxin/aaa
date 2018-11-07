@@ -26,15 +26,17 @@
 
     <!-- 分配商机量 创建时间在统计周期内分配给电销的商机量（包括分配+导入，销售个人新增及领取的不算在内)-->
     <select id="countAllotBusiness" resultMap="baseMap">
-        SELECT COUNT(c.customer_id),p.user_id AS userId,p.dept_id AS deptId
+        SELECT COUNT(c.customer_id)as num,c.user_id AS userId,c.dept_id AS deptId
             FROM
                 transfer_customer c
             INNER JOIN (
                 SELECT
-                    MIN(process_id) AS process_id,customer_id,dept_id,user_id
+                    MAX(process_id) AS process_id,customer_id
                 FROM
                     transfer_process
-                WHERE  memo = '首次咨询，自动分配' AND dept_id IN ${deptIds} AND user_id IN  ${userIds}
+                WHERE  user_id!= create_user_id
+                       AND dept_id IN ${deptIds}
+                       AND user_id IN  ${userIds}
                 GROUP BY
                     customer_id
             ) p ON p.customer_id = c.customer_id
