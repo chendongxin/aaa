@@ -46,19 +46,19 @@ public class SellDeptReportData {
     @ExcelAttribute(name = "成交量", column = "F")
     private int dealNum;
 
-    @ApiModelProperty(value = "有效上门量", hidden = true)
-    @JSONField(serialize = false)
+    @ApiModelProperty(value = "有效上门量")
+    @ExcelAttribute(name = "成交量", column = "G")
     private int visitValidNum;
 
     @ApiModelProperty(value = "商机有效率")
-    @ExcelAttribute(name = "商机有效率", column = "G")
+    @ExcelAttribute(name = "商机有效率", column = "H")
     private String validRate;
 
     @ApiModelProperty(value = "实际上门率")
-    @ExcelAttribute(name = "实际上门率", column = "H")
+    @ExcelAttribute(name = "实际上门率", column = "I")
     private String visitRate;
 
     @ApiModelProperty(value = "有效商机上门率")
-    @ExcelAttribute(name = "有效商机上门率", column = "I")
+    @ExcelAttribute(name = "有效商机上门率", column = "J")
     private String visitValidRate;
 }

@@ -96,6 +96,7 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         List<CustomerEntity> visitBusiness = sellAttacheDao.countVisitBusiness(query);
         List<CustomerEntity> validBusiness = sellAttacheDao.countValidBusiness(query);
         List<CustomerEntity> dealBusiness = sellAttacheDao.countDealBusiness(query);
+        List<CustomerEntity> countBusiness = sellAttacheDao.countBusiness(query);
         List<CustomerEntity> allotBusiness = sellAttacheDao.countAllotBusiness(query);
         List<CustomerEntity> visitValidBusiness = sellAttacheDao.countVisitValidBusiness(query);
         List<CustomerEntity> reservation = sellAttacheDao.countReservation(query);
@@ -116,6 +117,13 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             dealBusiness.forEach(y -> {
                 if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
                     x.setDealNum(y.getNum());
+                }
+            });
+
+            //商机量
+            countBusiness.forEach(y -> {
+                if (x.getDeptId().equals(y.getDeptId()) && x.getUserId().equals(y.getUserId())) {
+                    x.setBusinessNum(y.getNum());
                 }
             });
             //分配商机量
@@ -144,8 +152,8 @@ public class SellAttacheServiceImpl implements SellAttacheService {
         list.forEach(x -> {
             //有效商机上门率:有效上门量/有效商机总量
             x.setVisitValidRate(df.format(x.getValidNum() == 0 ? 0 : (double) x.getVisitValidNum() / x.getValidNum()));
-            //商机有效率:有效商机量/分配给电销专员商机量
-            x.setValidRate(df.format(x.getAllotNum() == 0 ? 0 : (double) x.getValidNum() / x.getAllotNum()));
+            //商机有效率:有效商机量/商机量
+            x.setValidRate(df.format(x.getBusinessNum() == 0 ? 0 : (double) x.getValidNum() / x.getBusinessNum()));
             //实际上门率:上门量/预约量
             x.setVisitRate(df.format(x.getReservationNum() == 0 ? 0 : (double) x.getVisitNum() / x.getReservationNum()));
         });
@@ -196,14 +204,15 @@ public class SellAttacheServiceImpl implements SellAttacheService {
             total.setVisitNum(total.getVisitNum() + x.getVisitNum());
             total.setValidNum(total.getValidNum() + x.getValidNum());
             total.setDealNum(total.getDealNum() + x.getDealNum());
+            total.setBusinessNum(total.getBusinessNum() + x.getBusinessNum());
             total.setAllotNum(total.getAllotNum() + x.getAllotNum());
             total.setVisitValidNum(total.getVisitValidNum() + x.getVisitValidNum());
         });
         DecimalFormat df = new DecimalFormat("0.00%");
         //有效商机上门率:有效上门量/有效商机总量
         total.setVisitValidRate(df.format(total.getValidNum() == 0 ? 0 : (double) total.getVisitValidNum() / total.getValidNum()));
-        //商机有效率:有效商机量/分配给电销专员商机量
-        total.setValidRate(df.format(total.getAllotNum() == 0 ? 0 : (double) total.getValidNum() / total.getAllotNum()));
+        //商机有效率:有效商机量/商机量
+        total.setValidRate(df.format(total.getBusinessNum() == 0 ? 0 : (double) total.getBusinessNum() / total.getBusinessNum()));
         //实际上门率:上门量/预约量
         total.setVisitRate(df.format(total.getReservationNum() == 0 ? 0 : (double) total.getVisitNum() / total.getReservationNum()));
         return total;

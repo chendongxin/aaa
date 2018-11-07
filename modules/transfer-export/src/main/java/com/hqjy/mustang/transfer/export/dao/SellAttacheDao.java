@@ -33,6 +33,23 @@ public interface SellAttacheDao {
     List<CustomerEntity> countValidBusiness(SellQueryParams params);
 
     /**
+     * 统计电销专员商机总量
+     *
+     * @param params 参数
+     * @return 返回结果
+     */
+    List<CustomerEntity> countBusiness(SellQueryParams params);
+
+    /**
+     * 统计电销专员被分配商机总量
+     *
+     * @param params 参数
+     * @return 返回结果
+     */
+    List<CustomerEntity> countAllotBusiness(SellQueryParams params);
+
+
+    /**
      * 统计电销专员成交量
      *
      * @param params 参数
@@ -49,13 +66,7 @@ public interface SellAttacheDao {
     List<CustomerEntity> countReservation(SellQueryParams params);
 
 
-    /**
-     * 统计电销专员被分配商机总量
-     *
-     * @param params 参数
-     * @return 返回结果
-     */
-    List<CustomerEntity> countAllotBusiness(SellQueryParams params);
+
 
 
     /**

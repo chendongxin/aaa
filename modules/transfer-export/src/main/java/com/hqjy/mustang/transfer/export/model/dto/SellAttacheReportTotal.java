@@ -1,6 +1,5 @@
 package com.hqjy.mustang.transfer.export.model.dto;
 
-import com.alibaba.fastjson.annotation.JSONField;
 import com.hqjy.mustang.common.base.annotation.ExcelAttribute;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -22,39 +21,43 @@ public class SellAttacheReportTotal {
     @ExcelAttribute(name = "部门", column = "B")
     private String deptName;
 
+    @ApiModelProperty(value = "商机量")
+    @ExcelAttribute(name = "商机量", column = "C")
+    private int businessNum;
+
     @ApiModelProperty(value = "分配商机量")
-    @ExcelAttribute(name = "分配商机量", column = "C")
+    @ExcelAttribute(name = "分配商机量", column = "D")
     private int allotNum;
 
     @ApiModelProperty(value = "商机有效量")
-    @ExcelAttribute(name = "商机有效量", column = "D")
+    @ExcelAttribute(name = "商机有效量", column = "E")
     private int validNum;
 
     @ApiModelProperty(value = "预约量")
-    @ExcelAttribute(name = "预约量", column = "E")
+    @ExcelAttribute(name = "预约量", column = "F")
     private int reservationNum;
 
-    @ApiModelProperty(value = "有效上门量", hidden = true)
-    @JSONField(serialize = false)
+    @ApiModelProperty(value = "有效上门量")
+    @ExcelAttribute(name = "预约量", column = "G")
     private int visitValidNum;
 
     @ApiModelProperty(value = "上门量")
-    @ExcelAttribute(name = "上门量", column = "F")
+    @ExcelAttribute(name = "上门量", column = "H")
     private int visitNum;
 
     @ApiModelProperty(value = "成交量")
-    @ExcelAttribute(name = "成交量", column = "G")
+    @ExcelAttribute(name = "成交量", column = "I")
     private int dealNum;
 
     @ApiModelProperty(value = "商机有效率")
-    @ExcelAttribute(name = "商机有效率", column = "H")
+    @ExcelAttribute(name = "商机有效率", column = "J")
     private String validRate;
 
     @ApiModelProperty(value = "实际上门率")
-    @ExcelAttribute(name = "实际上门率", column = "I")
+    @ExcelAttribute(name = "实际上门率", column = "K")
     private String visitRate;
 
     @ApiModelProperty(value = "有效商机上门率")
-    @ExcelAttribute(name = "有效商机上门率", column = "J")
+    @ExcelAttribute(name = "有效商机上门率", column = "L")
     private String visitValidRate;
 }
