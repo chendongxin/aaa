@@ -57,9 +57,9 @@
         SELECT COUNT(v.customer_id) AS num,deptId
         FROM (
             SELECT
-                r.customer_id,
+                distinct r.customer_id,
                 r.dept_id AS deptId,
-                r.create_user_id AS userId
+                r.user_id AS userId
             FROM
                 transfer_customer c
             INNER JOIN transfer_customer_reservation r ON c.customer_id = r.customer_id
@@ -74,7 +74,7 @@
             </if>
             GROUP BY
                 r.dept_id,
-                r.create_user_id
+                r.user_id
         ) v GROUP BY deptId
     </select>
 
@@ -84,7 +84,7 @@
         FROM (
             <!-- 首次预约单	-->
             SELECT
-            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            r.customer_id,r.dept_id,r.user_id,r.visit_time,r.visit_status,r.valid_visit
             FROM
             transfer_customer_reservation r
             INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
@@ -110,7 +110,7 @@
         FROM (
             <!-- 首次预约单	-->
             SELECT
-            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            r.customer_id,r.dept_id,r.user_id,r.visit_time,r.visit_status,r.valid_visit
             FROM
             transfer_customer_reservation r
             INNER JOIN transfer_customer c ON r.customer_id = c.customer_id

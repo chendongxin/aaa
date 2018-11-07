@@ -68,28 +68,28 @@
 
     <!-- 预约量 预约时间在统计周期内的商机量 同个商机被不同的电销预约分别计算一次	-->
     <select id="countReservation" resultMap="baseMap">
-        SELECT COUNT(DISTINCT r.customer_id) as num,r.dept_id AS deptId,r.create_user_id AS userId
+        SELECT COUNT(DISTINCT r.customer_id) as num,r.dept_id AS deptId,r.user_id AS userId
         FROM transfer_customer c
         INNER JOIN transfer_customer_reservation r ON c.customer_id=r.customer_id
         WHERE  r.appointment_time BETWEEN #{beginTime} AND #{endTime}
-        AND r.dept_id IN ${deptIds} AND r.create_user_id IN  ${userIds}
+        AND r.dept_id IN ${deptIds} AND r.user_id IN  ${userIds}
         <if test="getWay!=null">
             AND c.get_way=#{getWay}
         </if>
         <if test="sourceId!=null">
             AND c.source_id=#{sourceId}
         </if>
-        GROUP BY r.dept_id,r.create_user_id
+        GROUP BY r.dept_id,r.user_id
     </select>
 
 
     <!-- 商机上门量 上门时间在统计周期内上门商机量	-->
     <select id="countVisitBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId,v.create_user_id AS userId
+        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId,v.user_id AS userId
         FROM (
             <!-- 首次预约单	-->
             SELECT
-            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            r.customer_id,r.dept_id,r.user_id,r.visit_time,r.visit_status,r.valid_visit
             FROM
             transfer_customer_reservation r
             INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
@@ -106,17 +106,17 @@
         WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime}
         AND v.visit_status=1
         AND v.dept_id IN ${deptIds}
-        AND v.create_user_id IN ${userIds}
+        AND v.user_id IN ${userIds}
         GROUP BY deptId,userId
     </select>
 
     <!-- 有效上门量-->
     <select id="countVisitValidBusiness" resultMap="baseMap">
-        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId,v.create_user_id AS userId
+        SELECT COUNT(v.customer_id) AS num,v.dept_id AS deptId,v.user_id AS userId
         FROM (
         <!-- 首次预约单	-->
             SELECT
-            r.customer_id,r.dept_id,r.create_user_id,r.visit_time,r.visit_status,r.valid_visit
+            r.customer_id,r.dept_id,r.user_id,r.visit_time,r.visit_status,r.valid_visit
             FROM
             transfer_customer_reservation r
             INNER JOIN transfer_customer c ON r.customer_id = c.customer_id
@@ -131,7 +131,7 @@
             GROUP BY r.customer_id
         ) v
         WHERE v.visit_time BETWEEN  #{beginTime} AND #{endTime} AND v.valid_visit=1
-        AND v.dept_id IN ${deptIds} AND v.create_user_id IN  ${userIds}
+        AND v.dept_id IN ${deptIds} AND v.user_id IN  ${userIds}
         GROUP BY deptId,userId
     </select>
 

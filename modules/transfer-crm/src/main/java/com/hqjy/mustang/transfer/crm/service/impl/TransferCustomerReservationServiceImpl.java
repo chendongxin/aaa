@@ -95,8 +95,9 @@ public class TransferCustomerReservationServiceImpl extends BaseServiceImpl<Tran
             if (customerEntity.getUserId() == null) {
                 return R.error("预约失败：当前客户为公有客户，不能进行预约！");
             }
-            //添加客户预约表
-            reservationEntity.setProId(customerEntity.getProId())
+            //添加客户预约（当前商机归属谁的私海，操作的默认归属人就是谁的，不管是不是主管在操作或者其他角色）
+            reservationEntity.setProId(customerEntity.getProId()).setUserId(customerEntity.getUserId()).setDeptId(customerEntity.getDeptId())
+                    .setSchoolDeptId(reservationEntity.getDeptId()).setSchoolDeptName(reservationEntity.getDeptName())
                     .setCreateUserId(getUserId()).setCreateUserName(getUserName()).setCreateTime(new Date());
             super.save(reservationEntity);
             //更新客户主表客户状态为预约状态

@@ -9,7 +9,7 @@
     </resultMap>
 
     <select id="countConnect" resultMap="baseMap">
-		SELECT COUNT(DISTINCT tcr.customer_id) AS num, tc.create_user_dept_id AS deptId,tcr.create_user_id AS userId
+		SELECT COUNT(tcr.customer_id) AS num, tc.create_user_dept_id AS deptId,tcr.create_user_id AS userId
 		FROM transfer_call_record tcr
 		INNER JOIN  transfer_customer tc ON tc.customer_id = tcr.customer_id
 		WHERE tcr.status = false
@@ -20,7 +20,7 @@
 	</select>
 
     <select id="countCall" resultMap="baseMap">
-		SELECT COUNT(DISTINCT tcr.customer_id) AS num, tc.create_user_dept_id AS deptId,tcr.create_user_id AS userId
+		SELECT COUNT(tcr.customer_id) AS num, tc.create_user_dept_id AS deptId,tcr.create_user_id AS userId
 		FROM transfer_call_record tcr
 		INNER JOIN transfer_customer tc ON tc.customer_id = tcr.customer_id
 		WHERE tcr.create_time BETWEEN #{beginTime} AND #{endTime}

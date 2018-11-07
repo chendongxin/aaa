@@ -18,6 +18,8 @@
 	  <result column="visit_time" jdbcType="TIMESTAMP" property="visitTime" />
 	  <result column="valid_visit" jdbcType="BIT" property="validVisit" />
 	  <result column="intention" jdbcType="BIT" property="intention" />
+	  <result column="user_id" jdbcType="BIGINT" property="userId" />
+	  <result column="user_name" jdbcType="VARCHAR" property="userName" />
 	  <result column="create_user_id" jdbcType="BIGINT" property="createUserId" />
 	  <result column="create_user_name" jdbcType="VARCHAR" property="createUserName" />
 	  <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -65,8 +67,11 @@
 			<if test="null != status">status, </if>
 			<if test="null != teacherCode">teacher_code, </if>
 			<if test="null != teacherName">teacher_name, </if>
+			<if test="null != schoolDeptId">school_dept_id, </if>
+			<if test="null != schoolDeptName">school_dept_name, </if>
 			<if test="null != proId">pro_id, </if>
 			<if test="null != deptId">dept_id, </if>
+			<if test="null != userId">user_id, </if>
 			<if test="null != visitStatus">visit_status, </if>
 			<if test="null != visitTime">visit_time, </if>
 			<if test="null != validVisit">valid_visit, </if>
@@ -85,8 +90,11 @@
 			<if test="null != status">#{status}, </if>
 			<if test="null != teacherCode">#{teacherCode}, </if>
 			<if test="null != teacherName">#{teacherName}, </if>
+			<if test="null != schoolDeptId">#{schoolDeptId}, </if>
+			<if test="null != schoolDeptName">#{schoolDeptName}, </if>
 			<if test="null != proId">#{proId}, </if>
 			<if test="null != deptId">#{deptId}, </if>
+			<if test="null != userId">#{userId}, </if>
 			<if test="null != visitStatus">#{visitStatus}, </if>
 			<if test="null != visitTime">#{visitTime}, </if>
 			<if test="null != validVisit">#{validVisit}, </if>
@@ -138,10 +146,11 @@
 	<!-- 分页查询 -->
 	<select id="findPage" resultMap="BaseResultMap">
 		select
-		tcr.id, tcr.create_user_id, tcr.create_user_name, tcr.appointment_time,tcr.create_time, tcr.visit_status,
+		tcr.id, tc.user_id, u.user_name, tcr.appointment_time,tcr.create_time, tcr.visit_status,
 		tc.phone, tcr.teacher_name, tc.customer_id, tc.name
 		from transfer_customer_reservation tcr
 		inner join transfer_customer tc on tcr.customer_id=tc.customer_id
+		left join sys_user u on u.user_id=tcr.user_id
 		<where>
 			tc.status=3 and tc.user_id is not null
 			<!-- 数据权限过滤：取当前用户部门及其所有子部门的客户数据-->

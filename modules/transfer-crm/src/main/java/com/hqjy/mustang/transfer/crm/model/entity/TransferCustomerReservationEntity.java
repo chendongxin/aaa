@@ -56,6 +56,20 @@ public class TransferCustomerReservationEntity implements Serializable {
     private String teacherName;
 
     /**
+     * NC校区对应招转部门Id
+     **/
+    private Long schoolDeptId;
+
+    /**
+     * 前端传部门校区参数
+     */
+    private String deptName;
+    /**
+     * NC校区对应招转部门名称
+     **/
+    private String schoolDeptName;
+
+    /**
      * 赛道id pro_id
      **/
     private Long proId;
@@ -64,6 +78,16 @@ public class TransferCustomerReservationEntity implements Serializable {
      * 部门id dept_id
      **/
     private Long deptId;
+
+    /**
+     * 商机归属人 user_id
+     **/
+    private Long userId;
+
+    /***
+     * 商机归属人名称
+     */
+    private String userName;
 
     /**
      *  上门状态,见典VISIT_STATUS(0-未上门，1-已上门) visit_status

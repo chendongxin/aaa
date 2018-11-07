@@ -34,7 +34,7 @@ public class TransferCustomerReservationController {
             "高级查询参数（RequestBody数据格式接收）：[客户姓名:name],[手机:phone],[上门状态(0-未上门，1-已上门)：visitStatus]\n" +
             "[beginCreateTime:开始创建时间]，[endCreateTime:结束创建时间]，[beginAppointmentTime:开始预约时间]，[endAppointmentTime:结束预约时间]\n" +
             "返回参数：【id:预约主键id】，【当前页:currPage】，【当前页的数量:size】【总记录数:totalCount】,【总页数:totalPage】,【每页的数量:pageSize】\n" +
-            "【appointmentTime:预约时间】,【visitStatus:上门状态，（见数字字典VISIT_STATUS）:默认0-未上门，1-已上门】,【createUserId：归属人id】,【createUserName：归属人名称】\n" +
+            "【appointmentTime:预约时间】,【visitStatus:上门状态，（见数字字典VISIT_STATUS）:默认0-未上门，1-已上门】,【userId：归属人id】,【userName：归属人名称】\n" +
             "【createTime：创建时间】,【phone：客户电话】,【name：客户姓名】,【customerId:客户编号】\n" +
             "响应数据示例：\n" +
             "{\n" +
@@ -47,8 +47,8 @@ public class TransferCustomerReservationController {
             "        \"id\": \"1\",\n" +
             "        \"appointmentTime\": \"2018-06-15 00:00:00\",\n" +
             "        \"visitStatus\": \"0\",\n" +
-            "        \"createUserId\": \"10\",\n" +
-            "        \"createUserName\": \"admin\",\n" +
+            "        \"userId\": \"10\",\n" +
+            "        \"userName\": \"admin\",\n" +
             "        \"createTime\": \"2018-06-15 11:26:02\",\n" +
             "        \"name\": \"梅西\",\n" +
             "        \"phone\": \"13631156666\",\n" +
