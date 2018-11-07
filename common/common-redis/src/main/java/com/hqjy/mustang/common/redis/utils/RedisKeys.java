@@ -13,12 +13,12 @@ public class RedisKeys {
     /**
      * 公司key
      */
-    public static class Prefix {
+    private static class Prefix {
         /**
          * 不同公司生成不同key前缀
          */
         private static String buildKey(String type, Object key) {
-            return "mustang:" + type + ":" + key;
+            return "transfer:" + type + ":" + key;
         }
     }
 
@@ -31,19 +31,6 @@ public class RedisKeys {
         }
     }
 
-    /**
-     * 天润key add by xyq on 2018年6月15日17:31:33
-     */
-    public static class TiNet {
-        /**
-         * 坐席cno key
-         */
-        public final static String CNO = "cno";
-
-        public static String key(String key) {
-            return Prefix.buildKey("tiTet:info", key);
-        }
-    }
 
     /**
      * 客户key add by xyq on 2018年7月6日11:36:25
@@ -55,24 +42,6 @@ public class RedisKeys {
          */
         public final static String RECYCLE_LOCK_KEY = "recycleLockKey";
 
-        /**
-         * 分布式redis锁-商机领取key
-         */
-        public final static String RECEIVE_LOCK_KEY = "receiveLockKey";
-
-        /**
-         * 省份集合key
-         */
-        public final static String PROVINCE_KEY = "provinceList";
-
-        public static String province(String key) {
-            return Prefix.buildKey("biz:province", key);
-        }
-
-        public static String school(String key) {
-            return Prefix.buildKey("biz:school", key);
-        }
-
         public static String recycleLock(String key) {
             return Prefix.buildKey("biz:recycleLock", key);
         }
@@ -80,7 +49,6 @@ public class RedisKeys {
         public static String receiveLock(String key) {
             return Prefix.buildKey("biz:receiveLock", key);
         }
-
 
     }
 
@@ -103,7 +71,7 @@ public class RedisKeys {
         /**
          * 用户认证前缀
          */
-        public static String aut(String key) {
+        private static String aut(String key) {
             return "sys:user:aut:" + key;
         }
 
@@ -175,27 +143,6 @@ public class RedisKeys {
             return Prefix.buildKey("allot:phone:lock", phone);
         }
 
-        /**
-         * 延时消费,获取唯一锁ID,用于获取和删除分布式锁
-         */
-        public static String delayLook(String msgId) {
-            return Prefix.buildKey("allot:delay:lock", msgId);
-        }
-
-        /**
-         * 延时消费key
-         */
-        public static String delayKey(String msgId) {
-            return Prefix.buildKey("allot:delay:key", msgId);
-        }
-
-        /**
-         * 延时消费message
-         */
-        public static String delayMessage(String msgId) {
-            return Prefix.buildKey("allot:delay:message", msgId);
-        }
-
         public static String key(String key) {
             return Prefix.buildKey("allot", key);
         }
@@ -228,36 +175,27 @@ public class RedisKeys {
     }
 
     /**
-     * 请求nc的异步任务
+     * 获取NC相关数据
      */
-    public static class Nc {
-        /**
-         * 待处理队列
-         */
-        public final static String SAVE = "nc:sync:save:list";
-        /**
-         * 正在处理队列
-         */
-        public final static String SAVE_PROCESS = "nc:sync:save:process";
+    public static class NC {
 
         /**
-         * NC更新待处理队列
+         * 部门对应NC校区数据
          */
-        public final static String UPDATE = "nc:sync:update:list";
+        public final static String DEPT_NAME = "nc:deptName:";
+        /**
+         * NC校区—老师
+         */
+        public final static String SCHOOL = "nc:school:";
 
-        /**
-         * NC更新正在处理队列
-         */
-        public final static String UPDATE_PROCESS = "nc:sync:update:process";
 
-        /**
-         * NC保存跟进记录待处理队列
-         */
-        public final static String SAVE_FOLLOW = "nc:sync:save_follow:list";
-        /**
-         * NC保存跟进记录正在处理队列
-         */
-        public final static String SAVE_FOLLOW_PROCESS = "nc:sync:save_follow:process";
+        public static String deptNameKey(String deptName) {
+            return Prefix.buildKey(DEPT_NAME, deptName);
+        }
+
+        public static String schoolTeacherKey(String school) {
+            return Prefix.buildKey(SCHOOL, school);
+        }
     }
 
 }

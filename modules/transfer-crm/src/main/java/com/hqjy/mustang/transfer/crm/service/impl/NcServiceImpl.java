@@ -1,12 +1,15 @@
 package com.hqjy.mustang.transfer.crm.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.ImmutableList;
 
 import com.hqjy.mustang.common.base.exception.RRException;
 import com.hqjy.mustang.common.base.utils.JsonUtil;
 import com.hqjy.mustang.common.base.utils.StringUtils;
+import com.hqjy.mustang.common.redis.utils.RedisKeys;
+import com.hqjy.mustang.common.redis.utils.RedisUtils;
 import com.hqjy.mustang.transfer.crm.model.dto.*;
 import com.hqjy.mustang.transfer.crm.service.NcService;
 import lombok.extern.slf4j.Slf4j;
@@ -65,6 +68,13 @@ public class NcServiceImpl implements NcService {
         this.ncRestTemplate = ncRestTemplate;
     }
 
+    private RedisUtils redisUtils;
+
+    @Autowired
+    public void setRedisUtils(RedisUtils redisUtils) {
+        this.redisUtils = redisUtils;
+    }
+
     /**
      * 请求nc保存商机接口
      * NC:推送成功:{code:1;msg: 接收成功，学员NC ID值【pk】},推送失败:{code:0;msg:电话或QQ为空}
@@ -111,44 +121,54 @@ public class NcServiceImpl implements NcService {
     @Override
     public List<NcTeacherDTO> requestNCGetTeacher(String name) {
         NcSchoolDTO school = this.getSchoolByName(name);
-        String url = getNcTeacherUrl + "?schoolid=" + school.getNcId();
-        try {
-            String result = ncRestTemplate.getForEntity(url, String.class).getBody();
-            log.info("获取招生老师接口，返回参数：" + result);
-            if (StringUtils.isNotEmpty(result)) {
-                int code = JSONObject.parseObject(result).getInteger("code");
-                if (SUCCESS == code) {
-                    NcTeacherResultDTO ncGetTeacherResultVo = JSONObject.parseObject(result, NcTeacherResultDTO.class);
-                    log.info("请求NC获取招生老师接口成功：：" + JSON.toJSONString(ncGetTeacherResultVo));
-                    return ncGetTeacherResultVo.getMsg();
+        if (StringUtils.isNotBlank(redisUtils.get(RedisKeys.NC.schoolTeacherKey(name)))) {
+            return JSONArray.parseArray(redisUtils.get(RedisKeys.NC.schoolTeacherKey(name)), NcTeacherDTO.class);
+        } else {
+            try {
+                String url = getNcTeacherUrl + "?schoolid=" + school.getNcId();
+                String result = ncRestTemplate.getForEntity(url, String.class).getBody();
+                log.info("获取招生老师接口，返回参数：" + result);
+                if (StringUtils.isNotEmpty(result)) {
+                    int code = JSONObject.parseObject(result).getInteger("code");
+                    if (SUCCESS == code) {
+                        NcTeacherResultDTO ncGetTeacherResultVo = JSONObject.parseObject(result, NcTeacherResultDTO.class);
+                        log.info("请求NC获取招生老师接口成功：：" + JSON.toJSONString(ncGetTeacherResultVo));
+                        redisUtils.set(RedisKeys.NC.schoolTeacherKey(name), ncGetTeacherResultVo.getMsg(), 3600L);
+                        return ncGetTeacherResultVo.getMsg();
+                    }
                 }
+                log.error("请求NC获取校区老师失败，返回参数：" + result);
+                throw new RRException(JSONObject.parseObject(result).getString("msg"));
+            } catch (Exception e) {
+                throw new RRException("请求NC获取校区老师接口异常：" + e.getMessage());
             }
-            log.error("请求NC获取校区老师失败，返回参数：" + result);
-            throw new RRException(JSONObject.parseObject(result).getString("msg"));
-        } catch (Exception e) {
-            throw new RRException("请求NC获取校区老师接口异常：" + e.getMessage());
         }
     }
 
 
     @Override
     public NcSchoolDTO getSchoolByName(String name) {
-        StringBuilder url = new StringBuilder();
-        try {
-            url.append(getProvinceSchoolUrl).append("?state=1").append("&name=").append(name);
-            String result = ncRestTemplate.getForEntity(url.toString(), String.class).getBody();
-            if (StringUtils.isNotBlank(result)) {
-                int code = JSONObject.parseObject(result).getInteger(CODE);
-                String data = JSONObject.parseObject(result).getString("data");
-                if (0 == code) {
-                    List<NcSchoolDTO> ncSchool = JSON.parseArray(data, NcSchoolDTO.class);
-                    return ncSchool.get(0);
+        if (StringUtils.isNotBlank(redisUtils.get(RedisKeys.NC.deptNameKey(name)))) {
+            return JSON.parseObject(redisUtils.get(RedisKeys.NC.deptNameKey(name)), NcSchoolDTO.class);
+        } else {
+            StringBuilder url = new StringBuilder();
+            try {
+                url.append(getProvinceSchoolUrl).append("?state=1").append("&name=").append(name);
+                String result = ncRestTemplate.getForEntity(url.toString(), String.class).getBody();
+                if (StringUtils.isNotBlank(result)) {
+                    int code = JSONObject.parseObject(result).getInteger(CODE);
+                    String data = JSONObject.parseObject(result).getString("data");
+                    if (0 == code) {
+                        List<NcSchoolDTO> ncSchool = JSON.parseArray(data, NcSchoolDTO.class);
+                        redisUtils.set(RedisKeys.NC.deptNameKey(name), ncSchool.get(0), 3600L);
+                        return ncSchool.get(0);
+                    }
                 }
+                throw new RRException("获取NC校区接口异常:该部门名称找不到对应的NC校区");
+            } catch (Exception e) {
+                log.error("系统部门匹配NC校区接口异常：" + e.getMessage());
+                throw new RRException("系统部门匹配NC校区接口异常：" + e.getMessage());
             }
-            throw new RRException("获取NC校区接口异常:该部门名称找不到对应的NC校区");
-        } catch (Exception e) {
-            log.error("系统部门匹配NC校区接口异常：" + e.getMessage());
-            throw new RRException("系统部门匹配NC校区接口异常：" + e.getMessage());
         }
     }
 
