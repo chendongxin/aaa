@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * transfer_customer 持久化层
@@ -65,6 +66,13 @@ public interface TransferCustomerDao extends BaseDao<TransferCustomerEntity, Lon
      * @param entity 客户对象
      */
     int returnToCommon(TransferCustomerEntity entity);
+
+    /**
+     * 批量回收到公海
+     *
+     * @param map 客户id
+     */
+    int returnToCommonBatch(Map<String, Object> map);
 
     /**
      * 根据NCid查询客户信息

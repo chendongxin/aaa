@@ -363,9 +363,6 @@
 			<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
 				and dept_id in ${deptIds}
 			</if>
-			<if test="userId !=null and !&quot;&quot;.equals(userId)">
-				and user_id=#{userId}
-			</if>
 			<if test="name != null and !&quot;&quot;.equals(name)">and name like concat('%',#{name},'%')</if>
 			<if test="phone != null and !&quot;&quot;.equals(phone)">and phone like concat('%',#{phone},'%')</if>
 			<if test="status != null and !&quot;&quot;.equals(status)">and status = #{status}</if>
@@ -414,8 +411,14 @@
 
 	<update id="returnToCommon">
         update transfer_customer
-        set user_id = null, user_name = null, update_user_id = #{updateUserId}, update_user_name = #{updateUserName},update_time=#{updateTime},allot_time=#{allotTime}
+        set user_id = null, user_name = null, update_user_id = #{updateUserId}, update_user_name = #{updateUserName}, update_time=#{updateTime}, allot_time=#{allotTime}
         where customer_id = #{customerId}
+    </update>
+
+	<update id="returnToCommonBatch">
+        update transfer_customer
+        set user_id = null, user_name = null, update_user_id = ${updateUserId}, update_user_name = #{updateUserName}, update_time=#{updateTime}, allot_time=#{allotTime}
+        where customer_id in ${customerIdList}
     </update>
 
 	<!-- 根据NCId 获取商机信息-->

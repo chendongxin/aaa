@@ -115,4 +115,12 @@ public interface TransferCustomerService extends BaseService<TransferCustomerEnt
      */
     int updateUserTransferToPublic(Long userId, Boolean sign);
 
+    /**
+     * 批量回收到公海
+     * @param customerIdList 回收的客户ID集字符串
+     * @param updateId 更新人
+     * @return 返回影响行数
+     */
+    int returnToCommonBatch(String customerIdList, Long updateId);
+
 }

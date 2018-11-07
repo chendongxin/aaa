@@ -50,6 +50,14 @@ public class Constant {
     public static final String QQ = "qq";
     public static final String WEI_XIN = "weiXin";
 
+    /**
+     * 回收规则：每天23:59:59
+     */
+    public static final String CUSTOMER_RECYCLE_TIME = " 23:59:59";
+    /**
+     * 保护期：15天
+     */
+    public static final Integer CUSTOMER_PROTECT_TIME = 1;
 
     /**
      * 通用状态

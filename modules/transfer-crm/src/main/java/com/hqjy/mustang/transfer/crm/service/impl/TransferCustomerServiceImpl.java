@@ -50,6 +50,8 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
     private static final String END_LAST_FOLLOW_TIME = "endLastFollowTime";
     private static final String FIRST_TRANSFER_CREATE_TIME = "beginTransferCreateTime";
     private static final String END_TRANSFER_CREATE_TIME = "endTransferCreateTime";
+    private static final String BEGIN_APPOINTMENT_TIME = "beginAppointmentTime";
+    private static final String END_APPOINTMENT_TIME = "endAppointmentTime";
 
 
     /**
@@ -162,7 +164,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         }
         pageQuery.put("deptIds", StringUtils.listToString(ids));
         this.formatQueryTime(pageQuery);
-        if (isGeneralSeat()) {
+        if (isGeneralSeat() || isServiceCommissioner()) {
             pageQuery.put("userId", getUserId());
         }
         if (isSuperAdmin()) {
@@ -218,32 +220,20 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
             }
             List<TransferCustomerContactEntity> list = this.checkContactHasExit(customerDto, customerDto.getProId());
             if (list.size() > 0) {
-                Long customerId = list.get(0).getCustomerId();
-                TransferCustomerEntity customer = baseDao.findOne(customerId);
-                //如果重单商机状态为无效失败
-                if (customer.getStatus() == 2) {
-                    //如果在15天保护期内，就新增失败
-                    if (new Date().before(transferProcessService.getProcessByCustomerId(customerId).getExpireTime())) {
-                        return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
-                    } else {
-                        //否则按照新商机对待
-                        return this.saveCustomer(customerDto, proList);
-                    }
-                } else {
-                    TransferCustomerRepeatEntity customerEntity = new TransferCustomerRepeatEntity()
-                            .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
-                            .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
-                            .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
-                            .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId())
-                            .setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName());
-                    if (isGeneralSeat()) {
-                        customerEntity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
-                                .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
-                                .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
-                    }
-                    transferCustomerRepeatService.save(customerEntity);
-                    return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
+                TransferCustomerEntity customer = baseDao.findOne(list.get(0).getCustomerId());
+                TransferCustomerRepeatEntity customerEntity = new TransferCustomerRepeatEntity()
+                        .setCustomerId(customer.getCustomerId()).setPhone(customerDto.getPhone()).setWeChat(customerDto.getWeiXin()).setQq(customerDto.getQq())
+                        .setLandLine(customerDto.getLandLine()).setDeptId(customerDto.getDeptId()).setDeptName(customerDto.getDeptName()).setCompanyId(customerDto.getCompanyId())
+                        .setCompanyName(customerDto.getCompanyName()).setSourceId(customerDto.getSourceId()).setSourceName(customerDto.getSourceName()).setName(customerDto.getName())
+                        .setMemo(customerDto.getNote()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName()).setCreateUserId(getUserId())
+                        .setCreateUserName(getUserName()).setProId(customerDto.getProId()).setProName(customerDto.getProName());
+                if (isGeneralSeat()) {
+                    customerEntity.setCompanyId(transferGenCompanyService.findOneByName("电销来源").getCompanyId()).setCompanyName("电销来源")
+                            .setSourceId(transferSourceService.findOneByName("电销来源").getSourceId()).setSourceName("电销来源")
+                            .setProId(proList.get(0)).setProName(sysProductServiceFeign.findByProductId(proList.get(0))).setUserId(getUserId()).setUserName(getUserName());
                 }
+                transferCustomerRepeatService.save(customerEntity);
+                return R.error(StatusCode.BIZ_CUSTOMER_HAS_EXIT);
             } else {
                 return this.saveCustomer(customerDto, proList);
             }
@@ -285,7 +275,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         );
         transferCustomerContactService.save(customerDto);
         TransferProcessEntity processEntity = new TransferProcessEntity()
-                .setExpireTime(DateUtils.addDays(date, 15)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfoList.get(0).getDeptId()).setDeptName(sysDeptInfoList.get(0).getDeptName())
+                .setExpireTime(DateUtils.addDays(date, Constant.CUSTOMER_PROTECT_TIME)).setActive(false).setCustomerId(entity.getCustomerId()).setDeptId(sysDeptInfoList.get(0).getDeptId()).setDeptName(sysDeptInfoList.get(0).getDeptName())
                 .setCreateTime(date).setMemo("客户新增操作").setCreateUserId(getUserId()).setCreateUserName(getUserName()).setUserId(customerDto.getUserId()).setUserName(customerDto.getUserName());
         if (isGeneralSeat()) {
             processEntity.setUserId(getUserId()).setUserName(getUserName());
@@ -348,7 +338,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                 }
                 //新增流程记录
                 TransferProcessEntity newProcess = new TransferProcessEntity().setCreateTime(date).setMemo("客户转移操作").setActive(Boolean.FALSE).setDeptId(dto.getDeptId()).setDeptName(dto.getDeptName())
-                        .setUserId(dto.getUserId()).setUserName(dto.getUserName()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName()).setExpireTime(DateUtils.addDays(date, 15));
+                        .setUserId(dto.getUserId()).setUserName(dto.getUserName()).setCustomerId(c).setCreateUserId(getUserId()).setCreateUserName(getUserName()).setExpireTime(DateUtils.addDays(date, Constant.CUSTOMER_PROTECT_TIME));
                 int save = transferProcessService.save(newProcess);
                 if (save == 0) {
                     return;
@@ -396,6 +386,12 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         }
         if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_TRANSFER_CREATE_TIME))) {
             pageQuery.put(END_TRANSFER_CREATE_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_TRANSFER_CREATE_TIME)));
+        }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, BEGIN_APPOINTMENT_TIME))) {
+            pageQuery.put(BEGIN_APPOINTMENT_TIME, DateUtils.getBeginTime(MapUtils.getString(pageQuery, BEGIN_APPOINTMENT_TIME)));
+        }
+        if (StringUtils.isNotEmpty(MapUtils.getString(pageQuery, END_APPOINTMENT_TIME))) {
+            pageQuery.put(END_APPOINTMENT_TIME, DateUtils.getEndTime(MapUtils.getString(pageQuery, END_APPOINTMENT_TIME)));
         }
 
     }
@@ -468,7 +464,7 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
                             //新增激活状态，归属私人客户流程
                             TransferProcessEntity processEntity = new TransferProcessEntity().setMemo("公海领取商机").setCustomerId(c)
                                     .setDeptId(process.getDeptId()).setDeptName(process.getDeptName()).setUserId(userId).setUserName(userName)
-                                    .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE).setExpireTime(DateUtils.addDays(new Date(), 15));
+                                    .setCreateUserId(userId).setCreateUserName(userName).setActive(Boolean.FALSE).setExpireTime(DateUtils.addDays(new Date(), Constant.CUSTOMER_PROTECT_TIME));
                             int save = transferProcessService.save(processEntity);
                             if (save > 0) {
                                 //更新客户主表(同步激活状态流程)
@@ -766,5 +762,15 @@ public class TransferCustomerServiceImpl extends BaseServiceImpl<TransferCustome
         return count;
     }
 
-
+    @Override
+    public int returnToCommonBatch(String customerIdList, Long updateId) {
+        Date date = new Date();
+        Map<String, Object> map = new HashMap<>(1024);
+        map.put("customerIdList", customerIdList);
+        map.put("updateUserId", updateId);
+        map.put("updateUserName", "/");
+        map.put("updateTime", date);
+        map.put("allotTime", date);
+        return baseDao.returnToCommonBatch(map);
+    }
 }

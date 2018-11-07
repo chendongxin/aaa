@@ -295,4 +295,17 @@
         where process_id in ${processIdList} AND active = false
     </update>
 
+	<!--获取激活状态且过期时间<当天 23:00:00的流程数据 UPDATE BY XYQ ON 2018年7月27日15:15:21-->
+	<select id="findListIsActive" resultMap="BaseResultMap">
+		SELECT
+		tp.process_id, tp.customer_id, tp.dept_id
+		FROM transfer_process tp
+		INNER JOIN transfer_customer tc ON tp.customer_id=tc.customer_id
+		WHERE tp.active=0 AND tc.status=0 AND tc.user_id IS NOT NULL
+		AND tp.expire_time &lt; #{time}
+		<if test="deptIds != null and !&quot;&quot;.equals(deptIds)">
+			AND tp.dept_id NOT IN ${deptIds}
+		</if>
+	</select>
+
 </mapper>
