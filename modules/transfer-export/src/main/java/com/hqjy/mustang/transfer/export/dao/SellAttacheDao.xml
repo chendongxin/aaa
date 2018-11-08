@@ -38,30 +38,45 @@
         GROUP BY userId, deptId
     </select>
 
-    <!-- 分配商机量 创建时间在统计周期内分配给电销的商机量（包括分配+导入，销售个人新增及领取的不算在内)-->
+    <!-- 分配商机量创建时间在统计周期内分配给电销的商机量（包括分配+导入，销售个人新增及领取的不算在内);
+    现在每一条商机都作为做新商机处理，没有所谓的首次分配之分，同个商机我分配给A，A的分配是就+1.在分配给B，那B就+1. A就-1-->
     <select id="countAllotBusiness" resultMap="baseMap">
-        SELECT COUNT(c.customer_id)as num,c.user_id AS userId,c.dept_id AS deptId
+        SELECT
+            COUNT(c.customer_id) AS num,
+            p2.user_id AS userId,
+            p2.dept_id AS deptId
+        FROM
+            transfer_customer c
+        INNER JOIN (
+            SELECT
+                p.customer_id,
+                user_id,
+                dept_id
             FROM
-                transfer_customer c
+                transfer_process p
             INNER JOIN (
                 SELECT
-                    MAX(process_id) AS process_id,customer_id
+                    MAX(process_id) AS process_id,
+                    customer_id
                 FROM
                     transfer_process
-                WHERE  user_id!= create_user_id
-                       AND dept_id IN ${deptIds}
-                       AND user_id IN  ${userIds}
+                WHERE
+                    user_id != create_user_id AND dept_id IN ${deptIds} AND user_id IN  ${userIds}
                 GROUP BY
                     customer_id
-            ) p ON p.customer_id = c.customer_id
-            WHERE c.create_time BETWEEN #{beginTime} AND #{endTime}
+            ) p1 ON p.process_id = p1.process_id
+        ) p2 ON p2.customer_id = c.customer_id
+        WHERE
+            c.create_time BETWEEN  #{beginTime} AND #{endTime}
             <if test="getWay!=null">
                 AND c.get_way=#{getWay}
             </if>
             <if test="sourceId!=null">
                 AND c.source_id=#{sourceId}
             </if>
-            GROUP BY userId,deptId
+        GROUP BY
+            userId,
+            deptId
     </select>
 
     <!-- 成交量	成交时间在统计周期内商机的成交量-->
